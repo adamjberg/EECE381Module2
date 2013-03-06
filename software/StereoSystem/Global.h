@@ -24,6 +24,10 @@
 #include "Packet.h"
 #include "Object.h"
 #include "Coder.h"
+#include "Playlist.h"
+#include "Database.h"
+#include "Command.h"
+#include "Song.h"
 
 #define HEADERSIZE 2
 
@@ -31,6 +35,7 @@ extern alt_alarm alarm;
 extern struct alt_up_dev up_dev;
 extern struct RS232 com;
 extern int queue_lock;
+extern struct db db;
 
 enum msgType {
 	STRING=0, CMD=1, PLAYLIST=2, AUDIO=3
