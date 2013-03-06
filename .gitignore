@@ -37,6 +37,9 @@ local.properties
 *.out
 *.app
 
+create-this-app
+Makefile
+*.cproject
 obj/
 *.map
 *.elf
