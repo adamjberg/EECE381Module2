@@ -1,0 +1,18 @@
+<resources>
+
+    <string name="app_name">ece381</string>
+    <string name="label_ip">IP:</string>
+    <string name="playsong">Play Song</string>
+    <string name="label_port">Port:</string>
+    <string name="printsong">Print Song on Debug</string>
+    <string name="connect">Connect</string>
+    <string name="clear">Clear</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="label_myip">My IP:</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="refresh_socket">Show Sock.</string>
+    <string name="IP">192.3.17.101</string>
+
+</resources>
