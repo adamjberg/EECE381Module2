@@ -9,6 +9,13 @@
 #define COMMAND_H_
 #include "Global.h"
 
+struct Command {
+	int cmd_index;
+	int num_of_parameters;
+	int* parameters_size;
+	char** parameters;
+};
+
 void pause();
 void play(char*, int);
 void setVolume(int);

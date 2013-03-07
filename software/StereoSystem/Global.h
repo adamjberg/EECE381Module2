@@ -13,6 +13,8 @@
 
 #include "altera_up_avalon_rs232.h"
 #include "altera_up_avalon_audio.h"
+#include <alt_types.h>
+#include <altera_up_sd_card_avalon_interface.h>
 
 #include "sys/alt_stdio.h"
 #include "sys/alt_irq.h"
@@ -30,6 +32,8 @@
 #include "Song.h"
 
 #define HEADERSIZE 2
+#define SPACE 32
+#define NEWLINE 10
 
 extern alt_alarm alarm;
 extern struct alt_up_dev up_dev;

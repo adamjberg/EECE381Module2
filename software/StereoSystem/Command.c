@@ -10,8 +10,8 @@
 void pause() {
 
 }
-void play(char* song, int pos) {
-
+void play(char* song_name, int pos) {
+	struct Song* aSong = querySongByName(song_name);
 }
 void setVolume(int vol) {
 
@@ -29,6 +29,8 @@ void createPlaylist(char* listname) {
 
 }
 void modifyPlaylistName(char* listname, char* new_listname) {
+	struct Playlist* pl = queryListByName(listname);
+	pl->list_name = new_listname;
 
 }
 void shuffle(char* listname) {
