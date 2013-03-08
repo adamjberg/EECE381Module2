@@ -13,7 +13,7 @@ struct alt_up_dev up_dev;
 /*
  * Initialization of Serail communication
  */
-struct RS232 initRS232() {
+struct RS232 initRS232(struct CmdScheduler* sched) {
 	struct RS232 com_local;
 	com_local.receivePackets = initQueue();
 	com_local.sendPackets = initQueue();
@@ -29,6 +29,7 @@ struct RS232 initRS232() {
 	com_local.num_packets = com_local.index_packets = 0;
 	com_local.num_send_packets = com_local.index_send_packets = 0;
 	com_local.packetBuf = NULL;
+	com_local.scheduler = sched;
 
 	printf("UART Initialization\n");
 	alt_up_rs232_dev* uart = alt_up_rs232_open_dev(RS232_0_NAME);

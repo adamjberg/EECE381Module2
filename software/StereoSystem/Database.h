@@ -16,14 +16,20 @@ struct database {
 	int num_of_lists;
 	struct Song** songs;
 	struct Song* curr_song;
+	struct Song* next_song;
+	struct Song* prev_song;
 	int num_of_songs;
+
+	struct Cache* cache;
 };
 
+void initDatabase();
 struct Playlist* queryListByName(char*);
 struct Song* querySongByName(char*);
 int loadListFromSD(char*);
 int addListToSD(char* filename, struct Playlist*);
 void addListToDB(struct Playlist*);
+int removeListFromDB(char*);
 char* readLine(int);
 void writeLine(int, char*, int);
 void update();

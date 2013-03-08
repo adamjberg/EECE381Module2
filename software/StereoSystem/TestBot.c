@@ -22,4 +22,11 @@ void dBTester() {
 	loadListFromSD("010.TXT");
 	loadListFromSD("011.TXT");
 
+	if(removeListFromDB("list1")!=0)
+		printf("remove list1 failed\n");
+	if(removeListFromDB("list1")!=0)
+		printf("remove list1 failed\n");
+	if(removeListFromDB("List2")!=0)
+		printf("remove list2 failed\n");
+
 }

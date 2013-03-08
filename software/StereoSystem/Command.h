@@ -16,6 +16,8 @@ struct Command {
 	char** parameters;
 };
 
+struct Command* initCmd();
+
 void pause();
 void play(char*, int);
 void setVolume(int);

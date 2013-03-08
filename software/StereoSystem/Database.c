@@ -6,6 +6,15 @@
  */
 #include "Database.h"
 
+void initDatabase() {
+	db.cache = initCache();
+	db.curr_playlist = NULL;
+	db.curr_song = db.next_song = db.prev_song = NULL;
+	db.num_of_lists = 0;
+	db.num_of_songs = 0;
+	db.playlists = NULL;
+	db.songs = NULL;
+}
 /*
  * Query the list with a given play list name
  * return the first list founded with the same name, NULL otherwise
@@ -70,6 +79,29 @@ void addListToDB(struct Playlist* playlist) {
 		db.playlists = db.playlists->next;
 	}
 	db.num_of_lists++;
+}
+/*
+ * Remove a playlist from the database
+ * return 0 if list is removed, -1 if cannot find list in the database
+ */
+int removeListFromDB(char* list_name) {
+	struct Playlist* rm = queryListByName(list_name);
+	if(rm==NULL)
+		return -1;
+	if(rm->prev != NULL)
+		rm->prev->next = rm->next;
+	else if(rm->next != NULL)
+		rm->next->prev = NULL;
+
+	if(rm->next != NULL)
+		rm->next->prev = rm->prev;
+	else if(rm->prev != NULL)
+		rm->prev->next = NULL;
+	db.num_of_lists--;
+	if(rm == db.curr_playlist)
+		db.curr_playlist = NULL;
+	killPlaylist(&rm);
+	return 0;
 }
 /*
  * A helper function that read a line in a text file, require file pointer and does not close the file
@@ -150,3 +182,5 @@ void writeLine(int file_pointer, char* data, int size) {
 		printf("Write a new line ascii failed\n");
 	}
 }
+
+

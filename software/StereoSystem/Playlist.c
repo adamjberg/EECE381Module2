@@ -16,5 +16,7 @@ struct Playlist* initPlaylist() {
 }
 
 void killPlaylist(struct Playlist** this) {
+	printf("killPlaylist function is called.\n");
 
+	*this = NULL;
 }

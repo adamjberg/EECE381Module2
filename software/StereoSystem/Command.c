@@ -6,6 +6,12 @@
  */
 #include "Command.h"
 
+struct Command* initCmd() {
+	struct Command* this = (struct Command*)malloc(sizeof(struct Command));
+
+	return this;
+}
+
 //pause current play song
 void pause() {
 

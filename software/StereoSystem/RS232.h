@@ -17,6 +17,7 @@ struct RS232 {
 	struct Queue* receivePackets;
 	struct Queue* pendingPacketSize;
 	struct Packet* packetBuf;
+	struct CmdScheduler* scheduler;
 	enum States* stateMachine;
 	enum States* pastState;
 	int client_ack, host_ack, isRdySend, failReceive;
@@ -28,7 +29,7 @@ enum States {
 	checkClient = 0, sendStates = 1, waitClient = 2, sendData0 = 3, waitAck0 = 4, sendData1 = 5,
 	waitAck1 = 6, sendAck0 = 7, receiveData0 = 8, startInit = 9, waitStart = 10
 };
-struct RS232 initRS232();
+struct RS232 initRS232(struct CmdScheduler*);
 int send(void*, enum msgType);
 void sendRS232(alt_up_rs232_dev*, unsigned char*, int);
 unsigned char* sendStats();

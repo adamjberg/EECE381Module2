@@ -27,10 +27,12 @@
 #include "Object.h"
 #include "Coder.h"
 #include "Playlist.h"
+#include "Cache.h"
 #include "Database.h"
 #include "Command.h"
 #include "Song.h"
 #include "TestBot.h"
+#include "CommandScheduler.h"
 
 #define HEADERSIZE 2
 #define SPACE 32
