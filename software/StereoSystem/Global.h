@@ -30,6 +30,7 @@
 #include "Database.h"
 #include "Command.h"
 #include "Song.h"
+#include "TestBot.h"
 
 #define HEADERSIZE 2
 #define SPACE 32
@@ -39,7 +40,7 @@ extern alt_alarm alarm;
 extern struct alt_up_dev up_dev;
 extern struct RS232 com;
 extern int queue_lock;
-extern struct db db;
+extern struct database db;
 
 enum msgType {
 	STRING=0, CMD=1, PLAYLIST=2, AUDIO=3

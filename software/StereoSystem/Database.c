@@ -29,10 +29,10 @@ struct Song* querySongByName(char* song_name) {
 	return NULL;
 }
 /*
- * Load a playlist from SD card to the playlists of the database
+ * Load a playlist from SD card to the the database
  * return -1 if no more list can be found in the SD card; 0 otherwise
  */
-int loadPlaylist(char* filename) {
+int loadListFromSD(char* filename) {
 	if(filename == NULL) return -2;
 	int file_pointer;
 	if((file_pointer = alt_up_sd_card_fopen(filename, false)) < 0) {
@@ -46,17 +46,23 @@ int loadPlaylist(char* filename) {
 	//TODO: read other attributes
 
 
-	addPlaylist(playlist);
+	addListToDB(playlist);
 	alt_up_sd_card_fclose(file_pointer);
 	return 0;
 }
-
-void addPlaylist(struct Playlist* playlist) {
-	db.num_of_lists++;
-	db.playlists->next = playlist;
-	playlist->prev = db.playlists;
+/*
+ * Add a playlist to the database and set the pointer of database to this list
+ */
+void addListToDB(struct Playlist* playlist) {
 	playlist->next = NULL;
-	db.playlists = playlist;
+	if(db.num_of_lists == 0)
+		db.playlists = playlist;
+	else {
+		db.playlists->next = playlist;
+		playlist->prev = db.playlists;
+		db.playlists = db.playlists->next;
+	}
+	db.num_of_lists++;
 }
 /*
  * A helper function that read a line in a text file, require file pointer and does not close the file
@@ -73,20 +79,22 @@ char* readLine(int file_pointer) {
 		}
 	} temp[i] = 0;
 	char* result = (char*)malloc(sizeof(char)*i);
-	strncpy(result, temp, i);
+	strncpy(result, temp, i+1);
 	return result;
 }
 /*
  * A helper function that write or rewrite the playlist as a text file to SD card
  * return -1 if fail to write; 0 otherwise
  */
-int savePlaylist(struct Playlist* playlist) {
+int addListToSD(char* filename, struct Playlist* playlist) {
 	if(playlist == NULL) return -2;
 	int file_pointer;
-	if((file_pointer = alt_up_sd_card_fopen(playlist->list_name, true)) < 0) {
-		alt_up_sd_card_fclose(file_pointer);
-		printf("Save playlist %s failed\n", playlist->list_name);
-		return -1;
+	if((file_pointer = alt_up_sd_card_fopen(filename, false)) < 0) {
+		if((file_pointer = alt_up_sd_card_fopen(filename, true)) < 0) {
+			alt_up_sd_card_fclose(file_pointer);
+			printf("Save playlist %s failed\n", filename);
+			return -1;
+		}
 	}
 
 	writeLine(file_pointer, playlist->list_name, strlen(playlist->list_name));
@@ -104,7 +112,11 @@ void writeLine(int file_pointer, char* data, int size) {
 	int i;
 	for( i = 0; i < size; i++ )
 	{
-		alt_up_sd_card_write(file_pointer, data[i]);
+		if(!alt_up_sd_card_write(file_pointer, data[i])){
+			printf("Write a character to SD card failed.\n");
+		}
 	}
-	alt_up_sd_card_write(file_pointer, NEWLINE);
+	if(!alt_up_sd_card_write(file_pointer, NEWLINE)) {
+		printf("Write a new line ascii failed\n");
+	}
 }

@@ -15,4 +15,7 @@ struct Playlist {
 	struct Playlist* next;
 	struct Playlist* prev;
 };
+
+void initList();
+void killList(struct Playlist**);
 #endif /* PLAYLIST_H_ */
