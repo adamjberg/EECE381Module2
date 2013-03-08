@@ -6,3 +6,9 @@
  */
 #include "Playlist.h"
 
+struct Playlist* initPlaylist() {
+	struct Playlist* this = (struct Playlist*)malloc(sizeof(struct Playlist));
+	this->songs = initQueue();
+	this->list_name = NULL;
+	this->num_of_songs = 0;
+}
