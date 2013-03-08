@@ -18,5 +18,5 @@ struct Playlist {
 };
 
 struct Playlist* initPlaylist();
-void killList(struct Playlist**);
+void killPlayList(struct Playlist**);
 #endif /* PLAYLIST_H_ */

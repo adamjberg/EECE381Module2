@@ -22,6 +22,9 @@ void encodeString(char* str, struct Queue* q) {
 		packet_size+=1;
 	}
 	int* num_packets = (int*)malloc(sizeof(int));
+	if(num_packets == NULL) {
+		printf("NO MEMORY\n");
+	}
 	*num_packets = packet_size;
 	enqueue(com.pendingPacketSize, (void*)num_packets);
 	struct Packet* result;

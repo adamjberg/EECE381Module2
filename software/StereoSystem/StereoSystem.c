@@ -31,6 +31,7 @@ int main()
 	char* temp2 = "I hate debugging and testing";
 	int i;
 	dBTester();
+
 	for(i = 0; i < 39999999; i++) {}
 	send((void*)temp1, STRING);
 

@@ -8,12 +8,18 @@
 
 
 void dBTester() {
-	struct Playlist* pl = (struct Playlist*)malloc(sizeof(struct Playlist));
+	struct Playlist* pl = initPlaylist();
 	pl->list_name = "list1";
+	pl->num_of_songs = 3;
+	enqueue(pl->songs, initSong("aTestSong1"));
+	enqueue(pl->songs, initSong("aTestSong2"));
+	enqueue(pl->songs, initSong("aTestSong3"));
+
 	addListToDB(pl);
-	printf("%s\n", db.playlists->list_name);
+
 	addListToSD("010.TXT", pl);
+
 	loadListFromSD("010.TXT");
-	printf("%s\n", db.playlists->list_name);
-	printf("%s\n", db.playlists->prev->list_name);
+	loadListFromSD("011.TXT");
+
 }

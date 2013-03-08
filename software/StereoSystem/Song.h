@@ -15,4 +15,7 @@ struct Song {
 	int pos;
 	int size;
 };
+
+struct Song* initSong();
+void killSong(struct Song**);
 #endif /* SONG_H_ */

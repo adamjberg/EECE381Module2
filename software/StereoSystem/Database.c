@@ -8,7 +8,7 @@
 
 /*
  * Query the list with a given play list name
- * return the list if founded, NULL otherwise
+ * return the first list founded with the same name, NULL otherwise
  */
 struct Playlist* queryListByName(char* list_name) {
 	if(list_name == NULL) return NULL;
@@ -18,7 +18,7 @@ struct Playlist* queryListByName(char* list_name) {
 		if(strcmp(list_name, temp->list_name) == 0) {
 			return temp;
 		} else {
-			temp = db.playlists->prev;
+			temp = temp->prev;
 		}
 	}
 	temp = NULL;
@@ -40,13 +40,20 @@ int loadListFromSD(char* filename) {
 		alt_up_sd_card_fclose(file_pointer);
 		return -1;
 	}
-	//a temp malloc until construct of playlist has been impelemnted
-	struct Playlist* playlist = (struct Playlist*)malloc(sizeof(struct Playlist));
+
+	int i;
+	struct Playlist* playlist = initPlaylist();
 	playlist->list_name = readLine(file_pointer);
-	//TODO: read other attributes
+	char* num_of_song = readLine(file_pointer);
+	playlist->num_of_songs = atoi(num_of_song);
+	for(i = 0; i<playlist->num_of_songs; i++) {
+		enqueue(playlist->songs, initSong(readLine(file_pointer)));
+	}
 
-
+	free(num_of_song);
+	num_of_song = NULL;
 	addListToDB(playlist);
+	playlist = NULL;
 	alt_up_sd_card_fclose(file_pointer);
 	return 0;
 }
@@ -70,21 +77,28 @@ void addListToDB(struct Playlist* playlist) {
  */
 char* readLine(int file_pointer) {
 	char temp[100];
-	int i = 0;
-	while((temp[i] = alt_up_sd_card_read(file_pointer)) != NEWLINE) {
+	int i = -1;
+
+	do {
 		i++;
+		temp[i] = alt_up_sd_card_read(file_pointer);
+		if(i == 0 && temp[i] == '\n') //this is to skip an empty line if any
+			temp[i] = alt_up_sd_card_read(file_pointer);
 		if(i >= 100) {
 			printf("WARNNING! reading a line that contains more than 100 characters\n");
 			break;
 		}
-	} temp[i] = 0;
+	} while(temp[i] != '\n' && temp[i] != '\r' && temp[i] != 0 && temp[i] != -1);
+	temp[i] = 0;
 	char* result = (char*)malloc(sizeof(char)*i);
 	strncpy(result, temp, i+1);
 	return result;
 }
 /*
- * A helper function that write or rewrite the playlist as a text file to SD card
+ * A function that writes or rewrites the playlist to a text file to SD card
  * return -1 if fail to write; 0 otherwise
+ * @parm filename the file name of text file; must end with .TXT
+ * @parm playlist the playlist object
  */
 int addListToSD(char* filename, struct Playlist* playlist) {
 	if(playlist == NULL) return -2;
@@ -97,14 +111,26 @@ int addListToSD(char* filename, struct Playlist* playlist) {
 		}
 	}
 
-	writeLine(file_pointer, playlist->list_name, strlen(playlist->list_name));
-	//TODO: Write other attributes to the file
+	char num_of_songs[4];
+	int num = playlist->num_of_songs;
+	int i = 0;
+	struct Song* song;
 
+	writeLine(file_pointer, playlist->list_name, strlen(playlist->list_name));
+	sprintf(num_of_songs, "%d", num);
+	writeLine(file_pointer, num_of_songs, 3);
+	for(i = 0; i < num; i++) {
+		song = dequeue(playlist->songs);
+		writeLine(file_pointer, song->song_name, strlen(song->song_name));
+		enqueue(playlist->songs, song);
+	}
+
+	song = NULL;
 	alt_up_sd_card_fclose(file_pointer);
 	return 0;
 }
 /*
- * A helper function that write a segment of data to SD card and write a LINE FEED at end
+ * A helper function that write a segment of data to SD card and write a LINE FEED at the end
  * it does not close file pointer and require an input of file pointer
  */
 void writeLine(int file_pointer, char* data, int size) {
@@ -112,11 +138,15 @@ void writeLine(int file_pointer, char* data, int size) {
 	int i;
 	for( i = 0; i < size; i++ )
 	{
+		if(data[i] == 0) break;
 		if(!alt_up_sd_card_write(file_pointer, data[i])){
 			printf("Write a character to SD card failed.\n");
 		}
 	}
-	if(!alt_up_sd_card_write(file_pointer, NEWLINE)) {
+	if(!alt_up_sd_card_write(file_pointer, '\r')) {
+		printf("Write a new line ascii failed\n");
+	}
+	if(!alt_up_sd_card_write(file_pointer, '\n')) {
 		printf("Write a new line ascii failed\n");
 	}
 }
