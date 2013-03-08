@@ -17,10 +17,6 @@ struct Playlist {
 	struct Playlist* prev;
 };
 
-<<<<<<< HEAD
-void initList();
-void killList(struct Playlist**);
-=======
 struct Playlist* initPlaylist();
->>>>>>> f9685626a469454e92a071d08aa12b49bf2f5b16
+void killList(struct Playlist**);
 #endif /* PLAYLIST_H_ */

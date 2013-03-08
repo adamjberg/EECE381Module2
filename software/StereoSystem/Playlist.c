@@ -11,4 +11,5 @@ struct Playlist* initPlaylist() {
 	this->songs = initQueue();
 	this->list_name = NULL;
 	this->num_of_songs = 0;
+	return this;
 }
