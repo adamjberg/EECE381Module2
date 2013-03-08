@@ -14,7 +14,7 @@ struct database {
 	struct Playlist* playlists;
 	struct Playlist* curr_playlist;
 	int num_of_lists;
-	struct Song** songs;
+	struct Song* songs;
 	struct Song* curr_song;
 	struct Song* next_song;
 	struct Song* prev_song;
@@ -30,6 +30,7 @@ int loadListFromSD(char*);
 int addListToSD(char* filename, struct Playlist*);
 void addListToDB(struct Playlist*);
 int removeListFromDB(char*);
+void addSongToDB(struct Song*);
 char* readLine(int);
 void writeLine(int, char*, int);
 void update();

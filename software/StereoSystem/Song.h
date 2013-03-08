@@ -15,6 +15,8 @@ struct Song {
 	int pos;
 	int size;
 	bool isCached;
+	struct Song* next;
+	struct Song* prev;
 };
 
 struct Song* initSong();

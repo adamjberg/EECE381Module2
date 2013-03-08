@@ -35,6 +35,15 @@ struct Playlist* queryListByName(char* list_name) {
 }
 
 struct Song* querySongByName(char* song_name) {
+	if(song_name == NULL) return NULL;
+	int i;
+	struct Song* temp = db.songs;
+	for(i = 0; i < db.num_of_songs; i++) {
+		if(strcmp(song_name, temp->song_name) == 0) {
+			return temp;
+		} temp = temp->prev;
+	}
+	temp = NULL;
 	return NULL;
 }
 /*
@@ -67,13 +76,30 @@ int loadListFromSD(char* filename) {
 	return 0;
 }
 /*
+ * Add a song to the database
+ */
+void addSongToDB(struct Song* song) {
+	song->next = NULL;
+	if(db.num_of_songs == 0) {
+		db.songs = song;
+		db.songs->prev = NULL;
+	}
+	else {
+		db.songs->next = song;
+		song->prev = db.songs;
+		db.songs = db.songs->next;
+	}
+	db.num_of_songs++;
+}
+/*
  * Add a playlist to the database and set the pointer of database to this list
  */
 void addListToDB(struct Playlist* playlist) {
 	playlist->next = NULL;
-	if(db.num_of_lists == 0)
+	if(db.num_of_lists == 0) {
 		db.playlists = playlist;
-	else {
+		db.playlists->prev = NULL;
+	} else {
 		db.playlists->next = playlist;
 		playlist->prev = db.playlists;
 		db.playlists = db.playlists->next;
@@ -176,10 +202,10 @@ void writeLine(int file_pointer, char* data, int size) {
 		}
 	}
 	if(!alt_up_sd_card_write(file_pointer, '\r')) {
-		printf("Write a new line ascii failed\n");
+		printf("Write a new line ASCII failed\n");
 	}
 	if(!alt_up_sd_card_write(file_pointer, '\n')) {
-		printf("Write a new line ascii failed\n");
+		printf("Write a new line ASCII failed\n");
 	}
 }
 
