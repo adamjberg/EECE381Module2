@@ -10,4 +10,5 @@
 #include "Global.h"
 
 void dBTester();
+void cmdTester();
 #endif /* TESTBOT_H_ */

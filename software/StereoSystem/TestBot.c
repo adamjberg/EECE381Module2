@@ -30,3 +30,18 @@ void dBTester() {
 		printf("remove list2 failed\n");
 
 }
+
+void cmdTester() {
+	char* paras[8];
+	paras[0] = "para1";
+	paras[1] = "para21";
+	paras[2] = "para32";
+	paras[3] = "para43";
+	paras[4] = "para5";
+	paras[5] = "para6";
+	paras[6] = "para7";
+	paras[7] = "para8";
+	struct Command* cmd1 = initCmd(23, 8, paras);
+
+	send((void*)cmd1, CMD);
+}

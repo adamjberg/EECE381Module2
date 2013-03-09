@@ -69,3 +69,13 @@ void killQueueData(struct QueueData** this) {
 	free(*this);
 	*this = NULL;
 }
+
+void addPacketsLengthToQueue(int packet_size) {
+	int* num_packets = (int*)malloc(sizeof(int));
+	if(num_packets == NULL) {
+		printf("NO MEMORY\n");
+	}
+	*num_packets = packet_size;
+	enqueue(com.pendingPacketSize, (void*)num_packets);
+	num_packets = NULL;
+}

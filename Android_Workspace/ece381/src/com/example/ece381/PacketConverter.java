@@ -1,6 +1,7 @@
 package com.example.ece381;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -43,12 +44,16 @@ public class PacketConverter {
 		return result;
 	}
 	
+	public static Queue<Packet> convert(Command cmd) {
+		
+		return null;
+	}
 	public static Object decode(Queue<Packet> q) {
 		switch(q.peek().getInfoType()) {
 		case STRING:
 			return decodeString(q);
 		case CMD:
-			return null;
+			return decodeCmd(q);
 		case TXT:
 			return null;
 		case AUDIO:
@@ -72,5 +77,36 @@ public class PacketConverter {
 			}
 		}q.clear();
 		return (Object)strBuf.toString();
+	}
+	
+	public static Object decodeCmd(Queue<Packet> q) {
+		ArrayList<Byte> dataBuf = new ArrayList<Byte>();
+
+		Packet p;
+		int i;
+		int j = 0;
+		int k;
+		int len;
+		Command cmd;
+		Iterator<Packet> iterator = q.iterator();
+		while(iterator.hasNext()) {
+			p = iterator.next();
+			for(i = 0; i < p.length(); i++) {
+				dataBuf.add(new Byte(p.getPacket()[i+Packet.HEADERSIZE]));
+			}
+		}
+		cmd = new Command(dataBuf.get(0).intValue());
+		j = 2;
+		byte tempBytes[];
+		for(i = 0; i < dataBuf.get(1).intValue(); i++) {
+			len = dataBuf.get(j++).intValue();
+			tempBytes = new byte[len];
+			for(k = 0; k < len; k++) {
+				tempBytes[k] = dataBuf.get(j++).byteValue();
+			}
+			cmd.addParameter(new String(tempBytes));
+		}
+		q.clear();
+		return (Object)cmd;
 	}
 }

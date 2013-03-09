@@ -35,22 +35,47 @@ int main()
 	char* temp = "Constructs a new String by decoding the specified subarray of bytes using the specified charset. The length of the new String is a function of the charset, and hence may not be equal to the length of the subarray. ";
 	char* temp1 = "this is a testing message";
 	char* temp2 = "I hate debugging and testing";
+
+
+	char* paras[8];
+	paras[0] = "para1";
+	paras[1] = "aTestPara";
+	paras[2] = "para32";
+	struct Command* cmd1 = initCmd(23, 3, paras);
+
+	paras[0] = "yo";
+	paras[1] = "aTestPara";
+	paras[2] = "hmm";
+	paras[3] = "hi";
+	struct Command* cmd2 = initCmd(0, 4, paras);
+
+	paras[0] = "asl;dfasldfj";
+	paras[1] = "aTeddfasdstPara";
+	struct Command* cmd3 = initCmd(99, 2, paras);
+
 	int i;
 	dBTester();
 
-	for(i = 0; i < 39999999; i++) {}
-	send((void*)temp1, STRING);
+//	cmdTester();
+	//for(i = 0; i < 39999999; i++) {}
+	//send((void*)temp1, STRING);
 //Testing code end
 
 
 	while(1) {
 //Testing code start
-		for(i = 0; i < 9999999; i++) {}
-		send((void*)temp2, STRING);
-		for(i = 0; i < 9999999; i++) {}
-		send((void*)temp, STRING);
-		for(i = 0; i < 9999999; i++) {}
-		send((void*)temp1, STRING);
+	//	for(i = 0; i < 9999999; i++) {}
+	//	send((void*)temp2, STRING);
+	//	for(i = 0; i < 9999999; i++) {}
+	//	send((void*)temp, STRING);
+	//	for(i = 0; i < 9999999; i++) {}
+	//	send((void*)temp1, STRING);
+		for(i = 0; i < 19999999; i++) {}
+		send((void*)cmd1, CMD);
+		for(i = 0; i < 19999999; i++) {}
+		send((void*)cmd2, CMD);
+		for(i = 0; i < 19999999; i++) {}
+		send((void*)cmd3, CMD);
 //Testing code end
 
 		cmdProcessing(scheduler);

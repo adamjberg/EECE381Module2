@@ -16,7 +16,8 @@ struct Command {
 	char** parameters;
 };
 
-struct Command* initCmd();
+struct Command* initCmd(int, int, char**);
+void killCmd(struct Command**);
 
 void pause();
 void play(char*, int);

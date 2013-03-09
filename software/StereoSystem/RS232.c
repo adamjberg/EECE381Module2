@@ -57,6 +57,7 @@ int send(void* data, enum msgType type) {
 		encodeString((char*)data, com.sendPackets);
 		break;
 	case CMD:
+		encodeCmd((struct Command*)data, com.sendPackets);
 		break;
 	case PLAYLIST:
 		break;
@@ -143,17 +144,14 @@ unsigned char* sendAck() {
 
 	setBit(&cert[0], 0); //1111XX01
 
-	char* temp; //need to do something with this later
+	//char* temp; //need to do something with this later
 
 	if(com.index_packets >= com.num_packets) { //all packets received
 		setStates(checkClient);
 		com.index_packets = 0;
 
 		//call decode & command here later
-		temp = (char*)decode(com.receivePackets);
-		printf("%s\n", temp);
-		free(temp);
-		temp = NULL;
+		decode(com.receivePackets);
 	} else
 		setStates(receiveData0);
 	return cert;

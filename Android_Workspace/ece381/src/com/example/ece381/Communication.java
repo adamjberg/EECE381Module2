@@ -99,6 +99,23 @@ public class Communication {
 		
 		return true;
 	}
+	
+	public boolean send(Command cmd) {
+		try {
+			Queue<Packet> q = PacketConverter.convert(cmd);
+			sendData.addAll(q);
+			this.pendingPacketSize.add(Integer.valueOf(q.size()));
+			if(this.isReadySend) {
+				return false;
+			} else {
+				this.isReadySend = true; //notify that an information is ready to send
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 	/*
 	 * Pack received, put in queue if there are more packets to receive
 	 */

@@ -25,4 +25,5 @@ struct Queue* initQueue();
 void enqueue(struct Queue*, void*);
 void* dequeue(struct Queue*);
 void killQueueData(struct QueueData**);
+void addPacketsLengthToQueue(int);
 #endif /* QUEUE_H_ */

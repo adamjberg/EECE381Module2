@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
 	// Route called when the user presses "connect"
 	
 	public void openSocket(View view) {
-		MyApplication app = (MyApplication) getApplication();
+	/*	MyApplication app = (MyApplication) getApplication();
 		TextView msgbox = (TextView) findViewById(R.id.error_message_box);
 
 		// Make sure the socket is not already opened 
@@ -87,7 +87,11 @@ public class MainActivity extends Activity {
 	    // (defined below).  This creates an instance of the subclass
 		// and executes the code in it.
 		
-		new SocketConnect().execute((Void) null);
+		new SocketConnect().execute((Void) null);*/
+		Command cmd = new Command(5);
+		cmd.addParameter("song_name");
+		cmd.addParameter("list_name");
+		com.send(cmd);
 	}
 
 	//  Called when the user wants to send a message
@@ -328,15 +332,14 @@ public class MainActivity extends Activity {
 						com.setState(Stats.checkServer);
 						com.setIndex_packets(0);
 						
-						final String s = (String)PacketConverter.decode(com.getReceiveQueue());
+						final Command cmd = (Command)PacketConverter.decode(com.getReceiveQueue());
 						
 						runOnUiThread(new Runnable() {
 							public void run() {
 								EditText et = (EditText) findViewById(R.id.RecvdMessage);
-								et.setText(s);
+								et.setText(cmd.getParameters());
 							}
 						});
-						Log.i("MY_MESSAGE", s );
 					} else
 						com.setState(Stats.receiveData0);
 					break;

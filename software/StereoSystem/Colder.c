@@ -21,12 +21,9 @@ void encodeString(char* str, struct Queue* q) {
 	if(length % 100 >0) {
 		packet_size+=1;
 	}
-	int* num_packets = (int*)malloc(sizeof(int));
-	if(num_packets == NULL) {
-		printf("NO MEMORY\n");
-	}
-	*num_packets = packet_size;
-	enqueue(com.pendingPacketSize, (void*)num_packets);
+
+	addPacketsLengthToQueue(packet_size);
+
 	struct Packet* result;
 	for(i = 0; i < packet_size; i++) {
 		if(i == packet_size - 1) {
@@ -51,6 +48,56 @@ void encodeString(char* str, struct Queue* q) {
 	strBuf = NULL;
 }
 
+/*
+ * encode a command to packets and push to the queue
+ */
+void encodeCmd(struct Command* cmd, struct Queue* q) {
+	if(cmd == NULL || q == NULL) return;
+	int data_size = 2; //1 byte for cmd index and the other for number of parameters
+	data_size += cmd->num_of_parameters; //each parameter need a byte for its length
+	int i, j, k;
+	for(i = 0; i < cmd->num_of_parameters; i++) {
+		data_size += cmd->parameters_size[i];
+	}
+	char* dataBuf = (char*)malloc(sizeof(char)*data_size);
+	struct Packet* result = NULL;
+	int packets_size = data_size/100;
+	if(data_size %100 > 0)
+		packets_size+=1;
+
+	addPacketsLengthToQueue(packets_size);
+
+	dataBuf[0] = (unsigned char)cmd->cmd_index;
+	dataBuf[1] = (unsigned char)cmd->num_of_parameters;
+	j = 2;
+	for(i = 0; i< cmd->num_of_parameters; i++) {
+		dataBuf[j++] = (char)cmd->parameters_size[i];
+		for(k = 0; k < cmd->parameters_size[i]; k++) {
+			dataBuf[j++] = (char)cmd->parameters[i][k];
+		}
+	}
+	for(i = 0; i < packets_size; i++) {
+		if(i == packets_size-1) {
+			result = initPacket(data_size, (unsigned char*)dataBuf);
+			setHeader(result, 0, 1, CMD); //last packet
+		} else {
+			char* temp = strnsep_(&dataBuf, 100);
+			result = initPacket(100, (unsigned char*)dataBuf);
+			free(temp);
+			temp = NULL;
+			data_size -= 100;
+		}
+		if(i == 0)
+			setHeader(result, 1, 0, CMD); //first packet
+		else if(i != packets_size - 1)
+			setHeader(result, 0, 0, CMD);
+		enqueue(q, (void*)result);
+	}
+	result = NULL;
+	free(dataBuf);
+	dataBuf = NULL;
+}
+
 void* decode(struct Queue* this) {
 	int len = this->size;
 	struct Packet** packets = (struct Packet**)malloc(sizeof(struct Packet*)*len);
@@ -63,6 +110,7 @@ void* decode(struct Queue* this) {
 	switch(*(packets[0]->type)) {
 	case STRING:
 		result = decodeString(packets, len);
+		printf("%s\n",(char*)result);
 		break;
 	case CMD:
 		result = decodeCmd(packets, len);
@@ -101,3 +149,4 @@ void* decodePlaylist(struct Packet** p, int size) {
 
 	return NULL;
 }
+
