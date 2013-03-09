@@ -19,4 +19,5 @@ struct Playlist {
 
 struct Playlist* initPlaylist();
 void killPlaylist(struct Playlist**);
+void generateListNameForSD(char*, int);
 #endif /* PLAYLIST_H_ */

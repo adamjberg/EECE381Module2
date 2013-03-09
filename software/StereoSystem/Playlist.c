@@ -20,3 +20,12 @@ void killPlaylist(struct Playlist** this) {
 
 	*this = NULL;
 }
+
+void generateListNameForSD(char* str, int list_index_in_db){
+	char index[2];
+	index[0] = list_index_in_db + '0';
+	index[1] = '\0';
+	strcpy(str, "LIST");
+	strcat(str, index);
+	strcat(str, ".TXT");
+}
