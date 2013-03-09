@@ -12,7 +12,7 @@
 void encodeString(char*, struct Queue*);
 void encodeCmd(struct Command*, struct Queue*);
 
-void* decode(struct Queue*);
+void decode(struct Queue*);
 void* decodeString(struct Packet**, int);
 void* decodeCmd(struct Packet**, int);
 void* decodePlaylist(struct Packet**, int);

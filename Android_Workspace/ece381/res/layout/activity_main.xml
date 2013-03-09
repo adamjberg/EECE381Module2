@@ -76,7 +76,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="openSocket"
-        android:text="@string/connect" />
+        android:text="@string/play" />
 
     <Button
         android:layout_width="fill_parent"

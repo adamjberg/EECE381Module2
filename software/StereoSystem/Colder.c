@@ -98,7 +98,7 @@ void encodeCmd(struct Command* cmd, struct Queue* q) {
 	dataBuf = NULL;
 }
 
-void* decode(struct Queue* this) {
+void decode(struct Queue* this) {
 	int len = this->size;
 	struct Packet** packets = (struct Packet**)malloc(sizeof(struct Packet*)*len);
 	void* result = NULL;
@@ -111,12 +111,18 @@ void* decode(struct Queue* this) {
 	case STRING:
 		result = decodeString(packets, len);
 		printf("%s\n",(char*)result);
+		free(result);
+		result = NULL;
 		break;
 	case CMD:
 		result = decodeCmd(packets, len);
+		printf("%s %s\n", ((struct Command*)result)->parameters[0], ((struct Command*)result)->parameters[1]);
+		killCmd(&result);
+
 		break;
 	case PLAYLIST:
 		result = decodePlaylist(packets, len);
+
 		break;
 	default:
 		break;
@@ -126,7 +132,6 @@ void* decode(struct Queue* this) {
 	}
 	free(packets);
 	packets = NULL;
-	return result;
 }
 
 void* decodeString(struct Packet** p, int size) {
@@ -142,8 +147,39 @@ void* decodeString(struct Packet** p, int size) {
 	return (void*)result;
 }
 void* decodeCmd(struct Packet** p, int size) {
-
-	return NULL;
+	int length = 0;
+	int cmd_index = (int)p[0]->data[2];;
+	int num_parameters = (int)p[0]->data[3];;
+	char** paras = (char**)malloc(sizeof(char*)*num_parameters);
+	int i, j, k;
+	for(i = 0; i < size; i++) {
+		length += p[i]->data_size;
+	}
+	char* dataBuf = (char*)malloc(sizeof(char)*length);
+	i = 0;
+	for(j = 0; j < size; j++) {
+		for(k = 0; k < p[j]->data_size; k++) {
+			dataBuf[i++] = p[j]->data[k+HEADERSIZE];
+		}
+	}
+	j = 2;
+	int len = 0;
+	for(i = 0; i < num_parameters; i++) {
+		len = (int)dataBuf[j++];
+		paras[i] = (char*)malloc(sizeof(char)*(len+1));
+		for(k = 0; k < len; k++) {
+			paras[i][k] = dataBuf[j++];
+		} paras[i][k] = '\0';
+	}
+	void* result = (void*)initCmd(cmd_index, num_parameters, paras);
+	for(i = 0; i < num_parameters; i++) {
+		free(paras[i]);
+		paras[i] = NULL;
+	} free(paras);
+	paras = NULL;
+	free(dataBuf);
+	dataBuf = NULL;
+	return result;
 }
 void* decodePlaylist(struct Packet** p, int size) {
 

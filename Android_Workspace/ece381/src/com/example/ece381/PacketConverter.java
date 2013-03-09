@@ -45,9 +45,44 @@ public class PacketConverter {
 	}
 	
 	public static Queue<Packet> convert(Command cmd) {
-		
-		return null;
+		Queue<Packet> result = new ConcurrentLinkedQueue<Packet>();
+		int length = cmd.getBytesLength();
+		int num_packets = length/100;
+		byte buf[] = new byte[length];
+		byte temp[] = new byte[100];
+		if(length%100 > 0)
+			num_packets++;
+		int i, k;
+		buf[0] = (byte)cmd.getCmdIndex();
+		buf[1] = (byte)cmd.getNumParameters();
+		int j = 2;
+		for(i = 0; i < cmd.getNumParameters(); i++) {
+			buf[j++] = (byte)cmd.getParameterList().get(i).length();
+			for(k = 0; k < cmd.getParameterList().get(i).length(); k++) {
+				buf[j++] = cmd.getParameterList().get(i).getBytes()[k];
+			}
+		}
+		int packet_size = 100;
+		for(i = 0; i < num_packets; i++) {
+			if(i == num_packets-1) {
+				if((packet_size = length%100) == 0)
+					packet_size = 100;
+			}
+			System.arraycopy(buf, i*100, temp, 0, packet_size);
+			try {
+				if(i == 0)
+					result.add(new Packet(packet_size, temp, 0, InfoType.CMD, num_packets));
+				else if(i == num_packets-1)
+					result.add(new Packet(packet_size, temp, 2, InfoType.CMD, num_packets));
+				else
+					result.add(new Packet(packet_size, temp, 1, InfoType.CMD, num_packets));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
+	
 	public static Object decode(Queue<Packet> q) {
 		switch(q.peek().getInfoType()) {
 		case STRING:
