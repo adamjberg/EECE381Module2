@@ -52,4 +52,38 @@ public class Command {
 		}
 		return sum;
 	}
+	
+	static public void syncPlay(String song_name, int pos) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(1);
+		cmd.addParameter(song_name);
+		cmd.addParameter(String.valueOf(pos));
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void play(String song_name, int po) {
+		
+	}
+	
+	static public void synPause() {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(2);
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void pause() {
+		
+	}
+	
+	static public void syncStop() {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(3);
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	static public void stop() {
+		
+	}
 }

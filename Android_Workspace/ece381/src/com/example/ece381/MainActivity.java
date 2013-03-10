@@ -88,12 +88,16 @@ public class MainActivity extends Activity {
 		// and executes the code in it.
 		
 		new SocketConnect().execute((Void) null);*/
-		Command cmd = new Command(5);
-		cmd.addParameter("song_name");
-		cmd.addParameter("list_name");
-		com.send(cmd);
+		Command.syncPlay("Current_Song", 0);
 	}
 
+	public void pause(View view) {
+		Command.synPause();
+	}
+	
+	public void stop(View view) {
+		Command.syncStop();
+	}
 	//  Called when the user wants to send a message
 	
 	public void sendMessage(View view) {
@@ -122,33 +126,6 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
-	// Construct an IP address from the four boxes
-	
-	public String getConnectToIP() {
-		String addr = ""; //$NON-NLS-1$
-		EditText text_ip;
-		text_ip = (EditText) findViewById(R.id.ip1);
-		addr += text_ip.getText().toString();
-		text_ip = (EditText) findViewById(R.id.ip2);
-		addr += "." + text_ip.getText().toString(); //$NON-NLS-1$
-		text_ip = (EditText) findViewById(R.id.ip3);
-		addr += "." + text_ip.getText().toString(); //$NON-NLS-1$
-		text_ip = (EditText) findViewById(R.id.ip4);
-		addr += "." + text_ip.getText().toString(); //$NON-NLS-1$
-		return addr;
-	}
-
-	// Gets the Port from the appropriate field.
-	
-	public Integer getConnectToPort() {
-		Integer port;
-		EditText text_port;
-
-		text_port = (EditText) findViewById(R.id.port);
-		port = Integer.parseInt(text_port.getText().toString());
-
-		return port;
-	}
 
 
     // This is the Socket Connect asynchronous thread.  Opening a socket
@@ -164,7 +141,7 @@ public class MainActivity extends Activity {
 		protected Socket doInBackground(Void... voids) {
 			Socket s = null;
 			String ip = Messages.getString("MainActivity.IP_Address"); //$NON-NLS-1$
-			Integer port = getConnectToPort();
+			Integer port = Integer.valueOf(50002);
 
 			try {
 				s = new Socket(ip, port);
@@ -332,14 +309,17 @@ public class MainActivity extends Activity {
 						com.setState(Stats.checkServer);
 						com.setIndex_packets(0);
 						
-						final Command cmd = (Command)PacketConverter.decode(com.getReceiveQueue());
+						Object o = PacketConverter.decode(com.getReceiveQueue());
 						
-						runOnUiThread(new Runnable() {
-							public void run() {
-								EditText et = (EditText) findViewById(R.id.RecvdMessage);
-								et.setText(cmd.getParameters());
-							}
-						});
+						if(o instanceof String) {
+							final String s = (String)o;
+							runOnUiThread(new Runnable() {
+								public void run() {
+									EditText et = (EditText) findViewById(R.id.RecvdMessage);
+									et.setText(s);
+								}
+							});
+						}
 					} else
 						com.setState(Stats.receiveData0);
 					break;
@@ -370,9 +350,10 @@ public class MainActivity extends Activity {
 					break;
 				}
 				
+				com.getSched().cmdProcessing();
 					
 			}
-		}
+		} 
 	}
 	
 }

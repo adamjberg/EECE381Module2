@@ -10,6 +10,7 @@ struct Command* initCmd(int index, int num_parameters, char** paras) {
 	struct Command* this = (struct Command*)malloc(sizeof(struct Command));
 	this->cmd_index = index;
 	this->num_of_parameters = num_parameters;
+	if(num_parameters == 0 || paras == NULL) return  this;
 	this->parameters = (char**)malloc(sizeof(char*)*num_parameters);
 	this->parameters_size = (int*)malloc(sizeof(int)*num_parameters);
 	int i ;
@@ -23,27 +24,66 @@ struct Command* initCmd(int index, int num_parameters, char** paras) {
 }
 
 void killCmd(struct Command** this) {
-	free((*this)->parameters_size);
-	(*this)->parameters_size = NULL;
 	int i = 0;
-	for(i = 0; i < (*this)->num_of_parameters ; i++) {
-		free((*this)->parameters[i]);
-		(*this)->parameters[i] = NULL;
+	if((*this)->num_of_parameters != 0) {
+		free((*this)->parameters_size);
+		(*this)->parameters_size = NULL;
+		for(i = 0; i < (*this)->num_of_parameters ; i++) {
+			free((*this)->parameters[i]);
+			(*this)->parameters[i] = NULL;
+		}
+		free((*this)->parameters);
+		(*this)->parameters = NULL;
 	}
-	free((*this)->parameters);
-	(*this)->parameters = NULL;
 	free(*this);
 	*this = NULL;
 }
-
-//pause current play song
+/*
+ * Function to call when need to sync with Android
+ * It will also put command to scheduler
+ */
+void syncPlay(char* song_name, int pos) {
+	char* temp[2];
+	temp[0] = song_name;
+	char tempPos[4];
+	sprintf(tempPos, "%d", pos);
+	temp[1] = tempPos;
+	struct Command* cmd = initCmd(1, 2, temp);
+	send(cmd, CMD);
+	addCmd(com.scheduler, (struct Command*)cmd);
+}
+//index 1
+void play(char* song_name, int pos) {
+	//struct Song* aSong = querySongByName(song_name);
+	printf("A song %s is played at %d position.\n", song_name, pos);
+}
+/*
+ * Function to call when need to sync with Android
+ * It will also put command to scheduler
+ */
+void syncPause() {
+	struct Command* cmd = initCmd(2, 0, NULL);
+	send(cmd, CMD);
+	addCmd(com.scheduler, (struct Command*)cmd);
+}
+//pause current play song; index 2
 void pause() {
 	printf("The music is paused.\n");
 }
-void play(char* song_name, int pos) {
-	//struct Song* aSong = querySongByName(song_name);
-	printf("A song is played.\n");
+/*
+ * Function to call when need to sync with Android
+ * It will also put command to scheduler
+ */
+void syncStop() {
+	struct Command* cmd = initCmd(3, 0, NULL);
+	send(cmd, CMD);
+	addCmd(com.scheduler, (struct Command*)cmd);
 }
+//index 3
+void stop() {
+	printf("The song is stoped.\n");
+}
+
 void setVolume(int vol) {
 	printf("Volume is set to %d\n", vol);
 }
@@ -70,12 +110,6 @@ void shuffle(char* listname) {
 void addSongToPlaylist(char* song, char* listname) {
 	printf("Song %s is added to %s\n", song, listname);
 }
-void moveSongToIndex(char* song, int index, char* listname) {
-
-}
-void removeSongFromPlaylist(char* song, char* listname) {
-
-}
 void removeList(char* listname) {
 	printf("Playlist: %s is removed\n", listname);
 }
@@ -84,6 +118,13 @@ void play_playlist(char* listname) {
 }
 void repeatPlaylist(char* listname) {
 	printf("Playlist: %s is set to repeated\n", listname);
+}
+
+void moveSongToIndex(char* song, int index, char* listname) {
+
+}
+void removeSongFromPlaylist(char* song, char* listname) {
+
 }
 void repeatCurrentSong() {
 

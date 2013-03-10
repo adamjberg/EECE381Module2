@@ -84,11 +84,13 @@ public class PacketConverter {
 	}
 	
 	public static Object decode(Queue<Packet> q) {
+		Communication com = Communication.getInstance();
 		switch(q.peek().getInfoType()) {
 		case STRING:
 			return decodeString(q);
 		case CMD:
-			return decodeCmd(q);
+			com.getSched().addCmd((Command)decodeCmd(q));
+			return null;
 		case TXT:
 			return null;
 		case AUDIO:
@@ -111,7 +113,7 @@ public class PacketConverter {
 				e.printStackTrace();
 			}
 		}q.clear();
-		return (Object)strBuf.toString();
+		return strBuf.toString();
 	}
 	
 	public static Object decodeCmd(Queue<Packet> q) {

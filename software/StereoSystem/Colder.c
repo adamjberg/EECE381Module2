@@ -116,9 +116,7 @@ void decode(struct Queue* this) {
 		break;
 	case CMD:
 		result = decodeCmd(packets, len);
-		printf("%s %s\n", ((struct Command*)result)->parameters[0], ((struct Command*)result)->parameters[1]);
-		killCmd(&result);
-
+		addCmd(com.scheduler, result);
 		break;
 	case PLAYLIST:
 		result = decodePlaylist(packets, len);
@@ -175,8 +173,11 @@ void* decodeCmd(struct Packet** p, int size) {
 	for(i = 0; i < num_parameters; i++) {
 		free(paras[i]);
 		paras[i] = NULL;
-	} free(paras);
-	paras = NULL;
+	}
+	if(num_parameters != 0) {
+		free(paras);
+		paras = NULL;
+	}
 	free(dataBuf);
 	dataBuf = NULL;
 	return result;

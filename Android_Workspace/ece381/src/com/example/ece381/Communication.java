@@ -22,11 +22,13 @@ public class Communication {
 	private boolean isReadySend;
 	private int failReceveTime;
 	private Packet PacketBuf;
+	private CmdScheduler sched;
 	
 	private Communication() {
 		this.sendData = new ConcurrentLinkedQueue<Packet>();
 		this.receiveData = new ConcurrentLinkedQueue<Packet>();
 		this.pendingPacketSize = new ConcurrentLinkedQueue<Integer>();
+		this.sched = new CmdScheduler();
 		this.resetCom();
 	}
 	
@@ -42,6 +44,7 @@ public class Communication {
 		this.sendData.clear();
 		this.receiveData.clear();
 		this.pendingPacketSize.clear();
+		this.sched.clear();
 	}
 	static public Communication getInstance() {
 		return RS232;
@@ -145,6 +148,10 @@ public class Communication {
 	public void addPacketBuffer(Packet p) {
 		this.PacketBuf = p;
 	}
+	
+	public CmdScheduler getSched() {
+		return this.sched;
+	}
 	/*
 	 * get its current state
 	 */
@@ -215,6 +222,7 @@ public class Communication {
 	public int getAck() {
 		return this.client_ack;
 	}
+
 	/*
 	 * Check to see if the acknowledge received from server has correct value
 	 */

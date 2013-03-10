@@ -14,5 +14,6 @@ struct CmdScheduler {
 };
 
 struct CmdScheduler* initCmdScheduler();
+void addCmd(struct CmdScheduler*, struct Command*);
 void cmdProcessing(struct CmdScheduler*);
 #endif /* COMMANDSCHEDULER_H_ */

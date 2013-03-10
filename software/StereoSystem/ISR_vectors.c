@@ -53,7 +53,7 @@ alt_u32 RS232_ISR(void* up_dev) {
 				if(getBit(com.data[0], 1) == 1) {
 					setStates(sendAck0);
 					com.num_packets = ((int)(com.data[1] << 8))+(int)com.data[2];
-					printf("num of packets will be receiving: %d\n", com.num_packets);
+					//printf("num of packets will be receiving: %d\n", com.num_packets);
 				} else
 					setStates(sendStates);
 			} else

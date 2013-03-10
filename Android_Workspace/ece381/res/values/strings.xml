@@ -14,5 +14,6 @@
     <string name="stop">Stop</string>
     <string name="refresh_socket">Show Sock.</string>
     <string name="IP">192.3.17.101</string>
+    <string name="pause">Pause</string>
 
 </resources>

@@ -19,8 +19,10 @@ struct Command {
 struct Command* initCmd(int, int, char**);
 void killCmd(struct Command**);
 
-void pause();
+void syncPlay(char*, int);
 void play(char*, int);
+void pause();
+void stop();
 void setVolume(int);
 void seek(int);
 void next();
