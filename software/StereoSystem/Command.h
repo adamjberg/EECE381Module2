@@ -21,7 +21,9 @@ void killCmd(struct Command**);
 
 void syncPlay(char*, int);
 void play(char*, int);
+void syncPause();
 void pause();
+void syncStop();
 void stop();
 void setVolume(int);
 void seek(int);

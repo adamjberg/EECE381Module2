@@ -10,14 +10,16 @@
 #include "Global.h"
 
 struct Playlist {
-	struct Queue* songs;
+	//struct Queue* songs;
 	char* list_name;
 	int num_of_songs;
-	struct Playlist* next;
-	struct Playlist* prev;
+	//struct Playlist* next;
+	//struct Playlist* prev;
+	int id;
 };
 
 struct Playlist* initPlaylist();
+void setListId(struct Playlist*, int);
 void killPlaylist(struct Playlist**);
 void generateListNameForSD(char*, int);
 #endif /* PLAYLIST_H_ */

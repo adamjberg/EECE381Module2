@@ -8,17 +8,19 @@
 #ifndef DATABASE_H_
 #define DATABASE_H_
 #include "Global.h"
+#define LISTFILE "LISTS.TXT"
 struct database db;
 
 struct database {
-	struct Playlist* playlists;
-	struct Playlist* curr_playlist;
+	struct Playlist* playlists[50];
+	int curr_playlist_id;
 	int num_of_lists;
-	struct Song* songs;
-	struct Song* curr_song;
-	struct Song* next_song;
-	struct Song* prev_song;
+	struct Song* songs[200];
+	int curr_song_id;
+	int next_song_id;
+	int prev_song_id;
 	int num_of_songs;
+	int index_table[50][200];
 
 	struct Cache* cache;
 };
@@ -26,10 +28,10 @@ struct database {
 void initDatabase();
 struct Playlist* queryListByName(char*);
 struct Song* querySongByName(char*);
-int loadListFromSD(char*);
-int addListToSD(char* filename, struct Playlist*);
+int loadListFromSD();
+int addListToSD(struct Playlist*);
 void addListToDB(struct Playlist*);
-int removeListFromDB(char*);
+int removeListFromDB(int);
 void addSongToDB(struct Song*);
 char* readLine(int);
 void writeLine(int, char*, int);

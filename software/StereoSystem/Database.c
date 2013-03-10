@@ -8,12 +8,10 @@
 
 void initDatabase() {
 	db.cache = initCache();
-	db.curr_playlist = NULL;
-	db.curr_song = db.next_song = db.prev_song = NULL;
+	db.curr_playlist = 0;
+	db.curr_song = db.next_song = db.prev_song = 0;
 	db.num_of_lists = 0;
 	db.num_of_songs = 0;
-	db.playlists = NULL;
-	db.songs = NULL;
 }
 /*
  * Query the list with a given play list name
@@ -22,43 +20,40 @@ void initDatabase() {
 struct Playlist* queryListByName(char* list_name) {
 	if(list_name == NULL) return NULL;
 	int i;
-	struct Playlist* temp = db.playlists;
-	for(i = 0; i < db.num_of_lists; i++) {
-		if(strcmp(list_name, temp->list_name) == 0) {
-			return temp;
-		} else {
-			temp = temp->prev;
+	//struct Playlist* temp = db.playlists;
+	int size = db.num_of_lists;
+	for(i = 0; i < size; i++) {
+		if(strcmp(list_name, db.playlists[i]->list_name) == 0) {
+			return db.playlists[i];
 		}
 	}
-	temp = NULL;
 	return NULL;
 }
 
 struct Song* querySongByName(char* song_name) {
 	if(song_name == NULL) return NULL;
 	int i;
-	struct Song* temp = db.songs;
-	for(i = 0; i < db.num_of_songs; i++) {
-		if(strcmp(song_name, temp->song_name) == 0) {
-			return temp;
-		} temp = temp->prev;
+	int size = db.num_of_songs;
+	for(i = 0; i < size; i++) {
+		if(strcmp(song_name, db.songs[i]->song_name) == 0) {
+			return db.songs[i];
+		}
 	}
-	temp = NULL;
 	return NULL;
 }
 /*
  * Load a playlist from SD card to the the database
  * return -1 if no more list can be found in the SD card; 0 otherwise
  */
-int loadListFromSD(char* filename) {
-	if(filename == NULL) return -2;
+
+int loadListFromSD() {
 	int file_pointer;
-	if((file_pointer = alt_up_sd_card_fopen(filename, false)) < 0) {
+	if((file_pointer = alt_up_sd_card_fopen(LISTFILE, false)) < 0) {
 		printf("No more playlist to load\n");
 		alt_up_sd_card_fclose(file_pointer);
 		return -1;
 	}
-
+/*
 	int i;
 	struct Playlist* playlist = initPlaylist();
 	playlist->list_name = readLine(file_pointer);
@@ -71,7 +66,7 @@ int loadListFromSD(char* filename) {
 	free(num_of_song);
 	num_of_song = NULL;
 	addListToDB(playlist);
-	playlist = NULL;
+	playlist = NULL;*/
 	alt_up_sd_card_fclose(file_pointer);
 	return 0;
 }
@@ -79,54 +74,32 @@ int loadListFromSD(char* filename) {
  * Add a song to the database
  */
 void addSongToDB(struct Song* song) {
-	song->next = NULL;
-	if(db.num_of_songs == 0) {
-		db.songs = song;
-		db.songs->prev = NULL;
-	}
-	else {
-		db.songs->next = song;
-		song->prev = db.songs;
-		db.songs = db.songs->next;
-	}
 	db.num_of_songs++;
+	setSongId(song, db.num_of_songs);
+	db.songs[db.num_of_songs] = song;
 }
 /*
- * Add a playlist to the database and set the pointer of database to this list
+ * Add a playlist to the database
  */
 void addListToDB(struct Playlist* playlist) {
-	playlist->next = NULL;
-	if(db.num_of_lists == 0) {
-		db.playlists = playlist;
-		db.playlists->prev = NULL;
-	} else {
-		db.playlists->next = playlist;
-		playlist->prev = db.playlists;
-		db.playlists = db.playlists->next;
-	}
 	db.num_of_lists++;
+	setListId(playlist, db.num_of_lists);
+	db.playlists[db.num_of_lists] = playlist;
 }
 /*
  * Remove a playlist from the database
  * return 0 if list is removed, -1 if cannot find list in the database
  */
-int removeListFromDB(char* list_name) {
-	struct Playlist* rm = queryListByName(list_name);
-	if(rm==NULL)
-		return -1;
-	if(rm->prev != NULL)
-		rm->prev->next = rm->next;
-	else if(rm->next != NULL)
-		rm->next->prev = NULL;
-
-	if(rm->next != NULL)
-		rm->next->prev = rm->prev;
-	else if(rm->prev != NULL)
-		rm->prev->next = NULL;
+int removeListFromDB(int list_id) {
+	if(list_id > db.num_of_lists || list_id <= 0) return -1;
+	killPlaylist(&db.playlists[list_id]);
+	int i;
+	for(i = list_id+1; i <= db.num_of_lists; i++) {
+		db.playlists[i]->id--;
+		db.playlists[i-1] = db.playlists[i];
+	}
+	db.playlists[i] = NULL;
 	db.num_of_lists--;
-	if(rm == db.curr_playlist)
-		db.curr_playlist = NULL;
-	killPlaylist(&rm);
 	return 0;
 }
 /*
@@ -158,18 +131,18 @@ char* readLine(int file_pointer) {
  * @parm filename the file name of text file; must end with .TXT
  * @parm playlist the playlist object
  */
-int addListToSD(char* filename, struct Playlist* playlist) {
+int addListToSD(struct Playlist* playlist) {
 	if(playlist == NULL) return -2;
 	int file_pointer;
-	if((file_pointer = alt_up_sd_card_fopen(filename, false)) < 0) {
-		if((file_pointer = alt_up_sd_card_fopen(filename, true)) < 0) {
+	if((file_pointer = alt_up_sd_card_fopen(LISTFILE, false)) < 0) {
+		if((file_pointer = alt_up_sd_card_fopen(LISTFILE, true)) < 0) {
 			alt_up_sd_card_fclose(file_pointer);
-			printf("Save playlist %s failed\n", filename);
+			printf("Save playlist failed\n");
 			return -1;
 		}
 	}
 
-	char num_of_songs[4];
+/*	char num_of_songs[4];
 	int num = playlist->num_of_songs;
 	int i = 0;
 	struct Song* song;
@@ -183,7 +156,7 @@ int addListToSD(char* filename, struct Playlist* playlist) {
 		enqueue(playlist->songs, song);
 	}
 
-	song = NULL;
+	song = NULL;*/
 	alt_up_sd_card_fclose(file_pointer);
 	return 0;
 }

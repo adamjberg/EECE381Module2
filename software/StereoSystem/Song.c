@@ -11,10 +11,14 @@ struct Song* initSong(char* songname) {
 	this->song_name = songname;
 	this->isCached = false;
 	this->pos = this->size = this->volume = 0;
-	this->next = this->prev = NULL;
+	this->id = 0;
 	return this;
 }
 
 void killSong(struct Song** this) {
 
+}
+
+void setSongId(struct Song* this, int id) {
+	this->id = id;
 }

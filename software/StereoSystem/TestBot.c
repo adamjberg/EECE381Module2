@@ -12,7 +12,7 @@ void dBTester() {
 	/*createPlaylist("List1");
 	addSongToPlaylist("song1", "List1");
 */
-	struct Playlist* pl = initPlaylist();
+/*	struct Playlist* pl = initPlaylist();
 	pl->list_name = "list1";
 	pl->num_of_songs = 3;
 	enqueue(pl->songs, initSong("aTestSong1"));
@@ -31,7 +31,7 @@ void dBTester() {
 	if(removeListFromDB("list1")!=0)
 		printf("remove list1 failed\n");
 	if(removeListFromDB("List2")!=0)
-		printf("remove list2 failed\n");
+		printf("remove list2 failed\n");*/
 
 }
 

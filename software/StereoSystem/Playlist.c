@@ -8,16 +8,20 @@
 
 struct Playlist* initPlaylist() {
 	struct Playlist* this = (struct Playlist*)malloc(sizeof(struct Playlist));
-	this->songs = initQueue();
+	//this->songs = initQueue();
 	this->list_name = NULL;
 	this->num_of_songs = 0;
-	this->next = this->prev = NULL;
+	this->id = 0;
+	//this->next = this->prev = NULL;
 	return this;
 }
 
+void setListId(struct Playlist* this, int id) {
+	this->id = id;
+}
 void killPlaylist(struct Playlist** this) {
 	printf("killPlaylist function is called.\n");
-
+	//TODO: this function will actually remove and free the list
 	*this = NULL;
 }
 

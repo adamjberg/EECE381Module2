@@ -15,10 +15,12 @@ struct Song {
 	int pos;
 	int size;
 	bool isCached;
-	struct Song* next;
-	struct Song* prev;
+	int id;
+	//struct Song* next;
+	//struct Song* prev;
 };
 
 struct Song* initSong();
 void killSong(struct Song**);
+void setSongId(struct Song*, int);
 #endif /* SONG_H_ */
