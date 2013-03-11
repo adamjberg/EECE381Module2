@@ -223,4 +223,49 @@ void writeLine(int file_pointer, char* data, int size) {
 	}
 }
 
+/*
+ * Read all songs in .WAV format from SD and write it into
+ * a file (fileName) that has special format in
+ * storing the songs.
+ * */
+int loadSongsFromSD(char* txtFile){
+	int index;
+	char* fileName;
+
+	// open txtFile
+	int fileHandler;
+	if (txtFile == NULL) return -2;
+	fileHandler = alt_up_sd_card_fopen(txtFile, false);
+	if (fileHandler < 0){
+		if ((fileHandler = alt_up_sd_card_fopen(txtFile, true)) < 0){
+			alt_up_sd_card_fclose(fileHandler);
+			printf("Loading songs error %d.\n", fileHandler);
+			return -1;
+		}
+	}
+	// iterate through files in sdcard, load only .WAV files
+	index = alt_up_sd_card_find_first("", fileName);
+	if (index != 0){
+		printf("Cannot read songs from SDCard.\n");
+	}
+	char* strToStore;
+	int numOfWavFiles = 0;
+	int size;
+	while (index != -1){
+		index = alt_up_sd_card_find_next(fileName);
+		if (strstr(fileName, ".WAV") != NULL){
+			strToStore = "";
+			numOfWavFiles++;
+			//printf("%s\n", fileName);
+			size = sprintf(strToStore, "%d %s", numOfWavFiles, fileName);
+			printf("Song will be stored as %s\n", strToStore);
+			writeLine(fileHandler, strToStore, size);
+		}
+	}
+	if (!alt_up_sd_card_fclose(fileHandler)){
+		printf("File is not closed properly.\n");
+		return -1;
+	}
+	return 0;
+}
 
