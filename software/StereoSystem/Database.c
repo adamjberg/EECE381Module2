@@ -59,7 +59,7 @@ struct Song* querySongByName(char* song_name) {
 	if(song_name == NULL) return NULL;
 	int i;
 	int size = db.num_of_songs;
-	for(i = 0; i < size; i++) {
+	for(i = 1; i < size; i++) { // start from 1 since 0 always null
 		if(strcmp(song_name, db.songs[i]->song_name) == 0) {
 			return db.songs[i];
 		}
@@ -224,13 +224,14 @@ void writeLine(int file_pointer, char* data, int size) {
 }
 
 /*
- * Read all songs in .WAV format from SD and write it into
+ * Read and load all songs in .WAV format from SD to DB.
+ * This function writes all songs with their IDs into
  * a file (fileName) that has special format in
  * storing the songs.
  * */
 int loadSongsFromSD(char* txtFile){
 	int index;
-	char* fileName;
+	char* fileName = NULL;
 
 	// open txtFile
 	int fileHandler;
@@ -251,16 +252,19 @@ int loadSongsFromSD(char* txtFile){
 	char* strToStore;
 	int numOfWavFiles = 0;
 	int size;
+	char file[11];
 	while (index != -1){
-		index = alt_up_sd_card_find_next(fileName);
-		if (strstr(fileName, ".WAV") != NULL){
+		strcpy(file, fileName);
+		if (strstr(file, ".WAV") != NULL){
 			strToStore = "";
 			numOfWavFiles++;
 			//printf("%s\n", fileName);
-			size = sprintf(strToStore, "%d %s", numOfWavFiles, fileName);
-			printf("Song will be stored as %s\n", strToStore);
+			addSongToDB(initSong(fileName));
+			size = sprintf(strToStore, "%d %s", numOfWavFiles, file);
+			//printf("Song will be stored as %s\n", strToStore);
 			writeLine(fileHandler, strToStore, size);
 		}
+		index = alt_up_sd_card_find_next(fileName);
 	}
 	if (!alt_up_sd_card_fclose(fileHandler)){
 		printf("File is not closed properly.\n");

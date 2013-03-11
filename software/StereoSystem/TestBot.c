@@ -27,8 +27,19 @@ void dBTester() {
 	if (i != 0){
 		printf("WARNING: Program does not load songs from SDCard properly.\n");
 	}
+	printf("First song in DB is %s\n", db.songs[1]->song_name);
 
-
+	printf("Number of songs in DB is %d.\n", db.num_of_songs);
+	if (querySongByName("LOSE.WAV") != NULL){
+		printf("Test1 passed.\n");
+	}
+	if (querySongByName("DIANA.WAV") == NULL){
+		printf("Test2 passed.\n");
+	}
+	int k = 0;
+	for (k = 1; k < db.num_of_songs; k++){
+		printf("%s.\n", db.songs[k]->song_name);
+	}
 	/*int file_pointer;
 	char* line;
 	file_pointer = alt_up_sd_card_fopen("SONGS1.TXT", false);

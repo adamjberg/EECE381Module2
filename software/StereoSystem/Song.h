@@ -10,7 +10,7 @@
 #include "Global.h"
 
 struct Song {
-	char* song_name;
+	char song_name[11];
 	int volume;
 	int pos;
 	int size;
@@ -20,7 +20,7 @@ struct Song {
 	//struct Song* prev;
 };
 
-struct Song* initSong();
+struct Song* initSong(char*);
 void killSong(struct Song**);
 void setSongId(struct Song*, int);
 #endif /* SONG_H_ */
