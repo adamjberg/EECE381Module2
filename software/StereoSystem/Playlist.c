@@ -8,8 +8,11 @@
 
 struct Playlist* initPlaylist() {
 	struct Playlist* this = (struct Playlist*)malloc(sizeof(struct Playlist));
+	if(this == NULL) {
+		printf("playlist cannot malloc\n");
+		return NULL;
+	}
 	//this->songs = initQueue();
-	this->list_name = NULL;
 	this->num_of_songs = 0;
 	this->id = 0;
 	//this->next = this->prev = NULL;
@@ -19,9 +22,19 @@ struct Playlist* initPlaylist() {
 void setListId(struct Playlist* this, int id) {
 	this->id = id;
 }
+void setListName(struct Playlist* this, char* name) {
+	if(this == NULL || name == NULL) return;
+	int size = strlen(name);
+	if(size >29) {
+		strncpy(this->list_name, name, 29);
+		this->list_name[29] = '\0';
+	} else
+		strcpy(this->list_name, name);
+
+}
 void killPlaylist(struct Playlist** this) {
-	printf("killPlaylist function is called.\n");
-	//TODO: this function will actually remove and free the list
+	if(this == NULL || *this == NULL) return;
+	free(*this);
 	*this = NULL;
 }
 

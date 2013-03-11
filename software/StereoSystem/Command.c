@@ -98,26 +98,26 @@ void prev() {
 }
 void createPlaylist(char* listname) {
 	printf("A playlist %s is created.\n", listname);
+	struct Playlist* pl = initPlaylist();
 }
-void modifyPlaylistName(char* listname, char* new_listname) {
-	struct Playlist* pl = queryListByName(listname);
-	pl->list_name = new_listname;
+void modifyPlaylistName(int index, char* new_listname) {
+	setListName(db.playlists[index], new_listname);
 
 }
-void shuffle(char* listname) {
-	printf("Playlist: %s is shuffled\n", listname);
+void shuffle(int index) {
+	printf("Playlist %d is shuffled\n", index);
 }
-void addSongToPlaylist(char* song, char* listname) {
-	printf("Song %s is added to %s\n", song, listname);
+void addSongToPlaylist(int song_index, int list_index) {
+	printf("Song %d is added to %d\n", song_index, list_index);
 }
-void removeList(char* listname) {
-	printf("Playlist: %s is removed\n", listname);
+void removeList(int index) {
+	printf("Playlist: %d is removed\n", index);
 }
-void play_playlist(char* listname) {
-	printf("Playlist: %s is selected and played\n", listname);
+void play_playlist(int index) {
+	printf("Playlist %d is selected and played\n", index);
 }
-void repeatPlaylist(char* listname) {
-	printf("Playlist: %s is set to repeated\n", listname);
+void repeatPlaylist(int index) {
+	printf("Playlist: %d is set to repeated\n", index);
 }
 
 void moveSongToIndex(char* song, int index, char* listname) {

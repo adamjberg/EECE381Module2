@@ -11,7 +11,7 @@
 
 struct Playlist {
 	//struct Queue* songs;
-	char* list_name;
+	char list_name[30];
 	int num_of_songs;
 	//struct Playlist* next;
 	//struct Playlist* prev;
@@ -20,6 +20,7 @@ struct Playlist {
 
 struct Playlist* initPlaylist();
 void setListId(struct Playlist*, int);
+void setListName(struct Playlist*, char*);
 void killPlaylist(struct Playlist**);
 void generateListNameForSD(char*, int);
 #endif /* PLAYLIST_H_ */

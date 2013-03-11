@@ -9,18 +9,21 @@
 #define DATABASE_H_
 #include "Global.h"
 #define LISTFILE "LISTS.TXT"
+#define MAX_SONGS 101
+#define MAX_LISTS 51
 struct database db;
 
 struct database {
-	struct Playlist* playlists[50];
+	struct Playlist* playlists[MAX_LISTS];
 	int curr_playlist_id;
 	int num_of_lists;
-	struct Song* songs[200];
+	struct Song* songs[MAX_SONGS];
 	int curr_song_id;
-	int next_song_id;
-	int prev_song_id;
 	int num_of_songs;
-	int index_table[50][200];
+	int* index_list_song[MAX_LISTS];
+	int* index_list_order[MAX_LISTS];
+	struct Queue* avail_list_index;
+	int used_list_index[MAX_LISTS];
 
 	struct Cache* cache;
 };

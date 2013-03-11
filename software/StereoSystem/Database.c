@@ -9,23 +9,48 @@
 void initDatabase() {
 	db.cache = initCache();
 	db.curr_playlist_id = 0;
-	db.curr_song_id = db.next_song_id = db.prev_song_id = 0;
+	db.curr_song_id = 0;
 	db.num_of_lists = 0;
 	db.num_of_songs = 0;
+	db.avail_list_index = initQueue();
+	int i;
+	int* temp;
+	db.used_list_index[0] = 1; //index 0 should never get used
+	db.index_list_order[0] = NULL;
+	db.index_list_song[0] = NULL;
+	db.playlists[0] = NULL;
+	db.songs[0] = NULL;
+	for(i = 1; i < MAX_LISTS; i++) {
+		temp = (int*)malloc(sizeof(int));
+		*temp = i;
+		enqueue(db.avail_list_index, temp);
+		db.used_list_index[i] = 0;
+		db.index_list_order[i] = NULL;
+		db.index_list_song[i] = NULL;
+		db.playlists[i] = NULL;
+		db.songs[i] = NULL;
+	} temp = NULL;
 }
 /*
  * Query the list with a given play list name
  * return the first list founded with the same name, NULL otherwise
  */
 struct Playlist* queryListByName(char* list_name) {
-	if(list_name == NULL) return NULL;
-	int i;
-	//struct Playlist* temp = db.playlists;
+	if(list_name == NULL || db.num_of_lists == 0) return NULL;
+	int i = 0, j = 1;
 	int size = db.num_of_lists;
-	for(i = 0; i < size; i++) {
-		if(strcmp(list_name, db.playlists[i]->list_name) == 0) {
-			return db.playlists[i];
-		}
+	while(i < size) {
+		if(db.used_list_index[j] == 1) {
+			//make sure current index is in used
+			if(db.playlists[j] == NULL) { //double check
+				printf("querry list by name error\n");
+				return NULL;
+			}
+			if(strcmp(list_name, db.playlists[j]->list_name) == 0) {
+				return db.playlists[j];
+			}
+			i++;
+		} j++;
 	}
 	return NULL;
 }
@@ -79,27 +104,43 @@ void addSongToDB(struct Song* song) {
 	db.songs[db.num_of_songs] = song;
 }
 /*
- * Add a playlist to the database
+ * Add a playlist to the database; id will be automatically assigned
  */
 void addListToDB(struct Playlist* playlist) {
+	if(playlist == NULL || db.avail_list_index->size <= 0) return;
 	db.num_of_lists++;
-	setListId(playlist, db.num_of_lists);
-	db.playlists[db.num_of_lists] = playlist;
+	int* index = dequeue(db.avail_list_index);
+	db.used_list_index[*index] = 1;
+	setListId(playlist, *index);
+	db.playlists[*index] = playlist;
+	db.index_list_order[*index] = (int*)malloc(sizeof(int)*MAX_SONGS);
+	db.index_list_song[*index] = (int*)malloc(sizeof(int)*MAX_SONGS);
+	int i;
+	for(i = 1; i < MAX_SONGS; i++) {
+		db.index_list_order[*index][i] = 0;
+		db.index_list_song[*index][i] = 0;
+	}
+	free(index);
+	index = NULL;
 }
 /*
  * Remove a playlist from the database
  * return 0 if list is removed, -1 if cannot find list in the database
  */
 int removeListFromDB(int list_id) {
-	if(list_id > db.num_of_lists || list_id <= 0) return -1;
-	killPlaylist(&db.playlists[list_id]);
-	int i;
-	for(i = list_id+1; i <= db.num_of_lists; i++) {
-		db.playlists[i]->id--;
-		db.playlists[i-1] = db.playlists[i];
-	}
-	db.playlists[i] = NULL;
+	if(db.used_list_index[list_id] == 0 || list_id <= 0) return -1;
+	killPlaylist(&(db.playlists[list_id]));
+	db.playlists[list_id] = NULL;
+	db.used_list_index[list_id] = 0;
+	int* temp = (int*)malloc(sizeof(int));
+	*temp = list_id;
+	enqueue(db.avail_list_index, temp);
+	free(db.index_list_order[list_id]);
+	db.index_list_order[list_id] = NULL;
+	free(db.index_list_song[list_id]);
+	db.index_list_song[list_id] = NULL;
 	db.num_of_lists--;
+	temp = NULL;
 	return 0;
 }
 /*
