@@ -188,7 +188,7 @@ void writeLine(int file_pointer, char* data, int size) {
  * storing the songs.
  * */
 int loadSongsFromSD(char* txtFile){
-	int i;
+	int index;
 	char* fileName;
 
 	// open txtFile
@@ -203,23 +203,21 @@ int loadSongsFromSD(char* txtFile){
 		}
 	}
 	// iterate through files in sdcard, load only .WAV files
-	i = alt_up_sd_card_find_first("", fileName);
-	if (i != 0){
+	index = alt_up_sd_card_find_first("", fileName);
+	if (index != 0){
 		printf("Cannot read songs from SDCard.\n");
 	}
-	char* strCopy;
 	char* strToStore;
 	int numOfWavFiles = 0;
 	int size;
-	while (i != -1){
-		i = alt_up_sd_card_find_next(fileName);
-		strcpy(strCopy, fileName);
-		if (strcmp(strstr(strCopy, ".WAV"), ".WAV") == 0){
+	while (index != -1){
+		index = alt_up_sd_card_find_next(fileName);
+		if (strstr(fileName, ".WAV") != NULL){
 			strToStore = "";
 			numOfWavFiles++;
 			//printf("%s\n", fileName);
 			size = sprintf(strToStore, "%d %s", numOfWavFiles, fileName);
-			printf("File will be stored as %s\n", strToStore);
+			printf("Song will be stored as %s\n", strToStore);
 			writeLine(fileHandler, strToStore, size);
 		}
 	}

@@ -9,7 +9,10 @@
 
 void dBTester() {
 
-	//createPlaylist("List1");
+	int j = 0;
+	for (j = 0; j < 3; j++){
+		createPlaylist("List1");
+	}
 	/*printf("---- Test Adding Song To DB ----\n");
 	struct Song* s1 = initSong("song1");
 	addSongToDB(s1);
@@ -20,15 +23,15 @@ void dBTester() {
 	addSongToPlaylist("song2", "List1");
 	addSongToPlaylist("song1", "List2");
 	addSongToDB(s2);*/
-	int i = loadSongsFromSD("SNG.TXT");
+	int i = loadSongsFromSD("SONGS3.TXT");
 	if (i != 0){
 		printf("WARNING: Program does not load songs from SDCard properly.\n");
 	}
 
 
-	int file_pointer;
+	/*int file_pointer;
 	char* line;
-	file_pointer = alt_up_sd_card_fopen("SNG.TXT", false);
+	file_pointer = alt_up_sd_card_fopen("SONGS1.TXT", false);
 	if (file_pointer < 0){
 		if ((file_pointer = alt_up_sd_card_fopen("SNG.TXT", true)) < 0){
 			alt_up_sd_card_fclose(file_pointer);
@@ -36,11 +39,11 @@ void dBTester() {
 		}
 	} else {
 		int j = 0;
-		for (j; j < 8; j++){
+		for (j; j < 7; j++){
 			line = readLine(file_pointer);
 			printf("%s\n", line);
 		}
-	}
+	}*/
 
 /*	struct Playlist* pl = initPlaylist();
 	pl->list_name = "list1";
