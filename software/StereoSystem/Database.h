@@ -36,4 +36,8 @@ void addSongToDB(struct Song*);
 char* readLine(int);
 void writeLine(int, char*, int);
 void update();
+int loadSongsFromSD(char*);
+
+
+
 #endif /* DATABASE_H_ */

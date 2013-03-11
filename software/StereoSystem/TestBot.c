@@ -9,9 +9,39 @@
 
 void dBTester() {
 
-	/*createPlaylist("List1");
+	//createPlaylist("List1");
+	/*printf("---- Test Adding Song To DB ----\n");
+	struct Song* s1 = initSong("song1");
+	addSongToDB(s1);
+	printf("Good Test, should have no error after this line.\n");
 	addSongToPlaylist("song1", "List1");
-*/
+	struct Song* s2 = initSong("song2");
+	printf("Bad Tests, expect to have 2 errors after this line.\n");
+	addSongToPlaylist("song2", "List1");
+	addSongToPlaylist("song1", "List2");
+	addSongToDB(s2);*/
+	int i = loadSongsFromSD("SNG.TXT");
+	if (i != 0){
+		printf("WARNING: Program does not load songs from SDCard properly.\n");
+	}
+
+
+	int file_pointer;
+	char* line;
+	file_pointer = alt_up_sd_card_fopen("SNG.TXT", false);
+	if (file_pointer < 0){
+		if ((file_pointer = alt_up_sd_card_fopen("SNG.TXT", true)) < 0){
+			alt_up_sd_card_fclose(file_pointer);
+			printf("File cannot be opened.\n");
+		}
+	} else {
+		int j = 0;
+		for (j; j < 8; j++){
+			line = readLine(file_pointer);
+			printf("%s\n", line);
+		}
+	}
+
 /*	struct Playlist* pl = initPlaylist();
 	pl->list_name = "list1";
 	pl->num_of_songs = 3;
