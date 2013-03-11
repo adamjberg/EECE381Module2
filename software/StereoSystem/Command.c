@@ -98,7 +98,7 @@ void prev() {
 }
 void createPlaylist(char* listname) {
 	printf("A playlist %s is created.\n", listname);
-	struct Playlist* pl = initPlaylist();
+	struct Playlist* pl = initPlaylist(listname);
 }
 void modifyPlaylistName(int index, char* new_listname) {
 	setListName(db.playlists[index], new_listname);

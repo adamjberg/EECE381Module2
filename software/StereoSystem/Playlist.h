@@ -11,14 +11,14 @@
 
 struct Playlist {
 	//struct Queue* songs;
-	char list_name[30];
+	char list_name[100];
 	int num_of_songs;
 	//struct Playlist* next;
 	//struct Playlist* prev;
 	int id;
 };
 
-struct Playlist* initPlaylist();
+struct Playlist* initPlaylist(char*);
 void setListId(struct Playlist*, int);
 void setListName(struct Playlist*, char*);
 void killPlaylist(struct Playlist**);

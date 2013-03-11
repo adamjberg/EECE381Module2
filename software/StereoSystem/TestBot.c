@@ -9,20 +9,13 @@
 
 void dBTester() {
 
+	// just a random testing, createPlaylist
+	// does not do anything right now.
 	int j = 0;
-	for (j = 0; j < 3; j++){
+	for (j = 0; j < 20; j++){
 		createPlaylist("List1");
 	}
-	/*printf("---- Test Adding Song To DB ----\n");
-	struct Song* s1 = initSong("song1");
-	addSongToDB(s1);
-	printf("Good Test, should have no error after this line.\n");
-	addSongToPlaylist("song1", "List1");
-	struct Song* s2 = initSong("song2");
-	printf("Bad Tests, expect to have 2 errors after this line.\n");
-	addSongToPlaylist("song2", "List1");
-	addSongToPlaylist("song1", "List2");
-	addSongToDB(s2);*/
+
 	int i = loadSongsFromSD("SONGS3.TXT");
 	if (i != 0){
 		printf("WARNING: Program does not load songs from SDCard properly.\n");
@@ -31,30 +24,34 @@ void dBTester() {
 
 	printf("Number of songs in DB is %d.\n", db.num_of_songs);
 	if (querySongByName("LOSE.WAV") != NULL){
-		printf("Test1 passed.\n");
+		printf("loadSongsFromSD() Test1 passed.\n");
 	}
 	if (querySongByName("DIANA.WAV") == NULL){
-		printf("Test2 passed.\n");
+		printf("loadSongsFromSD() Test2 passed.\n");
 	}
 	int k = 0;
 	for (k = 1; k < db.num_of_songs; k++){
 		printf("%s.\n", db.songs[k]->song_name);
 	}
-	/*int file_pointer;
-	char* line;
-	file_pointer = alt_up_sd_card_fopen("SONGS1.TXT", false);
-	if (file_pointer < 0){
-		if ((file_pointer = alt_up_sd_card_fopen("SNG.TXT", true)) < 0){
-			alt_up_sd_card_fclose(file_pointer);
-			printf("File cannot be opened.\n");
-		}
-	} else {
-		int j = 0;
-		for (j; j < 7; j++){
-			line = readLine(file_pointer);
-			printf("%s\n", line);
-		}
-	}*/
+
+
+	int listStatus = loadListsFromSD();
+	if (listStatus != 0){
+		printf("WARNING: Program does not load lists from SDCard properly.\n");
+	}
+	printf("Number of lists in DB is %d.\n", db.num_of_lists);
+	if (queryListByName("List8") != NULL){
+		printf("loadListsFromSD() test1 passed.\n");
+	}
+	if (queryListByName("List200") == NULL ){
+		printf("loadListFromSD() test2 passed.\n");
+	}
+	int l = 0;
+	for(l = 1; l < db.num_of_lists; l++){
+		printf("%s.\n", db.playlists[l]->list_name);
+	}
+
+
 
 /*	struct Playlist* pl = initPlaylist();
 	pl->list_name = "list1";
@@ -80,12 +77,12 @@ void dBTester() {
 }
 
 void dbTester2() {
-	struct Playlist* pl = initPlaylist();
-	setListName(pl, "list1");
-	struct Playlist* pl1 = initPlaylist();
-	setListName(pl1, "list2");
-	struct Playlist* pl2 = initPlaylist();
-	setListName(pl2, "list3");
+	struct Playlist* pl = initPlaylist("list1");
+	//setListName(pl, "list1");
+	struct Playlist* pl1 = initPlaylist("list2");
+	//setListName(pl1, "list2");
+	struct Playlist* pl2 = initPlaylist("list3");
+	//setListName(pl2, "list3");
 
 	addListToDB(pl);
 	addListToDB(pl1);
@@ -108,12 +105,12 @@ void dbTester2() {
 	struct Playlist* al2;
 	int i;
 	for(i = 0; i < 1000; i ++) {
-	al = initPlaylist();
-	setListName(al, "list4");
-	al1 = initPlaylist();
-	setListName(al1, "list5");
-	al2 = initPlaylist();
-	setListName(al2, "list6");
+	al = initPlaylist("list4");
+	//setListName(al, "list4");
+	al1 = initPlaylist("list5");
+	//setListName(al1, "list5");
+	al2 = initPlaylist("list6");
+	//setListName(al2, "list6");
 
 	addListToDB(al);
 	addListToDB(al1);

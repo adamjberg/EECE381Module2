@@ -67,35 +67,6 @@ struct Song* querySongByName(char* song_name) {
 	return NULL;
 }
 /*
- * Load a playlist from SD card to the the database
- * return -1 if no more list can be found in the SD card; 0 otherwise
- */
-
-int loadListFromSD() {
-	int file_pointer;
-	if((file_pointer = alt_up_sd_card_fopen(LISTFILE, false)) < 0) {
-		printf("No more playlist to load\n");
-		alt_up_sd_card_fclose(file_pointer);
-		return -1;
-	}
-/*
-	int i;
-	struct Playlist* playlist = initPlaylist();
-	playlist->list_name = readLine(file_pointer);
-	char* num_of_song = readLine(file_pointer);
-	playlist->num_of_songs = atoi(num_of_song);
-	for(i = 0; i<playlist->num_of_songs; i++) {
-		enqueue(playlist->songs, initSong(readLine(file_pointer)));
-	}
-
-	free(num_of_song);
-	num_of_song = NULL;
-	addListToDB(playlist);
-	playlist = NULL;*/
-	alt_up_sd_card_fclose(file_pointer);
-	return 0;
-}
-/*
  * Add a song to the database
  */
 void addSongToDB(struct Song* song) {
@@ -226,42 +197,33 @@ void writeLine(int file_pointer, char* data, int size) {
 /*
  * Read and load all songs in .WAV format from SD to DB.
  * This function writes all songs with their IDs into
- * a file (fileName) that has special format in
- * storing the songs.
+ * a file (fileName) with special format.
+ * Return values:
+ * 0  means success, -1 means error during fopen/fclose
  * */
 int loadSongsFromSD(char* txtFile){
-	int index;
+	int index, size;
 	char* fileName = NULL;
+	char* strToStore;
+	int numOfWavFiles = 0;
+	char file[11];
 
-	// open txtFile
 	int fileHandler;
-	if (txtFile == NULL) return -2;
-	fileHandler = alt_up_sd_card_fopen(txtFile, false);
-	if (fileHandler < 0){
-		if ((fileHandler = alt_up_sd_card_fopen(txtFile, true)) < 0){
-			alt_up_sd_card_fclose(fileHandler);
-			printf("Loading songs error %d.\n", fileHandler);
-			return -1;
-		}
+	if ((fileHandler = openFileFromSD(txtFile)) < 0){
+		printf("Loading songs error!\n");
+		return -1;
 	}
-	// iterate through files in sdcard, load only .WAV files
 	index = alt_up_sd_card_find_first("", fileName);
 	if (index != 0){
 		printf("Cannot read songs from SDCard.\n");
 	}
-	char* strToStore;
-	int numOfWavFiles = 0;
-	int size;
-	char file[11];
 	while (index != -1){
 		strcpy(file, fileName);
 		if (strstr(file, ".WAV") != NULL){
 			strToStore = "";
 			numOfWavFiles++;
-			//printf("%s\n", fileName);
 			addSongToDB(initSong(fileName));
 			size = sprintf(strToStore, "%d %s", numOfWavFiles, file);
-			//printf("Song will be stored as %s\n", strToStore);
 			writeLine(fileHandler, strToStore, size);
 		}
 		index = alt_up_sd_card_find_next(fileName);
@@ -273,3 +235,80 @@ int loadSongsFromSD(char* txtFile){
 	return 0;
 }
 
+/*
+ * Read and load all playlists from SD card to the the database
+ * This function writes all lists with its ID to a text file (txtFile).
+ * Return values:
+ * 0 means success, -1 means error in fopen/fclose
+ */
+int loadListsFromSD() {
+
+	int fileHandler;
+	if ((fileHandler = openFileFromSD(LISTFILE)) < 0){
+		printf("Loading list error!\n");
+		return -1;
+	}
+	int index, size;
+	int numOfLists = 0;
+	char* fileName = NULL;
+	char* strToStore = "";
+	char file[11] = "";
+
+	// iterate through files in sdcard, load only LISTxx.TXT files
+	index = alt_up_sd_card_find_first("", fileName);
+	if (index != 0){
+		printf("Cannot read lists from SDCard.\n");
+		return -1;
+	}
+	while (index != -1){
+		strcpy(file, fileName);
+		if ((strstr(file, ".TXT") != NULL) && (strstr(file, "PLST") != NULL)){
+			strToStore = "";
+			numOfLists++;
+			addListToDB(initPlaylist(getListNameFromListFile(file)));
+			size = sprintf(strToStore, "%d %s", numOfLists, file);
+			writeLine(fileHandler, strToStore, size);
+		}
+		index = alt_up_sd_card_find_next(fileName);
+	}
+	if (!alt_up_sd_card_fclose(fileHandler)){
+		printf("File is not closed properly.\n");
+		return -1;
+	}
+
+	return 0;
+}
+
+/*
+ * Helper function to open a file from SDCard
+ * */
+int openFileFromSD(char* file){
+	int fileHandler;
+	if (file == NULL) return -2;
+	fileHandler = alt_up_sd_card_fopen(file, false);
+	if (fileHandler < 0){
+		if ((fileHandler = alt_up_sd_card_fopen(file, true)) < 0){
+			alt_up_sd_card_fclose(fileHandler);
+			return -1;
+		}
+	}
+	return fileHandler;
+}
+/*
+ * Given the list .TXT file, read first line of the file
+ * to get the playlist name.
+ * Example, name of TXT file is PLST3.TXT, name of list is List3
+ * */
+char* getListNameFromListFile(char* listTxtFile){
+	int fileHandler;
+	if ((fileHandler = openFileFromSD(listTxtFile)) < 0){
+		printf("Error in getListNameFromListFile, can't open %s.\n", listTxtFile);
+		return "";
+	}
+	char* result =  readLine(fileHandler);
+	if (!alt_up_sd_card_fclose(fileHandler)){
+		printf("File is not closed properly.\n");
+		return "";
+	}
+	return result;
+}

@@ -6,12 +6,13 @@
  */
 #include "Playlist.h"
 
-struct Playlist* initPlaylist() {
+struct Playlist* initPlaylist(char* listname) {
 	struct Playlist* this = (struct Playlist*)malloc(sizeof(struct Playlist));
 	if(this == NULL) {
 		printf("playlist cannot malloc\n");
 		return NULL;
 	}
+	strcpy(this->list_name, listname);
 	//this->songs = initQueue();
 	this->num_of_songs = 0;
 	this->id = 0;
