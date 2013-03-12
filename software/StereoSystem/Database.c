@@ -222,7 +222,7 @@ int loadSongsFromSD(char* txtFile){
 		if (strstr(file, ".WAV") != NULL){
 			strToStore = "";
 			numOfWavFiles++;
-			addSongToDB(initSong(fileName));
+			addSongToDB(initSong(file));
 			size = sprintf(strToStore, "%d %s", numOfWavFiles, file);
 			writeLine(fileHandler, strToStore, size);
 		}
