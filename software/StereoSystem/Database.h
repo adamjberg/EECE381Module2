@@ -32,17 +32,17 @@ struct database {
 void initDatabase();
 struct Playlist* queryListByName(char*);
 struct Song* querySongByName(char*);
-int addListToSD(struct Playlist*);
 void addListToDB(struct Playlist*);
 int removeListFromDB(int);
 void addSongToDB(struct Song*);
 char* readLine(int);
 void writeLine(int, char*, int);
 void update();
-int loadSongsFromSD(char*);
+int loadSongsFromSD();
+int updateSongsFromSD();
 int loadListsFromSD();
+int addListToSD(struct Playlist*);
 int openFileFromSD(char*);
-char* getListNameFromListFile(char*);
 
 
 #endif /* DATABASE_H_ */
