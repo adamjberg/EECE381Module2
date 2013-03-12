@@ -215,7 +215,7 @@ int loadListsFromSD() {
 		if ((strstr(file, ".TXT") != NULL) && (strstr(file, "PLST") != NULL)){
 			strToStore = "";
 			numOfLists++;
-			addListToDB(initPlaylist(getListNameFromListFile(file)));
+		//	addListToDB(initPlaylist(getListNameFromListFile(file)));
 			size = sprintf(strToStore, "%d %s", numOfLists, file);
 			writeLine(fileHandler, strToStore, size);
 		}
