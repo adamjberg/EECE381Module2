@@ -12,7 +12,7 @@ struct Playlist* initPlaylist(char* listname) {
 		printf("playlist cannot malloc\n");
 		return NULL;
 	}
-	strcpy(this->list_name, listname);
+	setListName(this, listname);
 	//this->songs = initQueue();
 	this->num_of_songs = 0;
 	this->id = 0;
@@ -26,9 +26,9 @@ void setListId(struct Playlist* this, int id) {
 void setListName(struct Playlist* this, char* name) {
 	if(this == NULL || name == NULL) return;
 	int size = strlen(name);
-	if(size >29) {
-		strncpy(this->list_name, name, 29);
-		this->list_name[29] = '\0';
+	if(size > LISTNAME_LENGTH-1) {
+		strncpy(this->list_name, name, LISTNAME_LENGTH-1);
+		this->list_name[LISTNAME_LENGTH-1] = '\0';
 	} else
 		strcpy(this->list_name, name);
 

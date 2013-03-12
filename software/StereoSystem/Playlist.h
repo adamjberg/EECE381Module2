@@ -8,10 +8,10 @@
 #ifndef PLAYLIST_H_
 #define PLAYLIST_H_
 #include "Global.h"
-
+#define LISTNAME_LENGTH 101
 struct Playlist {
 	//struct Queue* songs;
-	char list_name[100];
+	char list_name[LISTNAME_LENGTH];
 	int num_of_songs;
 	//struct Playlist* next;
 	//struct Playlist* prev;

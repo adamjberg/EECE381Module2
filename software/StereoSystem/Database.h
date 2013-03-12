@@ -9,6 +9,7 @@
 #define DATABASE_H_
 #include "Global.h"
 #define LISTFILE "LISTS.TXT"
+#define SONGFILE "SONGS.TXT"
 #define MAX_SONGS 101
 #define MAX_LISTS 51
 struct database db;

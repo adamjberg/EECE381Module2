@@ -105,30 +105,30 @@ void dbTester2() {
 	struct Playlist* al2;
 	int i;
 	for(i = 0; i < 1000; i ++) {
-	al = initPlaylist("list4");
-	//setListName(al, "list4");
-	al1 = initPlaylist("list5");
-	//setListName(al1, "list5");
-	al2 = initPlaylist("list6");
-	//setListName(al2, "list6");
+		al = initPlaylist("list4");
+		//setListName(al, "list4");
+		al1 = initPlaylist("list5");
+		//setListName(al1, "list5");
+		al2 = initPlaylist("list6");
+		//setListName(al2, "list6");
 
-	addListToDB(al);
-	addListToDB(al1);
-	addListToDB(al2);
+		addListToDB(al);
+		addListToDB(al1);
+		addListToDB(al2);
 
-	//pl = pl1 = pl2 = NULL;
-	temp = queryListByName("list4");
-	printf("%d %s is found\n", temp->id, temp->list_name);
-	temp1 = queryListByName("list5");
-	printf("%d %s is found\n", temp1->id, temp1->list_name);
-	temp2 = queryListByName("list6");
-	printf("%d %s is found\n", temp2->id, temp2->list_name);
-	if(removeListFromDB(al->id) != 0)
-		printf("sth wrong\n");
-	if(removeListFromDB(al1->id) !=0)
-		printf("sth wrong\n");
-	if(removeListFromDB(al2->id) != 0)
-		printf("sth wrong\n");
+		//pl = pl1 = pl2 = NULL;
+		temp = queryListByName("list4");
+		printf("%d %s is found\n", temp->id, temp->list_name);
+		temp1 = queryListByName("list5");
+		printf("%d %s is found\n", temp1->id, temp1->list_name);
+		temp2 = queryListByName("list6");
+		printf("%d %s is found\n", temp2->id, temp2->list_name);
+		if(removeListFromDB(al->id) != 0)
+			printf("sth wrong\n");
+		if(removeListFromDB(al1->id) !=0)
+			printf("sth wrong\n");
+		if(removeListFromDB(al2->id) != 0)
+			printf("sth wrong\n");
 	}
 }
 void cmdTester() {
