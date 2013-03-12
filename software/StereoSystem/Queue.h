@@ -24,6 +24,7 @@ struct QueueData {
 struct Queue* initQueue();
 void enqueue(struct Queue*, void*);
 void* dequeue(struct Queue*);
+void* dequeueValue(struct Queue*, int);
 void killQueueData(struct QueueData**);
 void addPacketsLengthToQueue(int);
 #endif /* QUEUE_H_ */

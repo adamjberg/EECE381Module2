@@ -95,6 +95,28 @@ void addListToDB(struct Playlist* playlist) {
 	index = NULL;
 }
 /*
+ * Add a playlist to the database by giving its id
+ * adding operation will failed if the id has been used already
+ */
+void addExisitedListToDB(struct Playlist* playlist, int id) {
+	if(playlist == NULL || db.avail_list_index->size <= 0
+			|| id == 0 || db.used_list_index[id] == 1) return;
+	int* index = dequeueValue(db.avail_list_index, id);
+	db.num_of_lists++;
+	db.used_list_index[*index] = 1;
+	setListId(playlist, *index);
+	db.playlists[*index] = playlist;
+	db.index_list_order[*index] = (int*)malloc(sizeof(int)*MAX_SONGS);
+	db.index_list_song[*index] = (int*)malloc(sizeof(int)*MAX_SONGS);
+	int i;
+	for(i = 1; i < MAX_SONGS; i++) {
+		db.index_list_order[*index][i] = 0;
+		db.index_list_song[*index][i] = 0;
+	}
+	free(index);
+	index = NULL;
+}
+/*
  * Remove a playlist from the database
  * return 0 if list is removed, -1 if cannot find list in the database
  */
@@ -248,6 +270,7 @@ int loadListsFromSD() {
 		printf("Loading list error!\n");
 		return -1;
 	}
+
 	int index, size;
 	int numOfLists = 0;
 	char* fileName = NULL;
@@ -271,6 +294,7 @@ int loadListsFromSD() {
 		}
 		index = alt_up_sd_card_find_next(fileName);
 	}
+
 	if (!alt_up_sd_card_fclose(fileHandler)){
 		printf("File is not closed properly.\n");
 		return -1;

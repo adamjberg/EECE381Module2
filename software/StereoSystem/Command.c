@@ -99,6 +99,18 @@ void prev() {
 void createPlaylist(char* listname) {
 	printf("A playlist %s is created.\n", listname);
 	struct Playlist* pl = initPlaylist(listname);
+	addListToDB(pl);
+	pl = NULL;
+}
+void syncCreateExisitedPlaylist(char* listname, int num_of_songs, int id) {
+
+	//struct Command* cmd = initCmd();
+}
+void createExisitedPlaylist(char* listname, int num_of_songs, int id) {
+	struct Playlist* pl = initPlaylist(listname);
+	pl->num_of_songs = num_of_songs;
+	addExisitedListToDB(pl, id);
+	pl = NULL;
 }
 void modifyPlaylistName(int index, char* new_listname) {
 	setListName(db.playlists[index], new_listname);
@@ -133,3 +145,8 @@ void repeatCurrentSong() {
 void reverse() {
 
 }
+
+void updateDBIndex() {
+
+}
+

@@ -30,6 +30,7 @@ void seek(int);
 void next();
 void prev();
 void createPlaylist(char*);
+void createExisitedPlaylist(char*, int, int);
 void modifyPlaylistName(int, char*);
 void shuffle(int);
 void addSongToPlaylist(int, int);

@@ -10,8 +10,8 @@
 #include "Global.h"
 #define LISTFILE "LISTS.TXT"
 #define SONGFILE "SONGS.TXT"
-#define MAX_SONGS 101
 #define MAX_LISTS 51
+#define MAX_SONGS 101
 struct database db;
 
 struct database {
@@ -34,6 +34,7 @@ struct Playlist* queryListByName(char*);
 struct Song* querySongByName(char*);
 int addListToSD(struct Playlist*);
 void addListToDB(struct Playlist*);
+void addExisitedListToDB(struct Playlist*, int);
 int removeListFromDB(int);
 void addSongToDB(struct Song*);
 char* readLine(int);

@@ -37,7 +37,7 @@ int main()
 	char* temp2 = "I hate debugging and testing";
 
 	int i;
-	dBTester();
+	//dBTester();
 
 //	cmdTester();
 	//for(i = 0; i < 39999999; i++) {}

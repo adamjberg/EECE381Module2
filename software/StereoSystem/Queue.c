@@ -61,6 +61,42 @@ void* dequeue(struct Queue* this) {
 	return result;
 }
 
+void* dequeueValue(struct Queue* this, int value) {
+	if(this == NULL || this->size <= 0) {
+		printf("dequeue returns null\n");
+		return NULL;
+	}
+	queue_lock = 1;
+	struct QueueData* temp = this->head;
+	void* result;
+
+	while(*((int*)(temp->obj)) != value) {
+		if(temp != this->tail)
+			temp = temp->next;
+		else {
+			printf("dequeueValue cannot find the value\n");
+			return NULL;
+		}
+	}
+	if(temp == this->head) {
+		this->head = temp->next;
+	}
+	if(temp == this->tail) {
+		this->tail = temp->prev;
+	}
+	if(temp->prev != NULL)
+		temp->prev->next = temp->next;
+	if(temp->next != NULL)
+		temp->next->prev = temp->prev;
+	temp->next = NULL;
+	temp->prev = NULL;
+	result = temp->obj;
+	killQueueData(&temp);
+	this->size--;
+	queue_lock = 0;
+	return result;
+}
+
 void killQueueData(struct QueueData** this) {
 	if(this == NULL) return;
 	(*this)->next =NULL;

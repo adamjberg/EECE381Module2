@@ -77,6 +77,22 @@ void dBTester() {
 }
 
 void dbTester2() {
+	int* tempVal = dequeueValue(db.avail_list_index, 1);
+	enqueue(db.avail_list_index, (void*)tempVal);
+	tempVal = dequeueValue(db.avail_list_index, 10);
+	enqueue(db.avail_list_index, (void*)tempVal);
+	tempVal = dequeueValue(db.avail_list_index, 5);
+	enqueue(db.avail_list_index, (void*)tempVal);
+	tempVal = dequeueValue(db.avail_list_index, 25);
+	enqueue(db.avail_list_index, (void*)tempVal);
+	tempVal = dequeueValue(db.avail_list_index, 3);
+	enqueue(db.avail_list_index, (void*)tempVal);
+	tempVal = dequeueValue(db.avail_list_index, 3);
+	enqueue(db.avail_list_index, (void*)tempVal);
+	tempVal = dequeueValue(db.avail_list_index, 7);
+	enqueue(db.avail_list_index, (void*)tempVal);
+
+
 	struct Playlist* pl = initPlaylist("list1");
 	//setListName(pl, "list1");
 	struct Playlist* pl1 = initPlaylist("list2");
@@ -130,6 +146,31 @@ void dbTester2() {
 		if(removeListFromDB(al2->id) != 0)
 			printf("sth wrong\n");
 	}
+
+	for(i = 0; i < 1000; i ++) {
+		al = initPlaylist("list4");
+		al1 = initPlaylist("list5");
+		al2 = initPlaylist("list6");
+
+		addExisitedListToDB(al, 8);
+		addExisitedListToDB(al1, 7);
+		addExisitedListToDB(al2, 15);
+
+
+		temp = queryListByName("list4");
+		printf("%d %s is found\n", temp->id, temp->list_name);
+		temp1 = queryListByName("list5");
+		printf("%d %s is found\n", temp1->id, temp1->list_name);
+		temp2 = queryListByName("list6");
+		printf("%d %s is found\n", temp2->id, temp2->list_name);
+		if(removeListFromDB(al->id) != 0)
+			printf("sth wrong\n");
+		if(removeListFromDB(al1->id) !=0)
+			printf("sth wrong\n");
+		if(removeListFromDB(al2->id) != 0)
+			printf("sth wrong\n");
+	}
+
 }
 void cmdTester() {
 	char* paras[8];
