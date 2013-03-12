@@ -25,7 +25,7 @@ int main()
 	}
 
 	initDatabase();
-	dbTester2();
+	//dbTester2();
 	struct CmdScheduler* scheduler = initCmdScheduler();
 
 	//Serial device initialization

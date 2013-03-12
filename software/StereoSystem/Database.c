@@ -59,7 +59,7 @@ struct Song* querySongByName(char* song_name) {
 	if(song_name == NULL) return NULL;
 	int i;
 	int size = db.num_of_songs;
-	for(i = 1; i < size; i++) { // start from 1 since 0 always null
+	for(i = 1; i <= size; i++) { // start from 1 since 0 always null
 		if(strcmp(song_name, db.songs[i]->song_name) == 0) {
 			return db.songs[i];
 		}
@@ -159,41 +159,7 @@ char* readLine(int file_pointer) {
 	strncpy(result, temp, i+1);
 	return result;
 }
-/*
- * A function that writes or rewrites the playlist to a text file to SD card
- * return -1 if fail to write; 0 otherwise
- * @parm filename the file name of text file; must end with .TXT
- * @parm playlist the playlist object
- */
-int addListToSD(struct Playlist* playlist) {
-	if(playlist == NULL) return -2;
-	int file_pointer;
-	if((file_pointer = alt_up_sd_card_fopen(LISTFILE, false)) < 0) {
-		if((file_pointer = alt_up_sd_card_fopen(LISTFILE, true)) < 0) {
-			alt_up_sd_card_fclose(file_pointer);
-			printf("Save playlist failed\n");
-			return -1;
-		}
-	}
 
-/*	char num_of_songs[4];
-	int num = playlist->num_of_songs;
-	int i = 0;
-	struct Song* song;
-
-	writeLine(file_pointer, playlist->list_name, strlen(playlist->list_name));
-	sprintf(num_of_songs, "%d", num);
-	writeLine(file_pointer, num_of_songs, 3);
-	for(i = 0; i < num; i++) {
-		song = dequeue(playlist->songs);
-		writeLine(file_pointer, song->song_name, strlen(song->song_name));
-		enqueue(playlist->songs, song);
-	}
-
-	song = NULL;*/
-	alt_up_sd_card_fclose(file_pointer);
-	return 0;
-}
 /*
  * A helper function that write a segment of data to SD card and write a LINE FEED at the end
  * it does not close file pointer and require an input of file pointer
@@ -216,46 +182,7 @@ void writeLine(int file_pointer, char* data, int size) {
 	}
 }
 
-/*
- * Read and load all songs in .WAV format from SD to DB.
- * This function writes all songs with their IDs into
- * a file (fileName) with special format.
- * Return values:
- * 0  means success, -1 means error during fopen/fclose
- * */
-int loadSongsFromSD(char* txtFile){
-	int index, size;
-	char* fileName = NULL;
-	char* strToStore;
-	int numOfWavFiles = 0;
-	char file[11];
 
-	int fileHandler;
-	if ((fileHandler = openFileFromSD(txtFile)) < 0){
-		printf("Loading songs error!\n");
-		return -1;
-	}
-	index = alt_up_sd_card_find_first("", fileName);
-	if (index != 0){
-		printf("Cannot read songs from SDCard.\n");
-	}
-	while (index != -1){
-		strcpy(file, fileName);
-		if (strstr(file, ".WAV") != NULL){
-			strToStore = "";
-			numOfWavFiles++;
-			addSongToDB(initSong(fileName));
-			size = sprintf(strToStore, "%d %s", numOfWavFiles, file);
-			writeLine(fileHandler, strToStore, size);
-		}
-		index = alt_up_sd_card_find_next(fileName);
-	}
-	if (!alt_up_sd_card_fclose(fileHandler)){
-		printf("File is not closed properly.\n");
-		return -1;
-	}
-	return 0;
-}
 
 /*
  * Read and load all playlists from SD card to the the database
@@ -318,21 +245,118 @@ int openFileFromSD(char* file){
 	}
 	return fileHandler;
 }
+
 /*
- * Given the list .TXT file, read first line of the file
- * to get the playlist name.
- * Example, name of TXT file is PLST3.TXT, name of list is List3
- * */
-char* getListNameFromListFile(char* listTxtFile){
+ * A function that writes or rewrites the playlist to a text file to SD card
+ * return -1 if fail to write; 0 otherwise
+ * @parm filename the file name of text file; must end with .TXT
+ * @parm playlist the playlist object
+ */
+int addListToSD(struct Playlist* playlist) {
+	if(playlist == NULL) return -2;
 	int fileHandler;
-	if ((fileHandler = openFileFromSD(listTxtFile)) < 0){
-		printf("Error in getListNameFromListFile, can't open %s.\n", listTxtFile);
-		return "";
+	if ((fileHandler = openFileFromSD(LISTFILE)) < 0){
+		printf("Error opening file in addListToSD.\n");
+		return -1;
 	}
-	char* result =  readLine(fileHandler);
+
 	if (!alt_up_sd_card_fclose(fileHandler)){
 		printf("File is not closed properly.\n");
-		return "";
+		return -1;
 	}
-	return result;
+
+
+/*	char num_of_songs[4];
+	int num = playlist->num_of_songs;
+	int i = 0;
+	struct Song* song;
+
+	writeLine(file_pointer, playlist->list_name, strlen(playlist->list_name));
+	sprintf(num_of_songs, "%d", num);
+	writeLine(file_pointer, num_of_songs, 3);
+	for(i = 0; i < num; i++) {
+		song = dequeue(playlist->songs);
+		writeLine(file_pointer, song->song_name, strlen(song->song_name));
+		enqueue(playlist->songs, song);
+	}
+
+	song = NULL;*/
+	//alt_up_sd_card_fclose(file_pointer);
+	return 0;
 }
+
+/*
+ * Search through all files in SDCard to find all .WAV files
+ * and store all songs name in SONGS.TXT file.
+ * Return values: -1 means error in fopen/fclose, 0 means success
+ * -2 means error in searching through the SDCard.
+ * */
+int updateSongsFromSD(){
+	int index, size;
+	char fileName[15];
+	char* strToStore;
+	int numOfWavFiles = 0;
+
+	int fileHandler;
+	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
+		printf("Error opening file in updateSongsFromSD.\n");
+		return -1;
+	}
+	index = alt_up_sd_card_find_first("", fileName);
+	if (index != 0){
+		printf("ERROR: updateSongsFromSD.\n");
+		return -2;
+	}
+	while (index != -1){
+		if (strstr(fileName, ".WAV") != NULL){
+			strToStore = "";
+			numOfWavFiles++;
+			size = sprintf(strToStore, "%d %s", numOfWavFiles, fileName);
+			writeLine(fileHandler, strToStore, size);
+		}
+		index = alt_up_sd_card_find_next(fileName);
+	}
+	strToStore = NULL;
+	free(strToStore);
+	if (!alt_up_sd_card_fclose(fileHandler)){
+		printf("File is not closed properly in updateSongsFromSD.\n");
+		return -1;
+	}
+	return 0;
+}
+/*
+ * Read SONGS.TXT and add all songs to database
+ * Return values:
+ * 0  means success, -1 means error during fopen/fclose
+ * */
+int loadSongsFromSD(){
+	int fileHandler;
+	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
+		printf("Error opening file in loadSongsFromSD.\n");
+		return -1;
+	}
+	char linecopy[100]; char *line; char* pch;
+	while (1){
+		line = readLine(fileHandler);
+		strcpy(linecopy, line);
+		if (linecopy[0] == NULL) {break;}
+		// first character before space is always ID
+		pch = strtok(linecopy, " ");
+		int id = *pch - '0';
+		pch = strtok(NULL, " ");
+		strcpy(linecopy, pch);
+		struct Song* s = initSong(linecopy);
+		setSongId(s, id);
+		addSongToDB(s);
+		s = NULL;
+		free(s);
+	}
+	line = NULL; free(line);
+	pch = NULL; free(pch);
+	if (!alt_up_sd_card_fclose(fileHandler)){
+		printf("File is not closed properly in loadSongsFromSD.\n");
+		return -1;
+	}
+	return 0;
+}
+

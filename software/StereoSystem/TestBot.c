@@ -16,8 +16,31 @@ void dBTester() {
 		createPlaylist("List1");
 	}
 
-	int i = loadSongsFromSD("SONGS3.TXT");
-	if (i != 0){
+	// **** test for updateSongsFromSD ****
+	int rc = updateSongsFromSD();
+	if (rc < 0){
+		printf("Warning: program does not update songs properly.\n");
+	}
+	printf("Finish updating songs.\n");
+
+	int rc1 = loadSongsFromSD();
+	if (rc1 < 0){
+		printf("Warning: loadSongsFromSD does not return 0.\n");
+	}
+
+	// *** test for loadSongsFomSD ***
+	if (querySongByName("LTWO.WAV") != NULL){
+		printf("loadSongsFromSD::test1 passed.\n");
+	} else {
+		printf("loadSongsFromSD::test1 doesnt pass.\n");
+	}
+	int i;
+	for(i = 1; i <= db.num_of_songs; i++){
+		printf("DB Contains %s\n", db.songs[i]->song_name);
+	}
+
+	//int i = loadSongsFromSD("SONGS3.TXT");
+	/*if (i != 0){
 		printf("WARNING: Program does not load songs from SDCard properly.\n");
 	}
 	printf("First song in DB is %s\n", db.songs[1]->song_name);
@@ -32,9 +55,9 @@ void dBTester() {
 	int k = 0;
 	for (k = 1; k < db.num_of_songs; k++){
 		printf("%s.\n", db.songs[k]->song_name);
-	}
+	}*/
 
-
+	/*
 	int listStatus = loadListsFromSD();
 	if (listStatus != 0){
 		printf("WARNING: Program does not load lists from SDCard properly.\n");
@@ -49,7 +72,7 @@ void dBTester() {
 	int l = 0;
 	for(l = 1; l < db.num_of_lists; l++){
 		printf("%s.\n", db.playlists[l]->list_name);
-	}
+	}*/
 
 
 
