@@ -88,6 +88,10 @@ public class Command {
 	}
 	
 	static public void createExisitedPlaylist(String list_name, int num_of_songs, int id) {
-		
+		Playlist pl = new Playlist(list_name);
+		pl.setId(id);
+		pl.setNumSongs(num_of_songs);
+		Communication com = Communication.getInstance();
+		com.getDB().addExisitedList(pl, id);
 	}
 }
