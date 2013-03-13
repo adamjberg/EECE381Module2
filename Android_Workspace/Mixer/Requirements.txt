@@ -24,8 +24,6 @@ Functions:
 	playback
 
 UI:	
-	
-	
 	navigation bars
 		play, pause, stop, fastforward, rewind, next clip, previous clip
 		return to mainactivity, 
@@ -43,8 +41,9 @@ UI:
 Data Structures:
 	Array of sound clips
 	Song being edited
-	managing the existing data on the DE2
+	managing the existing data structures on the DE2
 	clips
+	data structure on Android side
 
 Communication:
 	commands to the DE2
