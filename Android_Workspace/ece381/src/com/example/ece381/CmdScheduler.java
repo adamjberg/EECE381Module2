@@ -51,6 +51,7 @@ public class CmdScheduler {
 				Log.i("COMMAND", "previous song is selected.");
 				break;
 			case 8:
+				Command.createPlaylist(cmd.getParameterList().get(0));
 				break;
 			case 9:
 				Command.createExisitedPlaylist(cmd.getParameterList().get(0),

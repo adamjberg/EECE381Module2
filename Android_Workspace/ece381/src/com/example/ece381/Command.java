@@ -87,6 +87,20 @@ public class Command {
 		
 	}
 	
+	static public void SyncCreatePlaylist(String list_name) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(8);
+		cmd.addParameter(list_name);
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void createPlaylist(String list_name) {
+		Communication com = Communication.getInstance();
+		Playlist pl = new Playlist(list_name);
+		com.getDB().addList(pl);		
+	}
+ 	
 	static public void createExisitedPlaylist(String list_name, int num_of_songs, int id) {
 		Playlist pl = new Playlist(list_name);
 		pl.setId(id);

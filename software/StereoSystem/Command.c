@@ -98,6 +98,7 @@ void next() {
 void prev() {
 	printf("Previous song is selected and played.\n");
 }
+//index 8
 void createPlaylist(char* listname) {
 	printf("A playlist %s is created.\n", listname);
 	struct Playlist* pl = initPlaylist(listname);

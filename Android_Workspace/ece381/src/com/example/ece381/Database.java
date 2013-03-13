@@ -43,6 +43,22 @@ public class Database {
 		return this.used_list_index;
 	}
 	
+	public void addList(Playlist pl) {
+		if(this.avail_list_index.size() <= 0) {
+			Log.i("ERROR", "Added list failed\n");
+			return;
+		}
+		int id = this.avail_list_index.poll().intValue();
+		pl.setId(id);
+		this.playlists[id] = pl;
+		this.used_list_index[id] = 1;
+		int i;
+		for(i = 0; i < MAX_SONGS; i++) {
+			this.list_order_song[id][i] = 0;
+			this.list_song_order[id][i] = 0;
+		}
+		this.num_of_lists++;
+	}
 	public void addExisitedList(Playlist pl, int id) {
 		if(!this.avail_list_index.contains(Integer.valueOf(id))) {
 			Log.i("ERROR", "Added exisited list failed\n");

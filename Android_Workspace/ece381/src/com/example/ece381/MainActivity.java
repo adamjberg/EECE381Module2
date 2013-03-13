@@ -112,7 +112,10 @@ public class MainActivity extends Activity {
 	// Called when the user closes a socket
 	
 	public void closeSocket(View view) {
-		closeSocket();
+		//closeSocket();
+		EditText et = (EditText) findViewById(R.id.MessageText);
+		String msg = et.getText().toString();
+		Command.SyncCreatePlaylist(msg);
 	}
 
 	public void closeSocket() {
