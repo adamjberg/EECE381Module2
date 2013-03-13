@@ -7,7 +7,7 @@
 #include "Database.h"
 
 void initDatabase() {
-	db.cache = initCache();
+	//db.cache = initCache();
 	db.curr_playlist_id = 0;
 	db.curr_song_id = 0;
 	db.num_of_lists = 0;
@@ -46,7 +46,7 @@ void update() {
 
 	}
 	for(i = 0; i < db.num_of_songs; i++) {
-
+		syncCreateSong(db.songs[i]->song_name);
 	}
 }
 /*

@@ -10,7 +10,8 @@ struct Song* initSong(char* songname) {
 	struct Song* this = (struct Song*)malloc(sizeof(struct Song));
 	setSongName(this, songname);
 	this->isCached = false;
-	this->pos = this->size = this->volume = 0;
+	this->pos = this->size = 0;
+	this->volume = 1;
 	this->id = 0;
 	return this;
 }

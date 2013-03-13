@@ -10,7 +10,7 @@
 #include "Global.h"
 
 struct Cache {
-	volatile unsigned int memory[1500000]; //6 Mbytes
+	//volatile unsigned int memory[1500000]; //6 Mbytes
 };
 
 struct Cache* initCache();

@@ -127,6 +127,22 @@ void createExisitedPlaylist(char* listname, int num_of_songs, int id) {
 	addExisitedListToDB(pl, id);
 	pl = NULL;
 }
+/*
+ * Send command to create a song on android phone
+ * index 10
+ */
+void syncCreateSong(char* song_name) {
+	char* temp[1];
+	temp[0] = song_name;
+	struct Command* cmd = initCmd(10, 1, temp);
+	send(cmd, CMD);
+}
+void createSong(char* song_name) {
+	struct Song* song = initSong(song_name);
+	addSongToDB(song);
+	song = NULL;
+}
+
 void modifyPlaylistName(int index, char* new_listname) {
 	setListName(db.playlists[index], new_listname);
 
@@ -134,8 +150,23 @@ void modifyPlaylistName(int index, char* new_listname) {
 void shuffle(int index) {
 	printf("Playlist %d is shuffled\n", index);
 }
+void syncAddSongToPlaylist(int song_index, int list_index) {
+
+}
 void addSongToPlaylist(int song_index, int list_index) {
+	if(db.playlists[list_index] == NULL || db.songs[song_index] == NULL) return;
+	int i;
+	for(i = 1; i < MAX_SONGS; i++) {
+		if(db.index_list_order[list_index][i] == 0) {
+			db.index_list_order[list_index][i] = song_index;
+			db.index_list_song[list_index][song_index] = i;
+			return;
+		}
+	}
 	printf("Song %d is added to %d\n", song_index, list_index);
+}
+void updateSongToPlaylist(int song_index, int list_index, int order) {
+
 }
 void removeList(int index) {
 	printf("Playlist: %d is removed\n", index);
