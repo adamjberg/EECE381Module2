@@ -53,16 +53,16 @@ public class Command {
 		return sum;
 	}
 	
-	static public void syncPlay(String song_name, int pos) {
+	static public void syncPlay(int id, int pos) {
 		Communication com = Communication.getInstance();
 		Command cmd = new Command(1);
-		cmd.addParameter(song_name);
+		cmd.addParameter(String.valueOf(id));
 		cmd.addParameter(String.valueOf(pos));
 		com.send(cmd);
 		com.getSched().addCmd(cmd);
 	}
 	
-	static public void play(String song_name, int po) {
+	static public void play(int id, int po) {
 		
 	}
 	

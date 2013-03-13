@@ -59,7 +59,7 @@ int main()
 		for(i = 0; i < 3999999; i++) {}
 		syncPause();
 		for(i = 0; i < 3999999; i++) {}
-		syncPlay("a new song", 5);
+		syncPlay(1, 5);
 //Testing code end
 
 		cmdProcessing(scheduler);

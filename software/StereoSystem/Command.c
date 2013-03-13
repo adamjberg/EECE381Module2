@@ -42,9 +42,11 @@ void killCmd(struct Command** this) {
  * Function to call when need to sync with Android
  * It will also put command to scheduler
  */
-void syncPlay(char* song_name, int pos) {
+void syncPlay(int id, int pos) {
 	char* temp[2];
-	temp[0] = song_name;
+	char tempId[4];
+	sprintf(tempId, "%d", id);
+	temp[0] = tempId;
 	char tempPos[4];
 	sprintf(tempPos, "%d", pos);
 	temp[1] = tempPos;
@@ -53,9 +55,9 @@ void syncPlay(char* song_name, int pos) {
 	addCmd(com.scheduler, (struct Command*)cmd);
 }
 //index 1
-void play(char* song_name, int pos) {
+void play(int id, int pos) {
 	//struct Song* aSong = querySongByName(song_name);
-	printf("A song %s is played at %d position.\n", song_name, pos);
+	printf("A song %d is played at %d position.\n", id, pos);
 }
 /*
  * Function to call when need to sync with Android

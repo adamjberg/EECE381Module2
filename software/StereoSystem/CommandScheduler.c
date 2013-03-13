@@ -30,7 +30,7 @@ void cmdProcessing(struct CmdScheduler* this) {
 		cmd = dequeue(this->cmds);
 		switch(cmd->cmd_index) {
 		case 1:
-			play(cmd->parameters[0], atoi(cmd->parameters[1]));
+			play(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]));
 			break;
 		case 2:
 			pause();

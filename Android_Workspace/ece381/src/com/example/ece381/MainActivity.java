@@ -88,7 +88,7 @@ public class MainActivity extends Activity {
 		// and executes the code in it.
 		
 		new SocketConnect().execute((Void) null);*/
-		Command.syncPlay("Current_Song", 0);
+		Command.syncPlay(3, 0);
 	}
 
 	public void pause(View view) {
