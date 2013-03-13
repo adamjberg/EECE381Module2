@@ -24,11 +24,16 @@ Functions:
 UI:
 	display length of clip
 	display current items on the timeline
-		
+	size of items
 	navigation bar
-	mixer window
 	current clips to use
-	
+
+		Activity screens:
+			Select Song to rip clips screen
+			main mixer screen
+			clip ripping screen
+			Clip properties/editing screen
+				
 
 Data Structures:
 	Array of sound clips
@@ -38,5 +43,5 @@ Data Structures:
 
 Communication:
 	commands to the DE2
-	
+	DE2 state back to Android
 	
