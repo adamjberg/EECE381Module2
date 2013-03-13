@@ -86,4 +86,8 @@ public class Command {
 	static public void stop() {
 		
 	}
+	
+	static public void createExisitedPlaylist(String list_name, int num_of_songs, int id) {
+		
+	}
 }

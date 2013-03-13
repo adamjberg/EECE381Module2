@@ -53,6 +53,9 @@ public class CmdScheduler {
 			case 8:
 				break;
 			case 9:
+				Command.createExisitedPlaylist(cmd.getParameterList().get(0),
+						Integer.valueOf(cmd.getParameterList().get(1)).intValue(),  Integer.valueOf(cmd.getParameterList().get(2)).intValue());
+				Log.i("COMMAND", "playlist "+cmd.getParameterList().get(0)+ " is created");
 				break;
 			case 10:
 				break;
