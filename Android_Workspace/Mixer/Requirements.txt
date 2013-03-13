@@ -1,0 +1,42 @@
+Discription: 	A user will be able to string clips of sounds together and mix them 
+		in the application. These activities communicate with the DE2 to access
+		the sound files. The files will be playable on the DE2 and clips can be
+		played. Clips can be ripped from existing songs. Mixed songs can be saved
+		onto the DE2's SD card. 
+		
+	Andriod: UI and commands. 
+	DE2: Processing, Playing and Saving.
+
+Functions:
+	access database
+	select song
+	rip sound clip
+	Volume control
+	speed of clip
+	basic clips
+	position clips to a timeline
+	transpose clips
+	to name created song
+	to name clips
+	repeat clips
+	group clips into a longer clip
+
+UI:
+	display length of clip
+	display current items on the timeline
+		
+	navigation bar
+	mixer window
+	current clips to use
+	
+
+Data Structures:
+	Array of sound clips
+	Song being edited
+	managing the existing data on the DE2
+	clips
+
+Communication:
+	commands to the DE2
+	
+	
