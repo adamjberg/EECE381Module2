@@ -221,6 +221,9 @@ void reset(alt_up_rs232_dev *serial_dev) {
 		free(com.packetBuf);
 		com.packetBuf = NULL;
 	}
+
+	update();
+
 	while (alt_up_rs232_get_used_space_in_read_FIFO(serial_dev) != 0);
 	alt_up_rs232_read_data(serial_dev, &com.data[0], &com.parity);
 	setStates(startInit);

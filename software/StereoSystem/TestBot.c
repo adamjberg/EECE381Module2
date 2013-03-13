@@ -194,6 +194,11 @@ void dbTester2() {
 			printf("sth wrong\n");
 	}
 
+	createExisitedPlaylist("list1", 0, 1);
+	createExisitedPlaylist("list2", 0, 2);
+	createExisitedPlaylist("list3", 0, 3);
+	createExisitedPlaylist("list4", 0, 4);
+	createExisitedPlaylist("list5", 0, 5);
 }
 void cmdTester() {
 	char* paras[8];

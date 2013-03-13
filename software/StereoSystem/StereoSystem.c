@@ -31,6 +31,9 @@ int main()
 	//Serial device initialization
 	com = initRS232(scheduler);
 
+	//sync database
+	update();
+
 // Testing code start
 	char* temp = "Constructs a new String by decoding the specified subarray of bytes using the specified charset. The length of the new String is a function of the charset, and hence may not be equal to the length of the subarray. ";
 	char* temp1 = "this is a testing message";

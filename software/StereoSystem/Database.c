@@ -31,6 +31,24 @@ void initDatabase() {
 		db.songs[i] = NULL;
 	} temp = NULL;
 }
+
+void update() {
+	int i = 0, j = 0;
+	for(i = 0; i < db.num_of_lists; i++) {
+		while(db.used_list_index[++j] != 1);
+		if(db.playlists[j] == NULL) {
+			printf("update error\n");
+			return;
+		}
+		syncCreateExisitedPlaylist(db.playlists[j]->list_name,
+									db.playlists[j]->num_of_songs,
+									db.playlists[j]->id);
+
+	}
+	for(i = 0; i < db.num_of_songs; i++) {
+
+	}
+}
 /*
  * Query the list with a given play list name
  * return the first list founded with the same name, NULL otherwise

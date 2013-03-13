@@ -102,9 +102,21 @@ void createPlaylist(char* listname) {
 	addListToDB(pl);
 	pl = NULL;
 }
+/*
+ * send command to tell android phone to create a playlist with given information
+ * index: 9
+ */
 void syncCreateExisitedPlaylist(char* listname, int num_of_songs, int id) {
-
-	//struct Command* cmd = initCmd();
+	char* temp[3];
+	temp[0] = listname;
+	char temp1[4];
+	char temp2[4];
+	sprintf(temp1, "%d", num_of_songs);
+	sprintf(temp2, "%d", id);
+	temp[1] = temp1;
+	temp[2] = temp2;
+	struct Command* cmd = initCmd(9, 3, temp);
+	send(cmd, CMD);
 }
 void createExisitedPlaylist(char* listname, int num_of_songs, int id) {
 	struct Playlist* pl = initPlaylist(listname);
