@@ -143,7 +143,7 @@ void dbTester2() {
 	struct Playlist* al1;
 	struct Playlist* al2;
 	int i;
-	for(i = 0; i < 1000; i ++) {
+/*	for(i = 0; i < 1000; i ++) {
 		al = initPlaylist("list4");
 		//setListName(al, "list4");
 		al1 = initPlaylist("list5");
@@ -168,7 +168,7 @@ void dbTester2() {
 			printf("sth wrong\n");
 		if(removeListFromDB(al2->id) != 0)
 			printf("sth wrong\n");
-	}
+	}*/
 
 	for(i = 0; i < 1000; i ++) {
 		al = initPlaylist("list4");
