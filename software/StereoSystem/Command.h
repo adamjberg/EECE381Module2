@@ -21,19 +21,30 @@ void killCmd(struct Command**);
 
 void syncPlay(int, int);
 void play(int, int);
+
 void syncPause();
 void pause();
+
 void syncStop();
 void stop();
+
 void setVolume(int);
 void seek(int);
 void next();
 void prev();
+
+void syncCreatePlaylist(char*);
 void createPlaylist(char*);
+
 void syncCreateExisitedPlaylist(char*, int, int);
 void createExisitedPlaylist(char*, int, int);
+
 void syncCreateSong(char*);
 void createSong(char*);
+
+void syncSelectList(int);
+void selectList(int);
+
 void modifyPlaylistName(int, char*);
 void shuffle(int);
 void addSongToPlaylist(int, int);

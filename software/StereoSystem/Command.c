@@ -56,7 +56,9 @@ void syncPlay(int id, int pos) {
 }
 //index 1
 void play(int id, int pos) {
-	//struct Song* aSong = querySongByName(song_name);
+	if(db.songs[id] == NULL) return;
+	db.curr_song_id = id;
+	db.songs[id]->pos = pos;
 	printf("A song %d is played at %d position.\n", id, pos);
 }
 /*
@@ -98,6 +100,18 @@ void next() {
 void prev() {
 	printf("Previous song is selected and played.\n");
 }
+
+/*
+ * send command to a create playlist on android side
+ * index: 8
+ */
+void syncCreatePlaylist(char* list_name) {
+	char* temp[1];
+	temp[0] = list_name;
+	struct Command* cmd = initCmd(8, 1, temp);
+	send(cmd, CMD);
+	addCmd(com.scheduler, cmd);
+}
 //index 8
 void createPlaylist(char* listname) {
 	printf("A playlist %s is created.\n", listname);
@@ -120,6 +134,7 @@ void syncCreateExisitedPlaylist(char* listname, int num_of_songs, int id) {
 	temp[2] = temp2;
 	struct Command* cmd = initCmd(9, 3, temp);
 	send(cmd, CMD);
+	killCmd(&cmd);
 }
 void createExisitedPlaylist(char* listname, int num_of_songs, int id) {
 	struct Playlist* pl = initPlaylist(listname);
@@ -136,11 +151,31 @@ void syncCreateSong(char* song_name) {
 	temp[0] = song_name;
 	struct Command* cmd = initCmd(10, 1, temp);
 	send(cmd, CMD);
+	killCmd(&cmd);
 }
 void createSong(char* song_name) {
 	struct Song* song = initSong(song_name);
 	addSongToDB(song);
 	song = NULL;
+}
+
+/*
+ * Send command to select a list to play
+ * index: 11
+ */
+void syncSelectList(int id) {
+	char* temp[0];
+	char temp1[4];
+	sprintf(temp1, "%d", id);
+	temp[0] = temp1;
+	struct Command* cmd = initCmd(11, 1, temp);
+	send(cmd, CMD);
+	addCmd(com.scheduler, cmd);
+}
+
+void selectList(int id) {
+	printf("list %d is selected\n", id);
+	db.curr_playlist_id = id;
 }
 
 void modifyPlaylistName(int index, char* new_listname) {

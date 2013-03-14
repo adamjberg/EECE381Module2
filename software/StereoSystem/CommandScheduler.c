@@ -54,13 +54,13 @@ void cmdProcessing(struct CmdScheduler* this) {
 			createPlaylist(cmd->parameters[0]);
 			break;
 		case 9:
-			modifyPlaylistName(atoi(cmd->parameters[0]), cmd->parameters[1]);
+			//empty command for DE2
 			break;
 		case 10:
-			shuffle(atoi(cmd->parameters[0]));
+			//empty command for DE2
 			break;
 		case 11:
-			removeList(atoi(cmd->parameters[0]));
+			selectList(atoi(cmd->parameters[0]));
 			break;
 		case 12:
 			play_playlist(atoi(cmd->parameters[0]));

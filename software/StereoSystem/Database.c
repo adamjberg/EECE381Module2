@@ -45,7 +45,7 @@ void update() {
 									db.playlists[j]->id);
 
 	}
-	for(i = 0; i < db.num_of_songs; i++) {
+	for(i = 1; i <= db.num_of_songs; i++) {
 		syncCreateSong(db.songs[i]->song_name);
 	}
 }

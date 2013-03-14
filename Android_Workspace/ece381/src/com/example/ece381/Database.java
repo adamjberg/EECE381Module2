@@ -43,6 +43,12 @@ public class Database {
 		return this.used_list_index;
 	}
 	
+	public void addSong(Song song) {
+		song.setId(++this.num_of_songs);
+		this.songs[this.num_of_songs] = song;
+		
+	}
+	
 	public void addList(Playlist pl) {
 		if(this.avail_list_index.size() <= 0) {
 			Log.i("ERROR", "Added list failed\n");
@@ -88,6 +94,23 @@ public class Database {
 		for(j = 0; j < MAX_SONGS; j++) {
 			this.songs[j] = null;
  		}
-		this.curr_playlist_id = this.curr_song_id = this.num_of_lists = this.num_of_songs = 0;
+		this.setCurr_playlist_id(this.setCurr_song_id(this.num_of_lists = this.num_of_songs = 0));
+	}
+
+	public int getCurr_playlist_id() {
+		return curr_playlist_id;
+	}
+
+	public void setCurr_playlist_id(int curr_playlist_id) {
+		this.curr_playlist_id = curr_playlist_id;
+	}
+
+	public int getCurr_song_id() {
+		return curr_song_id;
+	}
+
+	public int setCurr_song_id(int curr_song_id) {
+		this.curr_song_id = curr_song_id;
+		return curr_song_id;
 	}
 }

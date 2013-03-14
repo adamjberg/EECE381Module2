@@ -167,7 +167,7 @@ public class Communication {
 	
 	public void setState(Stats s) {
 		this.statsMachine = s;
-		Log.i("Current State", s.toString());
+		//Log.i("Current State", s.toString());
 	}
 
 	/*

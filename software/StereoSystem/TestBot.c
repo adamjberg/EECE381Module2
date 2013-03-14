@@ -199,6 +199,18 @@ void dbTester2() {
 	createExisitedPlaylist("list3", 0, 2);
 	createExisitedPlaylist("list4", 0, 15);
 	createExisitedPlaylist("list5", 0, 11);
+	createExisitedPlaylist("list1", 0, 7);
+	createExisitedPlaylist("list2", 0, 25);
+	createExisitedPlaylist("list3", 0, 12);
+	createExisitedPlaylist("list4", 0, 35);
+	createExisitedPlaylist("list5", 0, 19);
+
+	createSong("new song 1");
+	createSong("new song 2");
+	createSong("new song 3");
+	createSong("new song 4");
+	createSong("new song 5");
+	createSong("new song 6");
 }
 void cmdTester() {
 	char* paras[8];
