@@ -67,6 +67,7 @@ public class CmdScheduler {
 				Log.i("COMMAND", "List "+cmd.getParameterList().get(0) + " is selected");
 				break;
 			case 12:
+				Command.hasSync();
 				break;
 			default:
 				break;

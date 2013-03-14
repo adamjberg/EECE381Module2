@@ -178,6 +178,16 @@ void selectList(int id) {
 	db.curr_playlist_id = id;
 }
 
+/*
+ * Send command to notify android app that the sync process at start up is finished
+ * index: 12
+ */
+
+void syncDBFinish() {
+	struct Command* cmd = initCmd(12, 0, NULL);
+	send(cmd, CMD);
+	killCmd(&cmd);
+}
 void modifyPlaylistName(int index, char* new_listname) {
 	setListName(db.playlists[index], new_listname);
 

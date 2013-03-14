@@ -45,6 +45,8 @@ void createSong(char*);
 void syncSelectList(int);
 void selectList(int);
 
+void syncDBFinish();
+
 void modifyPlaylistName(int, char*);
 void shuffle(int);
 void addSongToPlaylist(int, int);

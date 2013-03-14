@@ -24,6 +24,7 @@ public class Communication {
 	private Packet PacketBuf;
 	private CmdScheduler sched;
 	private Database db;
+	private boolean isSync;
 	
 	private Communication() {
 		this.sendData = new ConcurrentLinkedQueue<Packet>();
@@ -48,6 +49,14 @@ public class Communication {
 		this.pendingPacketSize.clear();
 		this.sched.clear();
 		this.db.clear();
+		this.isSync = false;
+	}
+	
+	public void setSync() {
+		this.isSync = true;
+	}
+	public boolean isSync() {
+		return this.isSync;
 	}
 	static public Communication getInstance() {
 		return RS232;

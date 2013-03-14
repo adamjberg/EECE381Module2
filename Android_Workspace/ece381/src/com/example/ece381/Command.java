@@ -131,4 +131,10 @@ public class Command {
 		Communication com = Communication.getInstance();
 		com.getDB().setCurr_playlist_id(id);
 	}
+	
+	//index 12
+	static public void hasSync() {
+		Communication com = Communication.getInstance();
+		com.setSync();
+	}
 }
