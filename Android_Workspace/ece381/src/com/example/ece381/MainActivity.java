@@ -7,20 +7,21 @@ import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.ece381.Communication.Stats;
-
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
+import com.example.ece381.Communication.Stats;
 
 public class MainActivity extends Activity {
 
@@ -66,7 +67,30 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-
+	@Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+	  // TODO Auto-generated method stub
+	  switch(item.getItemId()){
+	  case R.id.songs:
+		  Toast.makeText(MainActivity.this,
+		    item.getTitle(),
+		     Toast.LENGTH_LONG).show();
+		  return true;
+	  case R.id.menu_settings:
+		  Toast.makeText(MainActivity.this,
+		    item.getTitle(),
+		     Toast.LENGTH_LONG).show();
+		  return true;
+	  case R.id.playlists:
+		  Toast.makeText(MainActivity.this,
+		    item.getTitle(),
+		    Toast.LENGTH_LONG).show();
+		  return true;
+	  default:
+		  return false;
+	  }
+	   
+	 } 
 
 	@Override
 	public void finish() {
