@@ -125,16 +125,16 @@ public class MainActivity extends Activity {
     {
     	//Emulate the progressDialog.setCancelable(false) behavior
     	//If the first view is being shown
-    //	if(viewSwitcher.getDisplayedChild() == 0)
-    	//{
+    	if(viewSwitcher.getDisplayedChild() == 0)
+    	{
     		//Do nothing
-    		//return;
-    	//}
-    	//else
-    	//{
+    		return;
+    	}
+    	else
+    	{
     		//Finishes the current Activity
     		super.onBackPressed();
-    	//}
+    	}
     }
 	// Route called when the user presses "connect"
 	

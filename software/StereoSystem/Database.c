@@ -30,6 +30,7 @@ void initDatabase() {
 		db.playlists[i] = NULL;
 		db.songs[i] = NULL;
 	} temp = NULL;
+	loadListsFromSD();
 }
 
 void update() {
@@ -176,9 +177,11 @@ char* readLine(int file_pointer) {
 		}
 	} while(temp[i] != '\n' && temp[i] != '\r' && temp[i] != 0 && temp[i] != -1);
 	temp[i] = 0;
-	char* result = (char*)malloc(sizeof(char)*i);
-	strncpy(result, temp, i+1);
-	return result;
+	if(i == 0)
+		return NULL;
+	char* res = (char*)malloc(sizeof(char)*i);
+	strncpy(res, temp, i+1);
+	return res;
 }
 
 /*

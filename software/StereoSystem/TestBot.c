@@ -11,7 +11,7 @@ void dBTester() {
 
 	// just a random testing, createPlaylist
 	// does not do anything right now.
-	int j = 0;
+/*	int j = 0;
 	for (j = 0; j < 20; j++){
 		createPlaylist("List1");
 	}
@@ -38,7 +38,7 @@ void dBTester() {
 	for(i = 1; i <= db.num_of_songs; i++){
 		printf("DB Contains %s\n", db.songs[i]->song_name);
 	}
-
+*/
 	//int i = loadSongsFromSD("SONGS3.TXT");
 	/*if (i != 0){
 		printf("WARNING: Program does not load songs from SDCard properly.\n");
