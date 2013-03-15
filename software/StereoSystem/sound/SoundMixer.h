@@ -15,9 +15,11 @@ struct SoundMixer* soundMixer;
 struct SoundMixer {
 	struct Sound* sound;
 	bool cleared;
+	float volume;
 };
 
 void initSoundMixer();
+void setGlobalVolume(float);
 void updateSoundMixerLength(unsigned int);
 void updateSoundMixerPosition(int numWritten);
 

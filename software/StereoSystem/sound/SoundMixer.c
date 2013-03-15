@@ -17,7 +17,12 @@ void initSoundMixer() {
 	soundMixer->sound = initSound(BUFFER_LENGTH);
 	soundMixer->sound->playing = true;
 	soundMixer->sound->loops = -1;
+	soundMixer->volume = 1;
 	soundMixer->cleared = true;
+}
+
+void setGlobalVolume(float volume) {
+	soundMixer->volume = volume;
 }
 
 void clearSoundMixer() {
@@ -34,7 +39,7 @@ void updateSoundMixerPosition(int numWritten) {
 			continue;
 		if (db.songs[i]->sound->playing) {
 			soundMixer->cleared = false;
-			combineSounds(soundMixer->sound, db.songs[i]->sound,
+			combineSounds(soundMixer->sound, db.songs[i]->sound, soundMixer->volume,
 					soundMixer->sound->position, numWritten, numSoundsPlaying == 0);
 			updateSoundPosition(db.songs[i]->sound, numWritten);
 			numSoundsPlaying++;
