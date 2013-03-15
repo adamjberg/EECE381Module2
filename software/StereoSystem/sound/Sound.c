@@ -112,12 +112,16 @@ struct Sound* loadWavSound(char * filename) {
 	return sound;
 }
 
-void combineSounds(struct Sound* sound, struct Sound* soundToAdd, float volume, int startIndex, int numToWrite, bool overwrite) {
+void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex, int numToWrite, bool overwrite) {
 	int i;
 	int indexToWrite = startIndex;
 	int indexToRead = soundToAdd->position;
 
-	bool useVolume = volume != 1;
+	if(sound->volume == 0 || soundToAdd->volume == 0)
+		return;
+
+	bool useVolume = sound->volume != 1 || soundToAdd->volume != 1;
+	float combinedVolume = sound->volume * soundToAdd->volume;
 
 	for (i = 0; i < numToWrite; i++) {
 		if (indexToWrite >= sound->length) {
@@ -132,18 +136,43 @@ void combineSounds(struct Sound* sound, struct Sound* soundToAdd, float volume, 
 		}
 		if (overwrite) {
 			if(useVolume)
-				sound->buffer[indexToWrite] = (int) (soundToAdd->buffer[indexToRead] * volume);
+				sound->buffer[indexToWrite] = (int) (soundToAdd->buffer[indexToRead] * combinedVolume);
 			else
 				sound->buffer[indexToWrite] = soundToAdd->buffer[indexToRead];
 		} else {
 			if(useVolume)
-				sound->buffer[indexToWrite] += (int) (soundToAdd->buffer[indexToRead] * volume);
+				sound->buffer[indexToWrite] += (int) (soundToAdd->buffer[indexToRead] * combinedVolume);
 			else
 				sound->buffer[indexToWrite] += soundToAdd->buffer[indexToRead];
 		}
 		indexToRead++;
 		indexToWrite++;
 	}
+}
+
+/**
+ * Overwrites the current sound buffer with updated volume
+ *
+ * IMPORTANT: This will change the raw sound data and after several
+ * changes the quality of the sound will degrade.
+ */
+void setSoundVolumeStatic(struct Sound* this, float volume) {
+	int i;
+	for (i = 0; i < this->length; i++) {
+		this->buffer[i] = this->buffer[i] * volume;
+	}
+	this->volume = 1;
+}
+
+/**
+ * Changes the sound volume so that it can be taken into account when
+ * adding the sound to the SoundMixer.
+ *
+ * IMPORTANT: This allows the sound to maintain all of its data
+ * even if the volume is brought to 0 and then back to 1
+ */
+void setSoundVolume(struct Sound* this, float volume) {
+	this->volume = volume;
 }
 
 void playSound(struct Sound* sound, float volume, int startTime, int loops) {
