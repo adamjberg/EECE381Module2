@@ -9,12 +9,15 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,8 +44,20 @@ public class MainActivity extends Activity {
 				.penaltyLog().build());
 
 		super.onCreate(savedInstanceState);
+		 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			 getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		 }
 		setContentView(R.layout.activity_main);
 
+		 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+	            // Show the Up button in the action bar.
+	            this.getActionBar().setDisplayHomeAsUpEnabled(true);
+	        }
+
+	/*	ActionBar actionBar = this.getActionBar();
+		  actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP); */
+
+	
 		EditText et = (EditText) findViewById(R.id.RecvdMessage);
 		et.setKeyListener(null);
 		et = (EditText) findViewById(R.id.error_message_box);
@@ -71,6 +86,11 @@ public class MainActivity extends Activity {
 	 public boolean onOptionsItemSelected(MenuItem item) {
 	  // TODO Auto-generated method stub
 	  switch(item.getItemId()){
+	  case android.R.id.home:
+		  finish();
+        //  NavUtils.navigateUpFromSameTask(this);
+		 // onBackPressed();
+          return true;
 	  case R.id.songs:
 		  Toast.makeText(MainActivity.this,
 		    item.getTitle(),
@@ -86,10 +106,8 @@ public class MainActivity extends Activity {
 		    item.getTitle(),
 		    Toast.LENGTH_LONG).show();
 		  return true;
-	  default:
-		  return false;
 	  }
-	   
+	  return super.onOptionsItemSelected(item);
 	 } 
 
 	@Override
@@ -107,16 +125,16 @@ public class MainActivity extends Activity {
     {
     	//Emulate the progressDialog.setCancelable(false) behavior
     	//If the first view is being shown
-    	if(viewSwitcher.getDisplayedChild() == 0)
-    	{
+    //	if(viewSwitcher.getDisplayedChild() == 0)
+    	//{
     		//Do nothing
-    		return;
-    	}
-    	else
-    	{
+    		//return;
+    	//}
+    	//else
+    	//{
     		//Finishes the current Activity
     		super.onBackPressed();
-    	}
+    	//}
     }
 	// Route called when the user presses "connect"
 	
@@ -203,6 +221,7 @@ public class MainActivity extends Activity {
 			
 			//Set ViewSwitcher instance as the current View.
 			setContentView(viewSwitcher);
+			
 		}
 
 		//The code to be executed in a background thread.
