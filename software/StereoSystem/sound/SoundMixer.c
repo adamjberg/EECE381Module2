@@ -17,12 +17,11 @@ void initSoundMixer() {
 	soundMixer->sound = initSound(BUFFER_LENGTH);
 	soundMixer->sound->playing = true;
 	soundMixer->sound->loops = -1;
-	soundMixer->volume = 1;
 	soundMixer->cleared = true;
 }
 
 void setGlobalVolume(float volume) {
-	soundMixer->volume = volume;
+	soundMixer->sound->volume = volume;
 }
 
 void clearSoundMixer() {
