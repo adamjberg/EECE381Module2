@@ -43,6 +43,10 @@ void setSongId(struct Song* this, int id) {
 	this->id = id;
 }
 
+void setSongVolume(struct Song* this, float volume) {
+	setSoundVolume(this->sound, volume);
+}
+
 void playSong(struct Song* this, float volume, int startTime, int loops) {
 	playSound(this->sound, volume, startTime, loops);
 }

@@ -25,6 +25,7 @@ struct Song* initSong(char*);
 void killSong(struct Song**);
 void setSongName(struct Song*, char*);
 void setSongId(struct Song*, int);
+void setSongVolume(struct Song*, float);
 void playSong(struct Song*, float, int, int);
 void stopSong(struct Song*);
 void pauseSong(struct Song*);
