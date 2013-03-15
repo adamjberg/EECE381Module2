@@ -34,6 +34,7 @@ struct Sound* initSound(unsigned int length) {
 	this->position = 0;
 	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
 	this->playing = false;
+	this->volume = 1;
 	clearSoundBuffer(this);
 	return this;
 }
