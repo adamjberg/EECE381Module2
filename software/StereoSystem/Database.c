@@ -30,7 +30,7 @@ void initDatabase() {
 		db.playlists[i] = NULL;
 		db.songs[i] = NULL;
 	} temp = NULL;
-	loadListsFromSD();
+	//loadListsFromSD();
 }
 
 void update() {

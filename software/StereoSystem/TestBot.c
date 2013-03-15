@@ -97,6 +97,11 @@ void dBTester() {
 	if(removeListFromDB("List2")!=0)
 		printf("remove list2 failed\n");*/
 
+	int i;
+	loadListsFromSD();
+	for(i = 0; i < 10000; i++) {
+		saveListsToSD();
+	}
 }
 
 void dbTester2() {

@@ -25,6 +25,7 @@ int main()
 	}
 
 	initDatabase();
+	//dBTester();
 	//dbTester2();
 	struct CmdScheduler* scheduler = initCmdScheduler();
 
