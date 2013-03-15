@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">ece381</string>
+    <string name="app_name">StereoSystem</string>
     <string name="label_ip">IP:</string>
     <string name="playsong">Play Song</string>
     <string name="label_port">Port:</string>
@@ -17,5 +17,16 @@
     <string name="pause">Pause</string>
     <string name="playlists">Playlists</string>
     <string name="songs">Songs</string>
+ 	<string name="button_left">PlayList</string>
+ 	<string name="button_2">Mixer</string>
+ 	<string name="button_3">Albums</string>
+ 	<string name="top_right">Current</string>
+ 	<string name="text"/><string name="text3"/>
+ 	<string name="vol_left">0</string>
+ 	<string name="vol_2nd">20</string>
+ 	<string name="vol_3rd">40</string>
+ 	<string name="vol_4th">60</string>
+ 	<string name="vol_5th">80</string>
+ 	<string name="text_address"/>
 
 </resources>

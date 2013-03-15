@@ -8,18 +8,26 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -33,6 +41,12 @@ public class MainActivity extends Activity {
 	//creates a ViewSwitcher object, to switch between Views
 	private ViewSwitcher viewSwitcher;
 	
+	private Button current_song;
+	private SeekBar seekbar;
+	private String[] songs = new String[] {" song1", " song2", "song 3"," song4", " song5", "song6 "," song7", " song8", " song9"};
+	private TextView textview;
+	private ListView m_listview;
+  
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -53,16 +67,18 @@ public class MainActivity extends Activity {
 	            // Show the Up button in the action bar.
 	            this.getActionBar().setDisplayHomeAsUpEnabled(true);
 	        }
+		 
 
+		  
 	/*	ActionBar actionBar = this.getActionBar();
 		  actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP); */
 
-	
+	/*
 		EditText et = (EditText) findViewById(R.id.RecvdMessage);
 		et.setKeyListener(null);
 		et = (EditText) findViewById(R.id.error_message_box);
 		et.setKeyListener(null);
-
+*/
 		// Set up a timer task.  We will use the timer to check the
 		// input queue every 500 ms
 		
@@ -74,6 +90,7 @@ public class MainActivity extends Activity {
 		
 		//Initialize a LoadViewTask object and call the execute() method
     	new LoadViewTask().execute();    	
+
 
 	}
 
@@ -105,6 +122,10 @@ public class MainActivity extends Activity {
 		  Toast.makeText(MainActivity.this,
 		    item.getTitle(),
 		    Toast.LENGTH_LONG).show();
+		  return true;
+	  case R.id.playMenu:
+		  Intent intent2 = new Intent(MainActivity.this, play.class);
+          startActivity(intent2);   
 		  return true;
 	  }
 	  return super.onOptionsItemSelected(item);
@@ -139,21 +160,6 @@ public class MainActivity extends Activity {
 	// Route called when the user presses "connect"
 	
 	public void openSocket(View view) {
-	/*	MyApplication app = (MyApplication) getApplication();
-		TextView msgbox = (TextView) findViewById(R.id.error_message_box);
-
-		// Make sure the socket is not already opened 
-		
-		if (app.sock != null && app.sock.isConnected() && !app.sock.isClosed()) {
-			msgbox.setText("Socket already open"); //$NON-NLS-1$
-			return;
-		}
-		
-		// open the socket.  SocketConnect is a new subclass
-	    // (defined below).  This creates an instance of the subclass
-		// and executes the code in it.
-		
-		new SocketConnect().execute((Void) null);*/
 		Command.syncPlay(3, 0);
 	}
 
@@ -195,7 +201,73 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+	/*
+	private void addBarSsound(){  
+		textview= (TextView)  findViewById(R.id.textView1);
+		seekbar = (SeekBar) findViewById(R.id.seekBar1);
+	    seekbar.setOnSeekBarChangeListener( new OnSeekBarChangeListener(){
+		   @Override 
+		   public void onProgressChanged(SeekBar seekBar, int progress,
+                   boolean fromUser) {
+
+			   textview.setText(textview.getText()+"\n"+"SeekBar now at the value of:"+progress);
+			   
+			   
+              
+           }
+
+           @Override
+           public void onStartTrackingTouch(SeekBar seekBar) {}
+           @Override
+           public void onStopTrackingTouch(SeekBar seekBar) {}}
+       );}*/
+private void addListView(){
 	
+	
+	 m_listview = (ListView) findViewById(R.id.listView1);
+	    
+	   
+	    String[] items = songs;//new String[] {"Item 1", "Item 2", "Item 3"};
+	    ArrayAdapter<String> adapter =
+	      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+	 //   ArrayAdapter<String> adapter2 =
+	  	//      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, items);
+	    //setListAdapter(new ArrayAdapter<String>(this, R.layout.simple_list_item_1,items));
+	 
+	    m_listview.setAdapter(adapter);
+	 //   m_listview.setAdapter(adapter2);
+	    m_listview.setOnItemClickListener(new OnItemClickListener() {
+         @Override
+         public void onItemClick(AdapterView<?> parent, View view, int position,
+                 long id) {
+         	 Intent i = new Intent(MainActivity.this,play.class);
+         	 String item = ((TextView)view).getText().toString();
+         	 i.putExtra("USERNAME", item);
+         	 startActivity(i);
+             //String item = ((TextView)view).getText().toString();
+             
+            // Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+             
+         }
+     });
+	
+}/*
+private void CurrentButton(){
+	current_song= (Button) findViewById(R.id.button8);
+	   current_song.setOnClickListener(new OnClickListener() {
+			 
+			@Override
+			public void onClick(View arg0) {
+
+			    Intent intent2 = new Intent(MainActivity.this, play.class);
+		                    startActivity(intent2);   
+
+			}
+
+		});
+	   
+}*/
+
 	 //To use the AsyncTask, it must be subclassed
     private class LoadViewTask extends AsyncTask<Void, Integer, Void>
     {
@@ -285,6 +357,8 @@ public class MainActivity extends Activity {
 			viewSwitcher.addView(ViewSwitcher.inflate(MainActivity.this, R.layout.activity_main, null));
 			//Switch the Views
 			viewSwitcher.showNext();
+			//addBarSsound();
+			addListView();  
 		}
     }
 
@@ -515,5 +589,6 @@ public class MainActivity extends Activity {
 			}
 		} 
 	}
+	
 	
 }
