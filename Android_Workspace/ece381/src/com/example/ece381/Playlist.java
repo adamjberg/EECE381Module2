@@ -15,7 +15,6 @@ public class Playlist {
 		pl_count++;
 	}
 	
-	@Override
 	public Playlist(String name) {
 		this.list_name = name;
 		this.num_of_songs = 0;
@@ -23,7 +22,6 @@ public class Playlist {
 		pl_count++;
 	}
 	
-	@Override
 	public Playlist(String name, int num_of_song, int id) {
 		this.list_name = name;
 		this.num_of_songs = num_of_song;
