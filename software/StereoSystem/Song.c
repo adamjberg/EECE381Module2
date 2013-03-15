@@ -13,7 +13,17 @@ struct Song* initSong(char* songname) {
 	this->pos = this->size = 0;
 	this->volume = 1;
 	this->id = 0;
+	this->sound = NULL;
 	return this;
+}
+
+void loadSong(struct Song* this) {
+	this->sound = loadWavSound(this->song_name);
+}
+
+void unloadSong(struct Song* this) {
+	unloadSound(this->sound);
+	this->sound = NULL;
 }
 
 void killSong(struct Song** this) {
@@ -31,4 +41,20 @@ void setSongName(struct Song* this, char* name) {
 }
 void setSongId(struct Song* this, int id) {
 	this->id = id;
+}
+
+void playSong(struct Song* this, float volume, int startTime, int loops) {
+	playSound(this->sound, volume, startTime, loops);
+}
+
+void pauseSong(struct Song* this) {
+	pauseSound(this->sound);
+}
+
+void resumeSong(struct Song* this) {
+	resumeSound(this->sound);
+}
+
+void stopSong(struct Song* this) {
+	stopSound(this->sound);
 }
