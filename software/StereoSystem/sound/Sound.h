@@ -35,6 +35,7 @@ void setSoundVolume(struct Sound*, float);
 void unloadSound(struct Sound*);
 void playSound(struct Sound*, float, int, int);
 void pauseSound(struct Sound*);
+void resumeSound(struct Sound*);
 void stopSound(struct Sound*);
 void clearSoundBuffer(struct Sound*);
 
