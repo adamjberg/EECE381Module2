@@ -10,13 +10,13 @@
 /**
  * Helper function to read multiple bytes and return the representative int value
  */
-unsigned int readInt(int file_pointer, int numBytesToRead) {
-	unsigned int ret = 0;
+int readInt(int file_pointer, int numBytesToRead) {
+	int ret = 0;
 	int i;
-	unsigned int bytes[numBytesToRead];
+	int bytes[numBytesToRead];
 	for (i = 0; i < numBytesToRead; i++) {
 		bytes[i] = alt_up_sd_card_read(file_pointer);
-		ret |= ((unsigned int) bytes[i] << (8 * i));
+		ret |= (bytes[i] << (8 * i));
 	}
 	return ret;
 }
@@ -32,7 +32,7 @@ struct Sound* initSound(unsigned int length) {
 	struct Sound* this = (struct Sound*) malloc(sizeof(struct Sound));
 	this->length = length;
 	this->position = 0;
-	this->buffer = (unsigned int*) malloc(sizeof(unsigned int) * length);
+	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
 	this->playing = false;
 	clearSoundBuffer(this);
 	return this;
