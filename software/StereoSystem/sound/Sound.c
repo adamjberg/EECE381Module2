@@ -7,6 +7,8 @@
 
 #include "Sound.h"
 
+#define AUDIO_FREQ 32000
+
 /**
  * Helper function to read multiple bytes and return the representative int value
  */
@@ -174,6 +176,24 @@ void setSoundVolumeStatic(struct Sound* this, float volume) {
  */
 void setSoundVolume(struct Sound* this, float volume) {
 	this->volume = volume;
+}
+
+/**
+ * Helper function to convert a millisecond position to the correct position
+ * in the sound buffer
+ */
+unsigned int msToPosition(struct Sound* this, unsigned int position) {
+	return (unsigned int) (position * AUDIO_FREQ);
+}
+
+/**
+ * Seeks the sound to the given position
+ *
+ * @param this - The sound to change
+ * @param position - The position to seek to in MilliSeconds
+ */
+void seekSound(struct Sound* this, unsigned int position) {
+	this->position = msToPosition(this, position);
 }
 
 void playSound(struct Sound* sound, float volume, int startTime, int loops) {

@@ -30,6 +30,7 @@ void playSong(struct Song*, float, int, int);
 void stopSong(struct Song*);
 void pauseSong(struct Song*);
 void resumeSong(struct Song*);
+void seekSong(struct Song*, unsigned int);
 void unloadSong(struct Song*);
 void loadSong(struct Song*);
 #endif /* SONG_H_ */

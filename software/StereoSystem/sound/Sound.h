@@ -33,6 +33,7 @@ void combineSounds(struct Sound*, struct Sound*, int, int, bool);
 void setSoundVolumeStatic(struct Sound*, float);
 void setSoundVolume(struct Sound*, float);
 void unloadSound(struct Sound*);
+void seekSound(struct Sound*, unsigned int);
 void playSound(struct Sound*, float, int, int);
 void pauseSound(struct Sound*);
 void resumeSound(struct Sound*);

@@ -62,3 +62,13 @@ void resumeSong(struct Song* this) {
 void stopSong(struct Song* this) {
 	stopSound(this->sound);
 }
+
+/**
+ * Seek a song to a given position (in MilliSeconds)
+ *
+ * @param this - Song to seek
+ * @param position - Position to seek to in MilliSeconds
+ */
+void seekSong(struct Song* this, unsigned int position) {
+	seekSound( this->sound, position );
+}
