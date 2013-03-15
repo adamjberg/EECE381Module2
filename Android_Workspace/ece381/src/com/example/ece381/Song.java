@@ -8,5 +8,26 @@ public class Song {
 	private int id;
 	public Song(String song_name) {
 		this.song_name = song_name;
+		this.volume = 1;
 	}
+	public int getVolume() {
+		return volume;
+	}
+	public void setVolume(int volume) {
+		this.volume = volume;
+	}
+	public int getPos() {
+		return pos;
+	}
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	
 }

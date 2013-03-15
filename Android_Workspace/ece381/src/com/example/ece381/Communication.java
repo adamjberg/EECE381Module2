@@ -23,12 +23,15 @@ public class Communication {
 	private int failReceveTime;
 	private Packet PacketBuf;
 	private CmdScheduler sched;
+	private Database db;
+	private boolean isSync;
 	
 	private Communication() {
 		this.sendData = new ConcurrentLinkedQueue<Packet>();
 		this.receiveData = new ConcurrentLinkedQueue<Packet>();
 		this.pendingPacketSize = new ConcurrentLinkedQueue<Integer>();
 		this.sched = new CmdScheduler();
+		db = new Database();
 		this.resetCom();
 	}
 	
@@ -45,6 +48,15 @@ public class Communication {
 		this.receiveData.clear();
 		this.pendingPacketSize.clear();
 		this.sched.clear();
+		this.db.clear();
+		this.isSync = false;
+	}
+	
+	public void setSync() {
+		this.isSync = true;
+	}
+	public boolean isSync() {
+		return this.isSync;
 	}
 	static public Communication getInstance() {
 		return RS232;
@@ -145,6 +157,9 @@ public class Communication {
 		return this.receiveData;
 	}
 	
+	public Database getDB() {
+		return this.db;
+	}
 	public void addPacketBuffer(Packet p) {
 		this.PacketBuf = p;
 	}
@@ -161,7 +176,7 @@ public class Communication {
 	
 	public void setState(Stats s) {
 		this.statsMachine = s;
-		Log.i("Current State", s.toString());
+		//Log.i("Current State", s.toString());
 	}
 
 	/*

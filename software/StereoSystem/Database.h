@@ -26,7 +26,7 @@ struct database {
 	struct Queue* avail_list_index;
 	int used_list_index[MAX_LISTS];
 
-	struct Cache* cache;
+	//struct Cache* cache;
 };
 
 void initDatabase();

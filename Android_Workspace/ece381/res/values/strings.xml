@@ -8,12 +8,14 @@
     <string name="connect">Connect</string>
     <string name="clear">Clear</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Stereo System</string>
     <string name="label_myip">My IP:</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
     <string name="refresh_socket">Show Sock.</string>
     <string name="IP">192.3.17.101</string>
     <string name="pause">Pause</string>
+    <string name="playlists">Playlists</string>
+    <string name="songs">Songs</string>
 
 </resources>

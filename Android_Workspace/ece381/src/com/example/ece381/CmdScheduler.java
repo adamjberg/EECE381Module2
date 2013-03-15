@@ -29,7 +29,7 @@ public class CmdScheduler {
 			cmd = cmds.poll();
 			switch(cmd.getCmdIndex()) {
 			case 1:
-				Command.play(cmd.getParameterList().get(0), Integer.valueOf(cmd.getParameterList().get(1)).intValue());
+				Command.play(Integer.valueOf(cmd.getParameterList().get(0)).intValue(), Integer.valueOf(cmd.getParameterList().get(1)).intValue());
 				Log.i("COMMAND", "The Song "+cmd.getParameterList().get(0)+" is playing at "+cmd.getParameterList().get(1));
 				break;
 			case 2:
@@ -51,6 +51,7 @@ public class CmdScheduler {
 				Log.i("COMMAND", "previous song is selected.");
 				break;
 			case 8:
+				Command.createPlaylist(cmd.getParameterList().get(0));
 				break;
 			case 9:
 				Command.createExisitedPlaylist(cmd.getParameterList().get(0),
@@ -58,10 +59,15 @@ public class CmdScheduler {
 				Log.i("COMMAND", "playlist "+cmd.getParameterList().get(0)+ " is created");
 				break;
 			case 10:
+				Command.createSong(cmd.getParameterList().get(0));
+				Log.i("COMMAND", "Song "+cmd.getParameterList().get(0)+" is created");
 				break;
 			case 11:
+				Command.selectList(Integer.valueOf(cmd.getParameterList().get(0)).intValue());
+				Log.i("COMMAND", "List "+cmd.getParameterList().get(0) + " is selected");
 				break;
 			case 12:
+				Command.hasSync();
 				break;
 			default:
 				break;

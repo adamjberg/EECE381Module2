@@ -14,4 +14,12 @@ public class Playlist {
 		this.num_of_songs = num_of_song;
 		this.id = id;
 	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setNumSongs(int num_of_songs) {
+		this.num_of_songs = num_of_songs;
+	}
 }

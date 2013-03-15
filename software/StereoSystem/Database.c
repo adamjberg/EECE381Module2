@@ -7,7 +7,7 @@
 #include "Database.h"
 
 void initDatabase() {
-	db.cache = initCache();
+	//db.cache = initCache();
 	db.curr_playlist_id = 0;
 	db.curr_song_id = 0;
 	db.num_of_lists = 0;
@@ -45,9 +45,11 @@ void update() {
 									db.playlists[j]->id);
 
 	}
-	for(i = 0; i < db.num_of_songs; i++) {
-
+	for(i = 1; i <= db.num_of_songs; i++) {
+		syncCreateSong(db.songs[i]->song_name);
 	}
+
+	syncDBFinish();
 }
 /*
  * Query the list with a given play list name

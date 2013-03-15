@@ -7,22 +7,28 @@ import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.ece381.Communication.Stats;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
+
+import com.example.ece381.Communication.Stats;
 
 public class MainActivity extends Activity {
 
 	private Timer tcp_timer;
 	private Communication com = Communication.getInstance();
+	//creates a ViewSwitcher object, to switch between Views
+	private ViewSwitcher viewSwitcher;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,9 @@ public class MainActivity extends Activity {
 		
 		new SocketConnect().execute((Void) null);
 		
-		
+		//Initialize a LoadViewTask object and call the execute() method
+    	new LoadViewTask().execute();    	
+
 	}
 
 	@Override
@@ -59,7 +67,30 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-
+	@Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+	  // TODO Auto-generated method stub
+	  switch(item.getItemId()){
+	  case R.id.songs:
+		  Toast.makeText(MainActivity.this,
+		    item.getTitle(),
+		     Toast.LENGTH_LONG).show();
+		  return true;
+	  case R.id.menu_settings:
+		  Toast.makeText(MainActivity.this,
+		    item.getTitle(),
+		     Toast.LENGTH_LONG).show();
+		  return true;
+	  case R.id.playlists:
+		  Toast.makeText(MainActivity.this,
+		    item.getTitle(),
+		    Toast.LENGTH_LONG).show();
+		  return true;
+	  default:
+		  return false;
+	  }
+	   
+	 } 
 
 	@Override
 	public void finish() {
@@ -70,6 +101,23 @@ public class MainActivity extends Activity {
 		super.finish();
 	}
 	
+	 //Override the default back key behavior
+    @Override
+    public void onBackPressed() 
+    {
+    	//Emulate the progressDialog.setCancelable(false) behavior
+    	//If the first view is being shown
+    	if(viewSwitcher.getDisplayedChild() == 0)
+    	{
+    		//Do nothing
+    		return;
+    	}
+    	else
+    	{
+    		//Finishes the current Activity
+    		super.onBackPressed();
+    	}
+    }
 	// Route called when the user presses "connect"
 	
 	public void openSocket(View view) {
@@ -88,7 +136,7 @@ public class MainActivity extends Activity {
 		// and executes the code in it.
 		
 		new SocketConnect().execute((Void) null);*/
-		Command.syncPlay("Current_Song", 0);
+		Command.syncPlay(3, 0);
 	}
 
 	public void pause(View view) {
@@ -112,7 +160,10 @@ public class MainActivity extends Activity {
 	// Called when the user closes a socket
 	
 	public void closeSocket(View view) {
-		closeSocket();
+		//closeSocket();
+		EditText et = (EditText) findViewById(R.id.MessageText);
+		String msg = et.getText().toString();
+		Command.SyncCreatePlaylist(msg);
 	}
 
 	public void closeSocket() {
@@ -126,7 +177,97 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+	
+	 //To use the AsyncTask, it must be subclassed
+    private class LoadViewTask extends AsyncTask<Void, Integer, Void>
+    {
+    	//A TextView object and a ProgressBar object
+    	private TextView tv_progress;
+    	private ProgressBar pb_progressBar;
+    	
+    	//Before running code in the separate thread
+		@Override
+		protected void onPreExecute() 
+		{
+			//Initialize the ViewSwitcher object
+	        viewSwitcher = new ViewSwitcher(MainActivity.this);
+	        /* Initialize the loading screen with data from the 'loadingscreen.xml' layout xml file. 
+	         * Add the initialized View to the viewSwitcher.*/
+			viewSwitcher.addView(ViewSwitcher.inflate(MainActivity.this, R.layout.loadingscreen, null));
+			
+			//Initialize the TextView and ProgressBar instances - IMPORTANT: call findViewById() from viewSwitcher.
+			tv_progress = (TextView) viewSwitcher.findViewById(R.id.tv_progress);
+			pb_progressBar = (ProgressBar) viewSwitcher.findViewById(R.id.pb_progressbar);
+			//Sets the maximum value of the progress bar to 100 			
+			pb_progressBar.setMax(100);
+			
+			//Set ViewSwitcher instance as the current View.
+			setContentView(viewSwitcher);
+		}
 
+		//The code to be executed in a background thread.
+		@Override
+		protected Void doInBackground(Void... params) 
+		{
+				
+				//Get the current thread's token
+				synchronized (this) 
+				{
+					//Initialize an integer (that will act as a counter) to zero
+					int counter = 0;
+					//While the counter is smaller than four
+					while(counter <= 5)
+					{
+						switch(com.getState()) {
+						case START:
+							counter = 1;
+							break;
+						case waitStart:
+							counter = 2;
+							break;
+						case startInit:
+							counter = 3;
+							break;
+						case checkServer:
+							counter = 4;
+						case sendStates:
+							counter = 5;
+						default:
+							break;
+						}
+						if(com.isSync()) 
+							counter = 6;
+						//Set the current progress. 
+						//This value is going to be passed to the onProgressUpdate() method.
+						publishProgress(counter*13);
+					}
+				}
+			return null;
+		}
+
+		//Update the TextView and the progress at progress bar
+		@Override
+		protected void onProgressUpdate(Integer... values) 
+		{
+			//Update the progress at the UI if progress value is smaller than 100
+			if(values[0] <= 100)
+			{
+				tv_progress.setText("Progress: " + Integer.toString(values[0]) + "%");
+				pb_progressBar.setProgress(values[0]);
+			}
+		}
+		
+		//After executing the code in the thread
+		@Override
+		protected void onPostExecute(Void result) 
+		{
+			/* Initialize the application's main interface from the 'main.xml' layout xml file. 
+	         * Add the initialized View to the viewSwitcher.*/
+			viewSwitcher.addView(ViewSwitcher.inflate(MainActivity.this, R.layout.activity_main, null));
+			//Switch the Views
+			viewSwitcher.showNext();
+		}
+    }
 
     // This is the Socket Connect asynchronous thread.  Opening a socket
 	// has to be done in an Asynchronous thread in Android.  Be sure you
