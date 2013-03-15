@@ -9,6 +9,34 @@
 
 struct RS232 com;
 
+/***************************************************************************************
+ * Audio - Interrupt Service Routine
+ *
+ * This interrupt service routine records or plays back audio, depending on which type
+ * interrupt (read or write) is pending in the audio device.
+****************************************************************************************/
+void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
+{
+	if (alt_up_audio_write_interrupt_pending(audio_dev))	// check for write interrupt
+	{
+		int numWritten = 0, numToWrite;
+		int spaceAvailable = alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT);
+
+		while(numWritten < spaceAvailable) {
+			if( spaceAvailable + soundMixer->sound->position >= soundMixer->sound->length ) {
+				numToWrite = soundMixer->sound->length - soundMixer->sound->position;
+			} else {
+				numToWrite = spaceAvailable - numWritten;
+			}
+			alt_up_audio_write_fifo(audio_dev, &(soundMixer->sound->buffer[soundMixer->sound->position]), numToWrite, ALT_UP_AUDIO_LEFT);
+			alt_up_audio_write_fifo(audio_dev, &(soundMixer->sound->buffer[soundMixer->sound->position]), numToWrite, ALT_UP_AUDIO_RIGHT);
+			numWritten += numToWrite;
+			updateSoundMixerPosition(numToWrite);
+		}
+	}
+	return;
+}
+
 alt_u32 RS232_ISR(void* up_dev) {
 	if(queue_lock == 1) return alt_ticks_per_second()/1000;
 	alt_up_rs232_dev *serial_dev = ((struct alt_up_dev*)up_dev)->RS232_dev;

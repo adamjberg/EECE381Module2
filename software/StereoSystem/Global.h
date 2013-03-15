@@ -33,6 +33,9 @@
 #include "Song.h"
 #include "TestBot.h"
 #include "CommandScheduler.h"
+#include "sound/SoundMixer.h"
+#include "sound/Sound.h"
+#include "sound/AudioDeviceController.h"
 
 #define HEADERSIZE 2
 #define SPACE 32

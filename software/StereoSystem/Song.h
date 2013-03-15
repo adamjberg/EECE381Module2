@@ -10,6 +10,7 @@
 #include "Global.h"
 #define SONGNAME_LENGTH 31
 struct Song {
+	struct Sound* sound;
 	char song_name[SONGNAME_LENGTH];
 	int volume;
 	int pos;
@@ -24,4 +25,12 @@ struct Song* initSong(char*);
 void killSong(struct Song**);
 void setSongName(struct Song*, char*);
 void setSongId(struct Song*, int);
+void setSongVolume(struct Song*, float);
+void playSong(struct Song*, float, int, int);
+void stopSong(struct Song*);
+void pauseSong(struct Song*);
+void resumeSong(struct Song*);
+void seekSong(struct Song*, unsigned int);
+void unloadSong(struct Song*);
+void loadSong(struct Song*);
 #endif /* SONG_H_ */
