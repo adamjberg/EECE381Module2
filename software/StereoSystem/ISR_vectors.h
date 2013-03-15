@@ -9,6 +9,9 @@
 #define ISR_VECTORS_H_
 
 #include "Global.h"
+#include "altera_up_avalon_audio.h"
+#include "sound/AudioDeviceController.h"
+#include "sound/SoundMixer.h"
 
 /*
  * Structure that hold a pointer to each open I/O device
@@ -18,5 +21,6 @@ struct alt_up_dev {
 	alt_up_audio_dev *audio_dev;
 };
 
+void audio_ISR(alt_up_audio_dev*, unsigned int);
 alt_u32 RS232_ISR(void*);
 #endif /* ISR_VECTORS_H_ */
