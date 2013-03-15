@@ -38,7 +38,7 @@ void updateSoundMixerPosition(int numWritten) {
 			continue;
 		if (db.songs[i]->sound->playing) {
 			soundMixer->cleared = false;
-			combineSounds(soundMixer->sound, db.songs[i]->sound, soundMixer->volume,
+			combineSounds(soundMixer->sound, db.songs[i]->sound,
 					soundMixer->sound->position, numWritten, numSoundsPlaying == 0);
 			updateSoundPosition(db.songs[i]->sound, numWritten);
 			numSoundsPlaying++;
