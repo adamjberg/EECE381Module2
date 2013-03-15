@@ -63,6 +63,16 @@ public class Database {
 		}
 		this.num_of_lists++;
 	}
+	
+	public void removeList(Playlist pl) {
+		for(int i = 1; i < num_of_lists + 1; i++) {
+			if(playlists[i] == pl) {
+				// zero-out the entry
+				playlists[i] = null;
+				this.num_of_lists--;
+			}
+		}
+	}
 	public void addExisitedList(Playlist pl, int id) {
 		if(!this.avail_list_index.contains(Integer.valueOf(id))) {
 			Log.i("ERROR", "Added exisited list failed\n");
