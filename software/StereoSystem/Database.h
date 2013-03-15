@@ -42,8 +42,9 @@ void update();
 int loadSongsFromSD();
 int updateSongsFromSD();
 int loadListsFromSD();
-int addListToSD(struct Playlist*);
+int saveListsToSD();
 int openFileFromSD(char*);
+char* separateString(char*, char, int);
 
 
 #endif /* DATABASE_H_ */
