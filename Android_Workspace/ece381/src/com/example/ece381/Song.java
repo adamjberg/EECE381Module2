@@ -28,6 +28,8 @@ public class Song {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+	public String getSongName() {
+		return this.song_name;
+	}
 	
 }
