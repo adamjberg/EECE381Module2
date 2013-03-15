@@ -112,9 +112,13 @@ struct Sound* loadWavSound(char * filename) {
 	return sound;
 }
 
-void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex, int numToWrite, bool overwrite) {
-	int i, indexToWrite = startIndex, indexToRead =
-			soundToAdd->position;
+void combineSounds(struct Sound* sound, struct Sound* soundToAdd, float volume, int startIndex, int numToWrite, bool overwrite) {
+	int i;
+	int indexToWrite = startIndex;
+	int indexToRead = soundToAdd->position;
+
+	bool useVolume = volume != 1;
+
 	for (i = 0; i < numToWrite; i++) {
 		if (indexToWrite >= sound->length) {
 			indexToWrite = 0;
@@ -127,9 +131,15 @@ void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex
 			indexToRead = 0;
 		}
 		if (overwrite) {
-			sound->buffer[indexToWrite] = soundToAdd->buffer[indexToRead];
+			if(useVolume)
+				sound->buffer[indexToWrite] = (int) (soundToAdd->buffer[indexToRead] * volume);
+			else
+				sound->buffer[indexToWrite] = soundToAdd->buffer[indexToRead];
 		} else {
-			sound->buffer[indexToWrite] += soundToAdd->buffer[indexToRead];
+			if(useVolume)
+				sound->buffer[indexToWrite] += (int) (soundToAdd->buffer[indexToRead] * volume);
+			else
+				sound->buffer[indexToWrite] += soundToAdd->buffer[indexToRead];
 		}
 		indexToRead++;
 		indexToWrite++;

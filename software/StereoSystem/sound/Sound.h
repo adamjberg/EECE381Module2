@@ -29,7 +29,7 @@ struct Sound {
 struct Sound* initSound(unsigned int);
 void updateSoundPosition(struct Sound*, int);
 struct Sound* loadWavSound(char*);
-void combineSounds(struct Sound*, struct Sound*, int, int, bool);
+void combineSounds(struct Sound*, struct Sound*, float, int, int, bool);
 void unloadSound(struct Sound*);
 void playSound(struct Sound*, float, int, int);
 void pauseSound(struct Sound*);
