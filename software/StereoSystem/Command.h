@@ -19,8 +19,8 @@ struct Command {
 struct Command* initCmd(int, int, char**);
 void killCmd(struct Command**);
 
-void syncPlay(int, int);
-void play(int, int);
+void syncPlay(int, int, int);
+void play(int, int, int);
 
 void syncPause();
 void pause();

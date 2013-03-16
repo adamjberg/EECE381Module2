@@ -10,7 +10,7 @@
 
 #include "../Global.h"
 
-struct SoundMixer* soundMixer;
+struct SoundMixer* soundMixer; //internal global variable
 
 struct SoundMixer {
 	struct Sound* sound;

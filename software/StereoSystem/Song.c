@@ -9,6 +9,9 @@
 struct Song* initSong(char* songname) {
 	struct Song* this = (struct Song*)malloc(sizeof(struct Song));
 	setSongName(this, songname);
+	this->ext[0] = 'W';
+	this->ext[1] = 'A';
+	this->ext[2] = 'V';
 	this->isCached = false;
 	this->pos = this->size = 0;
 	this->volume = 1;
@@ -18,12 +21,26 @@ struct Song* initSong(char* songname) {
 }
 
 void loadSong(struct Song* this) {
-	this->sound = loadWavSound(this->song_name);
+	if(this == NULL) return;
+	if(this->sound != NULL)
+		unloadSong(this);
+	int len = strlen(this->song_name);
+	char fullname[len+5];
+	strncpy(fullname, this->song_name, len);
+	fullname[len] = '.';
+	fullname[len+1] = this->ext[0];
+	fullname[len+2] = this->ext[1];
+	fullname[len+3] = this->ext[2];
+	fullname[len+4] = '\0';
+	this->sound = loadWavSound(fullname);
+	this->isCached = true;
 }
 
 void unloadSong(struct Song* this) {
+	if(this == NULL || this->sound == NULL) return;
 	unloadSound(this->sound);
 	this->sound = NULL;
+	this->isCached = false;
 }
 
 void killSong(struct Song** this) {
@@ -48,10 +65,24 @@ void setSongVolume(struct Song* this, float volume) {
 }
 
 void playSong(struct Song* this, float volume, int startTime, int loops) {
+	db.curr_song_ids[db.song_playing_size++] = this->id;
+	this->pos = startTime;
+	this->volume = (int)volume;
+	if(this->sound == NULL)
+		loadSong(this);
 	playSound(this->sound, volume, startTime, loops);
 }
 
 void pauseSong(struct Song* this) {
+	int i, found = 0;
+	for(i = 0; i < db.song_playing_size; i++) {
+		if(found == 1) {
+			db.curr_song_ids[i-1] = db.curr_song_ids[i];
+		} else if(db.curr_song_ids[i] == this->id)
+			found = 1;
+	}
+	db.curr_song_ids[i-1] = this->id;
+	db.song_playing_size--;
 	pauseSound(this->sound);
 }
 

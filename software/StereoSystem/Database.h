@@ -12,6 +12,7 @@
 #define SONGFILE "SONGS.TXT"
 #define MAX_LISTS 51
 #define MAX_SONGS 101
+#define MAX_SONGS_MIX 10
 struct database db;
 
 struct database {
@@ -19,7 +20,8 @@ struct database {
 	int curr_playlist_id;
 	int num_of_lists;
 	struct Song* songs[MAX_SONGS];
-	int curr_song_id;
+	int curr_song_ids[MAX_SONGS_MIX];
+	int song_playing_size;
 	int num_of_songs;
 	int* index_list_song[MAX_LISTS];
 	int* index_list_order[MAX_LISTS];

@@ -9,7 +9,7 @@
 void initDatabase() {
 	//db.cache = initCache();
 	db.curr_playlist_id = 0;
-	db.curr_song_id = 0;
+	db.song_playing_size = 0;
 	db.num_of_lists = 0;
 	db.num_of_songs = 0;
 	db.avail_list_index = initQueue();

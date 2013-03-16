@@ -25,6 +25,15 @@ int main()
 	}
 
 	initDatabase();
+
+
+	syncCreateSong("LONE");
+	createSong("LONE");
+	syncCreateSong("LTWO");
+	createSong("LTWO");
+
+	initAudioDeviceController();
+	initSoundMixer();
 	//dBTester();
 	//dbTester2();
 	struct CmdScheduler* scheduler = initCmdScheduler();
@@ -48,8 +57,12 @@ int main()
 	//send((void*)temp1, STRING);
 //Testing code end
 
+	enableAudioDeviceController();
+
 
 	while(1) {
+	//	loadSong(song);
+	//	playSong(song, 1.0, 0, 5);
 //Testing code start
 	//	for(i = 0; i < 9999999; i++) {}
 	//	send((void*)temp2, STRING);
@@ -57,12 +70,13 @@ int main()
 	//	send((void*)temp, STRING);
 	//	for(i = 0; i < 9999999; i++) {}
 	//	send((void*)temp1, STRING);
-		for(i = 0; i < 3999999; i++) {}
-		syncPause();
-		for(i = 0; i < 3999999; i++) {}
-		syncPlay(1, 5);
+	//	for(i = 0; i < 3999999; i++) {}
+		//syncPause();
+	//	for(i = 0; i < 3999999; i++) {}
 //Testing code end
-
+		//for(i = 0; i < 49999999; i++) {}
+	//	pauseSong(song);
+	//	unloadSong(song);
 		cmdProcessing(scheduler);
 	}
 

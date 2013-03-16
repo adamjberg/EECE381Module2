@@ -15,8 +15,6 @@
 #include "../ISR_vectors.h"
 #include "../Global.h"
 
-struct alt_up_dev up_dev;
-
 void initAudioDeviceController();
 void enableAudioDeviceController();
 void disableAudioDeviceController();

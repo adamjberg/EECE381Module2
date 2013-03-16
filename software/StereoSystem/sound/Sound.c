@@ -83,6 +83,7 @@ struct Sound* loadWavSound(char * filename) {
 	int file_pointer = alt_up_sd_card_fopen(filename, false);
 	if (file_pointer < 0) {
 		alt_up_sd_card_fclose(file_pointer); //close the file
+		printf("sound file open failed\n");
 		return false;
 	}
 

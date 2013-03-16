@@ -12,6 +12,7 @@
 struct Song {
 	struct Sound* sound;
 	char song_name[SONGNAME_LENGTH];
+	char ext[3];
 	int volume;
 	int pos;
 	int size;
