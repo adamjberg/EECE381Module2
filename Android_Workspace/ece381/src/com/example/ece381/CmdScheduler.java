@@ -35,8 +35,8 @@ public class CmdScheduler {
 				Log.i("COMMAND", "The Song "+cmd.getParameterList().get(0)+" is playing at "+cmd.getParameterList().get(1));
 				break;
 			case 2:
-				Command.pause();
-				Log.i("COMMAND", "The song is puased.");
+				Command.pause(Integer.valueOf(cmd.getParameterList().get(0)).intValue());
+				Log.i("COMMAND", "The song "+cmd.getParameterList().get(0)+" is puased.");
 				break;
 			case 3:
 				Command.stop();

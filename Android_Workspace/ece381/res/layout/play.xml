@@ -110,8 +110,17 @@
         android:id="@+id/imageButton3"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageButton1"
-        android:layout_toRightOf="@+id/textView4"
+        android:layout_above="@+id/seekBar1"
+        android:layout_alignParentRight="true"
         android:src="@android:drawable/ic_media_ff" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBar1"
+        android:layout_alignRight="@+id/textView5"
+        android:onClick="onPauseButton"
+        android:src="@android:drawable/ic_media_pause" />
 
 </RelativeLayout>

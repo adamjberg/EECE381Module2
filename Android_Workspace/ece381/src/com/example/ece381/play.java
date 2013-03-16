@@ -82,9 +82,19 @@ public boolean onOptionsItemSelected(MenuItem item) {
  return super.onOptionsItemSelected(item);
 } 
 
+@Override
+public void finish() {
+	 com.getDB().setCurr_song_id(0);
+	 super.finish();
+}
 public void onPlay(View view){
 	if(com.getDB().getCurr_song_id() != 0)
 		Command.syncPlay(com.getDB().getCurr_song_id(), 1, 0);
+}
+
+public void onPauseButton(View view) {
+	if(com.getDB().getCurr_song_id() != 0)
+		Command.syncPause(com.getDB().getCurr_song_id());
 }
 private void addBarSsound(){  
 	textview= (TextView)  findViewById(R.id.textView7);

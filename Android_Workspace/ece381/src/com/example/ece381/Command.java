@@ -64,17 +64,23 @@ public class Command {
 	}
 	
 	static public void play(int id, int vol, int pos) {
-		
+		Communication com = Communication.getInstance();
+		com.getDB().getCurrSongsIds().add(Integer.valueOf(id));
+		com.getDB().getSongs()[id].setVolume(vol);
+		com.getDB().getSongs()[id].setPos(pos);
 	}
 	
-	static public void synPause() {
+	static public void syncPause(int id) {
 		Communication com = Communication.getInstance();
 		Command cmd = new Command(2);
+		cmd.addParameter(String.valueOf(id));
 		com.send(cmd);
 		com.getSched().addCmd(cmd);
 	}
 	
-	static public void pause() {
+	static public void pause(int id) {
+		Communication com = Communication.getInstance();
+		com.getDB().getCurrSongsIds().remove(Integer.valueOf(id));
 		
 	}
 	
