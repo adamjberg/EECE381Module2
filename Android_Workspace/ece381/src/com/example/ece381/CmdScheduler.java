@@ -29,7 +29,9 @@ public class CmdScheduler {
 			cmd = cmds.poll();
 			switch(cmd.getCmdIndex()) {
 			case 1:
-				Command.play(Integer.valueOf(cmd.getParameterList().get(0)).intValue(), Integer.valueOf(cmd.getParameterList().get(1)).intValue());
+				Command.play(Integer.valueOf(cmd.getParameterList().get(0)).intValue(),
+								Integer.valueOf(cmd.getParameterList().get(1)).intValue(),
+								 Integer.valueOf(cmd.getParameterList().get(2)).intValue());
 				Log.i("COMMAND", "The Song "+cmd.getParameterList().get(0)+" is playing at "+cmd.getParameterList().get(1));
 				break;
 			case 2:

@@ -20,6 +20,7 @@ public class Database {
 	private int used_list_index[];
 	private int[][] list_song_order;
 	private int[][] list_order_song;
+	private ArrayList<String> songs_name;
 	
 	public Database() {
 		this.playlists = new Playlist[MAX_LISTS];
@@ -29,6 +30,7 @@ public class Database {
 		this.used_list_index = new int[MAX_LISTS];
 		this.list_order_song = new int[MAX_LISTS][MAX_SONGS];
 		this.list_song_order = new int[MAX_LISTS][MAX_SONGS];
+		this.songs_name = new ArrayList<String>();
 		int i;
 		for(i = 1; i < MAX_LISTS; i++) {
 			this.avail_list_index.add(Integer.valueOf(i));
@@ -46,9 +48,16 @@ public class Database {
 	public void addSong(Song song) {
 		song.setId(++this.num_of_songs);
 		this.songs[this.num_of_songs] = song;
-		
+		this.songs_name.add(song.getSongName());
 	}
 	
+	public ArrayList<String> getSongsName() {
+		return this.songs_name;
+	}
+	
+	public int getTotalSongs() {
+		return this.num_of_songs;
+	}
 	public void addList(Playlist pl) {
 		if(this.avail_list_index.size() <= 0) {
 			Log.i("ERROR", "Added list failed\n");

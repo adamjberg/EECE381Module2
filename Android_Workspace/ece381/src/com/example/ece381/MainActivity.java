@@ -158,7 +158,7 @@ public class MainActivity extends Activity {
     	}
     }
 	// Route called when the user presses "connect"
-	
+	/*
 	public void openSocket(View view) {
 		Command.syncPlay(3, 0);
 	}
@@ -169,7 +169,7 @@ public class MainActivity extends Activity {
 	
 	public void stop(View view) {
 		Command.syncStop();
-	}
+	}*/
 	//  Called when the user wants to send a message
 	
 	public void sendMessage(View view) {
@@ -227,7 +227,8 @@ private void addListView(){
 	 m_listview = (ListView) findViewById(R.id.listView1);
 	    
 	   
-	    String[] items = songs;//new String[] {"Item 1", "Item 2", "Item 3"};
+	    String[] items = new String[com.getDB().getTotalSongs()];
+	    com.getDB().getSongsName().toArray(items);
 	    ArrayAdapter<String> adapter =
 	      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
 	 //   ArrayAdapter<String> adapter2 =
@@ -240,6 +241,7 @@ private void addListView(){
          @Override
          public void onItemClick(AdapterView<?> parent, View view, int position,
                  long id) {
+        	 com.getDB().setCurr_song_id(position+1);
          	 Intent i = new Intent(MainActivity.this,play.class);
          	 String item = ((TextView)view).getText().toString();
          	 i.putExtra("USERNAME", item);

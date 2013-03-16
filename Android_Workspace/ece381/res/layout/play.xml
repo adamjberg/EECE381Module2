@@ -103,6 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageButton2"
         android:layout_toRightOf="@+id/imageButton2"
+        android:onClick="onPlay"
         android:src="@android:drawable/ic_media_play" />
 
     <ImageButton

@@ -4,27 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.TextView;
-//import android.os.Bundle;
-//import android.app.Activity;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
-import android.widget.ListView;
-//import android.widget.ListView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-//import android.widget.TextView;
-import android.view.View;
-import android.app.ListActivity;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.view.View.OnClickListener;
 
 //import android.content.Intent;
 
@@ -34,6 +23,7 @@ public class play extends Activity {
 	TextView greetMsg;
 	TextView textview;
 	SeekBar seekbar;
+	private Communication com = Communication.getInstance();
 @Override
 public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -64,8 +54,8 @@ public boolean onOptionsItemSelected(MenuItem item) {
  // TODO Auto-generated method stub
  switch(item.getItemId()){
  case android.R.id.home:
-	  finish();
-   //  NavUtils.navigateUpFromSameTask(this);
+	 finish();
+    // NavUtils.navigateUpFromSameTask(this);
 	 // onBackPressed();
      return true;
  case R.id.songs:
@@ -92,6 +82,10 @@ public boolean onOptionsItemSelected(MenuItem item) {
  return super.onOptionsItemSelected(item);
 } 
 
+public void onPlay(View view){
+	if(com.getDB().getCurr_song_id() != 0)
+		Command.syncPlay(com.getDB().getCurr_song_id(), 1, 0);
+}
 private void addBarSsound(){  
 	textview= (TextView)  findViewById(R.id.textView7);
 	seekbar = (SeekBar) findViewById(R.id.seekBar1);
