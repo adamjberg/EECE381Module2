@@ -20,7 +20,7 @@ struct database {
 	int curr_playlist_id;
 	int num_of_lists;
 	struct Song* songs[MAX_SONGS];
-	int curr_song_ids[MAX_SONGS_MIX];
+	struct Queue* curr_song_ids;
 	int song_playing_size;
 	int num_of_songs;
 	int* index_list_song[MAX_LISTS];

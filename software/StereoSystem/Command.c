@@ -67,13 +67,18 @@ void play(int id, int vol, int pos) {
  * Function to call when need to sync with Android
  * It will also put command to scheduler
  */
-void syncPause() {
-	struct Command* cmd = initCmd(2, 0, NULL);
+void syncPause(int id) {
+	char* temp[1];
+	char tempId[4];
+	sprintf(tempId, "%d", id);
+	temp[0] = tempId;
+	struct Command* cmd = initCmd(2, 1, temp);
 	send(cmd, CMD);
 	addCmd(com.scheduler, (struct Command*)cmd);
 }
 //pause current play song; index 2
-void pause() {
+void pause(int id) {
+	pauseSong(db.songs[id]);
 	printf("The music is paused.\n");
 }
 /*

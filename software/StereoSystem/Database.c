@@ -13,6 +13,7 @@ void initDatabase() {
 	db.num_of_lists = 0;
 	db.num_of_songs = 0;
 	db.avail_list_index = initQueue();
+	db.curr_song_ids = initQueue();
 	int i;
 	int* temp;
 	db.used_list_index[0] = 1; //index 0 should never get used

@@ -33,7 +33,7 @@ void cmdProcessing(struct CmdScheduler* this) {
 			play(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]), atoi(cmd->parameters[2]));
 			break;
 		case 2:
-			pause();
+			pause(atoi(cmd->parameters[0]));
 			break;
 		case 3:
 			stop();
