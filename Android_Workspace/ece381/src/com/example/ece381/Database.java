@@ -51,8 +51,14 @@ public class Database {
 		this.songs_name.add(song.getSongName());
 	}
 	
-	public ArrayList<String> getSongsName() {
-		return this.songs_name;
+	public String[] getSongsName() {
+		String result[] = new String[this.num_of_songs];
+
+		int i;
+		for(i = 0; i < this.num_of_songs; i++) {
+			result[i] = (String)this.songs_name.get(i);
+		}
+		return result;
 	}
 	
 	public int getTotalSongs() {

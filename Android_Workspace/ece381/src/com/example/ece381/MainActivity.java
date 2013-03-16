@@ -226,11 +226,8 @@ private void addListView(){
 	
 	 m_listview = (ListView) findViewById(R.id.listView1);
 	    
-	   
-	    String[] items = new String[com.getDB().getTotalSongs()];
-	    com.getDB().getSongsName().toArray(items);
 	    ArrayAdapter<String> adapter =
-	      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+	      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, com.getDB().getSongsName());
 	 //   ArrayAdapter<String> adapter2 =
 	  	//      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, items);
 	    //setListAdapter(new ArrayAdapter<String>(this, R.layout.simple_list_item_1,items));
