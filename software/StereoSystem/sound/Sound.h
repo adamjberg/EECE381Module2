@@ -17,6 +17,8 @@
 #define BITS_PER_SAMPLE_OFFSET 34
 #define DATA_LENGTH_OFFSET 40
 
+int SDIO_lock;
+
 struct Sound {
 	volatile unsigned int position;
 	unsigned int length;

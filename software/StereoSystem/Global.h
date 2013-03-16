@@ -46,6 +46,8 @@ extern struct alt_up_dev up_dev;
 extern struct RS232 com;
 extern int queue_lock;
 extern struct database db;
+extern int song_id_lock;
+extern int SDIO_lock;
 
 enum msgType {
 	STRING=0, CMD=1, PLAYLIST=2, AUDIO=3

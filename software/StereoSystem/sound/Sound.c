@@ -80,6 +80,7 @@ struct Sound* loadWavSound(char * filename) {
 
 	struct Sound* sound;
 	int i, index = 0;
+	SDIO_lock = 1;
 	int file_pointer = alt_up_sd_card_fopen(filename, false);
 	if (file_pointer < 0) {
 		alt_up_sd_card_fclose(file_pointer); //close the file
@@ -112,7 +113,7 @@ struct Sound* loadWavSound(char * filename) {
 	printf("Sound loading complete\n");
 
 	alt_up_sd_card_fclose(file_pointer);
-
+	SDIO_lock = 0;
 	return sound;
 }
 

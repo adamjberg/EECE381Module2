@@ -22,6 +22,7 @@ struct QueueData {
 };
 
 struct Queue* initQueue();
+int containsValue(struct Queue*, int);
 void enqueue(struct Queue*, void*);
 void* dequeue(struct Queue*);
 void* dequeueValue(struct Queue*, int);

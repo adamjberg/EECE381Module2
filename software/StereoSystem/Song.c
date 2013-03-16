@@ -65,6 +65,8 @@ void setSongVolume(struct Song* this, float volume) {
 }
 
 void playSong(struct Song* this, float volume, int startTime, int loops) {
+	song_id_lock = 1;
+	if(containsValue(db.curr_song_ids, this->id) == 0) return;
 	int* temp = (int*)malloc(sizeof(int));
 	*temp = this->id;
 	enqueue(db.curr_song_ids, temp);
@@ -74,6 +76,7 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 		loadSong(this);
 	playSound(this->sound, volume, startTime, loops);
 	temp = NULL;
+	song_id_lock = 0;
 }
 
 void pauseSong(struct Song* this) {

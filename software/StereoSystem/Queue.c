@@ -16,6 +16,22 @@ struct Queue* initQueue() {
 	return this;
 }
 
+int containsValue(struct Queue* this, int val) {
+	if(this == NULL) return -1;
+	int i;
+	int size = this->size;
+	struct QueueData* temp = this->head;
+	for(i = 0; i < size; i++) {
+		if(*((int*)(temp->obj)) == val) {
+			temp = NULL;
+			queue_lock = 0;
+			return 0;
+		}
+		temp = temp->next;
+	}
+	temp = NULL;
+	return -1;
+}
 void enqueue(struct Queue* this, void* obj) {
 	if(this == NULL || obj == NULL || obj == this->tail->obj) {
 		printf("ENQUEUE fail\n");
