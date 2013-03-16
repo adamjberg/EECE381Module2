@@ -25,7 +25,7 @@ int main()
 	}
 
 	initDatabase();
-
+	//dBTester();
 
 	syncCreateSong("LONE");
 	createSong("LONE");

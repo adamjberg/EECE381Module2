@@ -42,11 +42,16 @@ char* readLine(int);
 void writeLine(int, char*, int);
 void update();
 int loadSongsFromSD();
-int updateSongsFromSD();
 int loadListsFromSD();
 int saveListsToSD();
 int openFileFromSD(char*);
+int updateSongsFromSD();
 char* separateString(char*, char, int);
-
+char** getSongsFromSD();
+char** getSongsFromTxt();
+char** checkTxtFile(char**, char**);
+void freeStrArray(char**);
+int updateSongsTxt(char**);
+void createPlaylistFromTxt(char*);
 
 #endif /* DATABASE_H_ */

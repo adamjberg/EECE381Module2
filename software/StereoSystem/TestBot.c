@@ -97,10 +97,13 @@ void dBTester() {
 	if(removeListFromDB("List2")!=0)
 		printf("remove list2 failed\n");*/
 
-	int i;
-	loadListsFromSD();
-	for(i = 0; i < 10000; i++) {
-		saveListsToSD();
+	int i, j;
+	for(i = 0; i < 50000; i++) {
+		loadListsFromSD();
+		for(j = 1; j < MAX_LISTS; j++) {
+			if(db.used_list_index[j] == 1)
+				removeListFromDB(j);
+		}
 	}
 }
 
