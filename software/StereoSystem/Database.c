@@ -32,6 +32,7 @@ void initDatabase() {
 		db.songs[i] = NULL;
 	} temp = NULL;
 	loadListsFromSD();
+	loadSongsFromSD();
 }
 
 void update() {
@@ -336,9 +337,10 @@ char** getSongsFromSD(){
 	char** songNames = malloc(MAX_SONGS *sizeof(char*));
 
 	memset(&fileName[0], 0 , sizeof(fileName)/sizeof(fileName[0]));
-	fileStatus = alt_up_sd_card_find_first("", fileName);
+	fileStatus = alt_up_sd_card_find_first(".", fileName);
 	if (fileStatus != 0){
 		printf("ERROR: updateSongsFromSD.\n");
+		return NULL;
 	}
 	while (fileStatus != -1){
 		if (strstr(fileName, ".WAV") != NULL){
@@ -364,6 +366,7 @@ void getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	int fileHandler;
 	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
 		printf("Reading songs from SONGS.TXT error!\n");
+		return;
 	}
 
 	// add songs from
@@ -373,15 +376,14 @@ void getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	char substr[20];
 	int start, end, i, iteration;
 	int numOfSongs = 0;
-	while (1){
+	while (numOfSongs < MAX_SONGS){
 		line = readLine(fileHandler);
 		memset(&temp[0], 0 , sizeof(temp)/sizeof(temp[0]));
-		strcpy(temp, line);
-		if (temp[0] == 0 || temp[0] == 20) {
-			memset(&temp[0], 0 , sizeof(temp)/sizeof(temp[0]));
-			line = NULL;
+		if (line == NULL) {
+			//it is not safe to pass null pointer to strcpy
 			break;
 		}
+		strcpy(temp, line);
 		iteration = 0;
 		for (i = 0; i < strlen(temp); i++){
 			if (temp[i] == ' '){

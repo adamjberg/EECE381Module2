@@ -60,7 +60,7 @@ void syncPlay(int id, int vol, int pos) {
 //index 1
 void play(int id, int vol, int pos) {
 	if(db.songs[id] == NULL) return;
-	playSong(db.songs[id], vol, pos, 1);
+	playSong(db.songs[id], vol, pos, 0);
 	printf("A song %d is played at %d position.\n", id, pos);
 }
 /*

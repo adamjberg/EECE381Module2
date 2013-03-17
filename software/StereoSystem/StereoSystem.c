@@ -27,10 +27,10 @@ int main()
 	initDatabase();
 	//dBTester();
 
-	/*syncCreateSong("LONE", 0);
-	createSong("LONE", 0);
-	syncCreateSong("LTWO", 0);
-	createSong("LTWO", 0);*/
+	//syncCreateSong("LONE", 0);
+	//createSong("DINGDING.WAV", 0);
+	//syncCreateSong("LTWO", 0);
+	//createSong("BOING.WAV", 0);
 
 	initAudioDeviceController();
 	initSoundMixer();

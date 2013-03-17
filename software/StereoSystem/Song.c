@@ -24,15 +24,7 @@ void loadSong(struct Song* this) {
 	if(this == NULL) return;
 	if(this->sound != NULL)
 		unloadSong(this);
-	int len = strlen(this->song_name);
-	char fullname[len+5];
-	strncpy(fullname, this->song_name, len);
-	fullname[len] = '.';
-	fullname[len+1] = this->ext[0];
-	fullname[len+2] = this->ext[1];
-	fullname[len+3] = this->ext[2];
-	fullname[len+4] = '\0';
-	this->sound = loadWavSound(fullname);
+	this->sound = loadWavSound(this->song_name);
 	this->isCached = true;
 }
 
