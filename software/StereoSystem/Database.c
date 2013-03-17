@@ -223,44 +223,6 @@ int openFileFromSD(char* file){
 }
 
 /*
- * Find all .WAV files in SDCard and store their names to
- * SONGS.TXT
- * Return values: -1 means error in fopen/fclose, 0 means success
- * -2 means error in searching through the SDCard.
- * */
-int updateSongsFromSD(){
-	int index, size;
-	char fileName[15];
-	char* strToStore;
-	int numOfWavFiles = 0;
-
-	int fileHandler;
-	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
-		printf("Error opening file in updateSongsFromSD.\n");
-		return -1;
-	}
-	index = alt_up_sd_card_find_first("", fileName);
-	if (index != 0){
-		printf("ERROR: updateSongsFromSD.\n");
-		return -2;
-	}
-	while (index != -1){
-		if (strstr(fileName, ".WAV") != NULL){
-			strToStore = "";
-			numOfWavFiles++;
-			size = sprintf(strToStore, "%d %s", numOfWavFiles, fileName);
-			writeLine(fileHandler, strToStore, size);
-		}
-		index = alt_up_sd_card_find_next(fileName);
-	}
-	strToStore = NULL;
-	if (!alt_up_sd_card_fclose(fileHandler)){
-		printf("File is not closed properly in updateSongsFromSD.\n");
-		return -1;
-	}
-	return 0;
-}
-/*
  * Saves all playlists with their information to
  * LISTS.TXT in SDCard.
  * Return value: 0 means success, -1 means error in fopen/fclose
@@ -371,10 +333,10 @@ char** getSongsFromSD(){
 	// songNames is array of strings that store song names.
 	char** songNames = malloc(MAX_SONGS *sizeof(char*));
 
+	memset(&fileName[0], 0 , sizeof(fileName)/sizeof(fileName[0]));
 	fileStatus = alt_up_sd_card_find_first("", fileName);
 	if (fileStatus != 0){
 		printf("ERROR: updateSongsFromSD.\n");
-		return -2;
 	}
 	while (fileStatus != -1){
 		if (strstr(fileName, ".WAV") != NULL){
@@ -382,6 +344,7 @@ char** getSongsFromSD(){
 			strcpy(songNames[numOfWavFiles], fileName);
 			numOfWavFiles++;
 		}
+		memset(&fileName[0], 0 , sizeof(fileName)/sizeof(fileName[0]));
 		fileStatus = alt_up_sd_card_find_next(fileName);
 	}
 	// set ending condition, NULL means end of the array
@@ -390,167 +353,106 @@ char** getSongsFromSD(){
 }
 
 /*
- * Stores all songs stored in SONGS.TXT file and return them
- * in an array of strings.
+ * Stores all songs stored in SONGS.TXT file to DB and return
+ * their names in an array of strings.
  * Return: array containing names of all songs in SONGS.TXT
- * *//*
-char** getSongsFromTxt(){
+ * */
+void getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	int fileHandler;
 	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
 		printf("Reading songs from SONGS.TXT error!\n");
 	}
 
+	// add songs from
 	char** songNames = malloc(MAX_SONGS *sizeof(char*));
 	char* line = NULL;
-	char* str = NULL;
 	char temp[20];
+	char substr[20];
+	int start, end, i, iteration;
 	int numOfSongs = 0;
-	int id, length, cursorPos;
 	while (1){
 		line = readLine(fileHandler);
+		memset(&temp[0], 0 , sizeof(temp)/sizeof(temp[0]));
 		strcpy(temp, line);
-		if (temp[0] == NULL) {
+		if (temp[0] == 0 || temp[0] == 20) {
+			memset(&temp[0], 0 , sizeof(temp)/sizeof(temp[0]));
+			line = NULL;
 			break;
 		}
-		// separate line being read to ID NAME LENGTH
-		cursorPos = 0;
-		str = separateString(line, ' ', cursorPos);
-		id = atoi(str);
-		cursorPos = strlen(str) + 1;
-		free(str);
-		str = NULL;
-		str = separateString(line, ' ', cursorPos);
-		strcpy(temp, str);
-		cursorPos = cursorPos + strlen(str) + 1;
-		free(str);
-		str = NULL;
-		str = separateString(line, ' ', cursorPos);
-		length = atoi(str);
-		free(str);
-		str = NULL;
-		//store song names to array of strings
-		songNames[numOfSongs] = malloc(20 * sizeof(char));
-		strcpy(songNames[numOfSongs], temp);
-		numOfSongs++;
-		//make a new song and add it to database
-		free(line);
-		line = NULL;
-
-	}
-	//set an end sign, null means end of the array.
-	songNames[numOfSongs] = NULL;
-	if (!alt_up_sd_card_fclose(fileHandler)){
-		printf("File is not closed properly.\n");
-	}
-	return songNames;
-}*/
-/*
- * Check if arrFromTXT contains all songs in arrFromSDFiles.
- * Store whatever arrFromTXT missing to an array of strings,
- * return that array.
- * */
-char** checkTxtFile(char** arrFromSDFiles, char** arrFromTxt){
-	int sdFiles_index, txt_index;
-	int diffArray_index = 0;
-	char** diffArray = malloc(MAX_SONGS*(sizeof(char*)));
-
-	for (sdFiles_index = 0; sdFiles_index < MAX_SONGS; sdFiles_index++){
-		if (arrFromSDFiles[sdFiles_index] == NULL){
-			// we reach the end of array that contains song names from SDFiles directory.
-			// no more songs to compare, quit the loop & function.
-			printf("Reach the end of sdFiles array. Loop should quit.\n");
-			break;
-		} else {
-			printf("Array from SDFiles being compared is %s\n", arrFromSDFiles[sdFiles_index]);
-			for (txt_index = 0; txt_index < MAX_SONGS; txt_index++){
-				if (arrFromTxt[txt_index] == NULL){
-					// we reach the end of song names array from SONGS.TXT.
-					// SONGS.TXT does not contain this song stored in arrFromSDFiles[sdFiles_index]
-					// store the song name in diffArray, quit the loop.
-					printf("Reach the end of txtFiles array. Storing the diff, move on.\n");
-					diffArray[diffArray_index] = malloc(20*(sizeof(char)));
-					strcpy(diffArray[diffArray_index], arrFromSDFiles[sdFiles_index]);
-					diffArray_index++;
-					break;
+		iteration = 0;
+		for (i = 0; i < strlen(temp); i++){
+			if (temp[i] == ' '){
+				if (iteration == 0){
+					start = i+1;
+					iteration++;
 				} else {
-					// compare the song name from arrFromTxt and arrFromSDFiles.
-					// quit the loop once we find a pair.
-					printf("Comparing that array with %s\n", arrFromTxt[txt_index]);
-					if (strcmp(arrFromTxt[txt_index], arrFromSDFiles[sdFiles_index]) == 0){
-						printf("They are the same!\n");
-						break;
-					} else {
-						printf("They're not the same.. Moving on..\n");
+					end = i+1;
+					memset(&temp[0], 0 , sizeof(temp)/sizeof(temp[0]));
+					strncpy(temp, line+start, end-start-1);
+					temp[strlen(temp)] = '\0';
+					if (temp[0] != '0'){
+						memset(&substr[0], 0 , sizeof(substr)/sizeof(substr[0]));
+						strcpy(substr, line+i+1);
+						createSong(temp, strtol(substr, NULL, 10));
+						songNames[numOfSongs] = malloc(20*sizeof(char));
+						strcpy(songNames[numOfSongs], temp);
 					}
+					break;
 				}
 			}
 		}
-	}
-	// set end sign to the diffArray
-	diffArray[diffArray_index] = NULL;
-	return diffArray;
-}
-/*
- * Helper function to free string array.
- * Array needs to have a null element at the end
- * */
-void freeStrArray(char** str_arr){
-	int i = 0;
-	while(str_arr[i] != NULL){
-		free(str_arr[i]);
-		str_arr[i] = NULL;
-		i++;
-	}
-	free(str_arr);
-	str_arr = NULL;
-}
-/*
- * Update SONGS.TXT with all songs that is found in SDCard but
- * not in SONGS.TXT. All these new songs will have 0 length.
- * */
-int updateSongsTxt(char** songsToAdd){
-	if (songsToAdd == NULL) {return -2;}
-	if (songsToAdd[0] == NULL) {
-		// there are no songs to add to SONGS.TXT.
-		// quit.
-		return 0;
-	}
-	int fileHandler, i, size;
-	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
-		printf("Reading songs from SONGS.TXT error!\n");
-	}
-
-	char* line = NULL;
-	char* strToStore = NULL;
-	char temp[100];
-	while (1){
-		line = readLine(fileHandler);
-		strcpy(temp, line);
-		if (temp[0] == NULL) {
-			printf("Last line being read is %s\n", line);
-			break;
-		}
 		free(line);
 		line = NULL;
+		numOfSongs++;
 	}
+	//set an end sign, null means end of the array.
+	songNames[numOfSongs] = NULL;
 
-	for (i = 0; i < MAX_SONGS; i++){
-		if (songsToAdd[i] = NULL){
-			// we reach the end of the array,
-			// all songs should be added to SONGS.TXT. Quit the loop
-			printf("No more songs to add. Quitting\n");
-			break;
+	char strToStore[20];
+	int size = 0;
+	// update the txt file and db
+	int sdFiles_index = 0;
+	int txtFiles_index = 0;
+
+	while (arrFromSDFiles[sdFiles_index] != NULL){
+		for (txtFiles_index = 0; txtFiles_index < MAX_SONGS; txtFiles_index++){
+			if (songNames[txtFiles_index] == NULL){
+				memset(&strToStore[0], 0 , sizeof(strToStore)/sizeof(strToStore[0]));
+				size = sprintf(strToStore, "%d %s 0", numOfSongs+1, arrFromSDFiles[sdFiles_index]);
+				writeLine(fileHandler, strToStore, size);
+				createSong(arrFromSDFiles[sdFiles_index], 0);
+				numOfSongs++;
+				break;
+			} else {
+				if (strcmp(songNames[txtFiles_index], arrFromSDFiles[sdFiles_index]) == 0)
+					break;
+			}
 		}
-		size = sprintf(strToStore, "%d %s 0", db.num_of_songs, songsToAdd[0]);
-		printf("Song will be added is %s\n", strToStore);
-		//writeLine(fileHandler, strToStore, size);
-		strToStore = NULL;
+		sdFiles_index++;
 	}
-
+	memset(&strToStore[0], 0 , sizeof(strToStore)/sizeof(strToStore[0]));
 	if (!alt_up_sd_card_fclose(fileHandler)){
 		printf("File is not closed properly.\n");
-		return -1;
 	}
-	return 0;
 
+	int j = 0;
+	while (arrFromSDFiles[j] != NULL){
+		free(arrFromSDFiles[j]);
+		arrFromSDFiles[j] = NULL;
+	}
+	free(arrFromSDFiles);
+	arrFromSDFiles = NULL;
+	j = 0;
+	while (songNames[j] != NULL){
+		free(songNames[j]);
+		songNames[j] = NULL;
+	}
+	free(songNames);
+	songNames = NULL;
+}
+
+void loadSongsFromSD(){
+	char** sdsongs = NULL;
+	sdsongs = getSongsFromSD();
+	getAndUpdateSongsFromTxt(sdsongs);
 }

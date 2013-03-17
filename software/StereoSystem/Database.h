@@ -41,17 +41,13 @@ void addSongToDB(struct Song*);
 char* readLine(int);
 void writeLine(int, char*, int);
 void update();
-int loadSongsFromSD();
+void loadSongsFromSD();
 int loadListsFromSD();
 int saveListsToSD();
 int openFileFromSD(char*);
-int updateSongsFromSD();
 char* separateString(char*, char, int);
 char** getSongsFromSD();
-char** getSongsFromTxt();
-char** checkTxtFile(char**, char**);
-void freeStrArray(char**);
-int updateSongsTxt(char**);
+void getAndUpdateSongsFromTxt();
 void createPlaylistFromTxt(char*);
 
 #endif /* DATABASE_H_ */
