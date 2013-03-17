@@ -61,7 +61,7 @@ public class CmdScheduler {
 				Log.i("COMMAND", "playlist "+cmd.getParameterList().get(0)+ " is created");
 				break;
 			case 10:
-				Command.createSong(cmd.getParameterList().get(0));
+				Command.createSong(cmd.getParameterList().get(0), Integer.valueOf(cmd.getParameterList().get(1)));
 				Log.i("COMMAND", "Song "+cmd.getParameterList().get(0)+" is created");
 				break;
 			case 11:

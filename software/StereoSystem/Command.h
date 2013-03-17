@@ -39,8 +39,8 @@ void createPlaylist(char*);
 void syncCreateExisitedPlaylist(char*, int, int);
 void createExisitedPlaylist(char*, int, int);
 
-void syncCreateSong(char*);
-void createSong(char*);
+void syncCreateSong(char*, int);
+void createSong(char*, int);
 
 void syncSelectList(int);
 void selectList(int);

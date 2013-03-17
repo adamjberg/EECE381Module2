@@ -48,7 +48,7 @@ void update() {
 
 	}
 	for(i = 1; i <= db.num_of_songs; i++) {
-		syncCreateSong(db.songs[i]->song_name);
+		syncCreateSong(db.songs[i]->song_name, db.songs[i]->size);
 	}
 
 	syncDBFinish();

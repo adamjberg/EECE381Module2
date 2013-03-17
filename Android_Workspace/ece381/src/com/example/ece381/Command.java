@@ -119,9 +119,10 @@ public class Command {
 	}
 
 	// index 10
-	static public void createSong(String song_name) {
+	static public void createSong(String song_name, int len) {
 		Communication com = Communication.getInstance();
 		Song song = new Song(song_name);
+		song.setSize(len);
 		com.getDB().addSong(song);
 	}
 	

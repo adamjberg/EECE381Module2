@@ -31,5 +31,11 @@ public class Song {
 	public String getSongName() {
 		return this.song_name;
 	}
+	public int getSize() {
+		return size;
+	}
+	public void setSize(int size) {
+		this.size = size;
+	}
 	
 }

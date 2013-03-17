@@ -153,15 +153,19 @@ void createExisitedPlaylist(char* listname, int num_of_songs, int id) {
  * Send command to create a song on android phone
  * index 10
  */
-void syncCreateSong(char* song_name) {
-	char* temp[1];
+void syncCreateSong(char* song_name, int len) {
+	char* temp[2];
 	temp[0] = song_name;
-	struct Command* cmd = initCmd(10, 1, temp);
+	char temp1[4];
+	sprintf(temp1, "%d", len);
+	temp[1] = temp1;
+	struct Command* cmd = initCmd(10, 2, temp);
 	send(cmd, CMD);
 	killCmd(&cmd);
 }
-void createSong(char* song_name) {
+void createSong(char* song_name, int len) {
 	struct Song* song = initSong(song_name);
+	song->size = len;
 	addSongToDB(song);
 	song = NULL;
 }
