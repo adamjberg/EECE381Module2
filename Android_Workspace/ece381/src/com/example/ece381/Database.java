@@ -121,6 +121,7 @@ public class Database {
 		this.setCurr_playlist_id(0);
 		this.num_of_lists = this.num_of_songs = this.curr_song_id = 0;
 		this.curr_song_ids.clear();
+		this.songs_name.clear();
 	}
 
 	public int getCurr_playlist_id() {

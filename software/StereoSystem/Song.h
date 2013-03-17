@@ -8,7 +8,7 @@
 #ifndef SONG_H_
 #define SONG_H_
 #include "Global.h"
-#define SONGNAME_LENGTH 31
+#define SONGNAME_LENGTH 20
 
 int song_id_lock;
 

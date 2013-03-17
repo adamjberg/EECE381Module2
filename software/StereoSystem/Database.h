@@ -38,16 +38,15 @@ void addListToDB(struct Playlist*);
 void addExisitedListToDB(struct Playlist*, int);
 int removeListFromDB(int);
 void addSongToDB(struct Song*);
-char* readLine(int);
+int readLine(int, char*);
 void writeLine(int, char*, int);
 void update();
 void loadSongsFromSD();
 int loadListsFromSD();
 int saveListsToSD();
 int openFileFromSD(char*);
-char* separateString(char*, char, int);
 char** getSongsFromSD();
-void getAndUpdateSongsFromTxt();
+int getAndUpdateSongsFromTxt(char**);
 void createPlaylistFromTxt(char*);
-
+void updateSongToSD();
 #endif /* DATABASE_H_ */

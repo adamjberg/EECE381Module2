@@ -23,15 +23,17 @@ int main()
 	while(!loadSDCard(device_reference)) {
 		printf("SD card is not connected.\n");
 	}
-
 	initDatabase();
 	//dBTester();
 
 	//syncCreateSong("LONE", 0);
-	//createSong("DINGDING.WAV", 0);
-	//syncCreateSong("LTWO", 0);
-	//createSong("BOING.WAV", 0);
-
+	/*createSong("BOING.WAV", 0);
+	createSong("DINGDING.WAV", 0);
+	createSong("LAZR.WAV", 0);
+	createSong("LONE.WAV", 0);
+	createSong("LOSE.WAV", 0);
+	createSong("LTWO.WAV", 0);
+	createSong("WIN.WAV", 0);*/
 	initAudioDeviceController();
 	initSoundMixer();
 	//dBTester();
@@ -43,16 +45,6 @@ int main()
 
 	//sync database
 	update();
-
-// Testing code start
-
-	int i;
-	//dBTester();
-
-//	cmdTester();
-	//for(i = 0; i < 39999999; i++) {}
-	//send((void*)temp1, STRING);
-//Testing code end
 
 	enableAudioDeviceController();
 
