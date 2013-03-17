@@ -256,7 +256,6 @@ int saveListsToSD() {
 
 /*
  * Reads LISTS.TXT and load all playlists into the DB.
- * Return values: 0 means success, -1 means error in fopen/fclose.
  */
 int loadListsFromSD() {
 
@@ -287,7 +286,10 @@ int loadListsFromSD() {
 	return 0;
 }
 
-
+/*
+ * Parse a string containing playlist information
+ * into a playlist object and add it to DB.
+ * */
 void createPlaylistFromTxt(char* line){
 	char temp[20];
 	char substr[20];
@@ -353,9 +355,10 @@ char** getSongsFromSD(){
 }
 
 /*
- * Stores all songs stored in SONGS.TXT file to DB and return
- * their names in an array of strings.
- * Return: array containing names of all songs in SONGS.TXT
+ * Get all songs from SONGS.TXT and add it to DB.
+ * It also checks if there exist any songs in SDCard that are newly
+ * added and has not been written to SONGS.TXT.
+ * Those songs will also get added to DB.
  * */
 void getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	int fileHandler;
@@ -450,7 +453,11 @@ void getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	free(songNames);
 	songNames = NULL;
 }
-
+/*
+ * Load songs from SDCARD and added it to DB
+ * This also updates the SONGS.TXT if the text file misses
+ * any song titles.
+ * */
 void loadSongsFromSD(){
 	char** sdsongs = NULL;
 	sdsongs = getSongsFromSD();
