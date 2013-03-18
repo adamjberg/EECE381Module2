@@ -43,6 +43,7 @@ public class CmdScheduler {
 				Log.i("COMMAND", "The song is stopped.");
 				break;
 			case 4:
+				Command.setVol(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
 				break;
 			case 5:
 				break;

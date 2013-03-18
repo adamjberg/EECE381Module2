@@ -41,9 +41,6 @@ public class MainActivity extends Activity {
 	//creates a ViewSwitcher object, to switch between Views
 	private ViewSwitcher viewSwitcher;
 	
-	private Button current_song;
-	private SeekBar seekbar;
-	private String[] songs = new String[] {" song1", " song2", "song 3"," song4", " song5", "song6 "," song7", " song8", " song9"};
 	private TextView textview;
 	private ListView m_listview;
   
@@ -58,16 +55,14 @@ public class MainActivity extends Activity {
 				.penaltyLog().build());
 
 		super.onCreate(savedInstanceState);
-		 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			 getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		 }
-		setContentView(R.layout.activity_main);
 
 		 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-	            // Show the Up button in the action bar.
-	            this.getActionBar().setDisplayHomeAsUpEnabled(true);
-	        }
+			 getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+			 this.getActionBar().hide();
+		 }
 		 
+		setContentView(R.layout.activity_main);
+
 
 		  
 	/*	ActionBar actionBar = this.getActionBar();
@@ -84,7 +79,7 @@ public class MainActivity extends Activity {
 		
 		TCPReadTimerTask tcp_task = new TCPReadTimerTask();
 		tcp_timer = new Timer();
-		tcp_timer.schedule(tcp_task, 5000, 60);
+		tcp_timer.schedule(tcp_task, 5000, 50);
 		
 		new SocketConnect().execute((Void) null);
 		
@@ -157,19 +152,7 @@ public class MainActivity extends Activity {
     		super.onBackPressed();
     	}
     }
-	// Route called when the user presses "connect"
-	/*
-	public void openSocket(View view) {
-		Command.syncPlay(3, 0);
-	}
 
-	public void pause(View view) {
-		Command.synPause();
-	}
-	
-	public void stop(View view) {
-		Command.syncStop();
-	}*/
 	//  Called when the user wants to send a message
 	
 	public void sendMessage(View view) {
@@ -201,26 +184,7 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
-	/*
-	private void addBarSsound(){  
-		textview= (TextView)  findViewById(R.id.textView1);
-		seekbar = (SeekBar) findViewById(R.id.seekBar1);
-	    seekbar.setOnSeekBarChangeListener( new OnSeekBarChangeListener(){
-		   @Override 
-		   public void onProgressChanged(SeekBar seekBar, int progress,
-                   boolean fromUser) {
 
-			   textview.setText(textview.getText()+"\n"+"SeekBar now at the value of:"+progress);
-			   
-			   
-              
-           }
-
-           @Override
-           public void onStartTrackingTouch(SeekBar seekBar) {}
-           @Override
-           public void onStopTrackingTouch(SeekBar seekBar) {}}
-       );}*/
 private void addListView(){
 	
 	
@@ -250,22 +214,7 @@ private void addListView(){
          }
      });
 	
-}/*
-private void CurrentButton(){
-	current_song= (Button) findViewById(R.id.button8);
-	   current_song.setOnClickListener(new OnClickListener() {
-			 
-			@Override
-			public void onClick(View arg0) {
-
-			    Intent intent2 = new Intent(MainActivity.this, play.class);
-		                    startActivity(intent2);   
-
-			}
-
-		});
-	   
-}*/
+}
 
 	 //To use the AsyncTask, it must be subclassed
     private class LoadViewTask extends AsyncTask<Void, Integer, Void>
@@ -327,6 +276,8 @@ private void CurrentButton(){
 						}
 						if(com.isSync()) 
 							counter = 6;
+						
+						
 						//Set the current progress. 
 						//This value is going to be passed to the onProgressUpdate() method.
 						publishProgress(counter*13);
@@ -356,8 +307,14 @@ private void CurrentButton(){
 			viewSwitcher.addView(ViewSwitcher.inflate(MainActivity.this, R.layout.activity_main, null));
 			//Switch the Views
 			viewSwitcher.showNext();
-			//addBarSsound();
+			 
 			addListView();  
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		         // Show the Up button in the action bar.
+		         MainActivity.this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		         MainActivity.this.getActionBar().show();
+		    }
 		}
     }
 

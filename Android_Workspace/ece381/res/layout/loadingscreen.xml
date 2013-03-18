@@ -19,7 +19,8 @@
         android:layout_above="@+id/pb_progressbar"
         android:layout_centerHorizontal="true"
         android:text="Connecting, please wait..."
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColorHint="#ffffffff" />
 
     <TextView
         android:id="@+id/tv_progress"
@@ -29,5 +30,15 @@
         android:layout_centerHorizontal="true"
         android:text="Progress: 0%"
         android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="#ffffffff" android:shadowColor="#000000" android:shadowDx="2.0" android:shadowDy="2.0" android:shadowRadius="3.0"/>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_loadingtext"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="76dp"
+        android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

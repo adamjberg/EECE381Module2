@@ -93,6 +93,21 @@ public class Command {
 	static public void stop() {
 		
 	}
+	//index 4
+	static public void syncSetVol(int id, int vol) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(4);
+		cmd.addParameter(String.valueOf(id));
+		cmd.addParameter(String.valueOf(vol));
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void setVol(int id, int vol) {
+		Communication com = Communication.getInstance();
+		com.getDB().getSongs()[id].setVolume(vol);
+		
+	}
 	
 	// index 8	
 	static public void SyncCreatePlaylist(String list_name) {
