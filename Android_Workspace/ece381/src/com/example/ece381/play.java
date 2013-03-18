@@ -89,7 +89,7 @@ public void finish() {
 }
 public void onPlay(View view){
 	if(com.getDB().getCurr_song_id() != 0)
-		Command.syncPlay(com.getDB().getCurr_song_id(), 1, 0);
+		Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
 }
 
 public void onPauseButton(View view) {
@@ -103,9 +103,8 @@ private void addBarSsound(){
 	   @Override 
 	   public void onProgressChanged(SeekBar seekBar, int progress,
                boolean fromUser) {
-
-		   textview.setText(textview.getText()+"\n"+"SeekBar now at the value of:"+progress);
-		   
+		   //textview.setText(textview.getText()+"\n"+"SeekBar now at the value of:"+progress);
+		   Command.syncSetVol(com.getDB().getCurr_song_id(), progress);
 		   
           
        }

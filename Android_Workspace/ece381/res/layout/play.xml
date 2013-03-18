@@ -5,82 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
-        android:src="@android:drawable/ic_media_rew" />
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:text="@string/text3" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="10dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/seekBar1"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="30dp"
-        android:text="@string/vol_left"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="20dp"
-        android:layout_toRightOf="@+id/textView2"
-        android:text="@string/vol_2nd"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="20dp"
-        android:layout_toRightOf="@+id/textView3"
-        android:text="@string/vol_3rd"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="20dp"
-        android:layout_toRightOf="@+id/textView4"
-        android:text="@string/vol_4th"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="20dp"
-        android:layout_toRightOf="@+id/textView5"
-        android:text="@string/vol_5th"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/textView7"
@@ -94,33 +23,46 @@
         android:id="@+id/seekBar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/imageButton1" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        style="@android:style/MediaButton.Pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBar1"
+        android:layout_toRightOf="@+id/imageButton1"
+        android:onClick="onPauseButton"
+        android:src="@android:drawable/ic_media_pause" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        style="@android:style/MediaButton.Ffwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageButton4"
+        android:layout_toRightOf="@+id/imageButton4"
+        android:src="@android:drawable/ic_media_ff" />
 
     <ImageButton
         android:id="@+id/imageButton1"
-        android:layout_width="70dp"
+        style="@android:style/MediaButton.Play"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageButton2"
+        android:layout_alignTop="@+id/imageButton4"
         android:layout_toRightOf="@+id/imageButton2"
         android:onClick="onPlay"
         android:src="@android:drawable/ic_media_play" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/seekBar1"
-        android:layout_alignParentRight="true"
-        android:src="@android:drawable/ic_media_ff" />
-
-    <ImageButton
-        android:id="@+id/imageButton4"
+        android:id="@+id/imageButton2"
+        style="@android:style/MediaButton.Rew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/seekBar1"
-        android:layout_alignRight="@+id/textView5"
-        android:onClick="onPauseButton"
-        android:src="@android:drawable/ic_media_pause" />
+        android:layout_alignTop="@+id/imageButton1"
+        android:layout_marginLeft="24dp"
+        android:layout_toRightOf="@+id/textView7"
+        android:src="@android:drawable/ic_media_rew" />
 
 </RelativeLayout>

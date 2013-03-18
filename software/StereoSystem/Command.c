@@ -108,7 +108,8 @@ void syncSetVol(int id, int vol) {
 }
 //index 4
 void setVolume(int id, int vol) {
-	db.songs[id]->sound->volume = (float)vol/100.0;
+	//db.songs[id]->sound->volume = (float)vol/100.0;
+	setGlobalVolume((float)vol/100.0);
 	printf("Volume is set to %d percent\n", vol);
 }
 
