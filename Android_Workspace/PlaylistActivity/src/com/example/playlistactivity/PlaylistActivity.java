@@ -137,7 +137,7 @@ public class PlaylistActivity extends Activity {
   public void HandleDeletePlaylist(int id) throws IndexOutOfBoundsException  {
 	  // Do something
 	  Toast.makeText(this, "Playlist deleted", Toast.LENGTH_SHORT).show();
-	
+	  /*	
 	  // Remove the selected item from the ArrayList
 	  try {
 		  String toRemove = listAdapter.getItem(id);
@@ -154,13 +154,10 @@ public class PlaylistActivity extends Activity {
 		  System.err.println("IndexOutOfBoundsException: " + e.getMessage());
 		  throw new IndexOutOfBoundsException();
 	  }
-	  
+	
+	  */
 	  // Refresh adapter after deleting
-	  listAdapter.remove(listAdapter.getItem(id));
-  }
-  
-  public void HandleCreatePlaylist(int id) {
-	 
+	listAdapter.remove(listAdapter.getItem(id));
   }
   
   public void HandleGoToSongList(int id) {
