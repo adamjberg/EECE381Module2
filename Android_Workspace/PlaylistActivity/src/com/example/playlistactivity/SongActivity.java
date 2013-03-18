@@ -41,11 +41,11 @@ public class SongActivity extends Activity {
     //Song testsong = new Song("Song1.wav");
     //db.addSong(testsong);
     
-    Song[] pl = db.getSongArray();
+    Song[] s = db.getSongArray();
     
     // iterate thru playlist array; retrieve the names of each playlist, and add it to arraylist
     for(int i = 1; i < db.getNumSongs()+1; i++ ) {
-		   song_names.add(pl[i].getSongName());
+		   song_names.add(s[i].getSongName());
     }
      
     song_names.add("Add a song to this playlist...");
