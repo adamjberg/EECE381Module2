@@ -25,7 +25,7 @@ void loadSong(struct Song* this) {
 	if(this->sound != NULL)
 		unloadSong(this);
 	this->sound = loadWavSound(this->song_name);
-	this->size = this->sound->length;
+	this->size = getSoundLengthMS(this->sound);
 	this->isCached = true;
 }
 
@@ -102,8 +102,10 @@ void seekSong(struct Song* this, unsigned int position) {
 	seekSound( this->sound, position );
 }
 
+int getSongPosition(struct Song* this) {
+	return getSoundPositionMS(this->sound);
+}
+
 int getLength(struct Song* this) {
-	if(this->isCached) {
-		return this->sound->length;
-	} return this->size;
+	return this->size;
 }

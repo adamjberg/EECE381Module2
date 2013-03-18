@@ -29,6 +29,8 @@ struct Sound {
 };
 
 struct Sound* initSound(unsigned int);
+unsigned int getSoundPositionMS(struct Sound*);
+unsigned int getSoundLengthMS(struct Sound*);
 void updateSoundPosition(struct Sound*, int);
 struct Sound* loadWavSound(char*);
 void combineSounds(struct Sound*, struct Sound*, int, int, bool);
