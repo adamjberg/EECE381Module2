@@ -35,7 +35,7 @@ void updateSoundMixerPosition(int numWritten) {
 	updateSoundPosition(soundMixer->sound, numWritten);
 	int size = db.curr_song_ids->size;
 	int* temp;
-	for(i = 0; i < size; i++) {
+	/*for(i = 0; i < size; i++) {
 		temp = dequeue(db.curr_song_ids);
 		if(!db.songs[*temp]->sound->playing) {
 			free(temp);
@@ -48,7 +48,7 @@ void updateSoundMixerPosition(int numWritten) {
 		enqueue(db.curr_song_ids, temp);
 		}
 	}
-	temp = NULL;/*
+	temp = NULL;*/
 	for (i = 1; i < db.num_of_songs + 1; i++) {
 		if( db.songs[i] == NULL || db.songs[i]->sound == NULL)
 			continue;
@@ -59,7 +59,7 @@ void updateSoundMixerPosition(int numWritten) {
 			updateSoundPosition(db.songs[i]->sound, numWritten);
 			numSoundsPlaying++;
 		}
-	}*/
+	}
 	if( !soundMixer->cleared && numSoundsPlaying == 0 ) {
 		clearSoundMixer();
 	}

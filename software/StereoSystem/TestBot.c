@@ -146,7 +146,31 @@ void dBTester() {
 	updateSongsTxt(diff);
 */
 
-	loadSongsFromSD();
+	//loadSongsFromSD();
+	int fileHandler;
+	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
+		printf("Reading songs from SONGS.TXT error!\n");
+	}
+	char** song_names = (char**)malloc(sizeof(char*)*MAX_SONGS);
+	int i = 0, fileStats = 0;
+	song_names[i] = (char*)malloc(sizeof(char)*100);
+	while((fileStats = readLine(fileHandler, song_names[i++])) != -1) {
+		if(fileStats == -2) {
+			printf("File cannot be read, reopening...\n");
+			if (!alt_up_sd_card_fclose(fileHandler)){
+				printf("File is not closed properly.\n");
+			}
+			break;
+		}
+		song_names[i] = (char*)malloc(sizeof(char)*100);
+	}
+	while(i > 0) {
+		free(song_names[--i]);
+		song_names[i] = NULL;
+	} free(song_names);
+	if (!alt_up_sd_card_fclose(fileHandler)){
+		printf("File is not closed properly.\n");
+	}
 }
 
 void dbTester2() {

@@ -87,10 +87,11 @@ struct Sound* loadWavSound(char * filename) {
 		printf("sound file open failed\n");
 		return false;
 	}
-
+	char temp;
 	//Start reading the wav header
 	while (index < BITS_PER_SAMPLE_OFFSET) {
-		alt_up_sd_card_read(file_pointer);
+		temp = alt_up_sd_card_read(file_pointer);
+		//printf("%d %x\n", index, temp);
 		index++;
 	}
 
@@ -98,7 +99,8 @@ struct Sound* loadWavSound(char * filename) {
 	index += 2;
 
 	while (index < DATA_LENGTH_OFFSET) {
-		alt_up_sd_card_read(file_pointer);
+		temp = alt_up_sd_card_read(file_pointer);
+		//printf("%d %x\n", index, temp);
 		index++;
 	}
 

@@ -23,6 +23,8 @@ int main()
 	while(!loadSDCard(device_reference)) {
 		printf("SD card is not connected.\n");
 	}
+
+
 	initDatabase();
 	//dBTester();
 
@@ -48,7 +50,7 @@ int main()
 
 	enableAudioDeviceController();
 
-
+	//playSong(db.songs[5], 1, 0, 0);
 	while(1) {
 	//	loadSong(song);
 	//	playSong(song, 1.0, 0, 5);

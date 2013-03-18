@@ -20,12 +20,12 @@
 int SDIO_lock;
 
 struct Sound {
-	volatile unsigned int position;
+	unsigned int position;
 	unsigned int length;
-	volatile int loops;
+	int loops;
 	unsigned int *buffer;
-	volatile bool playing;
-	volatile float volume;
+	bool playing;
+	float volume;
 };
 
 struct Sound* initSound(unsigned int);

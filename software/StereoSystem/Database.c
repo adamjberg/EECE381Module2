@@ -403,6 +403,7 @@ void updateSongToSD() {
  * added and has not been written to SONGS.TXT.
  * Those songs will also get added to DB.
  * */
+
 int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	int fileHandler;
 	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
