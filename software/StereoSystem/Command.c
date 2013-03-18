@@ -213,17 +213,16 @@ void syncDBFinish() {
 	send(cmd, CMD);
 	killCmd(&cmd);
 }
-void modifyPlaylistName(int index, char* new_listname) {
-	setListName(db.playlists[index], new_listname);
 
+void syncAddSongToList(int list_id, int song_id) {
+	char temp[2][4];
+	sprintf(temp[0], "%d", list_id);
+	sprintf(temp[1], "%d", song_id);
+	struct Command* cmd = initCmd(13, 2, temp);
+	send(cmd, CMD);
+	addCmd(com.scheduler, cmd);
 }
-void shuffle(int index) {
-	printf("Playlist %d is shuffled\n", index);
-}
-void syncAddSongToPlaylist(int song_index, int list_index) {
-
-}
-void addSongToPlaylist(int song_index, int list_index) {
+void addSongToList(int list_index, int song_index) {
 	if(db.playlists[list_index] == NULL || db.songs[song_index] == NULL) return;
 	int i;
 	for(i = 1; i < MAX_SONGS; i++) {
@@ -235,6 +234,27 @@ void addSongToPlaylist(int song_index, int list_index) {
 	}
 	printf("Song %d is added to %d\n", song_index, list_index);
 }
+
+void syncRemoveSongFromList(int list_id, int song_id) {
+	char temp[2][4];
+	sprintf(temp[0], "%d", list_id);
+	sprintf(temp[1], "%d", song_id);
+	struct Command* cmd = initCmd(14, 2, temp);
+	send(cmd, CMD);
+	addCmd(com.scheduler, cmd);
+}
+void removeSongFromList(int list_id, int song_id) {
+
+}
+
+void modifyPlaylistName(int index, char* new_listname) {
+	setListName(db.playlists[index], new_listname);
+
+}
+void shuffle(int index) {
+	printf("Playlist %d is shuffled\n", index);
+}
+
 void updateSongToPlaylist(int song_index, int list_index, int order) {
 
 }
@@ -251,9 +271,7 @@ void repeatPlaylist(int index) {
 void moveSongToIndex(char* song, int index, char* listname) {
 
 }
-void removeSongFromPlaylist(char* song, char* listname) {
 
-}
 void repeatCurrentSong() {
 
 }

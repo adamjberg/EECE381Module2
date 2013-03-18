@@ -49,11 +49,16 @@ void selectList(int);
 
 void syncDBFinish();
 
+void syncAddSongToList(int, int);
+void addSongToList(int, int);
+
+void syncRemoveSongFromList(int, int);
+void removeSongFromList(int, int);
+
 void modifyPlaylistName(int, char*);
 void shuffle(int);
-void addSongToPlaylist(int, int);
+
 void moveSongToIndex(char*, int, char*);
-void removeSongFromPlaylist(char*, char*);
 void removeList(int);
 void play_playlist(int);
 void repeatPlaylist(int);

@@ -72,6 +72,10 @@ public class CmdScheduler {
 			case 12:
 				Command.hasSync();
 				break;
+			case 13:
+				Command.addSongToList(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
+			case 14:
+				Command.removeSongFromList(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
 			default:
 				break;
 			}

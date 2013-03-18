@@ -138,5 +138,26 @@ public class Database {
 	public int getCurr_song_id() {
 		return this.curr_song_id;
 	}
+	
+	public int[] getSongsFromList(int list_id) {
+		return this.list_order_song[list_id];
+	}
+	
+	public void addSongToList(int list_id, int song_id) {
+		this.playlists[list_id].setNum_of_songs(this.playlists[list_id].getNum_of_songs()+1);
+		this.list_song_order[list_id][song_id] = this.playlists[list_id].getNum_of_songs();
+		this.list_order_song[list_id][this.playlists[list_id].getNum_of_songs()] = song_id;
+	}
+	
+	public void removeSongFromList(int list_id, int song_id) {
+		int order = this.list_song_order[list_id][song_id];
+		this.list_song_order[list_id][song_id] = 0;
+		int i;
+		for(i = order; i <= this.playlists[list_id].getNum_of_songs() - order; i++) {
+			this.list_order_song[list_id][i] = this.list_order_song[list_id][i+1];
+			this.list_song_order[list_id][this.list_order_song[list_id][i]] = i;
+		} this.list_order_song[list_id][i] = 0;
+		
+	}
 
 }

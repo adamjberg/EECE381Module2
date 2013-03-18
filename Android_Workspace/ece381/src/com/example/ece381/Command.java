@@ -160,4 +160,36 @@ public class Command {
 		Communication com = Communication.getInstance();
 		com.setSync();
 	}
+	
+	//index 13
+	static public void syncAddSongToList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(13);
+		cmd.addParameter(String.valueOf(list_id));
+		cmd.addParameter(String.valueOf(song_id));
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void addSongToList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		com.getDB().addSongToList(list_id, song_id);
+		
+	}
+	
+	//index 14
+	static public void syncRemoveSongFromList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(14);
+		cmd.addParameter(String.valueOf(list_id));
+		cmd.addParameter(String.valueOf(song_id));
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void removeSongFromList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		com.getDB().removeSongFromList(list_id, song_id);
+	}
+	
 }
