@@ -10,6 +10,36 @@
 #define AUDIO_FREQ 32000
 
 /**
+ * Helper function to convert a millisecond value to the correct position
+ * in the sound buffer
+ */
+unsigned int convertFromMS(struct Sound* this, unsigned int value) {
+	return (unsigned int) (value * AUDIO_FREQ);
+}
+
+/**
+ * Helper function to convert a value to its millisecond equivalent based on the
+ * sampling rate
+ */
+unsigned int convertToMS(struct Sound* this, unsigned int value) {
+	return (unsigned int) ((value * 1000)/ AUDIO_FREQ);
+}
+
+/**
+ * Returns the length of the sound in milliseconds
+ */
+unsigned int getSoundPositionMS(struct Sound* this) {
+	return convertToMS(this, this->position);
+}
+
+/**
+ * Returns the length of the sound in milliseconds
+ */
+unsigned int getSoundLengthMS(struct Sound* this) {
+	return convertToMS(this, this->length);
+}
+
+/**
  * Helper function to read multiple bytes and return the representative int value
  */
 int readInt(int file_pointer, int numBytesToRead) {
@@ -183,21 +213,13 @@ void setSoundVolume(struct Sound* this, float volume) {
 }
 
 /**
- * Helper function to convert a millisecond position to the correct position
- * in the sound buffer
- */
-unsigned int msToPosition(struct Sound* this, unsigned int position) {
-	return (unsigned int) (position * AUDIO_FREQ);
-}
-
-/**
  * Seeks the sound to the given position
  *
  * @param this - The sound to change
  * @param position - The position to seek to in MilliSeconds
  */
 void seekSound(struct Sound* this, unsigned int position) {
-	this->position = msToPosition(this, position);
+	this->position = convertFromMS(this, position);
 }
 
 void playSound(struct Sound* sound, float volume, int startTime, int loops) {
