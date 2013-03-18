@@ -37,4 +37,5 @@ void resumeSong(struct Song*);
 void seekSong(struct Song*, unsigned int);
 void unloadSong(struct Song*);
 void loadSong(struct Song*);
+int getLength(struct Song*);
 #endif /* SONG_H_ */

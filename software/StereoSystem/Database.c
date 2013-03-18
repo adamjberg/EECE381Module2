@@ -390,7 +390,7 @@ void updateSongToSD() {
 		return;
 	}
 	for(i = 1; i <= db.num_of_songs; i++) {
-		len = sprintf(temp, "%d %s %d", i, db.songs[i]->song_name, db.songs[i]->size);
+		len = sprintf(temp, "%d %s %d", i, db.songs[i]->song_name, getLength(db.songs[i]));
 		writeLine(filepointer, temp, len);
 	}
 	if (!alt_up_sd_card_fclose(filepointer)){

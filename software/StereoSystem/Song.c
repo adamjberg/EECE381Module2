@@ -25,6 +25,7 @@ void loadSong(struct Song* this) {
 	if(this->sound != NULL)
 		unloadSong(this);
 	this->sound = loadWavSound(this->song_name);
+	this->size = this->sound->length;
 	this->isCached = true;
 }
 
@@ -73,6 +74,7 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 
 void pauseSong(struct Song* this) {
 	int* temp = (int*)dequeueValue(db.curr_song_ids, this->id);
+	if(temp == NULL) return;
 	free(temp);
 	temp = NULL;
 	pauseSound(this->sound);
@@ -98,4 +100,10 @@ void stopSong(struct Song* this) {
  */
 void seekSong(struct Song* this, unsigned int position) {
 	seekSound( this->sound, position );
+}
+
+int getLength(struct Song* this) {
+	if(this->isCached) {
+		return this->sound->length;
+	} return this->size;
 }

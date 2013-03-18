@@ -28,7 +28,9 @@ void pause(int);
 void syncStop();
 void stop();
 
-void setVolume(int);
+void syncSetVol(int, int);
+void setVolume(int, int);
+
 void seek(int);
 void next();
 void prev();

@@ -95,9 +95,23 @@ void stop() {
 	printf("The song is stoped.\n");
 }
 
-void setVolume(int vol) {
-	printf("Volume is set to %d\n", vol);
+void syncSetVol(int id, int vol) {
+	char* temp[2];
+	char tempId[4];
+	char tempVol[4];
+	sprintf(tempId, "%d", id);
+	sprintf(tempVol, "%d", vol);
+	temp[0] = tempId;
+	temp[1] = tempVol;
+	struct Command* cmd = initCmd(4, 2, temp);
+	addCmd(com.scheduler, cmd);
 }
+//index 4
+void setVolume(int id, int vol) {
+	db.songs[id]->sound->volume = (float)vol/100.0;
+	printf("Volume is set to %d percent\n", vol);
+}
+
 void seek(int pos) {
 	printf("Seek is set to %d\n", pos);
 }

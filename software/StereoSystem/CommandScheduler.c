@@ -39,7 +39,7 @@ void cmdProcessing(struct CmdScheduler* this) {
 			stop();
 			break;
 		case 4:
-			setVolume(atoi(cmd->parameters[0]));
+			setVolume(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]));
 			break;
 		case 5:
 			seek(atoi(cmd->parameters[0]));
