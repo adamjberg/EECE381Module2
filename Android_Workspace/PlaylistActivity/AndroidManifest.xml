@@ -32,9 +32,14 @@
         </activity>
         <activity
             android:name="com.example.playlistactivity.TextEntryActivity"
-            android:label="Enter the playlist name" 
+            android:label="Enter the playlist name"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+        <activity
+            android:name="com.example.playlistactivity.AllSongsListActivity"
+            android:label="@string/title_activity_all_songs_list" >
+        </activity>
+
     </application>
 
 </manifest>
