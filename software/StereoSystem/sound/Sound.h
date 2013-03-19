@@ -14,6 +14,7 @@
 #include "SoundMixer.h"
 
 #define BITS_PER_BYTE 8
+#define SAMPLE_RATE_OFFSET 24
 #define BITS_PER_SAMPLE_OFFSET 34
 #define DATA_LENGTH_OFFSET 40
 
