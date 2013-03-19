@@ -22,6 +22,7 @@ public class Database {
 	private int[][] list_song_order;
 	private int[][] list_order_song;
 	private ArrayList<String> songs_name;
+	private ArrayList<String> lists_name;
 	
 	
 	public Database() {
@@ -34,12 +35,23 @@ public class Database {
 		this.list_order_song = new int[MAX_LISTS][MAX_SONGS];
 		this.list_song_order = new int[MAX_LISTS][MAX_SONGS];
 		this.songs_name = new ArrayList<String>();
+		this.lists_name = new ArrayList<String>();
 		int i;
 		for(i = 1; i < MAX_LISTS; i++) {
 			this.avail_list_index.add(Integer.valueOf(i));
 		}
 	}
 	
+	public int queryListByName(String list_name) {
+		int i = 1;
+		while(i <= this.num_of_lists) {
+			if(this.used_list_index[i] == 1) {
+				if(this.playlists[i].getListName().equals(list_name)) {
+					return i;
+				}
+			} i++;
+		} return -1;
+	}
 	public Queue<Integer> getCurrSongsIds() {
 		return this.curr_song_ids;
 	}
@@ -73,6 +85,17 @@ public class Database {
 	public int getTotalSongs() {
 		return this.num_of_songs;
 	}
+	
+	public String[] getListsName() {
+		String result[] = new String[this.num_of_lists];
+		
+		int i;
+		for(i = 0; i < this.num_of_lists; i++) {
+			result[i] = (String) this.lists_name.get(i);
+		}
+		return result;
+	}
+	
 	public void addList(Playlist pl) {
 		if(this.avail_list_index.size() <= 0) {
 			Log.i("ERROR", "Added list failed\n");
@@ -82,6 +105,7 @@ public class Database {
 		pl.setId(id);
 		this.playlists[id] = pl;
 		this.used_list_index[id] = 1;
+		this.lists_name.add(pl.getListName());
 		int i;
 		for(i = 0; i < MAX_SONGS; i++) {
 			this.list_order_song[id][i] = 0;
@@ -95,12 +119,17 @@ public class Database {
 			return;
 		}
 		this.avail_list_index.remove(Integer.valueOf(id));
+		this.lists_name.add(pl.getListName());
 		pl.setId(id);
 		this.playlists[id] = pl;
 		this.used_list_index[id] = 1;
 		this.num_of_lists++;
 	}
 
+	public Playlist[] getPlaylists() {
+		return playlists;
+	}
+	
 	public void clear() {
 		int i, j;
 		for(i = 0; i < MAX_LISTS; i++) {
@@ -122,13 +151,30 @@ public class Database {
 		this.num_of_lists = this.num_of_songs = this.curr_song_id = 0;
 		this.curr_song_ids.clear();
 		this.songs_name.clear();
+		this.lists_name.clear();
 	}
 
+	public void removeList(int id) {
+		int i;
+		for(i = 1; i <= this.playlists[id].getNum_of_songs(); i++) {
+			this.list_order_song[id][i] = 0;
+			this.list_song_order[id][i] = 0;
+		}
+
+		this.playlists[id] = null;
+		this.num_of_lists--;
+	}
+	
+	public int getNumLists() {
+		return num_of_lists;
+	}
+	
 	public int getCurr_playlist_id() {
 		return curr_playlist_id;
 	}
 
 	public void setCurr_playlist_id(int curr_playlist_id) {
+		if(curr_playlist_id <= 0) return;
 		this.curr_playlist_id = curr_playlist_id;
 	}
 	

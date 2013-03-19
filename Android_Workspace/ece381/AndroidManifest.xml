@@ -16,8 +16,8 @@
         android:name=".MyApplication">
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/MainTheme" >
+            android:label="@string/songs_title"
+            android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,8 +27,29 @@
             android:value="com.example.ece381.MainActivity" />
         </activity>
         <activity android:name=".play"
-            android:label="@string/app_name"
-            android:theme="@style/PlayTheme">
+            android:label="@string/ctrl_panel"
+            android:theme="@style/PlayTheme" android:icon="@drawable/av_play">
+        </activity>
+        <activity android:name=".PlaylistActivity"
+            android:label="@string/list_title"
+            android:theme="@style/ListTheme" android:icon="@drawable/collections_view_as_list">
+        </activity>
+        <activity
+            android:name=".SongActivity"
+            android:label="@string/title_activity_song" >
+        </activity>
+        <activity
+            android:name=".PlaylistBuilderActivity"
+            android:label="@string/title_activity_playlist_builder" >
+        </activity>
+        <activity
+            android:name=".TextEntryActivity"
+            android:label="Enter the playlist name"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name=".AllSongsListActivity"
+            android:label="@string/title_activity_all_songs_list" >
         </activity>
     </application>
 </manifest>

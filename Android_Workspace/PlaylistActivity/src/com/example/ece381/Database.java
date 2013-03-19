@@ -95,7 +95,7 @@ public class Database {
 		pl.setId(id);
 		this.playlists[id] = pl;
 		this.used_list_index[id] = 1;
-		this.songs_name.add(pl.getListName());
+		this.lists_name.add(pl.getListName());
 		
 		int i;
 		for(i = 0; i < MAX_SONGS; i++) {

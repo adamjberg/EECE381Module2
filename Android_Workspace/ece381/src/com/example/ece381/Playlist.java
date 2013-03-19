@@ -49,4 +49,8 @@ public class Playlist {
 	public void setNum_of_songs(int num_of_songs) {
 		this.num_of_songs = num_of_songs;
 	}
+
+	public String getListName() {
+		return this.list_name;
+	}
 }

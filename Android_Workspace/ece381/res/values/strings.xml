@@ -28,5 +28,16 @@
  	<string name="vol_4th">60</string>
  	<string name="vol_5th">80</string>
  	<string name="text_address"/>
+ 	<string name="songs_title">Songs</string>
+ 	<string name="list_title">Playlists</string>
+ 	<string name="ctrl_panel">Play</string>
+ 	<string name="sel_songs">Select Songs</string>
+    <string name="title_activity_song">SongActivity</string>
+    <string name="title_activity_playlist_builder">PlaylistBuilderActivity</string>
+    <string name="title_activity_text_entry">TextEntryDialog</string>
+    <string name="title_activity_all_songs_list">AllSongsListActivity</string>
+    <string name="title_activity_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+ 	
 
 </resources>

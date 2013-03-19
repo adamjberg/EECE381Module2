@@ -43,7 +43,6 @@ public class MainActivity extends Activity {
 	
 	private TextView textview;
 	private ListView m_listview;
-  
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -61,7 +60,7 @@ public class MainActivity extends Activity {
 			 this.getActionBar().hide();
 		 }
 		 
-		setContentView(R.layout.activity_main);
+		//setContentView(R.layout.activity_main);
 
 
 		  
@@ -105,7 +104,7 @@ public class MainActivity extends Activity {
           return true;
 	  case R.id.songs:
 		  Toast.makeText(MainActivity.this,
-		    item.getTitle(),
+		    "Already in song list",
 		     Toast.LENGTH_LONG).show();
 		  return true;
 	  case R.id.menu_settings:
@@ -114,9 +113,8 @@ public class MainActivity extends Activity {
 		     Toast.LENGTH_LONG).show();
 		  return true;
 	  case R.id.playlists:
-		  Toast.makeText(MainActivity.this,
-		    item.getTitle(),
-		    Toast.LENGTH_LONG).show();
+		  Intent intent = new Intent(MainActivity.this, PlaylistActivity.class);
+          startActivity(intent);   
 		  return true;
 	  case R.id.playMenu:
 		  Intent intent2 = new Intent(MainActivity.this, play.class);

@@ -39,7 +39,10 @@ public void onCreate(Bundle savedInstanceState) {
 	greetMsg = (TextView) findViewById(R.id.textView1);
 	Intent i = getIntent();
 	String uname = (String) i.getSerializableExtra("USERNAME");
-	greetMsg.setText("playing "+ uname);
+	if(uname == null)
+		greetMsg.setText("No song has been selected");
+	else
+		greetMsg.setText("playing "+ uname);
 
 }
 
@@ -59,9 +62,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
 	 // onBackPressed();
      return true;
  case R.id.songs:
-	  Toast.makeText(play.this,
-	    item.getTitle(),
-	     Toast.LENGTH_LONG).show();
+	 finish();
 	  return true;
  case R.id.menu_settings:
 	  Toast.makeText(play.this,
@@ -69,13 +70,12 @@ public boolean onOptionsItemSelected(MenuItem item) {
 	     Toast.LENGTH_LONG).show();
 	  return true;
  case R.id.playlists:
-	  Toast.makeText(play.this,
-	    item.getTitle(),
-	    Toast.LENGTH_LONG).show();
+	 Intent intent = new Intent(play.this, PlaylistActivity.class);
+     startActivity(intent);   
 	  return true;
  case R.id.playMenu:
 	 Toast.makeText(play.this,
-			    item.getTitle(),
+			    "Already in play menu.",
 			    Toast.LENGTH_LONG).show(); 
 	  return true;
  }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="android:style/Theme.Holo.Light.DarkActionBar" />
+    <style name="AppTheme" parent="android:style/Theme.Holo" />
      <style name="MainTheme" parent="android:style/Theme.Holo.Light.DarkActionBar" />
      <style name="PlayTheme" parent="android:style/Theme.Holo.Wallpaper" />
-     <style name="ListTheme" parent="" />
+     <style name="ListTheme" parent="android:style/Theme.Holo" />
 </resources>

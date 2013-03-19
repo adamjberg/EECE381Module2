@@ -1,8 +1,8 @@
 <resources>
 
-    <style name="AppTheme" parent="android:style/Theme.DeviceDefault.Light.DarkActionBar" />
+    <style name="AppTheme" parent="android:style/Theme.Black" />
     <style name="MainTheme" parent="android:style/Theme.DeviceDefault.Light.DarkActionBar" />
      <style name="PlayTheme" parent="android:style/Theme.Translucent" />
-     <style name="ListTheme" parent="" />
+     <style name="ListTheme" parent="android:style/Theme.DeviceDefault.Light.DarkActionBar" />
 
 </resources>
