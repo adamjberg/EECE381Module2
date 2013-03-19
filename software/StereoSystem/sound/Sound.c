@@ -7,14 +7,15 @@
 
 #include "Sound.h"
 
-#define AUDIO_FREQ 32000
+#define DEFAULT_SAMPLE_RATE 32000
+#define DEFAULT_BITS_PER_SAMPLE 24
 
 /**
  * Helper function to convert a millisecond value to the correct position
  * in the sound buffer
  */
 unsigned int convertFromMS(struct Sound* this, unsigned int value) {
-	return (unsigned int) (value * AUDIO_FREQ);
+	return (unsigned int) (value * DEFAULT_SAMPLE_RATE);
 }
 
 /**
@@ -22,7 +23,7 @@ unsigned int convertFromMS(struct Sound* this, unsigned int value) {
  * sampling rate
  */
 unsigned int convertToMS(struct Sound* this, unsigned int value) {
-	return (unsigned int) ((value * 1000)/ AUDIO_FREQ);
+	return (unsigned int) ((value * 1000)/ DEFAULT_SAMPLE_RATE);
 }
 
 /**
@@ -37,6 +38,68 @@ unsigned int getSoundPositionMS(struct Sound* this) {
  */
 unsigned int getSoundLengthMS(struct Sound* this) {
 	return convertToMS(this, this->length);
+}
+
+/**
+ * Resample the sound using linear interpolation
+ * @param this sound to resample
+ * @param toSampleRate - sampling rate to convert to
+ * @param fromSampleRate - current sound sample rate
+ */
+void linearResample(struct Sound* this, int toSampleRate, int fromSampleRate) {
+
+	if (toSampleRate == fromSampleRate) {
+		return;
+	}
+
+	int i = 0;
+	unsigned int srcLength = this->length;
+	unsigned int destLength = srcLength * toSampleRate / fromSampleRate;
+	double dx = (double) srcLength / destLength;
+	double x = 0;
+	unsigned int currentIndex;
+
+	unsigned int *new_buffer =
+			(unsigned int *) malloc(sizeof(int) * destLength);
+	double slope;
+
+	while (i < destLength) {
+		currentIndex = (int) x;
+		slope = (currentIndex < this->length ? this->buffer[currentIndex + 1] : 0 - this->buffer[currentIndex]);
+		new_buffer[i] = slope * (x - currentIndex) + this->buffer[currentIndex];
+		x += dx;
+		i++;
+	}
+
+	free(this->buffer);
+	this->length = destLength;
+	this->buffer = (unsigned int*) malloc(sizeof(int) * this->length);
+	for (i = 0; i < this->length; i++) {
+		this->buffer[i] = new_buffer[i];
+	}
+	free(new_buffer);
+	new_buffer = NULL;
+}
+
+/**
+ * Checks to see if the values need to be shifted to match given bytesPerSample
+ * @param this - sound to change values of
+ * @param bitsPerSampleTo - Number of bits per sample to convert to
+ * @param bitsPerSampleFrom - Number of bits used for current sample
+ */
+void changeBitsPerSample(struct Sound* this, int bitsPerSampleTo, int bitsPerSampleFrom) {
+	if (bitsPerSampleTo == bitsPerSampleFrom)
+		return;
+
+	int i;
+	int numToShift = bitsPerSampleTo - bitsPerSampleFrom;
+
+	for (i = 0; i < this->length; i++) {
+		if( numToShift > 1)
+			this->buffer[i] = this->buffer[i] << numToShift;
+		else
+			this->buffer[i] = this->buffer[i] >> -numToShift;
+	}
 }
 
 /**
@@ -67,6 +130,8 @@ struct Sound* initSound(unsigned int length) {
 	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
 	this->playing = false;
 	this->volume = 1;
+	this->inFadePosition = 0;
+	this->outFadePosition = this->length;
 	clearSoundBuffer(this);
 	return this;
 }
@@ -92,6 +157,13 @@ void updateSoundPosition(struct Sound* this, int numWritten) {
 	if (!this->playing)
 		return;
 	this->position += numWritten;
+
+	if( this->position < this->inFadePosition )
+		this->volume = 1 - ((float) (this->inFadePosition - this->position) / this->inFadePosition);
+	else if(this->position > this->outFadePosition)
+		this->volume = 1 - ((float) (this->position - this->outFadePosition) / (this->length - this->outFadePosition));
+	else
+		this->volume = 1;
 
 	if (this->position >= this->length) {
 		handleSoundEnd(this);
@@ -119,13 +191,22 @@ struct Sound* loadWavSound(char * filename) {
 	}
 	char temp;
 	//Start reading the wav header
+	while (index < SAMPLE_RATE_OFFSET) {
+		temp = alt_up_sd_card_read(file_pointer);
+		index++;
+	}
+
+	int sampleRate = readInt(file_pointer, 4);
+	index += 4;
+
 	while (index < BITS_PER_SAMPLE_OFFSET) {
 		temp = alt_up_sd_card_read(file_pointer);
 		//printf("%d %x\n", index, temp);
 		index++;
 	}
 
-	int bytes_per_sample = readInt(file_pointer, 2) / BITS_PER_BYTE;
+	int bits_per_sample = readInt(file_pointer, 2);
+	int bytes_per_sample = bits_per_sample / BITS_PER_BYTE;
 	index += 2;
 
 	while (index < DATA_LENGTH_OFFSET) {
@@ -142,20 +223,25 @@ struct Sound* loadWavSound(char * filename) {
 		sound->buffer[i] = readInt(file_pointer, bytes_per_sample);
 	}
 
-	printf("Sound loading complete\n");
-
 	alt_up_sd_card_fclose(file_pointer);
 	SDIO_lock = 0;
+
+	changeBitsPerSample(sound, DEFAULT_BITS_PER_SAMPLE, bits_per_sample);
+	linearResample(sound, DEFAULT_SAMPLE_RATE, sampleRate);
+
+	printf("Sound loading complete\n");
+
 	return sound;
 }
 
+/**
+ * TODO: If a sounds volume is 0 this function should return right away to save processing time
+ * Right now there's an ugly bug where the sound won't stop if the volume is set to 0
+ */
 void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex, int numToWrite, bool overwrite) {
 	int i;
 	int indexToWrite = startIndex;
 	int indexToRead = soundToAdd->position;
-
-	if(sound->volume == 0 || soundToAdd->volume == 0)
-		return;
 
 	bool useVolume = sound->volume != 1 || soundToAdd->volume != 1;
 	float combinedVolume = sound->volume * soundToAdd->volume;
@@ -185,6 +271,14 @@ void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex
 		indexToRead++;
 		indexToWrite++;
 	}
+}
+
+void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {
+	this->inFadePosition = convertFromMS(this, inFadeLength);
+}
+
+void setFadeOutLength(struct Sound* this, unsigned int outFadeLength) {
+	this->outFadePosition = this->length - convertFromMS(this, outFadeLength);
 }
 
 /**

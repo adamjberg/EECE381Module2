@@ -64,6 +64,8 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 	this->volume = (int)volume;
 	if(this->sound == NULL)
 		loadSong(this);
+	setFadeInLength(this->sound, 0);
+	setFadeOutLength(this->sound, 0);
 	playSound(this->sound, volume, startTime, loops);
 	db.curr_song_ids[db.total_songs_playing++] = this->id;
 	//song_id_lock = 0;

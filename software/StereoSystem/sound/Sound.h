@@ -14,12 +14,15 @@
 #include "SoundMixer.h"
 
 #define BITS_PER_BYTE 8
+#define SAMPLE_RATE_OFFSET 24
 #define BITS_PER_SAMPLE_OFFSET 34
 #define DATA_LENGTH_OFFSET 40
 
 int SDIO_lock;
 
 struct Sound {
+	unsigned int inFadePosition;
+	unsigned int outFadePosition;
 	unsigned int position;
 	unsigned int length;
 	int loops;
@@ -29,6 +32,8 @@ struct Sound {
 };
 
 struct Sound* initSound(unsigned int);
+void setFadeInLength(struct Sound*, unsigned int);
+void setFadeOutLength(struct Sound*, unsigned int);
 unsigned int getSoundPositionMS(struct Sound*);
 unsigned int getSoundLengthMS(struct Sound*);
 void updateSoundPosition(struct Sound*, int);

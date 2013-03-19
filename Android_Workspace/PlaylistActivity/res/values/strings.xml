@@ -6,6 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_song">SongActivity</string>
     <string name="title_activity_playlist_builder">PlaylistBuilderActivity</string>
-    <string name="title_activity_text_entry">TextEntryActivity</string>
+    <string name="title_activity_text_entry">TextEntryDialog</string>
+    <string name="title_activity_all_songs_list">AllSongsListActivity</string>
+    <string name="title_activity_refresh">Refresh</string>
 
 </resources>

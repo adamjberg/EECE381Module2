@@ -53,27 +53,34 @@ public class Command {
 		return sum;
 	}
 	
-	static public void syncPlay(int id, int pos) {
+	static public void syncPlay(int id, int vol, int pos) {
 		Communication com = Communication.getInstance();
 		Command cmd = new Command(1);
 		cmd.addParameter(String.valueOf(id));
+		cmd.addParameter(String.valueOf(vol));
 		cmd.addParameter(String.valueOf(pos));
 		com.send(cmd);
 		com.getSched().addCmd(cmd);
 	}
 	
-	static public void play(int id, int po) {
-		
+	static public void play(int id, int vol, int pos) {
+		Communication com = Communication.getInstance();
+		com.getDB().getCurrSongsIds().add(Integer.valueOf(id));
+		com.getDB().getSongs()[id].setVolume(vol);
+		com.getDB().getSongs()[id].setPos(pos);
 	}
 	
-	static public void synPause() {
+	static public void syncPause(int id) {
 		Communication com = Communication.getInstance();
 		Command cmd = new Command(2);
+		cmd.addParameter(String.valueOf(id));
 		com.send(cmd);
 		com.getSched().addCmd(cmd);
 	}
 	
-	static public void pause() {
+	static public void pause(int id) {
+		Communication com = Communication.getInstance();
+		com.getDB().getCurrSongsIds().remove(Integer.valueOf(id));
 		
 	}
 	
@@ -84,6 +91,21 @@ public class Command {
 		com.getSched().addCmd(cmd);
 	}
 	static public void stop() {
+		
+	}
+	//index 4
+	static public void syncSetVol(int id, int vol) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(4);
+		cmd.addParameter(String.valueOf(id));
+		cmd.addParameter(String.valueOf(vol));
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void setVol(int id, int vol) {
+		Communication com = Communication.getInstance();
+		com.getDB().getSongs()[id].setVolume(vol);
 		
 	}
 	
@@ -112,9 +134,10 @@ public class Command {
 	}
 
 	// index 10
-	static public void createSong(String song_name) {
+	static public void createSong(String song_name, int len) {
 		Communication com = Communication.getInstance();
 		Song song = new Song(song_name);
+		song.setSize(len);
 		com.getDB().addSong(song);
 	}
 	
@@ -137,4 +160,36 @@ public class Command {
 		Communication com = Communication.getInstance();
 		com.setSync();
 	}
+	
+	//index 13
+	static public void syncAddSongToList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(13);
+		cmd.addParameter(String.valueOf(list_id));
+		cmd.addParameter(String.valueOf(song_id));
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void addSongToList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		com.getDB().addSongToList(list_id, song_id);
+		
+	}
+	
+	//index 14
+	static public void syncRemoveSongFromList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(14);
+		cmd.addParameter(String.valueOf(list_id));
+		cmd.addParameter(String.valueOf(song_id));
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+	}
+	
+	static public void removeSongFromList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		com.getDB().removeSongFromList(list_id, song_id);
+	}
+	
 }
