@@ -8,6 +8,7 @@
 #include "Sound.h"
 
 #define DEFAULT_SAMPLE_RATE 32000
+#define DEFAULT_BITS_PER_SAMPLE 24
 
 /**
  * Helper function to convert a millisecond value to the correct position
@@ -79,6 +80,27 @@ void linearResample(struct Sound* this, int toSampleRate, int fromSampleRate) {
 	}
 	free(new_buffer);
 	new_buffer = NULL;
+}
+
+/**
+ * Checks to see if the values need to be shifted to match given bytesPerSample
+ * @param this - sound to change values of
+ * @param bitsPerSampleTo - Number of bits per sample to convert to
+ * @param bitsPerSampleFrom - Number of bits used for current sample
+ */
+void changeBitsPerSample(struct Sound* this, int bitsPerSampleTo, int bitsPerSampleFrom) {
+	if (bitsPerSampleTo == bitsPerSampleFrom)
+		return;
+
+	int i;
+	int numToShift = bitsPerSampleTo - bitsPerSampleFrom;
+
+	for (i = 0; i < this->length; i++) {
+		if( numToShift > 1)
+			this->buffer[i] = this->buffer[i] << numToShift;
+		else
+			this->buffer[i] = this->buffer[i] >> -numToShift;
+	}
 }
 
 /**
@@ -175,7 +197,8 @@ struct Sound* loadWavSound(char * filename) {
 		index++;
 	}
 
-	int bytes_per_sample = readInt(file_pointer, 2) / BITS_PER_BYTE;
+	int bits_per_sample = readInt(file_pointer, 2);
+	int bytes_per_sample = bits_per_sample / BITS_PER_BYTE;
 	index += 2;
 
 	while (index < DATA_LENGTH_OFFSET) {
@@ -195,6 +218,7 @@ struct Sound* loadWavSound(char * filename) {
 	alt_up_sd_card_fclose(file_pointer);
 	SDIO_lock = 0;
 
+	changeBitsPerSample(sound, DEFAULT_BITS_PER_SAMPLE, bits_per_sample);
 	linearResample(sound, DEFAULT_SAMPLE_RATE, sampleRate);
 
 	printf("Sound loading complete\n");
