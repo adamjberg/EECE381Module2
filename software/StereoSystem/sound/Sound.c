@@ -52,8 +52,7 @@ void linearResample(struct Sound* this, int toSampleRate, int fromSampleRate) {
 		return;
 	}
 
-	int i;
-	int indexToWrite = 0, count;
+	int i = 0;
 	unsigned int srcLength = this->length;
 	unsigned int destLength = srcLength * toSampleRate / fromSampleRate;
 	double dx = (double) srcLength / destLength;
@@ -64,12 +63,12 @@ void linearResample(struct Sound* this, int toSampleRate, int fromSampleRate) {
 			(unsigned int *) malloc(sizeof(int) * destLength);
 	double slope;
 
-	while (indexToWrite < destLength) {
+	while (i < destLength) {
 		currentIndex = (int) x;
 		slope = (currentIndex < this->length ? this->buffer[currentIndex + 1] : 0 - this->buffer[currentIndex]);
-		new_buffer[indexToWrite] = slope * (x - currentIndex) + this->buffer[currentIndex];
+		new_buffer[i] = slope * (x - currentIndex) + this->buffer[currentIndex];
 		x += dx;
-		indexToWrite++;
+		i++;
 	}
 
 	free(this->buffer);
@@ -131,6 +130,8 @@ struct Sound* initSound(unsigned int length) {
 	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
 	this->playing = false;
 	this->volume = 1;
+	this->inFadePosition = 0;
+	this->outFadePosition = this->length;
 	clearSoundBuffer(this);
 	return this;
 }
@@ -156,6 +157,13 @@ void updateSoundPosition(struct Sound* this, int numWritten) {
 	if (!this->playing)
 		return;
 	this->position += numWritten;
+
+	if( this->position < this->inFadePosition )
+		this->volume = 1 - ((float) (this->inFadePosition - this->position) / this->inFadePosition);
+	else if(this->position > this->outFadePosition)
+		this->volume = 1 - ((float) (this->position - this->outFadePosition) / (this->length - this->outFadePosition));
+	else
+		this->volume = 1;
 
 	if (this->position >= this->length) {
 		handleSoundEnd(this);
@@ -226,13 +234,14 @@ struct Sound* loadWavSound(char * filename) {
 	return sound;
 }
 
+/**
+ * TODO: If a sounds volume is 0 this function should return right away to save processing time
+ * Right now there's an ugly bug where the sound won't stop if the volume is set to 0
+ */
 void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex, int numToWrite, bool overwrite) {
 	int i;
 	int indexToWrite = startIndex;
 	int indexToRead = soundToAdd->position;
-
-	if(sound->volume == 0 || soundToAdd->volume == 0)
-		return;
 
 	bool useVolume = sound->volume != 1 || soundToAdd->volume != 1;
 	float combinedVolume = sound->volume * soundToAdd->volume;
@@ -262,6 +271,14 @@ void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex
 		indexToRead++;
 		indexToWrite++;
 	}
+}
+
+void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {
+	this->inFadePosition = convertFromMS(this, inFadeLength);
+}
+
+void setFadeOutLength(struct Sound* this, unsigned int outFadeLength) {
+	this->outFadePosition = this->length - convertFromMS(this, outFadeLength);
 }
 
 /**

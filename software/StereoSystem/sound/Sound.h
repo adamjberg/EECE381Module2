@@ -21,6 +21,8 @@
 int SDIO_lock;
 
 struct Sound {
+	unsigned int inFadePosition;
+	unsigned int outFadePosition;
 	unsigned int position;
 	unsigned int length;
 	int loops;
@@ -30,6 +32,8 @@ struct Sound {
 };
 
 struct Sound* initSound(unsigned int);
+void setFadeInLength(struct Sound*, unsigned int);
+void setFadeOutLength(struct Sound*, unsigned int);
 unsigned int getSoundPositionMS(struct Sound*);
 unsigned int getSoundLengthMS(struct Sound*);
 void updateSoundPosition(struct Sound*, int);
