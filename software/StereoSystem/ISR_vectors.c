@@ -38,7 +38,7 @@ void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 }
 
 alt_u32 RS232_ISR(void* up_dev) {
-	if(queue_lock == 1) return alt_ticks_per_second()/1000;
+	if(queue_lock == 1 || SDIO_lock == 1) return alt_ticks_per_second()/1000;
 	alt_up_rs232_dev *serial_dev = ((struct alt_up_dev*)up_dev)->RS232_dev;
 	unsigned char* cert;
 	int i = 0;

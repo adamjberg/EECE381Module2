@@ -58,38 +58,33 @@ void setSongVolume(struct Song* this, float volume) {
 }
 
 void playSong(struct Song* this, float volume, int startTime, int loops) {
-	song_id_lock = 1;
-	if(containsValue(db.curr_song_ids, this->id) == 0) return;
-	int* temp = (int*)malloc(sizeof(int));
-	*temp = this->id;
-	enqueue(db.curr_song_ids, temp);
+	//song_id_lock = 1;
+	if(isCurrPlaying(this->id) >= 0|| db.total_songs_playing >= MAX_SONGS_MIX - 1) return;
 	this->pos = startTime;
 	this->volume = (int)volume;
 	if(this->sound == NULL)
 		loadSong(this);
 	playSound(this->sound, volume, startTime, loops);
-	temp = NULL;
-	song_id_lock = 0;
+	db.curr_song_ids[db.total_songs_playing++] = this->id;
+	//song_id_lock = 0;
 }
 
 void pauseSong(struct Song* this) {
-	int* temp = (int*)dequeueValue(db.curr_song_ids, this->id);
-	if(temp == NULL) return;
-	free(temp);
-	temp = NULL;
+	int index;
+	if((index = isCurrPlaying(this->id)) < 0) return;
 	pauseSound(this->sound);
+	removeCurrPlaying(index);
 }
 
 void resumeSong(struct Song* this) {
-	int* temp = (int*)malloc(sizeof(int));
-	*temp = this->id;
-	enqueue(db.curr_song_ids, temp);
 	resumeSound(this->sound);
-	temp = NULL;
 }
 
 void stopSong(struct Song* this) {
+	int index;
+	if((index = isCurrPlaying(this->id)) < 0) return;
 	stopSound(this->sound);
+	removeCurrPlaying(index);
 }
 
 /**

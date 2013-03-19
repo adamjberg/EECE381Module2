@@ -33,22 +33,18 @@ void updateSoundMixerPosition(int numWritten) {
 	int numSoundsPlaying = 0;
 	int i;
 	updateSoundPosition(soundMixer->sound, numWritten);
-	int size = db.curr_song_ids->size;
-	int* temp;
+	int size = db.total_songs_playing;
 	for(i = 0; i < size; i++) {
-		temp = dequeue(db.curr_song_ids);
-		if(!db.songs[*temp]->sound->playing) {
-			free(temp);
+		if(db.songs[db.curr_song_ids[i]]->sound->playing) {
+			soundMixer->cleared = false;
+			combineSounds(soundMixer->sound, db.songs[db.curr_song_ids[i]]->sound,
+							soundMixer->sound->position, numWritten, numSoundsPlaying == 0);
+			updateSoundPosition(db.songs[db.curr_song_ids[i]]->sound, numWritten);
+			numSoundsPlaying++;
 		} else {
-		soundMixer->cleared = false;
-		combineSounds(soundMixer->sound, db.songs[*temp]->sound,
-						soundMixer->sound->position, numWritten, numSoundsPlaying == 0);
-		updateSoundPosition(db.songs[*temp]->sound, numWritten);
-		numSoundsPlaying++;
-		enqueue(db.curr_song_ids, temp);
+			syncPause(db.curr_song_ids[i]);
 		}
-	}
-	temp = NULL;/*
+	}/*
 	for (i = 1; i < db.num_of_songs + 1; i++) {
 		if( db.songs[i] == NULL || db.songs[i]->sound == NULL)
 			continue;

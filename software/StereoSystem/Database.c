@@ -9,16 +9,16 @@
 void initDatabase() {
 	//db.cache = initCache();
 	db.curr_playlist_id = 0;
-	db.song_playing_size = 0;
 	db.num_of_lists = 0;
 	db.num_of_songs = 0;
 	db.avail_list_index = initQueue();
-	db.curr_song_ids = initQueue();
+	memset(db.curr_song_ids, 0, MAX_SONGS_MIX);
+	db.total_songs_playing = 0;
 	int i;
 	int* temp;
 	db.used_list_index[0] = 1; //index 0 should never get used
-	db.index_list_order[0] = NULL;
-	db.index_list_song[0] = NULL;
+	db.index_list_order[0][0] = 0;
+	db.index_list_song[0][0] = 0;
 	db.playlists[0] = NULL;
 	db.songs[0] = NULL;
 	for(i = 1; i < MAX_LISTS; i++) {
@@ -26,8 +26,8 @@ void initDatabase() {
 		*temp = i;
 		enqueue(db.avail_list_index, temp);
 		db.used_list_index[i] = 0;
-		db.index_list_order[i] = NULL;
-		db.index_list_song[i] = NULL;
+		db.index_list_order[i][0] = 0;
+		db.index_list_song[i][0] = 0;
 		db.playlists[i] = NULL;
 		db.songs[i] = NULL;
 	} temp = NULL;
@@ -107,10 +107,8 @@ void addListToDB(struct Playlist* playlist) {
 	db.used_list_index[*index] = 1;
 	setListId(playlist, *index);
 	db.playlists[*index] = playlist;
-	db.index_list_order[*index] = (int*)malloc(sizeof(int)*MAX_SONGS);
-	db.index_list_song[*index] = (int*)malloc(sizeof(int)*MAX_SONGS);
 	int i;
-	for(i = 1; i < MAX_SONGS; i++) {
+	for(i = 0; i < MAX_SONGS; i++) {
 		db.index_list_order[*index][i] = 0;
 		db.index_list_song[*index][i] = 0;
 	}
@@ -129,10 +127,8 @@ void addExisitedListToDB(struct Playlist* playlist, int id) {
 	db.used_list_index[*index] = 1;
 	setListId(playlist, *index);
 	db.playlists[*index] = playlist;
-	db.index_list_order[*index] = (int*)malloc(sizeof(int)*MAX_SONGS);
-	db.index_list_song[*index] = (int*)malloc(sizeof(int)*MAX_SONGS);
 	int i;
-	for(i = 1; i < MAX_SONGS; i++) {
+	for(i = 0; i < MAX_SONGS; i++) {
 		db.index_list_order[*index][i] = 0;
 		db.index_list_song[*index][i] = 0;
 	}
@@ -151,10 +147,11 @@ int removeListFromDB(int list_id) {
 	int* temp = (int*)malloc(sizeof(int));
 	*temp = list_id;
 	enqueue(db.avail_list_index, temp);
-	free(db.index_list_order[list_id]);
-	db.index_list_order[list_id] = NULL;
-	free(db.index_list_song[list_id]);
-	db.index_list_song[list_id] = NULL;
+	int i;
+	for(i = 0; i < MAX_SONGS; i++) {
+		db.index_list_order[list_id][i] = 0;
+		db.index_list_song[list_id][i] = 0;
+	}
 	db.num_of_lists--;
 	temp = NULL;
 	return 0;
@@ -519,4 +516,24 @@ void loadSongsFromSD(){
 	getAndUpdateSongsFromTxt(sdsongs);
 	//while(getAndUpdateSongsFromTxt() != 0);
 
+}
+
+/*
+ * This function check if the song is currently playing in the SoundMixer
+ */
+int isCurrPlaying(int song_id) {
+	int i = 0;
+	while(db.curr_song_ids[i] != 0) {
+		if(db.curr_song_ids[i++] == song_id) {
+			return i-1;
+		}
+	} return -1;
+}
+
+void removeCurrPlaying(int index) {
+	int i = index;
+	while(db.curr_song_ids[i] != 0) {
+		db.curr_song_ids[i] = db.curr_song_ids[++i];
+	}
+	db.total_songs_playing--;
 }

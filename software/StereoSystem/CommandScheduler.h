@@ -9,6 +9,7 @@
 #define COMMANDSCHEDULER_H_
 #include "Global.h"
 
+struct Command;
 struct CmdScheduler {
 	struct Queue* cmds;
 };

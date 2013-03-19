@@ -12,7 +12,7 @@
 #define SONGFILE "SONGS.TXT"
 #define MAX_LISTS 51
 #define MAX_SONGS 101
-#define MAX_SONGS_MIX 10
+#define MAX_SONGS_MIX 11
 struct database db;
 
 struct database {
@@ -20,11 +20,11 @@ struct database {
 	int curr_playlist_id;
 	int num_of_lists;
 	struct Song* songs[MAX_SONGS];
-	struct Queue* curr_song_ids;
-	int song_playing_size;
+	int curr_song_ids[MAX_SONGS_MIX];
+	int total_songs_playing;
 	int num_of_songs;
-	int* index_list_song[MAX_LISTS];
-	int* index_list_order[MAX_LISTS];
+	int index_list_song[MAX_LISTS][MAX_SONGS];
+	int index_list_order[MAX_LISTS][MAX_SONGS];
 	struct Queue* avail_list_index;
 	int used_list_index[MAX_LISTS];
 
@@ -49,4 +49,6 @@ char** getSongsFromSD();
 int getAndUpdateSongsFromTxt(char**);
 void createPlaylistFromTxt(char*);
 void updateSongToSD();
+int isCurrPlaying(int);
+void removeCurrPlaying(int);
 #endif /* DATABASE_H_ */

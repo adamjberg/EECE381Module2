@@ -43,23 +43,17 @@ void killCmd(struct Command** this) {
  * It will also put command to scheduler
  */
 void syncPlay(int id, int vol, int pos) {
-	char* temp[3];
-	char tempId[4];
-	char tempVol[4];
-	sprintf(tempId, "%d", id);
-	temp[0] = tempId;
-	sprintf(tempVol, "%d", vol);
-	temp[1] = tempVol;
-	char tempPos[4];
-	sprintf(tempPos, "%d", pos);
-	temp[2] = tempPos;
+	char temp[3][4];
+	sprintf(temp[0], "%d", id);
+	sprintf(temp[1], "%d", vol);
+	sprintf(temp[2], "%d", pos);
 	struct Command* cmd = initCmd(1, 3, temp);
 	send(cmd, CMD);
 	addCmd(com.scheduler, (struct Command*)cmd);
 }
 //index 1
 void play(int id, int vol, int pos) {
-	if(db.songs[id] == NULL) return;
+	if(db.songs[id] == NULL || id <= 0 || id > MAX_SONGS) return;
 	playSong(db.songs[id], vol, pos, 0);
 	printf("A song %d is played at %d position.\n", id, pos);
 }
