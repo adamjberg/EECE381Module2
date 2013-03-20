@@ -32,8 +32,8 @@ void syncSetVol(int, int);
 void setVolume(int, int);
 
 void seek(int);
-void next();
-void prev();
+void next(int);
+void prev(int);
 
 void syncCreatePlaylist(char*);
 void createPlaylist(char*);

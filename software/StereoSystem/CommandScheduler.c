@@ -45,10 +45,10 @@ void cmdProcessing(struct CmdScheduler* this) {
 			seek(atoi(cmd->parameters[0]));
 			break;
 		case 6:
-			next();
+			next(atoi(cmd->parameters[0]));
 			break;
 		case 7:
-			prev();
+			prev(atoi(cmd->parameters[0]));
 			break;
 		case 8:
 			createPlaylist(cmd->parameters[0]);

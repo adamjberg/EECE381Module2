@@ -110,10 +110,28 @@ void setVolume(int id, int vol) {
 void seek(int pos) {
 	printf("Seek is set to %d\n", pos);
 }
-void next() {
+void syncNext(int song_id) {
+
+}
+//index 6
+void next(int song_id) {
+	if(db.curr_playlist_id == 0 && song_id < db.num_of_songs) {
+		play(song_id+1, 1, 0);
+	} else if(db.curr_playlist_id != 0 && db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1] != 0) {
+		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1], 1, 0);
+	}
 	printf("Next song is selected and played.\n");
 }
-void prev() {
+void syncPrev(int song_id) {
+
+}
+//index 7
+void prev(int song_id) {
+	if(db.curr_playlist_id == 0 && song_id > 1) {
+		play(song_id-1, 1, 0);
+	} else if(db.curr_playlist_id != 0) {
+		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]-1], 1, 0);
+	}
 	printf("Previous song is selected and played.\n");
 }
 
