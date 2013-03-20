@@ -52,6 +52,8 @@ void syncDBFinish();
 void syncAddSongToList(int, int);
 void addSongToList(int, int);
 
+void syncAddExisitedSongToList(int, int);
+
 void syncRemoveSongFromList(int, int);
 void removeSongFromList(int, int);
 

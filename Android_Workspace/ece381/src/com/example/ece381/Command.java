@@ -215,9 +215,14 @@ public class Command {
 	}
 	
 	//index 14
+	static public void addExisitedSongToList(int list_id, int song_id) {
+		Communication com = Communication.getInstance();
+		com.getDB().addExisitedSongToList(list_id, song_id);
+	}
+	//index 15
 	static public void syncRemoveSongFromList(int list_id, int song_id) {
 		Communication com = Communication.getInstance();
-		Command cmd = new Command(14);
+		Command cmd = new Command(15);
 		cmd.addParameter(String.valueOf(list_id));
 		cmd.addParameter(String.valueOf(song_id));
 		com.send(cmd);

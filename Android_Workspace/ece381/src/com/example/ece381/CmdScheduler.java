@@ -77,7 +77,7 @@ public class CmdScheduler {
 			case 13:
 				Command.addSongToList(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
 			case 14:
-				Command.removeSongFromList(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
+				Command.addExisitedSongToList(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
 			default:
 				break;
 			}

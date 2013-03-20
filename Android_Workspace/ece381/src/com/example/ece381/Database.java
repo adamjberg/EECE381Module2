@@ -212,6 +212,17 @@ public class Database {
 		this.list_order_song[list_id][this.playlists[list_id].getNum_of_songs()] = song_id;
 	}
 	
+	public void addExisitedSongToList(int list_id, int song_id) {
+		int i;
+		for(i = 1; i <= this.playlists[list_id].getNum_of_songs(); i++) {
+			if(this.list_order_song[list_id][i] == 0) {
+				this.list_order_song[list_id][i] = song_id;
+				this.list_song_order[list_id][song_id] = i;
+				return;
+			}
+		}
+	}
+	
 	public void removeSongFromList(int list_id, int song_id) {
 		int order = this.list_song_order[list_id][song_id];
 		this.list_song_order[list_id][song_id] = 0;

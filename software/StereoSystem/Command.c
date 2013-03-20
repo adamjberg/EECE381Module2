@@ -260,6 +260,19 @@ void addSongToList(int list_index, int song_index) {
 	printf("Song %d is added to %d\n", song_index, list_index);
 }
 
+//index 14
+void syncAddExisitedSongToList(int list_id, int song_id) {
+	char* temp[2];
+	char templist[4];
+	char tempsong[4];
+	sprintf(templist, "%d", list_id);
+	sprintf(tempsong, "%d", song_id);
+	temp[0] = templist;
+	temp[1] = tempsong;
+	struct Command* cmd = initCmd(14, 2, temp);
+	send(cmd, CMD);
+	killCmd(&cmd);
+}
 
 
 void syncRemoveSongFromList(int list_id, int song_id) {

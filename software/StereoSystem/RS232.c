@@ -224,7 +224,7 @@ void reset(alt_up_rs232_dev *serial_dev) {
 
 	saveListsToSD();
 	updateSongToSD();
-	//saveAllUpdatesToSDBeforeQuits();
+	saveAllUpdatesToSDBeforeQuits();
 	update();
 
 	while (alt_up_rs232_get_used_space_in_read_FIFO(serial_dev) != 0) {

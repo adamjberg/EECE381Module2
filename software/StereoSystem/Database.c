@@ -34,7 +34,7 @@ void initDatabase() {
 	} temp = NULL;
 	loadListsFromSD();
 	loadSongsFromSD();
-	//preloadSongsToPlaylist();
+	preloadSongsToPlaylist();
 }
 
 void update() {
@@ -54,20 +54,13 @@ void update() {
 		syncCreateSong(db.songs[i]->song_name, db.songs[i]->size);
 	}
 
-	/*for(i = 1; i <= db.num_of_lists; i++){
+	for(i = 1; i <= db.num_of_lists; i++){
 		if (db.playlists[i] != NULL){
 			for(j = 1; j <= db.playlists[i]->num_of_songs; j++){
-				printf("%d to %d", db.index_list_order[i][j], i);
-				syncAddSongToList(i, db.index_list_order[i][j]);
+				syncAddExisitedSongToList(i, db.index_list_order[i][j]);
 			}
-			printf("\n");
 		}
-	}*/
-	syncAddSongToList(1,1);
-	syncAddSongToList(1,2);
-
-
-
+	}
 	syncDBFinish();
 }
 /*
@@ -718,14 +711,12 @@ void initializeListWithSongs(char* input){
 				cursorPos = i+1;
 				strncpy(temp, line, cursorPos);
 				iteration++;
-				temp[cursorPos] = '\0';
 				list_id = strtol(temp, NULL, 10);
 				//printf("List id is %d\n", list_id);
 				if (list_id == 0){ break;}
 			} else {
 				strncpy(temp, line+cursorPos, i-cursorPos+1);
 				cursorPos = i;
-				temp[i-cursorPos+1] = '\0';
 				song_id = strtol(temp, NULL, 10);
 				if (song_id == 0) { break;}
 				db.index_list_song[list_id][song_id] = order;
