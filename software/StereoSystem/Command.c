@@ -228,12 +228,17 @@ void syncDBFinish() {
 }
 
 void syncAddSongToList(int list_id, int song_id) {
-	char temp[2][4];
-	sprintf(temp[0], "%d", list_id);
-	sprintf(temp[1], "%d", song_id);
+	char* temp[2];
+	char templist[4];
+	char tempsong[4];
+	sprintf(templist, "%d", list_id);
+	sprintf(tempsong, "%d", song_id);
+	temp[0] = templist;
+	temp[1] = tempsong;
 	struct Command* cmd = initCmd(13, 2, temp);
 	send(cmd, CMD);
-	addCmd(com.scheduler, cmd);
+	killCmd(&cmd);
+	//addCmd(com.scheduler, cmd);
 }
 void addSongToList(int list_index, int song_index) {
 	if(db.playlists[list_index] == NULL || db.songs[song_index] == NULL) return;
@@ -248,6 +253,8 @@ void addSongToList(int list_index, int song_index) {
 	}
 	printf("Song %d is added to %d\n", song_index, list_index);
 }
+
+
 
 void syncRemoveSongFromList(int list_id, int song_id) {
 	char temp[2][4];
