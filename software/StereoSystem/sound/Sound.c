@@ -7,6 +7,7 @@
 
 #include "Sound.h"
 
+#define MIN_VOLUME_BITS 8
 #define DEFAULT_SAMPLE_RATE 32000
 #define DEFAULT_BITS_PER_SAMPLE 24
 
@@ -15,7 +16,7 @@
  * in the sound buffer
  */
 unsigned int convertFromMS(struct Sound* this, unsigned int value) {
-	return (unsigned int) (value * DEFAULT_SAMPLE_RATE);
+	return (unsigned int) (value * DEFAULT_SAMPLE_RATE / 1000);
 }
 
 /**
@@ -129,7 +130,7 @@ struct Sound* initSound(unsigned int length) {
 	this->position = 0;
 	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
 	this->playing = false;
-	this->volume = 1;
+	this->volume = DEFAULT_BITS_PER_SAMPLE;
 	this->inFadePosition = 0;
 	this->outFadePosition = this->length;
 	clearSoundBuffer(this);
@@ -146,6 +147,10 @@ void handleSoundEnd(struct Sound* this) {
 	}
 }
 
+bool allowFade(struct Sound* this) {
+	return !(this->inFadePosition == 0 && this->outFadePosition == this->length);
+}
+
 /**
  * Update the position index for this sound.
  * Determines if the sound is complete and allows it to continue playing if
@@ -158,12 +163,14 @@ void updateSoundPosition(struct Sound* this, int numWritten) {
 		return;
 	this->position += numWritten;
 
-	if( this->position < this->inFadePosition )
-		this->volume = 1 - ((float) (this->inFadePosition - this->position) / this->inFadePosition);
-	else if(this->position > this->outFadePosition)
-		this->volume = 1 - ((float) (this->position - this->outFadePosition) / (this->length - this->outFadePosition));
-	else
-		this->volume = 1;
+	if (allowFade(this)) {
+		if (this->position < this->inFadePosition)
+			setSoundVolume(this, 0.9 - ((float) (this->inFadePosition - this->position) / this->inFadePosition));
+		else if (this->position > this->outFadePosition)
+			setSoundVolume(this, 0.9 - ((float) (this->position - this->outFadePosition) / (this->length - this->outFadePosition)));
+		else
+			setSoundVolume(this, 1.0);
+	}
 
 	if (this->position >= this->length) {
 		handleSoundEnd(this);
@@ -243,8 +250,8 @@ void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex
 	int indexToWrite = startIndex;
 	int indexToRead = soundToAdd->position;
 
-	bool useVolume = sound->volume != 1 || soundToAdd->volume != 1;
-	float combinedVolume = sound->volume * soundToAdd->volume;
+	int numBitsToShift = (int) (2 * DEFAULT_BITS_PER_SAMPLE - (sound->volume + soundToAdd->volume));
+	bool useVolume = numBitsToShift > 0;
 
 	for (i = 0; i < numToWrite; i++) {
 		if (indexToWrite >= sound->length) {
@@ -259,12 +266,12 @@ void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex
 		}
 		if (overwrite) {
 			if(useVolume)
-				sound->buffer[indexToWrite] = (int) (soundToAdd->buffer[indexToRead] * combinedVolume);
+				sound->buffer[indexToWrite] = soundToAdd->buffer[indexToRead] >> numBitsToShift;
 			else
 				sound->buffer[indexToWrite] = soundToAdd->buffer[indexToRead];
 		} else {
 			if(useVolume)
-				sound->buffer[indexToWrite] += (int) (soundToAdd->buffer[indexToRead] * combinedVolume);
+				sound->buffer[indexToWrite] += soundToAdd->buffer[indexToRead] >> numBitsToShift;
 			else
 				sound->buffer[indexToWrite] += soundToAdd->buffer[indexToRead];
 		}
@@ -281,6 +288,10 @@ void setFadeOutLength(struct Sound* this, unsigned int outFadeLength) {
 	this->outFadePosition = this->length - convertFromMS(this, outFadeLength);
 }
 
+int convertVolumeToInt(float volume) {
+	return (int) (volume * (DEFAULT_BITS_PER_SAMPLE - MIN_VOLUME_BITS)) + MIN_VOLUME_BITS;
+}
+
 /**
  * Overwrites the current sound buffer with updated volume
  *
@@ -290,9 +301,9 @@ void setFadeOutLength(struct Sound* this, unsigned int outFadeLength) {
 void setSoundVolumeStatic(struct Sound* this, float volume) {
 	int i;
 	for (i = 0; i < this->length; i++) {
-		this->buffer[i] = this->buffer[i] * volume;
+		this->buffer[i] = this->buffer[i] << convertVolumeToInt(volume);
 	}
-	this->volume = 1;
+	this->volume = convertVolumeToInt(1);
 }
 
 /**
@@ -303,7 +314,7 @@ void setSoundVolumeStatic(struct Sound* this, float volume) {
  * even if the volume is brought to 0 and then back to 1
  */
 void setSoundVolume(struct Sound* this, float volume) {
-	this->volume = volume;
+	this->volume = convertVolumeToInt(volume);
 }
 
 /**
@@ -318,7 +329,7 @@ void seekSound(struct Sound* this, unsigned int position) {
 
 void playSound(struct Sound* sound, float volume, int startTime, int loops) {
 	sound->position = startTime;
-	sound->volume = volume;
+	setSoundVolume(sound, volume);
 	sound->playing = true;
 	sound->loops = loops;
 }
