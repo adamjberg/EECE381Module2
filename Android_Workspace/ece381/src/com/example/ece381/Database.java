@@ -82,6 +82,15 @@ public class Database {
 		return result;
 	}
 	
+	public String[] getSongsNameFromList(int list_id) {
+		int size = this.playlists[list_id].getNum_of_songs();
+		String result[] = new String[size];
+		int i;
+		for(i = 1; i<= size; i++) {
+			result[i] = (String)this.songs[this.list_order_song[list_id][i]].getSongName();
+		}
+		return result;
+	}
 	public int getTotalSongs() {
 		return this.num_of_songs;
 	}
