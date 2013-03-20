@@ -18,6 +18,7 @@
 struct database db;
 
 struct database {
+	int curr_song_id;
 	struct Playlist* playlists[MAX_LISTS];
 	int curr_playlist_id;
 	int num_of_lists;

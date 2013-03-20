@@ -8,6 +8,7 @@
 
 void initDatabase() {
 	//db.cache = initCache();
+	db.curr_song_id = 1;
 	db.curr_playlist_id = 0;
 	db.num_of_lists = 0;
 	db.num_of_songs = 0;
@@ -52,6 +53,20 @@ void update() {
 	for(i = 1; i <= db.num_of_songs; i++) {
 		syncCreateSong(db.songs[i]->song_name, db.songs[i]->size);
 	}
+
+	/*for(i = 1; i <= db.num_of_lists; i++){
+		if (db.playlists[i] != NULL){
+			for(j = 1; j <= db.playlists[i]->num_of_songs; j++){
+				printf("%d to %d", db.index_list_order[i][j], i);
+				syncAddSongToList(i, db.index_list_order[i][j]);
+			}
+			printf("\n");
+		}
+	}*/
+	syncAddSongToList(1,1);
+	syncAddSongToList(1,2);
+
+
 
 	syncDBFinish();
 }
@@ -267,11 +282,11 @@ int loadListsFromSD() {
 		return -1;
 	}
 	char* line = NULL;
-	char array[100];
+	char array[501];
 	int i = 0;
 	int stats = 0;
 	while (i < 50){
-		line = (char*)malloc(sizeof(char)*500);
+		line = (char*)malloc(sizeof(char)*501);
 		if((stats = readLine(fileHandler, line)) == -2) {
 			printf("Cannot read the file, reopening..\n");
 			if (!alt_up_sd_card_fclose(fileHandler)){
@@ -315,8 +330,8 @@ int loadListsFromSD() {
  * into a playlist object and add it to DB.
  * */
 void createPlaylistFromTxt(char* line){
-	char temp[20];
-	char substr[20];
+	char temp[501];
+	char substr[501];
 	int id = 0;
 	int i, last_position;
 	int iteration = 0;
@@ -412,12 +427,12 @@ int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	// add songs from
 	char** songNames = malloc(MAX_SONGS *sizeof(char*));
 	char* line = NULL;
-	char temp[25];
-	char substr[25];
+	char temp[501];
+	char substr[501];
 	int start, end, i, iteration;
 	int numOfSongs = 0, fileStats = 0;
 	while (numOfSongs < MAX_SONGS){
-		line = (char*)malloc(sizeof(char)*500);
+		line = (char*)malloc(sizeof(char)*501);
 		if((fileStats = readLine(fileHandler, line)) == -2) {
 			printf("File cannot be read, reopening...\n");
 			if (!alt_up_sd_card_fclose(fileHandler)){
@@ -654,7 +669,7 @@ void preloadSongsToPlaylist(){
 
 	i = 0;
 	while (i < 50){
-		line = (char*)malloc(sizeof(char)*500);
+		line = (char*)malloc(sizeof(char)*501);
 		fileStats = readLine(fileHandler, line);
 		if (fileStats == -2){
 			printf("LORDER.TXT cannot be read, reopening...\n");
@@ -665,6 +680,7 @@ void preloadSongsToPlaylist(){
 			line = NULL;
 			break;
 		} else if (fileStats == -1){
+			//printf("Quit after iteration %d\n", i);
 			free(line);
 			line = NULL;
 			break;
@@ -692,6 +708,7 @@ void initializeListWithSongs(char* input){
 	char temp[1024];
 	int i, list_id, song_id, cursorPos;
 	int iteration = 0;
+	int order = 1;
 	memset(line, 0, sizeof(line)/sizeof(line[0]));
 	strcpy(line, input);
 	for (i = 0; i < strlen(input); i++){
@@ -703,7 +720,7 @@ void initializeListWithSongs(char* input){
 				iteration++;
 				temp[cursorPos] = '\0';
 				list_id = strtol(temp, NULL, 10);
-				printf("List id is %d\n", list_id);
+				//printf("List id is %d\n", list_id);
 				if (list_id == 0){ break;}
 			} else {
 				strncpy(temp, line+cursorPos, i-cursorPos+1);
@@ -711,8 +728,9 @@ void initializeListWithSongs(char* input){
 				temp[i-cursorPos+1] = '\0';
 				song_id = strtol(temp, NULL, 10);
 				if (song_id == 0) { break;}
-				printf("Song ID is %d\n", song_id);
-				addSongToList(list_id, song_id);
+				db.index_list_song[list_id][song_id] = order;
+				db.index_list_order[list_id][order] = song_id;
+				order++;
 			}
 		}
 	}

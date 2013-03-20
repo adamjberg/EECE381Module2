@@ -174,8 +174,19 @@ void dBTester() {
 
 	//addSongToList(1,3);
 	//addSongToList(1,4);
+	//addSongToList(2,1);
+	//addSongToList(2,2);
 	//preloadSongsToPlaylist();
 	//saveAllUpdatesToSDBeforeQuits();
+
+	/*int i, j;
+	for (i = 0; i < 50000; i++){
+		addExistingSongToPlaylist(1, 3);
+		printf("Iteration %d\n", i);
+	}*/
+	//	preloadSongsToPlaylist();
+	//	printf("Iteration %d\n", i);
+	//}
 }
 
 void dbTester2() {
@@ -283,6 +294,8 @@ void dbTester2() {
 	createExisitedPlaylist("list3", 0, 12);
 	createExisitedPlaylist("list4", 0, 35);
 	createExisitedPlaylist("list5", 0, 19);
+
+
 
 	/*createSong("new song 1");
 	createSong("new song 2");

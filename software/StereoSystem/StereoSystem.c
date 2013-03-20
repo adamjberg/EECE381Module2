@@ -28,16 +28,6 @@ int main()
 	initDatabase();
 	//dBTester();
 
-
-
-	//syncCreateSong("LONE", 0);
-	/*createSong("BOING.WAV", 0);
-	createSong("DINGDING.WAV", 0);
-	createSong("LAZR.WAV", 0);
-	createSong("LONE.WAV", 0);
-	createSong("LOSE.WAV", 0);
-	createSong("LTWO.WAV", 0);
-	createSong("WIN.WAV", 0);*/
 	initAudioDeviceController();
 	initSoundMixer();
 	//dBTester();
@@ -51,25 +41,9 @@ int main()
 	update();
 
 	enableAudioDeviceController();
+	initPushKeyController();
 
-	//playSong(db.songs[5], 1, 0, 0);
 	while(1) {
-	//	loadSong(song);
-	//	playSong(song, 1.0, 0, 5);
-//Testing code start
-	//	for(i = 0; i < 9999999; i++) {}
-	//	send((void*)temp2, STRING);
-	//	for(i = 0; i < 9999999; i++) {}
-	//	send((void*)temp, STRING);
-	//	for(i = 0; i < 9999999; i++) {}
-	//	send((void*)temp1, STRING);
-	//	for(i = 0; i < 3999999; i++) {}
-		//syncPause();
-	//	for(i = 0; i < 3999999; i++) {}
-//Testing code end
-		//for(i = 0; i < 49999999; i++) {}
-	//	pauseSong(song);
-	//	unloadSong(song);
 		cmdProcessing(scheduler);
 	}
 

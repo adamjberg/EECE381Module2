@@ -36,6 +36,7 @@
 #include "sound/SoundMixer.h"
 #include "sound/Sound.h"
 #include "sound/AudioDeviceController.h"
+#include "PushKeyController.h"
 
 #define HEADERSIZE 2
 #define SPACE 32

@@ -28,7 +28,7 @@ struct Sound {
 	int loops;
 	unsigned int *buffer;
 	bool playing;
-	float volume;
+	int volume;
 };
 
 struct Sound* initSound(unsigned int);

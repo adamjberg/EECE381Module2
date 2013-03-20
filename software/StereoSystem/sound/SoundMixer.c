@@ -21,7 +21,7 @@ void initSoundMixer() {
 }
 
 void setGlobalVolume(float volume) {
-	soundMixer->sound->volume = volume;
+	setSoundVolume(soundMixer->sound, volume);
 }
 
 void clearSoundMixer() {
@@ -33,8 +33,7 @@ void updateSoundMixerPosition(int numWritten) {
 	int numSoundsPlaying = 0;
 	int i;
 	updateSoundPosition(soundMixer->sound, numWritten);
-	int size = db.total_songs_playing;
-	for(i = 0; i < size; i++) {
+	for(i = 0; i < db.total_songs_playing; i++) {
 		if(db.songs[db.curr_song_ids[i]]->sound->playing) {
 			soundMixer->cleared = false;
 			combineSounds(soundMixer->sound, db.songs[db.curr_song_ids[i]]->sound,
@@ -44,18 +43,7 @@ void updateSoundMixerPosition(int numWritten) {
 		} else {
 			syncPause(db.curr_song_ids[i]);
 		}
-	}/*
-	for (i = 1; i < db.num_of_songs + 1; i++) {
-		if( db.songs[i] == NULL || db.songs[i]->sound == NULL)
-			continue;
-		if (db.songs[i]->sound->playing) {
-			soundMixer->cleared = false;
-			combineSounds(soundMixer->sound, db.songs[i]->sound,
-					soundMixer->sound->position, numWritten, numSoundsPlaying == 0);
-			updateSoundPosition(db.songs[i]->sound, numWritten);
-			numSoundsPlaying++;
-		}
-	}*/
+	}
 	if( !soundMixer->cleared && numSoundsPlaying == 0 ) {
 		clearSoundMixer();
 	}
