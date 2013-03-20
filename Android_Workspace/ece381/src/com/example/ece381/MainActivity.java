@@ -117,6 +117,7 @@ public class MainActivity extends Activity {
           startActivity(intent);   
 		  return true;
 	  case R.id.playMenu:
+		  com.getDB().setCurr_playlist_id(0);
 		  Intent intent2 = new Intent(MainActivity.this, play.class);
           startActivity(intent2);   
 		  return true;

@@ -103,21 +103,21 @@ public void onPauseButton(View view) {
 
 public void onNext(View view) {
 	if(com.getDB().getCurr_song_id() >= com.getDB().getTotalSongs()) return;
-	if(com.getDB().getCurr_playlist_id() == 0) {
+	//if(com.getDB().getCurr_playlist_id() == 0) {
 		greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSongName());
 		seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSize());
 		seekbar2.setProgress(0);
-	}
+	//}
 	Command.syncNext(com.getDB().getCurr_song_id());
 }
 
 public void onPrev(View view) {
 	if(com.getDB().getCurr_song_id() <=1) return;
-	if(com.getDB().getCurr_playlist_id() == 0) {
+	//if(com.getDB().getCurr_playlist_id() == 0) {
 		greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSongName());
 		seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSize());
 		seekbar2.setProgress(0);
-	}
+	//}
 	Command.syncPrev(com.getDB().getCurr_song_id());
 }
 private void addBarSsound(){  

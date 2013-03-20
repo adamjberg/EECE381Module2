@@ -85,8 +85,10 @@ public class PlaylistActivity extends Activity {
     			
     			db.setCurr_playlist_id(db.queryListByName(selected));
     			intent = new Intent(getApplicationContext(), SongActivity.class);
+    			String selected_pl_name = selected;
+    			intent.putExtra("selected_pl_name", selected_pl_name);
     		}
-			startActivityForResult(intent, 1); // get the playlist id back
+			startActivity(intent); // get the playlist id back
     	}
   
     } );
@@ -225,7 +227,7 @@ public class PlaylistActivity extends Activity {
 		   if(selectedValue == db.getSongs()[i].getSongName() )
 			   songid = i;
 	   }
-	   Log.d("current songid: ", ""+songid);
+	  // Log.d("current songid: ", ""+songid);
 	   return songid;
   }
   
