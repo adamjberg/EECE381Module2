@@ -8,6 +8,7 @@
 
 void initDatabase() {
 	//db.cache = initCache();
+	db.curr_song_id = 1;
 	db.curr_playlist_id = 0;
 	db.num_of_lists = 0;
 	db.num_of_songs = 0;

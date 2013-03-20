@@ -9,6 +9,30 @@
 
 struct RS232 com;
 
+/**
+ * The Interrupt service routine for the keys
+ * This reads the values of the keys and then calls the registered key listener.
+ */
+void push_key_ISR(struct PushKeyController* pushKeyController, unsigned int id)
+{
+	pushKeyController->keys_changed = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEYS_BASE);
+
+	if(wasKeyJustPressed(pushKeyController, 0)) {
+		next(db.curr_song_id);
+		if(db.curr_song_id < db.num_of_songs)
+			db.curr_song_id++;
+	} else if( wasKeyJustPressed(pushKeyController, 1)) {
+		prev(db.curr_song_id);
+		if(db.curr_song_id > 1)
+			db.curr_song_id--;
+	} else if(wasKeyJustPressed(pushKeyController, 2)) {
+		syncPause(db.curr_song_id);
+	} else if(wasKeyJustPressed(pushKeyController, 3)) {
+		play(db.curr_song_id, 1, 0);
+	}
+
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP( KEYS_BASE, 0);
+}
 /***************************************************************************************
  * Audio - Interrupt Service Routine
  *
