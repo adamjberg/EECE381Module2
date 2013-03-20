@@ -242,6 +242,7 @@ void addSongToList(int list_index, int song_index) {
 		if(db.index_list_order[list_index][i] == 0) {
 			db.index_list_order[list_index][i] = song_index;
 			db.index_list_song[list_index][song_index] = i;
+			db.playlists[list_index]->num_of_songs++;
 			return;
 		}
 	}

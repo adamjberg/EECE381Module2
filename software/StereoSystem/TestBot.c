@@ -147,7 +147,7 @@ void dBTester() {
 */
 
 	//loadSongsFromSD();
-	int fileHandler;
+	/*int fileHandler;
 	if ((fileHandler = openFileFromSD(SONGFILE)) < 0){
 		printf("Reading songs from SONGS.TXT error!\n");
 	}
@@ -170,7 +170,12 @@ void dBTester() {
 	} free(song_names);
 	if (!alt_up_sd_card_fclose(fileHandler)){
 		printf("File is not closed properly.\n");
-	}
+	}*/
+
+	//addSongToList(1,3);
+	//addSongToList(1,4);
+	//preloadSongsToPlaylist();
+	//saveAllUpdatesToSDBeforeQuits();
 }
 
 void dbTester2() {

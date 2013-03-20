@@ -10,6 +10,8 @@
 #include "Global.h"
 #define LISTFILE "LISTS.TXT"
 #define SONGFILE "SONGS.TXT"
+#define LISTORDERFILE "LORDER.TXT"
+#define LISTSONGFILE "LSONG.TXT"
 #define MAX_LISTS 51
 #define MAX_SONGS 101
 #define MAX_SONGS_MIX 11
@@ -51,4 +53,8 @@ void createPlaylistFromTxt(char*);
 void updateSongToSD();
 int isCurrPlaying(int);
 void removeCurrPlaying(int);
+void saveAllUpdatesToSDBeforeQuits();
+void saveListChangesToSD(int);
+void preloadSongsToPlaylist();
+void initializeListWithSongs(char*);
 #endif /* DATABASE_H_ */

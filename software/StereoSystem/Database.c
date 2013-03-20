@@ -33,6 +33,7 @@ void initDatabase() {
 	} temp = NULL;
 	loadListsFromSD();
 	loadSongsFromSD();
+	preloadSongsToPlaylist();
 }
 
 void update() {
@@ -173,8 +174,8 @@ int readLine(int file_pointer, char* line) {
 		}
 		if(i == 0 && line[i] == '\n') //this is to skip an empty line if any
 			line[i] = alt_up_sd_card_read(file_pointer);
-		if(i >= 100) {
-			printf("WARNNING! reading a line that contains more than 100 characters\n");
+		if(i >= 500) {
+			printf("WARNNING! reading a line that contains more than 500 characters\n");
 			break;
 		}
 	} while(line[i] != '\n' && line[i] != '\r' && line[i] != 0 && line[i] != -1);
@@ -270,7 +271,7 @@ int loadListsFromSD() {
 	int i = 0;
 	int stats = 0;
 	while (i < 50){
-		line = (char*)malloc(sizeof(char)*100);
+		line = (char*)malloc(sizeof(char)*500);
 		if((stats = readLine(fileHandler, line)) == -2) {
 			printf("Cannot read the file, reopening..\n");
 			if (!alt_up_sd_card_fclose(fileHandler)){
@@ -416,7 +417,7 @@ int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	int start, end, i, iteration;
 	int numOfSongs = 0, fileStats = 0;
 	while (numOfSongs < MAX_SONGS){
-		line = (char*)malloc(sizeof(char)*100);
+		line = (char*)malloc(sizeof(char)*500);
 		if((fileStats = readLine(fileHandler, line)) == -2) {
 			printf("File cannot be read, reopening...\n");
 			if (!alt_up_sd_card_fclose(fileHandler)){
@@ -537,3 +538,182 @@ void removeCurrPlaying(int index) {
 	}
 	db.total_songs_playing--;
 }
+
+/*
+ * Saves all changes related to songs and playlists to SDCard
+ * Called before quitting the app
+ * */
+void saveAllUpdatesToSDBeforeQuits(){
+	saveListChangesToSD(0);
+	saveListChangesToSD(1);
+}
+
+/*
+ * Reads the content of db.index_list_song/db.index_list_order
+ * (depends on param) and writes it to corresponding file
+ * if param is 0, then function will read from db.index_list_song and
+ * updates LSONG.TXT.
+ * if param is 1, then function will read from db.idnex_list_order and
+ * updates LORDER.TXT
+ *
+ * LSONG.TXT will contain information regarding which songs belong to
+ * each playlist.
+ * LORDER.TXT will contain have id of each playlist along with their songs
+ * in correct order.
+ * */
+// TODO: simplify this function :(
+void saveListChangesToSD(int param){
+
+	int fileHandler;
+	char* fileName = NULL;
+
+	if (param == 0){
+		fileName = LISTSONGFILE;
+	} else if (param == 1){
+		fileName = LISTORDERFILE;
+	} else {
+		printf("Incorrect parameter value.\n");
+		return;
+	}
+	if ((fileHandler = openFileFromSD(fileName)) < 0){
+		printf("Can't open LSONG.TXT error!\n");
+		return;
+	}
+	int i, j;
+	char line[1024];
+	char temp[5];
+	char* emptyPlaylist = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
+
+	if (param == 0)
+	{
+		for (i = 1; i < MAX_LISTS-1; i++){
+			if (db.playlists[i] != NULL) {
+				sprintf(line, "%d", db.playlists[i]->id);
+				for (j = 1; j < MAX_SONGS; j++){
+					memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
+					sprintf(temp, " %d", db.index_list_song[i][j]);
+					if (strlen(line) >= 1024) {
+						printf("this line has more than 1024 words\n");
+						emptyPlaylist = NULL;
+						return;
+					}
+					strncat(line, temp, strlen(temp));
+				}
+				line[strlen(line)] = '\0';
+				writeLine(fileHandler, line, strlen(line));
+				memset(line, 0, sizeof(line)/sizeof(line[0]));
+			} else {
+				writeLine(fileHandler, emptyPlaylist, strlen(emptyPlaylist));
+			}
+		}
+	}else{
+		for (i = 1; i < MAX_LISTS-1; i++){
+			if (db.playlists[i] != NULL) {
+				sprintf(line, "%d", db.playlists[i]->id);
+				for (j = 1; j < MAX_SONGS; j++){
+					memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
+					sprintf(temp, " %d", db.index_list_order[i][j]);
+					if (strlen(line) >= 1024) {
+						printf("this line has more than 1024 words\n");
+						emptyPlaylist = NULL;
+						return;
+					}
+					strncat(line, temp, strlen(temp));
+				}
+				line[strlen(line)] = '\0';
+				writeLine(fileHandler, line, strlen(line));
+				memset(line, 0, sizeof(line)/sizeof(line[0]));
+			} else {
+				writeLine(fileHandler, emptyPlaylist, strlen(emptyPlaylist));
+			}
+		}
+	}
+	emptyPlaylist = NULL;
+	fileName = NULL;
+	if (!alt_up_sd_card_fclose(fileHandler)){
+		printf("file is not closed properly.\n");
+		return;
+	}
+}
+
+/*
+ * After all playlists are loaded to database,
+ * initialize each playlist with the correct songs that belong to
+ * that playlist.
+ * This information is stored in LORDER.TXT
+ * */
+void preloadSongsToPlaylist(){
+	int fileHandler;
+	if ((fileHandler = openFileFromSD(LISTORDERFILE)) < 0){
+		printf("Can't open file LORDER.TXT error!\n");
+		return;
+	}
+
+	char* line = NULL;
+	int i, fileStats;
+
+	i = 0;
+	while (i < 50){
+		line = (char*)malloc(sizeof(char)*500);
+		fileStats = readLine(fileHandler, line);
+		if (fileStats == -2){
+			printf("LORDER.TXT cannot be read, reopening...\n");
+			if (!alt_up_sd_card_fclose(fileHandler)){
+				printf("File is not closed properly.\n");
+			}
+			free(line);
+			line = NULL;
+			break;
+		} else if (fileStats == -1){
+			free(line);
+			line = NULL;
+			break;
+		} else {
+			initializeListWithSongs(line);
+			free(line);
+			i++;
+		}
+	}
+	line = NULL;
+	if (!alt_up_sd_card_fclose(fileHandler)){
+		printf("file is not closed properly.\n");
+		return;
+	}
+}
+
+/*
+ * Parses a string that contains playlist & songs that
+ * belong to that playlist, load all songs to the playlist
+ * in correct order.
+ * */
+void initializeListWithSongs(char* input){
+
+	char line[1024];
+	char temp[1024];
+	int i, list_id, song_id, cursorPos;
+	int iteration = 0;
+	memset(line, 0, sizeof(line)/sizeof(line[0]));
+	strcpy(line, input);
+	for (i = 0; i < strlen(input); i++){
+		if (line[i] == ' '){
+			memset(temp, 0, sizeof(temp)/sizeof(temp[0]));
+			if (iteration == 0){
+				cursorPos = i+1;
+				strncpy(temp, line, cursorPos);
+				iteration++;
+				list_id = strtol(temp, NULL, 10);
+				printf("List id is %d\n", list_id);
+				if (list_id == 0){ break;}
+			} else {
+				strncpy(temp, line+cursorPos, i-cursorPos+1);
+				cursorPos = i;
+				song_id = strtol(temp, NULL, 10);
+				if (song_id == 0) { break;}
+				printf("Song ID is %d\n", song_id);
+				addSongToList(list_id, song_id);
+			}
+		}
+	}
+}
+
+

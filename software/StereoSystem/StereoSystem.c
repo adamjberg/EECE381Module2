@@ -28,6 +28,8 @@ int main()
 	initDatabase();
 	//dBTester();
 
+
+
 	//syncCreateSong("LONE", 0);
 	/*createSong("BOING.WAV", 0);
 	createSong("DINGDING.WAV", 0);
