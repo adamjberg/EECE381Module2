@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Mix {
 	
 	private String name = "The Mix";
-	private ArrayList<Clip> usedClips = new ArrayList();
+	private ArrayList<Clip> usedClips = new ArrayList<Clip>();
 	
 	public Mix(){
 		
@@ -16,20 +16,24 @@ public class Mix {
 	}
 	
 	//TODO implement and design functions
-	public static void setUP(Clip a){
+	
+	public void removeAllInstanceOf(int index){
 		
+		usedClips.get(index).wipePlayData();
 	}
 	
+	//TODO make segment
 	public static Clip makeNewSegment(){
 		return new Clip();
 	}
 	
 	public void deleteClip(int index){
-		
+		usedClips.remove(index);
 	}
 	
 	public void repeatClip(int index, int times){
 		//TODO repeat
+		usedClips.get(index).setToPlayAt(24);
 	}
 	
 	public void addClip(Clip a){

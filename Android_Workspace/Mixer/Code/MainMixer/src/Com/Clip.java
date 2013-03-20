@@ -96,5 +96,10 @@ public class Clip {
 		Clip temp = (other.length>this.length) ? other : this;
 		return temp;
 	}
+	
+	public void wipePlayData(){
+		numberOfPlays = 0;
+		startTimes.clear();
+	}
 
 }
