@@ -6,6 +6,9 @@
  */
 #include "Song.h"
 
+#define LENGTH_OF_FADE_PERCENT 0.2
+#define MAX_FADE_LENGTH 2500
+
 struct Song* initSong(char* songname) {
 	struct Song* this = (struct Song*)malloc(sizeof(struct Song));
 	setSongName(this, songname);
@@ -64,8 +67,12 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 	this->volume = (int)volume;
 	if(this->sound == NULL)
 		loadSong(this);
-	setFadeInLength(this->sound, 0);
-	setFadeOutLength(this->sound, 0);
+	int fadeLength = (int) (getLength(this) * LENGTH_OF_FADE_PERCENT);
+	if(fadeLength > MAX_FADE_LENGTH) {
+		fadeLength = MAX_FADE_LENGTH;
+	}
+	setFadeInLength(this->sound, fadeLength);
+	setFadeOutLength(this->sound, fadeLength);
 	playSound(this->sound, volume, startTime, loops);
 	db.curr_song_ids[db.total_songs_playing++] = this->id;
 	//song_id_lock = 0;
