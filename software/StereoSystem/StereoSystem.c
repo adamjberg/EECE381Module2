@@ -51,6 +51,7 @@ int main()
 	update();
 
 	enableAudioDeviceController();
+	initPushKeyController();
 
 	//playSong(db.songs[5], 1, 0, 0);
 	while(1) {
