@@ -33,7 +33,7 @@ public class Mix {
 	
 	public void repeatClip(int index, int times){
 		//TODO repeat
-		usedClips.get(index).setToPlayAt(24);
+		usedClips.get(index).setToPlayAt(usedClips.get(index).getLength());
 	}
 	
 	public void addClip(Clip a){
@@ -47,6 +47,11 @@ public class Mix {
 		return new Clip();
 	}
 	
+	public void saveMix(){
+		//TODO DE2 implement
+		
+	}
+
 	
 	
 }
