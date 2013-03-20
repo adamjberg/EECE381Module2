@@ -49,9 +49,11 @@ public class CmdScheduler {
 				break;
 			case 6:
 				Command.next(Integer.valueOf(cmd.getParameterList().get(0)));
+				Log.i("COMMAND", "NEXT: "+cmd.getParameterList().get(0));
 				break;
 			case 7:
 				Command.prev(Integer.valueOf(cmd.getParameterList().get(0)));
+				Log.i("COMMAND", "PREV: "+cmd.getParameterList().get(0));
 				break;
 			case 8:
 				Command.createPlaylist(cmd.getParameterList().get(0));

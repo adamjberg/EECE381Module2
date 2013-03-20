@@ -23,6 +23,9 @@ public class play extends Activity {
 	TextView greetMsg;
 	TextView textview;
 	SeekBar seekbar;
+	SeekBar seekbar2;
+	private int seek;
+	private boolean user;
 	private Communication com = Communication.getInstance();
 @Override
 public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public void onCreate(Bundle savedInstanceState) {
         this.getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 	addBarSsound();
+	addBarSeek();
 	greetMsg = (TextView) findViewById(R.id.textView1);
 	Intent i = getIntent();
 	String uname = (String) i.getSerializableExtra("USERNAME");
@@ -99,14 +103,21 @@ public void onPauseButton(View view) {
 
 public void onNext(View view) {
 	if(com.getDB().getCurr_song_id() >= com.getDB().getTotalSongs()) return;
-	if(com.getDB().getCurr_playlist_id() == 0)
+	if(com.getDB().getCurr_playlist_id() == 0) {
 		greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSongName());
+		seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSize());
+		seekbar2.setProgress(0);
+	}
 	Command.syncNext(com.getDB().getCurr_song_id());
 }
 
 public void onPrev(View view) {
 	if(com.getDB().getCurr_song_id() <=1) return;
-	greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSongName());
+	if(com.getDB().getCurr_playlist_id() == 0) {
+		greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSongName());
+		seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSize());
+		seekbar2.setProgress(0);
+	}
 	Command.syncPrev(com.getDB().getCurr_song_id());
 }
 private void addBarSsound(){  
@@ -126,5 +137,47 @@ private void addBarSsound(){
        public void onStartTrackingTouch(SeekBar seekBar) {}
        @Override
        public void onStopTrackingTouch(SeekBar seekBar) {}}
-   );}
+   );
+  }
+private void addBarSeek(){  
+	//textview= (TextView)  findViewById(R.id.textView7);
+	seekbar2 = (SeekBar) findViewById(R.id.seekBar2);
+	//seek_textview = (TextView) findViewById(R.id.textView10);
+	if(com.getDB().getCurr_song_id() != 0)
+		seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());
+		
+		//seek_textview.setText(""+ com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize() *1000);}
+	else
+	{
+		seekbar2.setMax(0);
+		//seek_textview.setText(""+0);	
+	}
+	seekbar2.setProgress(0);
+	
+	//seekbar.setProgress(c+1);
+	seekbar2.setOnSeekBarChangeListener( new OnSeekBarChangeListener(){
+		@Override 
+		public void onProgressChanged(SeekBar seekBar, int progress,
+									  boolean fromUser) {
+			if (fromUser){
+				user =fromUser;
+				//seek_textview.setText(""+progress);
+				seek=progress;
+			}
+			//seek_textview.setText(""+progress);
+			
+			
+		}
+		
+		
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {}
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {		
+				if(com.getDB().getCurr_song_id() != 0)
+					Command.syncPlay(com.getDB().getCurr_song_id(), 1, seek);           }
+			
+		}
+											);
+	}
 }

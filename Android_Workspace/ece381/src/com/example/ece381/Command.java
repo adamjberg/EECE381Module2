@@ -80,7 +80,8 @@ public class Command {
 	
 	static public void pause(int id) {
 		Communication com = Communication.getInstance();
-		com.getDB().getCurrSongsIds().remove(Integer.valueOf(id));
+		if(com.getDB().getCurrSongsIds().contains(Integer.valueOf(id)))
+			com.getDB().getCurrSongsIds().remove(Integer.valueOf(id));
 		
 	}
 	
