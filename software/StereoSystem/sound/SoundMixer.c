@@ -21,7 +21,7 @@ void initSoundMixer() {
 }
 
 void setGlobalVolume(float volume) {
-	soundMixer->sound->volume = volume;
+	setSoundVolume(soundMixer->sound, volume);
 }
 
 void clearSoundMixer() {
