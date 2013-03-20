@@ -3,13 +3,16 @@ package Com;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class Mixer extends Activity{
+public class MixerActivity extends Activity{
+	private static Mix theMix;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		
-		Mix theMix = new Mix();
+		theMix = new Mix();
 		
 	}
+	
+	
 	
 	
 }

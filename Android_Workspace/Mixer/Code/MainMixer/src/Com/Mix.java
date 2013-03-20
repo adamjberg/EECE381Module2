@@ -6,19 +6,20 @@ public class Mix {
 	
 	private String name = "The Mix";
 	private ArrayList<Clip> usedClips = new ArrayList<Clip>();
+	private int timeLine;
 	
 	public Mix(){
-		
+		timeLine = 0;
 	}
 	
 	public Mix(String name){
 		this.name = name;
+		timeLine = 0;
 	}
 	
 	//TODO implement and design functions
 	
 	public void removeAllInstanceOf(int index){
-		
 		usedClips.get(index).wipePlayData();
 	}
 	
@@ -37,7 +38,7 @@ public class Mix {
 	}
 	
 	public void addClip(Clip a){
-		if(usedClips.size() < 8){
+		if(usedClips.size() <= 4){
 			usedClips.add(a);
 		}
 	}
@@ -51,7 +52,22 @@ public class Mix {
 		//TODO DE2 implement
 		
 	}
-
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public void seekTime(int time){
+		timeLine= time;
+	}
+	
+	public ArrayList <Clip> listContents(){
+		return (ArrayList<Clip>) usedClips.clone();
+	}
+	
+	public void setUp(){
+		//Iterate thro usedclips and set up the timeline
+	}
+	
 	
 	
 }
