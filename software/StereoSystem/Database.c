@@ -33,7 +33,7 @@ void initDatabase() {
 	} temp = NULL;
 	loadListsFromSD();
 	loadSongsFromSD();
-	preloadSongsToPlaylist();
+	//preloadSongsToPlaylist();
 }
 
 void update() {
@@ -532,11 +532,11 @@ int isCurrPlaying(int song_id) {
 }
 
 void removeCurrPlaying(int index) {
+	db.total_songs_playing--;
 	int i = index;
 	while(db.curr_song_ids[i] != 0) {
 		db.curr_song_ids[i] = db.curr_song_ids[++i];
 	}
-	db.total_songs_playing--;
 }
 
 /*
@@ -701,12 +701,14 @@ void initializeListWithSongs(char* input){
 				cursorPos = i+1;
 				strncpy(temp, line, cursorPos);
 				iteration++;
+				temp[cursorPos] = '\0';
 				list_id = strtol(temp, NULL, 10);
 				printf("List id is %d\n", list_id);
 				if (list_id == 0){ break;}
 			} else {
 				strncpy(temp, line+cursorPos, i-cursorPos+1);
 				cursorPos = i;
+				temp[i-cursorPos+1] = '\0';
 				song_id = strtol(temp, NULL, 10);
 				if (song_id == 0) { break;}
 				printf("Song ID is %d\n", song_id);

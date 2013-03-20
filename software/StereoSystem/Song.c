@@ -74,8 +74,8 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 void pauseSong(struct Song* this) {
 	int index;
 	if((index = isCurrPlaying(this->id)) < 0) return;
-	pauseSound(this->sound);
 	removeCurrPlaying(index);
+	pauseSound(this->sound);
 }
 
 void resumeSong(struct Song* this) {

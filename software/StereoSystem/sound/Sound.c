@@ -15,7 +15,7 @@
  * in the sound buffer
  */
 unsigned int convertFromMS(struct Sound* this, unsigned int value) {
-	return (unsigned int) (value * DEFAULT_SAMPLE_RATE);
+	return (unsigned int) (value * DEFAULT_SAMPLE_RATE/1000);
 }
 
 /**
@@ -317,7 +317,7 @@ void seekSound(struct Sound* this, unsigned int position) {
 }
 
 void playSound(struct Sound* sound, float volume, int startTime, int loops) {
-	sound->position = startTime;
+	seekSound(sound, startTime);
 	sound->volume = volume;
 	sound->playing = true;
 	sound->loops = loops;

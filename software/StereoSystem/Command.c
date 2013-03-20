@@ -43,10 +43,16 @@ void killCmd(struct Command** this) {
  * It will also put command to scheduler
  */
 void syncPlay(int id, int vol, int pos) {
-	char temp[3][4];
-	sprintf(temp[0], "%d", id);
-	sprintf(temp[1], "%d", vol);
-	sprintf(temp[2], "%d", pos);
+	char* temp[3];
+	char tempId[4];
+	char tempVol[4];
+	char tempPos[4];
+	sprintf(tempId, "%d", id);
+	sprintf(tempVol, "%d", vol);
+	sprintf(tempPos, "%d", pos);
+	temp[0] = tempId;
+	temp[1] = tempVol;
+	temp[2] = tempPos;
 	struct Command* cmd = initCmd(1, 3, temp);
 	send(cmd, CMD);
 	addCmd(com.scheduler, (struct Command*)cmd);
@@ -228,9 +234,13 @@ void syncDBFinish() {
 }
 
 void syncAddSongToList(int list_id, int song_id) {
-	char temp[2][4];
-	sprintf(temp[0], "%d", list_id);
-	sprintf(temp[1], "%d", song_id);
+	char* temp[2];
+	char templist[4];
+	char tempsong[4];
+	sprintf(templist, "%d", list_id);
+	sprintf(tempsong, "%d", song_id);
+	temp[0] = templist;
+	temp[1] = tempsong;
 	struct Command* cmd = initCmd(13, 2, temp);
 	send(cmd, CMD);
 	addCmd(com.scheduler, cmd);
@@ -250,12 +260,12 @@ void addSongToList(int list_index, int song_index) {
 }
 
 void syncRemoveSongFromList(int list_id, int song_id) {
-	char temp[2][4];
+	/*char temp[2][4];
 	sprintf(temp[0], "%d", list_id);
 	sprintf(temp[1], "%d", song_id);
 	struct Command* cmd = initCmd(14, 2, temp);
 	send(cmd, CMD);
-	addCmd(com.scheduler, cmd);
+	addCmd(com.scheduler, cmd);*/
 }
 void removeSongFromList(int list_id, int song_id) {
 
