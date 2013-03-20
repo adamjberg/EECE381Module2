@@ -48,10 +48,10 @@ public class CmdScheduler {
 			case 5:
 				break;
 			case 6:
-				Log.i("COMMAND", "Next song is selected.");
+				Command.next(Integer.valueOf(cmd.getParameterList().get(0)));
 				break;
 			case 7:
-				Log.i("COMMAND", "previous song is selected.");
+				Command.prev(Integer.valueOf(cmd.getParameterList().get(0)));
 				break;
 			case 8:
 				Command.createPlaylist(cmd.getParameterList().get(0));

@@ -154,6 +154,14 @@ public class Database {
 		this.lists_name.clear();
 	}
 
+	public int[][] getSongOrderFromList() {
+		return this.list_song_order;
+	}
+	
+	public int[][] getSongIdFromOrder() {
+		return this.list_order_song;
+	}
+	
 	public void removeList(int id) {
 		int i;
 		for(i = 1; i <= this.playlists[id].getNum_of_songs(); i++) {

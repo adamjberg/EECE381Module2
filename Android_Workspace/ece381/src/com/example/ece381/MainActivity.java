@@ -168,7 +168,7 @@ public class MainActivity extends Activity {
 		//closeSocket();
 		EditText et = (EditText) findViewById(R.id.MessageText);
 		String msg = et.getText().toString();
-		Command.SyncCreatePlaylist(msg);
+		Command.syncCreatePlaylist(msg);
 	}
 
 	public void closeSocket() {
@@ -201,6 +201,7 @@ private void addListView(){
          public void onItemClick(AdapterView<?> parent, View view, int position,
                  long id) {
         	 com.getDB().setCurr_song_id(position+1);
+        	 com.getDB().setCurr_playlist_id(0);
          	 Intent i = new Intent(MainActivity.this,play.class);
          	 String item = ((TextView)view).getText().toString();
          	 i.putExtra("USERNAME", item);

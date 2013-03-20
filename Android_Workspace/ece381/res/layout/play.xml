@@ -43,7 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageButton4"
         android:layout_toRightOf="@+id/imageButton4"
-        android:src="@android:drawable/ic_media_ff" />
+        android:onClick="onNext"
+        android:src="@android:drawable/ic_media_next" />
 
     <ImageButton
         android:id="@+id/imageButton1"
@@ -63,6 +64,7 @@
         android:layout_alignTop="@+id/imageButton1"
         android:layout_marginLeft="24dp"
         android:layout_toRightOf="@+id/textView7"
-        android:src="@android:drawable/ic_media_rew" />
+        android:onClick="onPrev"
+        android:src="@android:drawable/ic_media_previous" />
 
 </RelativeLayout>

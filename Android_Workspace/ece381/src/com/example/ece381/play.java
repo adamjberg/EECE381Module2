@@ -39,10 +39,10 @@ public void onCreate(Bundle savedInstanceState) {
 	greetMsg = (TextView) findViewById(R.id.textView1);
 	Intent i = getIntent();
 	String uname = (String) i.getSerializableExtra("USERNAME");
-	if(uname == null)
+	if(com.getDB().getCurr_song_id() == 0)
 		greetMsg.setText("No song has been selected");
 	else
-		greetMsg.setText("playing "+ uname);
+		greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSongName());
 
 }
 
@@ -95,6 +95,19 @@ public void onPlay(View view){
 public void onPauseButton(View view) {
 	if(com.getDB().getCurr_song_id() != 0)
 		Command.syncPause(com.getDB().getCurr_song_id());
+}
+
+public void onNext(View view) {
+	if(com.getDB().getCurr_song_id() >= com.getDB().getTotalSongs()) return;
+	if(com.getDB().getCurr_playlist_id() == 0)
+		greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSongName());
+	Command.syncNext(com.getDB().getCurr_song_id());
+}
+
+public void onPrev(View view) {
+	if(com.getDB().getCurr_song_id() <=1) return;
+	greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSongName());
+	Command.syncPrev(com.getDB().getCurr_song_id());
 }
 private void addBarSsound(){  
 	textview= (TextView)  findViewById(R.id.textView7);
