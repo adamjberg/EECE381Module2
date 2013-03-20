@@ -13,6 +13,8 @@ public class MixerActivity extends Activity{
 	}
 	
 	
-	
+	public void UI() {
+		
+	}
 	
 }
