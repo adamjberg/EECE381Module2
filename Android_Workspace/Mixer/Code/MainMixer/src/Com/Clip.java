@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 
 public class Clip {
-	private int iD;
 	private String name;
 	private int numberOfPlays = 0;
 	private ArrayList<Integer> startTimes = new ArrayList<Integer>();
@@ -19,28 +18,24 @@ public class Clip {
 	
 	//defualt constructor
 	public Clip(){
-		iD = 0;
 		name= "default";
 		numberOfPlays = 0;
 	}
 	
 	//constructor with name and length of song
 	public Clip(String name, int length){
-		iD = 0;
 		this.name = name;
 		this.length = length;
 	}
 	
 	//conctructor to add 2 clips together
 	public Clip(Clip a, Clip b){
-		iD= 0;
 		name = "new appended clip";
 		length =a.length + b.length;
 	}
 	
 	//constructor to make a new sub clip 
 	public Clip(Clip a, int start, int end){
-		iD= 0;
 		name = "newsubclip";
 		length = end - start;
 	}
@@ -96,5 +91,30 @@ public class Clip {
 		Clip temp = (other.length>this.length) ? other : this;
 		return temp;
 	}
+	
+	public void wipePlayData(){
+		numberOfPlays = 0;
+		startTimes.clear();
+	}
 
+	public int getLength() {
+		return length;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public void setName(String newName){
+		name = newName;
+	}
+	
+	public ArrayList<Integer> TimesUsed(){
+		return (ArrayList<Integer>) startTimes.clone();
+	}
+	
+	public void changePlayTime(int index, int time){
+		startTimes.add(index, time);
+		startTimes.remove(index ++);
+	}
 }
