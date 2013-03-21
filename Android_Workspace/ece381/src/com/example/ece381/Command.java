@@ -92,7 +92,10 @@ public class Command {
 		com.getSched().addCmd(cmd);
 	}
 	static public void stop() {
-		
+		Communication com = Communication.getInstance();
+		if(com.getDB().getCurr_song_id() == 0) return;
+		com.getDB().getSongs()[com.getDB().getCurr_song_id()].setPos(0);
+		com.getDB().getSongs()[com.getDB().getCurr_song_id()].setVolume(100);
 	}
 	//index 4
 	static public void syncSetVol(int id, int vol) {
@@ -112,6 +115,7 @@ public class Command {
 	
 	//index 6
 	static public void syncNext(int song_id) {
+		syncStop();
 		Communication com = Communication.getInstance();
 		Command cmd = new Command(6);
 		cmd.addParameter(String.valueOf(song_id));
@@ -120,16 +124,22 @@ public class Command {
 	}
 	static public void next(int song_id) {
 		Communication com = Communication.getInstance();
+		int next_id = 0;
 		if(com.getDB().getCurr_playlist_id() != 0) {
 			int curr_order =
 					com.getDB().getSongOrderFromList()[com.getDB().getCurr_playlist_id()][song_id];
-			com.getDB().setCurr_song_id(com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order+1]);
+			next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order+1];
 		} else {
-			com.getDB().setCurr_song_id(com.getDB().getCurr_song_id()+1);
+			next_id = com.getDB().getCurr_song_id()+1;
 		}
+		if(next_id == 0) return;
+		com.getDB().setCurr_song_id(next_id);
+		com.getDB().getSongs()[next_id].setPos(0);
+		com.getDB().getSongs()[next_id].setVolume(100);
 	}
 	//index 7
 	static public void syncPrev(int song_id) {
+		syncStop();
 		Communication com = Communication.getInstance();
 		Command cmd = new Command(7);
 		cmd.addParameter(String.valueOf(song_id));
@@ -138,13 +148,18 @@ public class Command {
 	}
 	static public void prev(int song_id) {
 		Communication com = Communication.getInstance();
+		int next_id = 0;
 		if(com.getDB().getCurr_playlist_id() != 0) {
 			int curr_order =
 					com.getDB().getSongOrderFromList()[com.getDB().getCurr_playlist_id()][song_id];
-			com.getDB().setCurr_song_id(com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order-1]);
+			next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order-1];
 		} else {
-			com.getDB().setCurr_song_id(com.getDB().getCurr_song_id()-1);
+			next_id = com.getDB().getCurr_song_id()-1;
 		}
+		if(next_id == 0) return;
+		com.getDB().setCurr_song_id(next_id);
+		com.getDB().getSongs()[next_id].setPos(0);
+		com.getDB().getSongs()[next_id].setVolume(100);
 	}
 	// index 8	
 	static public void syncCreatePlaylist(String list_name) {

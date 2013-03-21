@@ -79,7 +79,6 @@ void syncPause(int id) {
 //pause current play song; index 2
 void pause(int id) {
 	pauseSong(db.songs[id]);
-	printf("The music is paused.\n");
 }
 /*
  * Function to call when need to sync with Android
@@ -92,7 +91,7 @@ void syncStop() {
 }
 //index 3
 void stop() {
-	printf("The song is stoped.\n");
+	stopSong(db.songs[db.curr_song_id]);
 }
 
 void syncSetVol(int id, int vol) {

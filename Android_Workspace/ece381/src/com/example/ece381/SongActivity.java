@@ -6,9 +6,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
@@ -41,11 +45,16 @@ public class SongActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		 getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+	 }
     setContentView(R.layout.activity_song);
-
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        // Show the Up button in the action bar.
+        this.getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
     // Get the passed in playlist name
     selected_pl_name = getIntent().getExtras().getString("selected_pl_name");
-    Log.v("selected_pl_name", selected_pl_name);
     
     // Find the ListView resource. 
     songListView = (ListView) findViewById( R.id.songListView );
@@ -127,26 +136,46 @@ public class SongActivity extends Activity {
 	  refreshSonglist();
   }
   
-  
+ @Override
+ public boolean onCreateOptionsMenu(Menu menu) {
+ 	getMenuInflater().inflate(R.menu.activity_main, menu);
+ 	return true;
+ }
+
+ @Override
+ public boolean onOptionsItemSelected(MenuItem item) {
+	  // TODO Auto-generated method stub
+	  switch(item.getItemId()){
+	  case android.R.id.home:
+	 	 finish();
+	     // NavUtils.navigateUpFromSameTask(this);
+	 	 // onBackPressed();
+	      return true;
+	  case R.id.songs:
+		  Intent intentsong = new Intent(SongActivity.this, MainActivity.class);
+		  startActivity(intentsong);
+	 	  return true;
+	  case R.id.menu_settings:
+	 	  Toast.makeText(SongActivity.this,
+	 	    item.getTitle(),
+	 	     Toast.LENGTH_LONG).show();
+	 	  return true;
+	  case R.id.playlists:
+		  finish(); 
+	 	  return true;
+	  case R.id.playMenu:
+		  Intent intent = new Intent(SongActivity.this, play.class);
+		  startActivity(intent);   
+	 	  return true;
+	  }
+	  return super.onOptionsItemSelected(item);
+  } 
   public void refreshSonglist() {
 	  	listAdapter.clear();
 	    // "add a song" button
 	  	listAdapter.add(addsong);
-	    
-	  	// Add the songs of the playlist to the adapter
-	  	
-	  	int listid = db.queryListByName(selected_pl_name);
-	  	
-	  	if(db.getPlaylists()[listid].getNum_of_songs() > 0) {
-	  	
-	  		for(int i = 1; i <= db.getPlaylists()[listid].getNum_of_songs(); i++) {
-	  			
-	  			if(db.getSongsFromList(listid)[i] > 0) {
-		  			listAdapter.add(String.format("%d",db.getSongsFromList(listid)[i]) );
-		  		}
-	  		}
-	  	}
-	  	
+	  	listAdapter.addAll(db.querySongsBylist(db.getCurr_playlist_id()));
+	 
 	  	// refresh adapter
 	    listAdapter.notifyDataSetChanged();
   }

@@ -30,6 +30,7 @@ public class Database {
 		this.songs = new Song[MAX_SONGS];
 		this.avail_list_index = new ConcurrentLinkedQueue<Integer>();
 		this.curr_song_ids = new ConcurrentLinkedQueue<Integer>();
+		this.curr_song_id = 0;
 		this.avail_list_index.clear();
 		this.used_list_index = new int[MAX_LISTS];
 		this.list_order_song = new int[MAX_LISTS][MAX_SONGS];
@@ -41,10 +42,33 @@ public class Database {
 			this.avail_list_index.add(Integer.valueOf(i));
 		}
 	}
+	public void clear() {
+		int i, j;
+		for(i = 0; i < MAX_LISTS; i++) {
+			this.playlists[i] = null;
+			for(j = 0; j < MAX_SONGS; j++) {
+				this.list_order_song[i][j] = 0;
+				this.list_song_order[i][j] = 0;
+			}
+			this.used_list_index[i] = 0;
+		}
+		this.avail_list_index.clear();
+		for(i = 1; i < MAX_LISTS; i++) {
+			this.avail_list_index.add(Integer.valueOf(i));
+		}
+		for(j = 0; j < MAX_SONGS; j++) {
+			this.songs[j] = null;
+ 		}
+		this.setCurr_playlist_id(0);
+		this.num_of_lists = this.num_of_songs = this.curr_song_id = 0;
+		this.curr_song_ids.clear();
+		this.songs_name.clear();
+		this.lists_name.clear();
+	}	
 	
 	public int queryListByName(String list_name) {
 		int i = 1;
-		while(i <= this.num_of_lists) {
+		while(i <= MAX_LISTS) {
 			if(this.used_list_index[i] == 1) {
 				if(this.playlists[i].getListName().equals(list_name)) {
 					return i;
@@ -88,6 +112,17 @@ public class Database {
 		int i;
 		for(i = 1; i<= size; i++) {
 			result[i] = (String)this.songs[this.list_order_song[list_id][i]].getSongName();
+		}
+		return result;
+	}
+	
+	public String[] querySongsBylist(int list_id) {
+		if(this.used_list_index[list_id] == 0 || this.playlists[list_id].getNum_of_songs() == 0) return new String[0];
+		int num_of_songs = this.playlists[list_id].getNum_of_songs();
+		String result[] = new String[num_of_songs];
+		int i;
+		for(i = 1; i <= num_of_songs; i++) {
+			result[i-1] = this.songs[this.list_order_song[list_id][i]].getSongName();
 		}
 		return result;
 	}
@@ -137,30 +172,6 @@ public class Database {
 
 	public Playlist[] getPlaylists() {
 		return playlists;
-	}
-	
-	public void clear() {
-		int i, j;
-		for(i = 0; i < MAX_LISTS; i++) {
-			this.playlists[i] = null;
-			for(j = 0; j < MAX_SONGS; j++) {
-				this.list_order_song[i][j] = 0;
-				this.list_song_order[i][j] = 0;
-			}
-			this.used_list_index[i] = 0;
-		}
-		this.avail_list_index.clear();
-		for(i = 1; i < MAX_LISTS; i++) {
-			this.avail_list_index.add(Integer.valueOf(i));
-		}
-		for(j = 0; j < MAX_SONGS; j++) {
-			this.songs[j] = null;
- 		}
-		this.setCurr_playlist_id(0);
-		this.num_of_lists = this.num_of_songs = this.curr_song_id = 0;
-		this.curr_song_ids.clear();
-		this.songs_name.clear();
-		this.lists_name.clear();
 	}
 
 	public int[][] getSongOrderFromList() {

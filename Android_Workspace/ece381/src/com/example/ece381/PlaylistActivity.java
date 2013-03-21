@@ -83,10 +83,9 @@ public class PlaylistActivity extends Activity {
     		else {
     			// Make an intent and start the Activity to view the songs of the playlist
     			
-    			db.setCurr_playlist_id(db.queryListByName(selected));
+    			Command.syncSelectList(db.queryListByName(selected));
     			intent = new Intent(getApplicationContext(), SongActivity.class);
-    			String selected_pl_name = selected;
-    			intent.putExtra("selected_pl_name", selected_pl_name);
+    			intent.putExtra("selected_pl_name", selected);
     		}
 			startActivity(intent); // get the playlist id back
     	}
@@ -146,7 +145,8 @@ public class PlaylistActivity extends Activity {
   	 // onBackPressed();
        return true;
    case R.id.songs:
-  	  finish();
+	  Intent intentsong = new Intent(PlaylistActivity.this, MainActivity.class);
+	  startActivity(intentsong);
   	  return true;
    case R.id.menu_settings:
   	  Toast.makeText(PlaylistActivity.this,
