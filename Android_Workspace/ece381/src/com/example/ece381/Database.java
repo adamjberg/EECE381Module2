@@ -202,7 +202,7 @@ public class Database {
 	}
 
 	public void setCurr_playlist_id(int curr_playlist_id) {
-		if(curr_playlist_id <= 0) return;
+		if(curr_playlist_id < 0) return;
 		this.curr_playlist_id = curr_playlist_id;
 	}
 	

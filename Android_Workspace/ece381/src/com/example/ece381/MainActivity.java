@@ -522,7 +522,7 @@ private void addListView(){
 							byte header[] = new byte[2];
 							in.read(header, 0, 2);		
 							while((int)header[1] != bytes_avail) {
-								Log.i("WARNING", "received bytes not match");
+								//Log.i("WARNING", "received bytes not match");
 								bytes_avail = in.available()+2;
 							}
 							byte buf[] = new byte[bytes_avail];
