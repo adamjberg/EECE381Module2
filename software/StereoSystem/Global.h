@@ -15,6 +15,8 @@
 #include "altera_up_avalon_audio.h"
 #include <alt_types.h>
 #include <altera_up_sd_card_avalon_interface.h>
+#include "altera_up_avalon_video_pixel_buffer_dma.h"
+#include "altera_up_avalon_video_character_buffer_with_dma.h"
 
 #include "sys/alt_stdio.h"
 #include "sys/alt_irq.h"
@@ -37,6 +39,7 @@
 #include "sound/Sound.h"
 #include "sound/AudioDeviceController.h"
 #include "PushKeyController.h"
+#include "Graphic.h"
 
 #define HEADERSIZE 2
 #define SPACE 32
@@ -44,6 +47,8 @@
 
 extern alt_alarm alarm;
 extern struct alt_up_dev up_dev;
+extern alt_up_pixel_buffer_dma_dev* pixel_buffer;
+extern alt_up_char_buffer_dev* char_buffer;
 extern struct RS232 com;
 extern int queue_lock;
 extern struct database db;

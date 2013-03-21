@@ -24,9 +24,9 @@ int main()
 		printf("SD card is not connected.\n");
 	}
 
+	initVGA();
 
 	initDatabase();
-	//dBTester();
 
 	initAudioDeviceController();
 	initSoundMixer();
@@ -43,6 +43,7 @@ int main()
 	enableAudioDeviceController();
 	initPushKeyController();
 
+	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 27);
 	while(1) {
 		cmdProcessing(scheduler);
 	}
