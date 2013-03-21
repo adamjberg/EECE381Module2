@@ -48,19 +48,20 @@ public class PlaylistBuilderActivity extends FragmentActivity {
 		//Toast.makeText(this, "Playlist created", Toast.LENGTH_SHORT).show();
 		
 		// create a new playlist with the name entered
-		Playlist new_pl = new Playlist(selectedValue); 
-		db.addList(new_pl);
+		Command.syncCreatePlaylist(selectedValue);
+	//	Playlist new_pl = new Playlist(selectedValue); 
+		//db.addList(new_pl);
 		
 		// find the playlist id
 		//	int plid = getSelectedPlaylistId(selectedValue);
-		   int plid = db.queryListByName(selectedValue) ;
-		   db.setCurr_playlist_id(plid);
+		 //  int plid = db.queryListByName(selectedValue) ;
+		  // db.setCurr_playlist_id(plid);
 		   // Log plid
-	       Log.d("setCurr_plid: ", ""+plid); 
+	       //Log.d("setCurr_plid: ", ""+plid); 
 	       
 		// return to PlaylistActivity
 		Intent returnIntent = new Intent();
-		returnIntent.putExtra("PLid", plid);
+		//returnIntent.putExtra("PLid", plid);
 		setResult(RESULT_OK, returnIntent);
 		this.finish(); 
 		
