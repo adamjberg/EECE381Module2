@@ -7,6 +7,7 @@ public class Mix {
 	private String name = "The Mix";
 	private ArrayList<Clip> usedClips = new ArrayList<Clip>();
 	private int timeLine;
+	private int length;
 	
 	public Mix(){
 		timeLine = 0;
@@ -64,8 +65,10 @@ public class Mix {
 		return (ArrayList<Clip>) usedClips.clone();
 	}
 	
-	public void setUp(){
-		//Iterate thro usedclips and set up the timeline
+	public int lengthOf(){
+		//Iterate thro usedclips and set up the timeline and length
+		
+		return length;
 	}
 	
 	

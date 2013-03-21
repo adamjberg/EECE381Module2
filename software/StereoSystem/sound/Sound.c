@@ -43,44 +43,45 @@ unsigned int getSoundLengthMS(struct Sound* this) {
 }
 
 /**
- * Resample the sound using linear interpolation
- * @param this sound to resample
+ * Loads the sound using linear interpolation to convert to correct sample rate
+ * TODO: The quality of linear interpolation is very poor, we may want to look into
+ * a different kind of interpolation.
+ *
+ * @param filePointer - current filePointer
+ * @param srcLength - Length of wav file
  * @param toSampleRate - sampling rate to convert to
  * @param fromSampleRate - current sound sample rate
  */
-void linearResample(struct Sound* this, int toSampleRate, int fromSampleRate) {
-
-	if (toSampleRate == fromSampleRate) {
-		return;
-	}
-
+struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength, int toSampleRate, int fromSampleRate) {
 	int i = 0;
-	unsigned int srcLength = this->length;
-	unsigned int destLength = srcLength * toSampleRate / fromSampleRate;
+	int destLength = ((double) srcLength * toSampleRate) / fromSampleRate;
 	double dx = (double) srcLength / destLength;
 	double x = 0;
-	unsigned int currentIndex;
+	int currentIndex = 0;
+	int lastIndex = -1;
+	int numRead = 1;
+	int currVal, nextVal = readInt(filePointer, bytesPerSample);
 
-	unsigned int *new_buffer =
-			(unsigned int *) malloc(sizeof(int) * destLength);
 	double slope;
 
-	while (i < destLength) {
-		currentIndex = (int) x;
-		slope = (currentIndex < this->length ? this->buffer[currentIndex + 1] : 0 - this->buffer[currentIndex]);
-		new_buffer[i] = slope * (x - currentIndex) + this->buffer[currentIndex];
-		x += dx;
-		i++;
-	}
+	struct Sound* this = initSound(destLength);
 
-	free(this->buffer);
-	this->length = destLength;
-	this->buffer = (unsigned int*) malloc(sizeof(int) * this->length);
-	for (i = 0; i < this->length; i++) {
-		this->buffer[i] = new_buffer[i];
+	for( i = 0; i < destLength; i++ ) {
+		currentIndex = (int) x;
+		if( currentIndex > lastIndex ) {
+			while( currentIndex > lastIndex ) {
+				currVal = nextVal;
+				nextVal = (currentIndex < this->length) ? readInt(filePointer, bytesPerSample) : 0;
+				numRead++;
+				lastIndex++;
+			}
+		}
+		slope = nextVal - currVal;
+		this->buffer[i] = slope * (x - currentIndex) + currVal;
+		x += dx;
+		lastIndex = currentIndex;
 	}
-	free(new_buffer);
-	new_buffer = NULL;
+	return this;
 }
 
 /**
@@ -223,19 +224,14 @@ struct Sound* loadWavSound(char * filename) {
 		index++;
 	}
 
-	sound = initSound(readInt(file_pointer, 4) / bytes_per_sample);
-
-	printf("length: %u\n", sound->length);
-
-	for (i = 0; i < sound->length; i++) {
-		sound->buffer[i] = readInt(file_pointer, bytes_per_sample);
-	}
+	int srcLength = readInt(file_pointer, 4) / bytes_per_sample;
+	printf("length: %u\n", srcLength);
+	sound = loadSoundBuffer(file_pointer, bytes_per_sample, srcLength, DEFAULT_SAMPLE_RATE, sampleRate);
 
 	alt_up_sd_card_fclose(file_pointer);
 	SDIO_lock = 0;
 
 	changeBitsPerSample(sound, DEFAULT_BITS_PER_SAMPLE, bits_per_sample);
-	linearResample(sound, DEFAULT_SAMPLE_RATE, sampleRate);
 
 	printf("Sound loading complete\n");
 
