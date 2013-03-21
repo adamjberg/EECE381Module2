@@ -13,19 +13,7 @@
  * "small_hello_world" template.
  *
  */
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-#include "altera_up_avalon_rs232.h"
-#include "altera_up_avalon_audio.h"
-#include <alt_types.h>
-#include <altera_up_sd_card_avalon_interface.h>
-
-#include "sys/alt_stdio.h"
-#include "sys/alt_irq.h"
-#include "sys/alt_alarm.h"
+#include "Global.h"
 
 
 bool loadSDCard(alt_up_sd_card_dev* device) {
@@ -44,7 +32,7 @@ bool loadSDCard(alt_up_sd_card_dev* device) {
 }
 /**
  * Helper function to read multiple bytes and return the representative int value
- */
+ *//*
 int readInt(int file_pointer, int numBytesToRead) {
 	int ret = 0;
 	int i;
@@ -95,11 +83,11 @@ void loadWavSound(char * filename) {
 
 	alt_up_sd_card_fclose(file_pointer);
 }
-
+*/
 /*
  * A helper function that read a line in a text file, require file pointer and does not close the file
  * Assumption has made that a line does not go over 100 characters
- */
+ *//*
 int readLine(int file_pointer, char* line) {
 	if(line == NULL) return -1;
 	//char temp[100];
@@ -122,12 +110,12 @@ int readLine(int file_pointer, char* line) {
 		return -1;/*
 	char* res = (char*)malloc(sizeof(char)*(i+1));
 	strncpy(res, temp, i+1);*/
-	return 0;
-}
+	/*return 0;
+}*/
 /*
  * A helper function that write a segment of data to SD card and write a LINE FEED at the end
  * it does not close file pointer and require an input of file pointer
- */
+ *//*
 void writeLine(int file_pointer, char* data, int size) {
 	if(data == NULL) return;
 	int i;
@@ -144,10 +132,10 @@ void writeLine(int file_pointer, char* data, int size) {
 	if(!alt_up_sd_card_write(file_pointer, '\n')) {
 		printf("Write a new line ASCII failed\n");
 	}
-}
+}*/
 /*
  * Helper function to open a file from SDCard
- * */
+ * *//*
 int openFileFromSD(char* file){
 	int fileHandler;
 	if (file == NULL) return -2;
@@ -159,26 +147,20 @@ int openFileFromSD(char* file){
 		}
 	}
 	return fileHandler;
-}
+}*/
 int main()
 {
 	alt_up_sd_card_dev *device_reference = NULL;
 		while(!loadSDCard(device_reference)) {
 			printf("SD card is not connected.\n");
 		}
-	/*	int file_pointer = alt_up_sd_card_fopen("WIN.WAV", false);
-		if (file_pointer < 0) {
-			alt_up_sd_card_fclose(file_pointer); //close the file
-			printf("sound file open failed\n");
-		}
-		char data[50000];
-		int i;
-		for(i = 0; i < 50; i++) {
-			data[i] = alt_up_sd_card_read(file_pointer);
-			printf("%d %x\n", i , data[i]);
-		}alt_up_sd_card_fclose(file_pointer);*/
-		loadWavSound("WIN.WAV");
-		loadSongsFromSD();
+		initVGA();
+		int* pic;
+
+		while((pic = loadSDImage("WIN.BMP")) == NULL);
+		draw(60, 0, pic, 240);
+	while(1) {
+	}
   return 0;
 }
 
@@ -186,7 +168,7 @@ int main()
  * Find all .WAV files in SDCard and return their names in an
  * array of strings.
  * Return: array containing names of all .WAV files in SDCard
- * */
+ * *//*
 char** getSongsFromSD(){
 	int fileStatus = 0;
 	char fileName[15];
@@ -214,14 +196,14 @@ char** getSongsFromSD(){
 	songNames[numOfWavFiles] = NULL;
 	return songNames;
 }
-
+*/
 /*
  * Get all songs from SONGS.TXT and add it to DB.
  * It also checks if there exist any songs in SDCard that are newly
  * added and has not been written to SONGS.TXT.
  * Those songs will also get added to DB.
  * */
-
+/*
 int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	int fileHandler;
 	if ((fileHandler = openFileFromSD("SONGS.TXT")) < 0){
@@ -325,12 +307,12 @@ int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	free(songNames);
 	songNames = NULL;
 	return 0;
-}
+}*/
 /*
  * Load songs from SDCARD and added it to DB
  * This also updates the SONGS.TXT if the text file misses
  * any song titles.
- * */
+ * *//*
 void loadSongsFromSD(){
 	char** sdsongs = NULL;
 	sdsongs = getSongsFromSD();
@@ -338,3 +320,4 @@ void loadSongsFromSD(){
 	//while(getAndUpdateSongsFromTxt() != 0);
 
 }
+*/

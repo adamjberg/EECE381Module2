@@ -47,7 +47,6 @@ void initVGA() {
 * Load bitmap image from SD card. Fixed problem with color coding
 * file name is required to be upper-case and bitmap pixels has to be even size x even size
 */
-
 int* loadSDImage(char* filename) {
 	int i, j, bytes = 0, offset = 0, byte = 0;
 	int a, b;
@@ -127,9 +126,8 @@ int* loadSDImage(char* filename) {
 }
 
 void draw(int pos_x, int pos_y, int* img, int size) {
-	if(img == NULL) return;
-	if(pos_x < 0 || pos_y < 0 || pos_x >= 320 || pos_y >= 240) return;
 	int i, j;
+	if(pos_x < 0 || pos_y < 0 || pos_x >= 320 || pos_y >= 240) return;
 		for(i = 0; i < size; i++) {
 			for(j = 0; j < size; j++) {
 				if(*(img + j*size+i) != 0) {

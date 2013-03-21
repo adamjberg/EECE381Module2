@@ -43,8 +43,21 @@ int main()
 	enableAudioDeviceController();
 	initPushKeyController();
 
+	//Test VGA Output
+
+	int* picture = NULL;
+	//draw(60, 0, picture, 240);
 	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 27);
+	while((picture = loadSDImage("WIN.BMP")) == NULL);
+	draw(60, 0, picture, 240);
+
+	if(picture != NULL) {
+		free(picture);
+		picture = NULL;
+	}
+	//Test End
 	while(1) {
+
 		cmdProcessing(scheduler);
 	}
 
