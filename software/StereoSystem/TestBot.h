@@ -12,4 +12,5 @@
 void dBTester();
 void dBTester2();
 void cmdTester();
+void graphicTester();
 #endif /* TESTBOT_H_ */

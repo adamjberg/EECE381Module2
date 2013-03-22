@@ -44,20 +44,15 @@ int main()
 	initPushKeyController();
 
 	//Test VGA Output
-
-	int* picture = NULL;
-	//draw(60, 0, picture, 240);
-	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 27);
-	while((picture = loadSDImage("WIN.BMP")) == NULL);
-	draw(60, 0, picture, 240);
-
-	if(picture != NULL) {
-		free(picture);
-		picture = NULL;
-	}
+	struct Image* testImg;
+	while((testImg = loadSDImage("TEST.BMP")) == NULL);
+	draw(35, 35, testImg);
+	killImage(testImg);
+	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
+	//graphicTester();
 	//Test End
-	while(1) {
 
+	while(1) {
 		cmdProcessing(scheduler);
 	}
 

@@ -6,7 +6,15 @@
  */
 #include "TestBot.h"
 
-
+void graphicTester() {
+	struct Image* picture;
+	int i;
+	for( i = 0; i < 1000; i ++) {
+		while((picture = loadSDImage("WIN.BMP")) == NULL);
+		draw(i%50, 0, picture);
+		killImage(picture);
+	}
+}
 void dBTester() {
 
 	/*int i, j;

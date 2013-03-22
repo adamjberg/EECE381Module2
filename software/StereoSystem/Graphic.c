@@ -44,14 +44,16 @@ void initVGA() {
 }
 
 /*
-* Load bitmap image from SD card. Fixed problem with color coding
-* file name is required to be upper-case and bitmap pixels has to be even size x even size
+* Load bitmap image from SD card.
+* file name is required to be upper-case
+* return Image struct if success; null otherwise
 */
 
-int* loadSDImage(char* filename) {
+struct Image* loadSDImage(char* filename) {
 	int i, j, bytes = 0, offset = 0, byte = 0;
 	int a, b;
 	int height = 0, width = 0;
+	int size = 0, count = 0;
 	char bmpId[3];
 	int* result = NULL;
 	memset(bmpId, 0, 3);
@@ -79,9 +81,9 @@ int* loadSDImage(char* filename) {
 			alt_up_sd_card_fclose(file_pointer);
 			printf("fail reading %s\n", filename);
 			return NULL;
-		} printf("%x ", temp);
+		}
 		bytes++;
-	} printf("\n");
+	}
 
 	if((offset = alt_up_sd_card_read(file_pointer))< 0) {
 		alt_up_sd_card_fclose(file_pointer);
@@ -99,7 +101,15 @@ int* loadSDImage(char* filename) {
 				alt_up_sd_card_fclose(file_pointer);
 				return false;
 			} printf("height: %d\n", height);
-			result = (int*)malloc(sizeof(int)*width*height);
+		} else if(bytes == 34 || bytes == 35 || bytes == 36 || bytes == 37) {
+			if((temp = alt_up_sd_card_read(file_pointer))< 0) {
+				alt_up_sd_card_fclose(file_pointer);
+				return false;
+			}  size += (int)(temp << 8*(count++));
+			if(bytes == 37) {
+				printf("data size: %d\n", size/2);
+				result = (int*)malloc(sizeof(int)*(size/2));
+			}
 		} else if((temp = alt_up_sd_card_read(file_pointer)) < 0) {
 			alt_up_sd_card_fclose(file_pointer);
 			return NULL;
@@ -108,7 +118,7 @@ int* loadSDImage(char* filename) {
 	}
 	//Start reading the pixel data
 	for(j = height-1; j >= 0; j--) {
-		for(i = 0; i < width; i++) {
+		for(i = 0; i < size/2/height; i++) {
 			a = alt_up_sd_card_read(file_pointer);
 			b = alt_up_sd_card_read(file_pointer);
 			if(a < 0 || b < 0) {
@@ -119,21 +129,27 @@ int* loadSDImage(char* filename) {
 				return NULL;
 			}
 			byte = getColor555(b*256+a);
-			*(result + j*height+i) = byte;
+			*(result + j*(width)+i) = byte;
 		}
 	}
 	alt_up_sd_card_fclose(file_pointer);
-	return result;
+	return initImage(result, 0, width, height);
 }
-
-void draw(int pos_x, int pos_y, int* img, int size) {
-	if(img == NULL) return;
-	if(pos_x < 0 || pos_y < 0 || pos_x >= 320 || pos_y >= 240) return;
+/*
+ * This function draw the image and set the previous position for the image
+ */
+void draw(int pos_x, int pos_y, struct Image* this) {
+	if(this == NULL || this->buffer == NULL) return;
+	if(pos_x < 0 || pos_y < 0 || pos_x >= 320 || pos_y >= 240) {
+		printf("draw image out of boundary\n");
+		return;
+	}
+	setImagePos(this, pos_x, pos_y);
 	int i, j;
-		for(i = 0; i < size; i++) {
-			for(j = 0; j < size; j++) {
-				if(*(img + j*size+i) != 0) {
-					IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((pos_y+j)*320+pos_x+i)*2, *(img + j*size+i));
+	for(i = 0; i < this->width; i++) {
+		for(j = 0; j < this->height; j++) {
+			if(*(this->buffer+ j*this->width+i) != 0) {
+				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((pos_y+j)*320+pos_x+i)<<1, *(this->buffer + j*this->width+i));
 			}
 		}
 	}
@@ -146,4 +162,65 @@ int getColor(int red, int green, int blue) {
 int getColor555(int color555) {
 	int color = color555&0x7FFF;
 	return (color&0x7C00)*2+(color&0x03E0)*2+(color&0x1F);
+}
+
+/*
+ * Constructor of Animation; start == 1 if this animation contains the first image
+ * in the sequence;
+ */
+struct Image* initImage(int* img, int start, int width, int height) {
+	struct Image* a;
+	while((a = (struct Image*)malloc(sizeof(struct Image)))==NULL) {printf("memory allocation with aniimation\n");}
+	a->width = width;
+	a->height = height;
+	a->x = a->y = a->prev_x = a->prev_y = 0;
+	a->buffer = img;
+	a->prev = a;
+	a->next = a;
+	a->end = a;
+	if(start > 0)
+		a->first = a;
+	else
+		a->first = NULL;
+	return a;
+}
+
+/*
+ * Destructor;
+ */
+void killImage(struct Image* this) {
+	if(this == NULL) return;
+	if(this->prev != NULL) {
+		this->prev = NULL;
+	}
+	free(this->buffer);
+	this->buffer = NULL;
+	if(this->end != this)
+		killImage(this->next);
+
+	this->next = NULL;
+	this->first = NULL;
+	this->end = NULL;
+	free(this);
+	this = NULL;
+}
+/*
+ * add an image to the animation
+ */
+void addImage(struct Image *curr, struct Image* n) {
+	n->prev = curr->end;
+	curr->end->next = n;
+	curr->end = n;
+	curr->first->prev = n;
+	n->first = curr->first;
+	n->next = curr->first;
+}
+/*
+ * set the position of the image
+ */
+void setImagePos(struct Image* this, int pos_x, int pos_y) {
+	this->prev_x = this->x;
+	this->prev_y = this->y;
+	this->x = pos_x;
+	this->y = pos_y;
 }
