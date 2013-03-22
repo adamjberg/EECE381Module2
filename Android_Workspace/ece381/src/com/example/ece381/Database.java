@@ -69,7 +69,7 @@ public class Database {
 	public int queryListByName(String list_name) {
 		int i = 1;
 		while(i <= MAX_LISTS) {
-			if(this.used_list_index[i] == 1) {
+			if(this.used_list_index[i] == 1) {				
 				if(this.playlists[i].getListName().equals(list_name)) {
 					return i;
 				}
@@ -135,7 +135,9 @@ public class Database {
 		
 		int i;
 		for(i = 0; i < this.num_of_lists; i++) {
-			result[i] = (String) this.lists_name.get(i);
+			if(this.lists_name.get(i) != "") {
+				result[i] = (String) this.lists_name.get(i);
+			}
 		}
 		return result;
 	}
@@ -188,8 +190,9 @@ public class Database {
 			this.list_order_song[id][i] = 0;
 			this.list_song_order[id][i] = 0;
 		}
-
-		this.playlists[id] = null;
+		this.playlists[id].setId(0);
+		this.playlists[id].setNum_of_songs(0);
+		this.playlists[id].setListName("");
 		this.num_of_lists--;
 	}
 	

@@ -5,14 +5,10 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import com.example.ece381.Communication;
-import com.example.ece381.Database;
-import com.example.ece381.Playlist;
+import android.widget.Toast;
 
 public class PlaylistBuilderActivity extends FragmentActivity {
 	
@@ -45,39 +41,20 @@ public class PlaylistBuilderActivity extends FragmentActivity {
 	
 	// Callback method from TextEntryDialog, returning the value of user input
 	public void onUserSelectValue(String selectedValue) {
-		//Toast.makeText(this, "Playlist created", Toast.LENGTH_SHORT).show();
 		
 		// create a new playlist with the name entered
-		Command.syncCreatePlaylist(selectedValue);
-	//	Playlist new_pl = new Playlist(selectedValue); 
-		//db.addList(new_pl);
-		
-		// find the playlist id
-		//	int plid = getSelectedPlaylistId(selectedValue);
-		 //  int plid = db.queryListByName(selectedValue) ;
-		  // db.setCurr_playlist_id(plid);
-		   // Log plid
-	       //Log.d("setCurr_plid: ", ""+plid); 
-	       
+		if( checkNameValid(selectedValue) ) {
+			Command.syncCreatePlaylist(selectedValue);
+		}
+		else {
+			Toast.makeText(this, "Invalid playlist name!", Toast.LENGTH_SHORT).show();
+		}
 		// return to PlaylistActivity
 		Intent returnIntent = new Intent();
-		//returnIntent.putExtra("PLid", plid);
 		setResult(RESULT_OK, returnIntent);
-		this.finish(); 
+		this.finish();
 		
-//	Intent returnIntent = new Intent(getApplicationContext(),  PlaylistActivity.class);
-//	startActivity(returnIntent);
 	}
-
-	/*  public int getSelectedPlaylistId(String selectedValue) {
-		   int plid = 0;
-		   
-		   for(int i = 1; i < db.getNumLists()+1; i++) {
-			   if(selectedValue == db.getPlaylists()[i].getListName() )
-				   plid = i;
-		   }
-		   return plid;
-	  }*/
 	  
 	  public int getSelectedSongId(String selectedValue) {
 		  int songid = 0;
@@ -88,6 +65,11 @@ public class PlaylistBuilderActivity extends FragmentActivity {
 		   return songid;
 	  }
 	 
-	
+	public boolean checkNameValid(String name) {
+		// Check if the name is illegal
+		if (name.equals("")  || name == null || name.equals("0") )
+			return false;
+		return true;
+	}
 }
 
