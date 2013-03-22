@@ -90,6 +90,15 @@ public class Mix {
 		return temp;
 	}
 	
+	public void setCliptoPlatAt(int index, int time){
+		if(index < usedClips.size()){
+		usedClips.get(index).setToPlayAt(time);}
+	}
+	
+	
+	public void play(){
+		//TODO play this mix back
+	}
 	
 	
 }

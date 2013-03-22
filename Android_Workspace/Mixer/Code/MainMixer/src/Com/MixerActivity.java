@@ -12,6 +12,8 @@ public class MixerActivity extends Activity{
 	public static int clipIndex;
 	
 	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		//this.setContentView();
 		
 		theMix = new Mix();
 		addTimeline();
@@ -40,5 +42,11 @@ public class MixerActivity extends Activity{
 		});
 	}
 	
+	public void setUP(){
+		theMix.addClip(new Clip("clip one", 5));
+		theMix.addClip(new Clip("clip two", 10));
+		theMix.addClip(new Clip("clip three", 2));
+		
+	}
 	
 }
