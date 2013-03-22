@@ -189,8 +189,9 @@ public class PlaylistActivity extends Activity {
 				  // Set current playlist id and songid to 0
 				  com.getDB().setCurr_playlist_id(0);
 			  }
-			  Command.removeList(plid);
-			  Command.syncRemoveList(plid);
+			  //Command.removeList(plid);
+			  //Command.syncRemoveList(plid);
+			  db.removeList(plid);
 			  listAdapter.remove(listAdapter.getItem(id));
 			  
 		  }
