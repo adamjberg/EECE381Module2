@@ -172,27 +172,32 @@ public class PlaylistActivity extends Activity {
   }
   
   public void HandleDeletePlaylist(int id) throws IndexOutOfBoundsException  {
-	  // Do something
-	  Toast.makeText(this, "Playlist deleted", Toast.LENGTH_SHORT).show();
 	
 	  // Remove the selected item from the ArrayList
-	  try {
 		  String toRemove = listAdapter.getItem(id);
 		 
 		  int plid = db.queryListByName(toRemove);
 		  
-		  if(plid != 0) {
+		  // Only handle deleting if playlist id isn't 0 
+		  if(plid > 0) {
+			  
+			  for(int i = 1; i < db.getTotalSongs()+1; i++) {
+				  // Remove all songs from list
+				  Command.removeSongFromList(plid, i);
+				  Command.syncRemoveSongFromList(plid, i); 
+				  
+				  // Set current playlist id and songid to 0
+				  com.getDB().setCurr_playlist_id(0);
+			  }
+			  //Command.removeList(plid);
+			  //Command.syncRemoveList(plid);
 			  db.removeList(plid);
+			  listAdapter.remove(listAdapter.getItem(id));
+			  
 		  }
-	  }
-	  catch(IndexOutOfBoundsException e) {
-		  System.err.println("IndexOutOfBoundsException: " + e.getMessage());
-		  throw new IndexOutOfBoundsException();
-	  }
-	
-
-	  // Refresh adapter after deleting
-	listAdapter.remove(listAdapter.getItem(id));
+		  else {
+			  return;
+		  }
   }
   
   

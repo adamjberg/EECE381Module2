@@ -66,11 +66,39 @@ public class Mix {
 	}
 	
 	public int lengthOf(){
-		//Iterate thro usedclips and set up the timeline and length
-		
+		int temp=0;
+		for(Clip c: usedClips){
+			for(Integer t: c.TimesUsed()){
+				if( (t + c.getLength()) > temp){
+					temp = t + c.getLength();
+				}
+			}
+		}
+		length = temp;
 		return length;
 	}
 	
+	public ArrayList<Clip> findNowActiveClips(){
+		ArrayList temp = new ArrayList();
+		for(Clip c: usedClips){
+			for(Integer t: c.TimesUsed()){
+				if(t > timeLine && t < (timeLine+ //time segment 20 seconds
+						20000)){
+				temp.add(c);}
+			}
+		}
+		return temp;
+	}
+	
+	public void setCliptoPlatAt(int index, int time){
+		if(index < usedClips.size()){
+		usedClips.get(index).setToPlayAt(time);}
+	}
+	
+	
+	public void play(){
+		//TODO play this mix back
+	}
 	
 	
 }

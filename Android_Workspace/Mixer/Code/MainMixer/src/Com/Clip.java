@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 
 public class Clip {
+	private int ID;
 	private String name;
 	private int numberOfPlays = 0;
 	private ArrayList<Integer> startTimes = new ArrayList<Integer>();
