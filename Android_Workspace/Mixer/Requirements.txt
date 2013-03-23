@@ -33,7 +33,6 @@ UI:
 			Select Song to rip clips screen
 			main mixer screen
 				display current items on the timeline
-			clip ripping screen
 			Clip properties/editing screen
 				size of item/length
 				
