@@ -159,7 +159,7 @@ bool allowFade(struct Sound* this) {
  * it should loop.
  *
  * @param numWritten - The number of values written to the buffer
- *//*
+ */
 void updateSoundPosition(struct Sound* this, int numWritten) {
 	if (!this->playing)
 		return;
@@ -177,7 +177,7 @@ void updateSoundPosition(struct Sound* this, int numWritten) {
 	if (this->position >= this->length) {
 		handleSoundEnd(this);
 	}
-}*/
+}
 
 /**
  * Creates a Sound struct and loads the correct wav file from the SD card
@@ -241,7 +241,7 @@ struct Sound* loadWavSound(char * filename) {
 /**
  * TODO: If a sounds volume is 0 this function should return right away to save processing time
  * Right now there's an ugly bug where the sound won't stop if the volume is set to 0
- *//*
+ */
 void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex, int numToWrite, bool overwrite) {
 	int i;
 	int indexToWrite = startIndex;
@@ -275,7 +275,7 @@ void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex
 		indexToRead++;
 		indexToWrite++;
 	}
-}*/
+}
 
 void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {
 	this->inFadePosition = convertFromMS(this, inFadeLength);
@@ -311,7 +311,7 @@ void setSoundVolumeStatic(struct Sound* this, float volume) {
  * even if the volume is brought to 0 and then back to 1
  */
 void setSoundVolume(struct Sound* this, float volume) {
-	this->volume = volume;
+	this->volume = convertVolumeToInt(volume);
 }
 
 /**
@@ -348,8 +348,4 @@ void stopSound(struct Sound* sound) {
 void unloadSound(struct Sound* sound) {
 	free(sound->buffer);
 	free(sound);
-}
-
-bool checkEnd(struct Sound* this) {
-	return (this->position >= this->length);
 }

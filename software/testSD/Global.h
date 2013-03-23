@@ -24,15 +24,23 @@
 #include "sys/alt_alarm.h"
 
 #include "Graphic.h"
+#include "AudioDeviceController.h"
+#include "Sound.h"
+#include "SoundMixer.h"
+#include "ISR_vectors.h"
 
 #define HEADERSIZE 2
 #define SPACE 32
 #define NEWLINE 10
 
 extern alt_alarm alarm;
-//extern struct alt_up_dev up_dev;
+extern struct alt_up_dev up_dev;
 extern alt_up_pixel_buffer_dma_dev* pixel_buffer;
 extern alt_up_char_buffer_dev* char_buffer;
+extern struct SoundMixer* soundMixer;
+extern struct Sound* s;
+extern struct Sound* s1;
+extern struct Sound* s2;
 
 enum msgType {
 	STRING=0, CMD=1, PLAYLIST=2, AUDIO=3

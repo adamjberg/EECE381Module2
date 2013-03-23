@@ -40,20 +40,21 @@ int main()
 	//sync database
 	update();
 
-	enableAudioDeviceController();
+	//enableAudioDeviceController();
 	initPushKeyController();
 
 	//Test VGA Output
-	struct Image* testImg;
-	while((testImg = loadSDImage("TEST.BMP")) == NULL);
-	draw(35, 35, testImg);
-	killImage(testImg);
+//	struct Image* testImg;
+//	while((testImg = loadSDImage("TEST.BMP")) == NULL);
+//	draw(35, 35, testImg);
+//	killImage(testImg);
 	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
 	//graphicTester();
 	//Test End
 
 	while(1) {
 		cmdProcessing(scheduler);
+		updateMixer();
 	}
 
 

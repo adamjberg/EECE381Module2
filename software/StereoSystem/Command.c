@@ -60,7 +60,11 @@ void syncPlay(int id, int vol, int pos) {
 //index 1
 void play(int id, int vol, int pos) {
 	if(db.songs[id] == NULL || id <= 0 || id > MAX_SONGS) return;
+	printf("A song %d is started at %d volume.\n", id, vol);
 	playSong(db.songs[id], vol, pos, 0);
+	updateMixer();
+	//if (!alt_up_audio_write_interrupt_pending(up_dev.audio_dev))
+	enableAudioDeviceController();
 	printf("A song %d is played at %d position.\n", id, pos);
 }
 /*
@@ -107,7 +111,6 @@ void syncSetVol(int id, int vol) {
 }
 //index 4
 void setVolume(int id, int vol) {
-	//db.songs[id]->sound->volume = (float)vol/100.0;
 	setGlobalVolume((float)vol/100.0);
 	printf("Volume is set to %d percent\n", vol);
 }
@@ -120,24 +123,26 @@ void syncNext(int song_id) {
 }
 //index 6
 void next(int song_id) {
+	printf("Next song is selected.\n");
 	if(db.curr_playlist_id == 0 && song_id < db.num_of_songs) {
-		play(song_id+1, 1, 0);
+		play(song_id+1, 100, 0);
 	} else if(db.curr_playlist_id != 0 && db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1] != 0) {
-		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1], 1, 0);
+		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1], 100, 0);
 	}
-	printf("Next song is selected and played.\n");
+	printf("Next song is played.\n");
 }
 void syncPrev(int song_id) {
 
 }
 //index 7
 void prev(int song_id) {
+	printf("Previous song is selected.\n");
 	if(db.curr_playlist_id == 0 && song_id > 1) {
-		play(song_id-1, 1, 0);
+		play(song_id-1, 100, 0);
 	} else if(db.curr_playlist_id != 0) {
-		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]-1], 1, 0);
+		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]-1], 100, 0);
 	}
-	printf("Previous song is selected and played.\n");
+	printf("Previous song is played.\n");
 }
 
 /*

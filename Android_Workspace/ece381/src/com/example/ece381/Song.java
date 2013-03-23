@@ -8,7 +8,7 @@ public class Song {
 	private int id;
 	public Song(String song_name) {
 		this.song_name = song_name;
-		this.volume = 1;
+		this.volume = 100;
 	}
 	public int getVolume() {
 		return volume;

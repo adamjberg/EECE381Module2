@@ -7,30 +7,8 @@
 
 #include "ISR_vectors.h"
 
-struct RS232 com;
+struct alt_up_dev up_dev;
 
-/**
- * The Interrupt service routine for the keys
- * This reads the values of the keys and then calls the registered key listener.
- */
-void push_key_ISR(struct PushKeyController* pushKeyController, unsigned int id)
-{
-	pushKeyController->keys_changed = IORD_ALTERA_AVALON_PIO_EDGE_CAP(KEYS_BASE);
-
-	if(wasKeyJustPressed(pushKeyController, 0)) {
-		if(db.curr_song_id < db.num_of_songs)
-			next(db.curr_song_id++);
-	} else if( wasKeyJustPressed(pushKeyController, 1)) {
-		if(db.curr_song_id > 1)
-			prev(db.curr_song_id--);
-	} else if(wasKeyJustPressed(pushKeyController, 2)) {
-		syncPause(db.curr_song_id);
-	} else if(wasKeyJustPressed(pushKeyController, 3)) {
-		syncPlay(db.curr_song_id, 1, 0);
-	}
-
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP( KEYS_BASE, 0);
-}
 /***************************************************************************************
  * Audio - Interrupt Service Routine
  *
@@ -39,33 +17,22 @@ void push_key_ISR(struct PushKeyController* pushKeyController, unsigned int id)
 ****************************************************************************************/
 void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 {
-/*	if (alt_up_audio_write_interrupt_pending(audio_dev))	// check for write interrupt
+	if (alt_up_audio_write_interrupt_pending(audio_dev))	// check for write interrupt
 	{
-		int numWritten = 0, numToWrite;
-		int spaceAvailable = alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT);
-
-		//while(numWritten < spaceAvailable) {
-			if( spaceAvailable + soundMixer->sound->position >= soundMixer->sound->length ) {
-				numToWrite = soundMixer->sound->length - soundMixer->sound->position;
-			} else {
-				numToWrite = spaceAvailable;
-			}
-			alt_up_audio_write_fifo(audio_dev, &(soundMixer->sound->buffer[soundMixer->sound->position]), numToWrite, ALT_UP_AUDIO_LEFT);
-			alt_up_audio_write_fifo(audio_dev, &(soundMixer->sound->buffer[soundMixer->sound->position]), numToWrite, ALT_UP_AUDIO_RIGHT);
-			//numWritten += numToWrite;
-			updateSoundMixerPosition(numToWrite);
-
-		//}
-	}*/
-	int temp = 0, temp1 = 0;
-	if(soundMixer->indexSize <= 0) return;
-	temp = alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_LEFT);
-	temp1 = alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_RIGHT);
-
-	incIndex();
+		//int numToWrite = 0;
+		//int spaceAvailable = alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT);
+		int temp = 0, temp1 = 0;
+		if(soundMixer->indexSize <= 0) return;
+		temp = alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_LEFT);
+		temp1 = alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_RIGHT);
+		/*s->position += 96;
+		if(s->position>=s->length)
+			s->position = 0;*/
+		incIndex();
+	}
 	return;
 }
-
+/*
 alt_u32 RS232_ISR(void* up_dev) {
 	if(queue_lock == 1 || SDIO_lock == 1) return alt_ticks_per_second()/1000;
 	alt_up_rs232_dev *serial_dev = ((struct alt_up_dev*)up_dev)->RS232_dev;
@@ -232,4 +199,4 @@ alt_u32 RS232_ISR(void* up_dev) {
 	}
 
 	return alt_ticks_per_second()/20;
-}
+}*/

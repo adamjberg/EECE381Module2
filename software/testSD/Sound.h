@@ -28,7 +28,7 @@ struct Sound {
 	int loops;
 	unsigned int *buffer;
 	bool playing;
-	float volume;
+	int volume;
 };
 
 struct Sound* initSound(unsigned int);
@@ -48,5 +48,5 @@ void pauseSound(struct Sound*);
 void resumeSound(struct Sound*);
 void stopSound(struct Sound*);
 void clearSoundBuffer(struct Sound*);
-bool checkEnd(struct Sound*);
+
 #endif /* SOUND_H_ */

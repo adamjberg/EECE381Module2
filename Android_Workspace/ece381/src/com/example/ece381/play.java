@@ -107,7 +107,7 @@ public class play extends Activity {
 			if(com.getDB().getCurr_song_id() >= com.getDB().getTotalSongs()) return;
 			greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSongName());
 			seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSize());
-			seekbar2.setProgress(0);
+			seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getVolume());
 		} else {
 			Log.i("COMMAND", "NEXT IN PLAYLIST");
 		}
@@ -119,7 +119,7 @@ public class play extends Activity {
 			if(com.getDB().getCurr_song_id() <=1) return;
 			greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSongName());
 			seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSize());
-			seekbar2.setProgress(0);
+			seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getVolume());
 		} else {
 			Log.i("COMMAND", "PREV IN PLAYLIST");
 		}
@@ -129,6 +129,7 @@ public class play extends Activity {
 		textview= (TextView)  findViewById(R.id.textView7);
 		seekbar = (SeekBar) findViewById(R.id.seekBar1);
 		seekbar.setMax(100);
+		seekbar.setProgress(100);
 	    seekbar.setOnSeekBarChangeListener( new OnSeekBarChangeListener(){
 		   @Override 
 		   public void onProgressChanged(SeekBar seekBar, int progress,
