@@ -100,8 +100,6 @@ public class SongActivity extends Activity {
     			//Log.v("setting current playlist", selected_pl_name);
     			
     			Intent goToPlay = new Intent(SongActivity.this, play.class);
-    		
-    			Command.syncPlay(db.getCurr_song_id(), 1, 0);
     			startActivity(goToPlay);
     				
     		}

@@ -60,19 +60,6 @@ public class MainActivity extends Activity {
 			 this.getActionBar().hide();
 		 }
 		 
-		//setContentView(R.layout.activity_main);
-
-
-		  
-	/*	ActionBar actionBar = this.getActionBar();
-		  actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP); */
-
-	/*
-		EditText et = (EditText) findViewById(R.id.RecvdMessage);
-		et.setKeyListener(null);
-		et = (EditText) findViewById(R.id.error_message_box);
-		et.setKeyListener(null);
-*/
 		// Set up a timer task.  We will use the timer to check the
 		// input queue every 500 ms
 		

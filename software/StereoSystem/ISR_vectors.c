@@ -19,14 +19,14 @@ void push_key_ISR(struct PushKeyController* pushKeyController, unsigned int id)
 
 	if(wasKeyJustPressed(pushKeyController, 0)) {
 		if(db.curr_song_id < db.num_of_songs)
-			next(db.curr_song_id++);
+			syncNext(db.curr_song_id);
 	} else if( wasKeyJustPressed(pushKeyController, 1)) {
 		if(db.curr_song_id > 1)
-			prev(db.curr_song_id--);
+			syncPrev(db.curr_song_id);
 	} else if(wasKeyJustPressed(pushKeyController, 2)) {
 		syncPause(db.curr_song_id);
 	} else if(wasKeyJustPressed(pushKeyController, 3)) {
-		syncPlay(db.curr_song_id, 1, 0);
+		syncPlay(db.curr_song_id, 100, 0);
 	}
 
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP( KEYS_BASE, 0);
@@ -57,10 +57,9 @@ void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 
 		//}
 	}*/
-	int temp = 0, temp1 = 0;
 	if(soundMixer->indexSize <= 0) return;
-	temp = alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_LEFT);
-	temp1 = alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_RIGHT);
+	alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_LEFT);
+	alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_RIGHT);
 
 	incIndex();
 	return;

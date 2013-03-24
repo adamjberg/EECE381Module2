@@ -198,7 +198,7 @@ void dBTester() {
 }
 
 void dbTester2() {
-	int* tempVal = dequeueValue(db.avail_list_index, 1);
+/*	int* tempVal = dequeueValue(db.avail_list_index, 1);
 	enqueue(db.avail_list_index, (void*)tempVal);
 	tempVal = dequeueValue(db.avail_list_index, 10);
 	enqueue(db.avail_list_index, (void*)tempVal);
@@ -240,7 +240,7 @@ void dbTester2() {
 	struct Playlist* al;
 	struct Playlist* al1;
 	struct Playlist* al2;
-	int i;
+	int i;*/
 /*	for(i = 0; i < 1000; i ++) {
 		al = initPlaylist("list4");
 		//setListName(al, "list4");
@@ -268,7 +268,7 @@ void dbTester2() {
 			printf("sth wrong\n");
 	}*/
 
-	for(i = 0; i < 1000; i ++) {
+/*	for(i = 0; i < 1000; i ++) {
 		al = initPlaylist("list4");
 		al1 = initPlaylist("list5");
 		al2 = initPlaylist("list6");
@@ -301,7 +301,7 @@ void dbTester2() {
 	createExisitedPlaylist("list2", 0, 25);
 	createExisitedPlaylist("list3", 0, 12);
 	createExisitedPlaylist("list4", 0, 35);
-	createExisitedPlaylist("list5", 0, 19);
+	createExisitedPlaylist("list5", 0, 19);*/
 
 
 
@@ -311,6 +311,24 @@ void dbTester2() {
 	createSong("new song 4");
 	createSong("new song 5");
 	createSong("new song 6");*/
+
+	int i;
+	for(i = 0; i < 50000; i++) {
+		loadListsFromSD();
+
+		removeListFromDB(1);
+		removeListFromDB(6);
+		removeListFromDB(9);
+		removeListFromDB(12);
+		removeListFromDB(17);
+		removeListFromDB(22);
+		removeListFromDB(29);
+		removeListFromDB(33);
+		removeListFromDB(36);
+		removeListFromDB(47);
+		removeListFromDB(49);
+		removeListFromDB(50);
+	}
 }
 void cmdTester() {
 	char* paras[8];

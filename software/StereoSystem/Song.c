@@ -17,7 +17,7 @@ struct Song* initSong(char* songname) {
 	this->ext[2] = 'V';
 	this->isCached = false;
 	this->pos = this->size = 0;
-	this->volume = 1;
+	this->volume = 100;
 	this->id = 0;
 	this->sound = NULL;
 	return this;

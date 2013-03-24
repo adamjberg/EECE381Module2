@@ -184,6 +184,10 @@ public class Database {
 		return this.list_order_song;
 	}
 	
+	public int getNextSongInList() {
+		int order = this.list_song_order[this.curr_playlist_id][this.curr_song_id];
+		return this.list_order_song[this.curr_playlist_id][order+1];
+	}
 	public void removeList(int id) {
 		int i;
 		for(i = 1; i <= this.playlists[id].getNum_of_songs(); i++) {

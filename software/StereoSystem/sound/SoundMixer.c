@@ -14,12 +14,8 @@
  */
 void initSoundMixer() {
 	soundMixer = (struct SoundMixer*) malloc(sizeof(struct SoundMixer));
-	soundMixer->cleared = true;
 	soundMixer->currIndex = soundMixer->endIndex = soundMixer->indexSize = 0;
-	int i;
-	for(i = 0; i < 10; i++) {
-		memset(soundMixer->buffer[i], 0, MAX_SOUNDMIXBUF*sizeof(int));
-	}
+	clearSoundMixer();
 }
 
 void setGlobalVolume(float volume) {
@@ -27,8 +23,11 @@ void setGlobalVolume(float volume) {
 }
 
 void clearSoundMixer() {
-	//clearSoundBuffer(soundMixer->sound);
+	int i;
 	soundMixer->cleared = true;
+	for(i = 0; i < 100; i++) {
+		clearIndexBuffer(i);
+	}
 }
 /*
 void updateSoundMixerPosition(int numWritten) {
@@ -75,9 +74,10 @@ void clearIndexBuffer(int index){
 void incIndex() {
 	soundMixer->currIndex++;
 	soundMixer->indexSize--;
-	if(soundMixer->currIndex >= 100) {
+	if(soundMixer->currIndex > 99) {
 		soundMixer->currIndex = 0;
 	}
+	//syncUpdatePos(db.curr_song_id, db.songs[db.curr_song_id]->sound->position);
 }
 
 void updateMixer() {

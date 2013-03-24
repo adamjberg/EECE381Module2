@@ -23,6 +23,10 @@ void initSoundMixer();
 void setGlobalVolume(float);
 void updateSoundMixerLength(unsigned int);
 void updateSoundMixerPosition(int numWritten);
+void updateMixer();
+void clearSoundMixer();
 int negativeToPositive(int);
 int positiveToNegative(int);
+void clearIndexBuffer(int);
+void incIndex();
 #endif /* SOUNDMIXER_H_ */

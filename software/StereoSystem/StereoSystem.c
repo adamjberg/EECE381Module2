@@ -25,23 +25,20 @@ int main()
 	}
 
 	initVGA();
-
-	initDatabase();
-
 	initAudioDeviceController();
 	initSoundMixer();
-	//dBTester();
-	//dbTester2();
+
 	struct CmdScheduler* scheduler = initCmdScheduler();
 
 	//Serial device initialization
 	com = initRS232(scheduler);
 
+	initPushKeyController();
+
+	initDatabase();
 	//sync database
 	update();
 
-	//enableAudioDeviceController();
-	initPushKeyController();
 
 	//Test VGA Output
 //	struct Image* testImg;

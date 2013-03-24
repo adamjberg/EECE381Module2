@@ -82,6 +82,7 @@ void syncPause(int id) {
 }
 //pause current play song; index 2
 void pause(int id) {
+	disableAudioDeviceController();
 	pauseSong(db.songs[id]);
 }
 /*
@@ -95,7 +96,15 @@ void syncStop() {
 }
 //index 3
 void stop() {
-	stopSong(db.songs[db.curr_song_id]);
+	printf("The music start to stop.\n");
+	disableAudioDeviceController();
+	clearSoundMixer();
+	int i;
+	for(i = 0; i < db.total_songs_playing; i++) {
+		removeCurrPlaying(i);
+	}
+	db.curr_song_id = 0;
+	printf("Music has stopped.\n");
 }
 
 void syncSetVol(int id, int vol) {
@@ -119,7 +128,13 @@ void seek(int pos) {
 	printf("Seek is set to %d\n", pos);
 }
 void syncNext(int song_id) {
-
+	syncStop();
+	char* temp[1];
+	char tempId[4];
+	sprintf(tempId, "%d", song_id);
+	temp[0] = tempId;
+	struct Command* cmd = initCmd(6, 1, temp);
+	addCmd(com.scheduler, cmd);
 }
 //index 6
 void next(int song_id) {
@@ -132,6 +147,13 @@ void next(int song_id) {
 	printf("Next song is played.\n");
 }
 void syncPrev(int song_id) {
+	syncStop();
+	char* temp[1];
+	char tempId[4];
+	sprintf(tempId, "%d", song_id);
+	temp[0] = tempId;
+	struct Command* cmd = initCmd(7, 1, temp);
+	addCmd(com.scheduler, cmd);
 
 }
 //index 7
@@ -258,10 +280,10 @@ void addSongToList(int list_index, int song_index) {
 			db.index_list_order[list_index][i] = song_index;
 			db.index_list_song[list_index][song_index] = i;
 			db.playlists[list_index]->num_of_songs++;
+			printf("Song %d is added to %d\n", song_index, list_index);
 			return;
 		}
 	}
-	printf("Song %d is added to %d\n", song_index, list_index);
 }
 
 //index 14
@@ -278,7 +300,7 @@ void syncAddExisitedSongToList(int list_id, int song_id) {
 	killCmd(&cmd);
 }
 
-
+//index 15
 void syncRemoveSongFromList(int list_id, int song_id) {
 	/*char temp[2][4];
 	sprintf(temp[0], "%d", list_id);
@@ -288,7 +310,22 @@ void syncRemoveSongFromList(int list_id, int song_id) {
 	addCmd(com.scheduler, cmd);*/
 }
 void removeSongFromList(int list_id, int song_id) {
+	db.index_list_order[list_id][db.index_list_song[list_id][song_id]] = 0;
+	db.index_list_song[list_id][song_id] = 0;
+}
 
+//index 16
+void syncUpdatePos(int song_id, int pos) {
+	char* temp[2];
+	char tempId[4];
+	char tempPos[4];
+	sprintf(tempId, "%d", song_id);
+	sprintf(tempPos, "%d", pos);
+	temp[0] = tempId;
+	temp[1] = tempPos;
+	struct Command* cmd = initCmd(16, 2, temp);
+	send(cmd, CMD);
+	killCmd(&cmd);
 }
 
 void modifyPlaylistName(int index, char* new_listname) {

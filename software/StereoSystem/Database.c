@@ -13,8 +13,9 @@ void initDatabase() {
 	db.num_of_lists = 0;
 	db.num_of_songs = 0;
 	db.avail_list_index = initQueue();
-	memset(db.curr_song_ids, 0, MAX_SONGS_MIX);
+	memset(db.curr_song_ids, 0, MAX_SONGS_MIX*sizeof(int));
 	db.total_songs_playing = 0;
+	db.used_memory = 0;
 	int i;
 	int* temp;
 	db.used_list_index[0] = 1; //index 0 should never get used
@@ -172,7 +173,6 @@ int removeListFromDB(int list_id) {
  */
 int readLine(int file_pointer, char* line) {
 	if(line == NULL) return -1;
-	//char temp[100];
 	int i = -1;
 
 	do {
@@ -189,9 +189,7 @@ int readLine(int file_pointer, char* line) {
 	} while(line[i] != '\n' && line[i] != '\r' && line[i] != 0 && line[i] != -1);
 	line[i] = 0;
 	if(i == 0)
-		return -1;/*
-	char* res = (char*)malloc(sizeof(char)*(i+1));
-	strncpy(res, temp, i+1);*/
+		return -1;
 	return 0;
 }
 
@@ -246,14 +244,12 @@ int saveListsToSD() {
 	int i, size;
 	char* strToStore = (char*)malloc(sizeof(char)*99);
 	for(i = 1; i < MAX_LISTS; i++){
-		//writeLine(fileHandler, "     ", 5);
 		if (db.used_list_index[i] == 0){
 			size = sprintf(strToStore, "%d %d %d", i, 0, 0);
-			writeLine(fileHandler, strToStore, size);
 		} else {
 			size = sprintf(strToStore,"%d %s %d", db.playlists[i]->id, db.playlists[i]->list_name, db.playlists[i]->num_of_songs);
-			writeLine(fileHandler, strToStore, size);
 		}
+		writeLine(fileHandler, strToStore, size);
 	}
 	free(strToStore);
 	strToStore = NULL;
@@ -275,41 +271,27 @@ int loadListsFromSD() {
 		return -1;
 	}
 	char* line = NULL;
-	char array[501];
 	int i = 0;
 	int stats = 0;
-	while (i < 50){
+	for(i = 0; i < 50; i++) {
 		line = (char*)malloc(sizeof(char)*501);
-		if((stats = readLine(fileHandler, line)) == -2) {
-			printf("Cannot read the file, reopening..\n");
-			if (!alt_up_sd_card_fclose(fileHandler)){
-				printf("File is not closed properly.\n");
-				free(line);
-				line = NULL;
-				return -1;
-			}
-			if ((fileHandler = openFileFromSD(LISTFILE)) < 0){
-				printf("Loading list error!\n");
-				free(line);
-				line = NULL;
-				return -1;
-			}
-			i = 0;
-		} else if(stats == -1) { //end of file
+		stats = readLine(fileHandler, line);
+
+		if(stats == -2) {
+			alt_up_sd_card_fclose(fileHandler);
+			printf("Cannot read the list file, file closed.\n");
+			free(line);
+			line = NULL;
+			return -1;
+		} else if(stats == -1) {
 			free(line);
 			line = NULL;
 			break;
 		} else {
-			memset(array, 0, sizeof(array)/sizeof(array[0]));
-			strcpy(array, line);
-			if (array[0] == 0) {
-				break;
-			}
 			createPlaylistFromTxt(line);
-			i++;
+			free(line);
+			line = NULL;
 		}
-		free(line);
-		line = NULL;
 	}
 	if (!alt_up_sd_card_fclose(fileHandler)){
 		printf("File is not closed properly.\n");
@@ -323,35 +305,17 @@ int loadListsFromSD() {
  * into a playlist object and add it to DB.
  * */
 void createPlaylistFromTxt(char* line){
-	char temp[501];
-	char substr[501];
-	int id = 0;
-	int i, last_position;
-	int iteration = 0;
-
-	memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
-	strcpy(temp, line);
-	for (i = 0; i < strlen(temp); i++){
-		if (temp[i] == ' '){
-			if (iteration == 0){
-				memset(substr, 0 , sizeof(substr)/sizeof(substr[0]));
-				strncpy(substr, line, i);
-				id = strtol(substr, NULL, 10);
-				last_position = i;
-				iteration++;
-			} else {
-				memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
-				strncpy(temp, line+last_position+1, i-last_position-1);
-				temp[strlen(temp)] = '\0';
-				if(temp[0] != '0'){
-					memset(substr, 0 , sizeof(substr)/sizeof(substr[0]));
-					strcpy(substr, line+i+1);
-					createExisitedPlaylist(temp, strtol(substr, NULL, 10), id);
-					break;
-				}
-			}
-		}
-	}
+	int i = 0, j = 0;
+	char id[4];
+	char listName[100];
+	char numOfSong[4];
+	while((id[j++] = line[i++]) != ' ');
+	id[j] = 0; j = 0;
+	while((listName[j++] = line[i++]) != ' ');
+	listName[j-1] = 0; j = 0;
+	if(listName[0] == '0') return;
+	while((numOfSong[j++] = line[i++]) != 0);
+	createExisitedPlaylist(listName, atoi(numOfSong), atoi(id));
 }
 
 /*
@@ -367,7 +331,7 @@ char** getSongsFromSD(){
 	// songNames is array of strings that store song names.
 	char** songNames = malloc(MAX_SONGS *sizeof(char*));
 
-	memset(fileName, 0 , sizeof(fileName)/sizeof(fileName[0]));
+	memset(fileName, 0 , sizeof(fileName));
 	fileStatus = alt_up_sd_card_find_first("", fileName);
 	if (fileStatus != 0){
 		printf("ERROR: updateSongsFromSD.\n");
@@ -377,9 +341,10 @@ char** getSongsFromSD(){
 		if (strstr(fileName, ".WAV") != NULL){
 			songNames[numOfWavFiles] = malloc(20 * sizeof(char));
 			strcpy(songNames[numOfWavFiles], fileName);
+			//createSong(fileName, 0);
 			numOfWavFiles++;
 		}
-		memset(fileName, 0 , sizeof(fileName)/sizeof(fileName[0]));
+		memset(fileName, 0 , sizeof(fileName));
 		fileStatus = alt_up_sd_card_find_next(fileName);
 	}
 	// set ending condition, NULL means end of the array
@@ -542,6 +507,7 @@ int isCurrPlaying(int song_id) {
 void removeCurrPlaying(int index) {
 	db.total_songs_playing--;
 	int i = index;
+	stopSound(db.songs[db.curr_song_ids[i]]->sound);
 	while(db.curr_song_ids[i] != 0) {
 		db.curr_song_ids[i] = db.curr_song_ids[++i];
 	}

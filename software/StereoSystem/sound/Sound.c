@@ -44,8 +44,6 @@ unsigned int getSoundLengthMS(struct Sound* this) {
 
 /**
  * Loads the sound using linear interpolation to convert to correct sample rate
- * TODO: The quality of linear interpolation is very poor, we may want to look into
- * a different kind of interpolation.
  *
  * @param filePointer - current filePointer
  * @param srcLength - Length of wav file
@@ -54,32 +52,41 @@ unsigned int getSoundLengthMS(struct Sound* this) {
  */
 struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength, int toSampleRate, int fromSampleRate) {
 	int i = 0;
-	int destLength = ((double) srcLength * toSampleRate) / fromSampleRate;
-	double dx = (double) srcLength / destLength;
-	double x = 0;
-	int currentIndex = 0;
-	int lastIndex = -1;
-	int numRead = 1;
-	int currVal, nextVal = readInt(filePointer, bytesPerSample);
-
-	double slope;
-
+	int destLength = ((float) srcLength * toSampleRate) / fromSampleRate;
+	float x0 = 0, x1 = 0, x = 0;
+	int y0 = 0, y1 = 0;
+	int j = 0;
+	if(db.used_memory + destLength > MAX_CACHE_MEMORY) {
+		printf("NO MEMORY!!");
+		return NULL;
+	}
 	struct Sound* this = initSound(destLength);
 
-	for( i = 0; i < destLength; i++ ) {
-		currentIndex = (int) x;
-		if( currentIndex > lastIndex ) {
-			while( currentIndex > lastIndex ) {
-				currVal = nextVal;
-				nextVal = (currentIndex < this->length) ? readInt(filePointer, bytesPerSample) : 0;
-				numRead++;
-				lastIndex++;
+	if(toSampleRate != fromSampleRate) {
+		for(i = 0; i < srcLength; i++) {
+			if(j >= destLength) break;
+			x1 = i/(float)fromSampleRate;
+			y1 = readInt(filePointer, bytesPerSample);
+			if(y1 > 0x07FFFFF) {
+				y1 = y1 | 0xFF000000;
 			}
+			if(x <= x1) {
+				if(x == x1) {
+					this->buffer[j++] = y1;
+				} else if(x < x1) {
+					this->buffer[j++] = (y1 - y0) * (x - x0) / (x1 - x0) + y0;
+					if(this->buffer[j-1] > 0x07FFFFF)
+						this->buffer[j-1] &= 0x00FFFFFF;
+				}
+				x = j/(float)toSampleRate;
+			}
+			x0 = x1;
+			y0 = y1;
 		}
-		slope = nextVal - currVal;
-		this->buffer[i] = slope * (x - currentIndex) + currVal;
-		x += dx;
-		lastIndex = currentIndex;
+	} else {
+		for(i = 0; i < destLength; i++) {
+			this->buffer[i] = readInt(filePointer, bytesPerSample);
+		}
 	}
 	return this;
 }
@@ -131,8 +138,9 @@ struct Sound* initSound(unsigned int length) {
 	this->length = length;
 	this->position = 0;
 	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
+	db.used_memory += length;
 	this->playing = false;
-	this->volume = DEFAULT_BITS_PER_SAMPLE;
+	this->volume = 1;
 	this->inFadePosition = 0;
 	this->outFadePosition = this->length;
 	clearSoundBuffer(this);
@@ -190,7 +198,7 @@ struct Sound* loadWavSound(char * filename) {
 	printf("loading sound: %s\n", filename);
 
 	struct Sound* sound;
-	int i, index = 0;
+	int index = 0;
 	SDIO_lock = 1;
 	int file_pointer = alt_up_sd_card_fopen(filename, false);
 	if (file_pointer < 0) {
@@ -202,12 +210,13 @@ struct Sound* loadWavSound(char * filename) {
 	//Start reading the wav header
 	while (index < SAMPLE_RATE_OFFSET) {
 		temp = alt_up_sd_card_read(file_pointer);
+		//printf("%d %x\n", index, temp);
 		index++;
 	}
 
 	int sampleRate = readInt(file_pointer, 4);
 	index += 4;
-
+	printf("sample rate: %d\n", sampleRate);
 	while (index < BITS_PER_SAMPLE_OFFSET) {
 		temp = alt_up_sd_card_read(file_pointer);
 		//printf("%d %x\n", index, temp);
@@ -217,7 +226,7 @@ struct Sound* loadWavSound(char * filename) {
 	int bits_per_sample = readInt(file_pointer, 2);
 	int bytes_per_sample = bits_per_sample / BITS_PER_BYTE;
 	index += 2;
-
+	printf("bits/sample %d\n", bits_per_sample);
 	while (index < DATA_LENGTH_OFFSET) {
 		temp = alt_up_sd_card_read(file_pointer);
 		//printf("%d %x\n", index, temp);
@@ -294,14 +303,14 @@ int convertVolumeToInt(float volume) {
  *
  * IMPORTANT: This will change the raw sound data and after several
  * changes the quality of the sound will degrade.
- */
+ *//*
 void setSoundVolumeStatic(struct Sound* this, float volume) {
 	int i;
 	for (i = 0; i < this->length; i++) {
 		this->buffer[i] = this->buffer[i] << convertVolumeToInt(volume);
 	}
 	this->volume = convertVolumeToInt(1);
-}
+}*/
 
 /**
  * Changes the sound volume so that it can be taken into account when
@@ -324,6 +333,11 @@ void seekSound(struct Sound* this, unsigned int position) {
 	this->position = convertFromMS(this, position);
 }
 
+void updatePos(struct Sound* this) {
+	this->position += 96;
+	if(this->position > this->length)
+		this->position = this->length;
+}
 void playSound(struct Sound* sound, float volume, int startTime, int loops) {
 
 	seekSound(sound, startTime);
@@ -346,8 +360,11 @@ void stopSound(struct Sound* sound) {
 }
 
 void unloadSound(struct Sound* sound) {
+	if(sound == NULL) return;
 	free(sound->buffer);
+	sound->buffer = NULL;
 	free(sound);
+	sound = NULL;
 }
 
 bool checkEnd(struct Sound* this) {

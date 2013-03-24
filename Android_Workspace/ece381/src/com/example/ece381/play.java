@@ -1,5 +1,14 @@
 package com.example.ece381;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.example.ece381.Communication.Stats;
+import com.example.ece381.MainActivity.TCPReadTimerTask;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -10,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -27,6 +37,7 @@ public class play extends Activity {
 	SeekBar seekbar2;
 	private int seek;
 	private Communication com = Communication.getInstance();
+	private Timer play_timer;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +57,16 @@ public class play extends Activity {
 		//String uname = (String) i.getSerializableExtra("USERNAME");
 		if(com.getDB().getCurr_song_id() == 0)
 			greetMsg.setText("No song has been selected");
-		else
-			greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSongName());
-	
+		else {
+			String msg = "playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSongName();
+			greetMsg.setText(msg);
+			Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+			Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
+		}
+
+		SeekBarTimerTask seek_task = new SeekBarTimerTask();
+		play_timer = new Timer();
+		play_timer.schedule(seek_task, 1000, 500);
 	}
 
 	@Override
@@ -89,7 +107,7 @@ public class play extends Activity {
 
 	@Override
 	public void finish() {
-		//Command.syncStop();
+		play_timer.cancel();
 		super.finish();
 	}
 	public void onPlay(View view){
@@ -103,14 +121,21 @@ public class play extends Activity {
 	}
 	
 	public void onNext(View view) {
+		String msg;
+		Database db = com.getDB();
 		if(com.getDB().getCurr_playlist_id() == 0) {
 			if(com.getDB().getCurr_song_id() >= com.getDB().getTotalSongs()) return;
-			greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSongName());
+			msg = "playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSongName();
+			
 			seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSize());
 			seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getVolume());
 		} else {
-			Log.i("COMMAND", "NEXT IN PLAYLIST");
+			msg = "playing "+ com.getDB().getSongs()[db.getNextSongInList()].getSongName();
+			seekbar2.setMax(com.getDB().getSongs()[db.getNextSongInList()].getSize());
+			seekbar2.setProgress(com.getDB().getSongs()[db.getNextSongInList()].getVolume());
 		}
+		greetMsg.setText(msg);
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 		Command.syncNext(com.getDB().getCurr_song_id());
 	}
 
@@ -172,9 +197,17 @@ public class play extends Activity {
 			public void onStopTrackingTouch(SeekBar seekBar) {		
 				if(com.getDB().getCurr_song_id() != 0) {
 					Command.syncPause(com.getDB().getCurr_song_id());
-					Command.syncPlay(com.getDB().getCurr_song_id(), 1, seek);      
+					Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), seek);      
 				}
 			}	
 		});
 	}
+	
+	public class SeekBarTimerTask extends TimerTask {
+		public void run() {
+			seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());
+				
+		} 
+	}
+	
 }

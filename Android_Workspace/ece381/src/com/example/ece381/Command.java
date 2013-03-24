@@ -135,7 +135,7 @@ public class Command {
 		if(next_id == 0) return;
 		com.getDB().setCurr_song_id(next_id);
 		com.getDB().getSongs()[next_id].setPos(0);
-		com.getDB().getSongs()[next_id].setVolume(100);
+		//com.getDB().getSongs()[next_id].setVolume(100);
 	}
 	//index 7
 	static public void syncPrev(int song_id) {
@@ -159,7 +159,7 @@ public class Command {
 		if(next_id == 0) return;
 		com.getDB().setCurr_song_id(next_id);
 		com.getDB().getSongs()[next_id].setPos(0);
-		com.getDB().getSongs()[next_id].setVolume(100);
+		//com.getDB().getSongs()[next_id].setVolume(100);
 	}
 	// index 8	
 	static public void syncCreatePlaylist(String list_name) {
@@ -248,5 +248,13 @@ public class Command {
 		Communication com = Communication.getInstance();
 		com.getDB().removeSongFromList(list_id, song_id);
 	}
-	
+	//index 16
+	static public void syncUpdatePos(int song_id, int pos) {
+		
+	}
+	static public void updatePos(int song_id, int pos) {
+		Communication com = Communication.getInstance();
+		com.getDB().getSongs()[song_id].setPos(pos);
+		
+	}
 }

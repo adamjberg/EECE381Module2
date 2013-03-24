@@ -32,7 +32,11 @@ void syncSetVol(int, int);
 void setVolume(int, int);
 
 void seek(int);
+
+void syncNext(int);
 void next(int);
+
+void syncPrev(int);
 void prev(int);
 
 void syncCreatePlaylist(char*);
@@ -56,6 +60,8 @@ void syncAddExisitedSongToList(int, int);
 
 void syncRemoveSongFromList(int, int);
 void removeSongFromList(int, int);
+
+void syncUpdatePos(int, int);
 
 void modifyPlaylistName(int, char*);
 void shuffle(int);

@@ -49,4 +49,6 @@ void resumeSound(struct Sound*);
 void stopSound(struct Sound*);
 void clearSoundBuffer(struct Sound*);
 bool checkEnd(struct Sound*);
+int readInt(int, int);
+void updatePos(struct Sound*);
 #endif /* SOUND_H_ */

@@ -15,6 +15,7 @@
 #define MAX_LISTS 51
 #define MAX_SONGS 101
 #define MAX_SONGS_MIX 11
+#define MAX_CACHE_MEMORY 1500000
 struct database db;
 
 struct database {
@@ -30,8 +31,7 @@ struct database {
 	int index_list_order[MAX_LISTS][MAX_SONGS];
 	struct Queue* avail_list_index;
 	int used_list_index[MAX_LISTS];
-
-	//struct Cache* cache;
+	int used_memory;
 };
 
 void initDatabase();
