@@ -40,6 +40,8 @@
 #include "PushKeyController.h"
 #include "Graphic.h"
 #include "MemoryMgr.h"
+#include "Range.h"
+#include "Cursor.h"
 
 #define HEADERSIZE 2
 #define SPACE 32

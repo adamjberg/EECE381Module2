@@ -140,7 +140,7 @@ struct Image* loadSDImage(char* filename) {
  */
 void draw(int pos_x, int pos_y, struct Image* this) {
 	if(this == NULL || this->buffer == NULL) return;
-	if(pos_x < 0 || pos_y < 0 || pos_x >= 320 || pos_y >= 240) {
+	if(pos_x < 0 || pos_y < 0 || pos_x + this->width>= 320 || pos_y + this->height>= 240) {
 		printf("draw image out of boundary\n");
 		return;
 	}
@@ -148,9 +148,25 @@ void draw(int pos_x, int pos_y, struct Image* this) {
 	int i, j;
 	for(i = 0; i < this->width; i++) {
 		for(j = 0; j < this->height; j++) {
-			if(*(this->buffer+ j*this->width+i) != 0) {
+			if(*(this->buffer+ j*this->width+i) != BACKGROUND) {
 				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((pos_y+j)*320+pos_x+i)<<1, *(this->buffer + j*this->width+i));
 			}
+		}
+	}
+}
+void draw_notransparent(int pos_x, int pos_y, struct Image* this) {
+	if(this == NULL || this->buffer == NULL) return;
+	if(pos_x < 0 || pos_y < 0 || pos_x + this->width>= 320 || pos_y + this->height>= 240) {
+		printf("draw image out of boundary\n");
+		return;
+	}
+	setImagePos(this, pos_x, pos_y);
+	int i, j;
+	for(i = 0; i < this->width; i++) {
+		for(j = 0; j < this->height; j++) {
+			//if(*(this->buffer+ j*this->width+i) != 0) {
+			IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((pos_y+j)*320+pos_x+i)<<1, *(this->buffer + j*this->width+i));
+			//}
 		}
 	}
 }

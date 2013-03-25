@@ -41,18 +41,24 @@ int main()
 
 	initMemory();
 
+	struct Cursor* cursor = initCursor(10, 100);
 	//Test VGA Output
-//	struct Image* testImg;
-//	while((testImg = loadSDImage("TEST.BMP")) == NULL);
-//	draw(35, 35, testImg);
-//	killImage(testImg);
+	struct Image* testImg;
+	while((testImg = loadSDImage("TEST.BMP")) == NULL);
+	draw(35, 35, testImg);
+	killImage(testImg);
 	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
 	//graphicTester();
 	//Test End
 
+	float x = getCursorX(cursor);
 	while(1) {
 		cmdProcessing(scheduler);
 		updateMixer();
+		updateCursor(cursor, (int)x, 100);
+		x+=0.005;
+		if(x >= 310)
+			x = 0;
 	}
 
 

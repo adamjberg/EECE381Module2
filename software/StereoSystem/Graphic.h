@@ -8,7 +8,7 @@
 #ifndef GRAPHIC_H_
 #define GRAPHIC_H_
 #include "Global.h"
-
+#define BACKGROUND 0
 struct Image {
 	int* buffer;
 	int x, y, prev_x, prev_y;
@@ -28,4 +28,5 @@ struct Image* loadSDImage(char*);
 int getColor(int, int, int);
 int getColor555(int);
 void draw(int, int, struct Image*);
+void draw_notransparent(int, int, struct Image*);
 #endif /* GRAPHIC_H_ */

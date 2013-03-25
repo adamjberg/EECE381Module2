@@ -24,15 +24,8 @@
         android:id="@+id/seekBar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
-
-    <SeekBar
-        android:id="@+id/seekBar1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/seekBar2"
-        android:layout_toRightOf="@+id/imageButton3" />
+        android:layout_alignLeft="@+id/imageButton1"
+        android:layout_alignParentBottom="true" />
 
     <ImageButton
         android:id="@+id/imageButton1"
@@ -73,5 +66,20 @@
         android:layout_alignParentLeft="true"
         android:onClick="onPrev"
         android:src="@android:drawable/ic_media_previous" />
+
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageButton3"
+        android:layout_toRightOf="@+id/imageView1" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/seekBar1"
+        android:layout_centerHorizontal="true"
+        android:src="@android:drawable/ic_lock_silent_mode_off" />
 
 </RelativeLayout>
