@@ -6,9 +6,11 @@ public class Song {
 	private int pos;
 	private int size;
 	private int id;
+	private boolean isStart;
 	public Song(String song_name) {
 		this.song_name = song_name;
 		this.volume = 100;
+		this.isStart = false;
 	}
 	public int getVolume() {
 		return volume;
@@ -20,7 +22,10 @@ public class Song {
 		return pos;
 	}
 	public void setPos(int pos) {
-		this.pos = pos;
+		if(pos > this.size)
+			this.pos = this.size;
+		else
+			this.pos = pos;
 	}
 	public int getId() {
 		return id;
@@ -37,5 +42,15 @@ public class Song {
 	public void setSize(int size) {
 		this.size = size;
 	}
-	
+	public void incPosByMs(int dt) {
+		this.pos += dt;
+		if(this.pos >= this.size)
+			this.pos = this.size;
+	}
+	public void startSwitch() {
+		this.isStart = !this.isStart;
+	}
+	public boolean getStart() {
+		return this.isStart;
+	}
 }

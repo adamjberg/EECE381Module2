@@ -81,7 +81,7 @@ public class CmdScheduler {
 				Command.addExisitedSongToList(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
 				break;
 			case 16:
-				Command.updatePos(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
+				Command.updatePos(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)), Integer.valueOf(cmd.getParameterList().get(2)));
 				break;
 			default:
 				break;

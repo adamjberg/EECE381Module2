@@ -39,6 +39,7 @@ int main()
 	//sync database
 	update();
 
+	initMemory();
 
 	//Test VGA Output
 //	struct Image* testImg;

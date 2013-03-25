@@ -56,9 +56,8 @@ struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength
 	float x0 = 0, x1 = 0, x = 0;
 	int y0 = 0, y1 = 0;
 	int j = 0;
-	if(db.used_memory + destLength > MAX_CACHE_MEMORY) {
-		printf("NO MEMORY!!");
-		return NULL;
+	if(memMgr.used_memory + destLength > MAX_CACHE_MEMORY) {
+		freeMem();
 	}
 	struct Sound* this = initSound(destLength);
 
@@ -138,7 +137,7 @@ struct Sound* initSound(unsigned int length) {
 	this->length = length;
 	this->position = 0;
 	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
-	db.used_memory += length;
+	//memMgr.used_memory += length;
 	this->playing = false;
 	this->volume = 1;
 	this->inFadePosition = 0;

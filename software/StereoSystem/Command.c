@@ -62,6 +62,7 @@ void play(int id, int vol, int pos) {
 	if(db.songs[id] == NULL || id <= 0 || id > MAX_SONGS) return;
 	printf("A song %d is started at %d volume.\n", id, vol);
 	playSong(db.songs[id], vol, pos, 0);
+	syncUpdatePos(id, pos, 1);
 	updateMixer();
 	//if (!alt_up_audio_write_interrupt_pending(up_dev.audio_dev))
 	enableAudioDeviceController();
@@ -310,20 +311,24 @@ void syncRemoveSongFromList(int list_id, int song_id) {
 	addCmd(com.scheduler, cmd);*/
 }
 void removeSongFromList(int list_id, int song_id) {
+	printf("remove song %d from list %d\n", song_id, list_id);
 	db.index_list_order[list_id][db.index_list_song[list_id][song_id]] = 0;
 	db.index_list_song[list_id][song_id] = 0;
 }
 
 //index 16
-void syncUpdatePos(int song_id, int pos) {
-	char* temp[2];
+void syncUpdatePos(int song_id, int pos, int isStart) {
+	char* temp[3];
 	char tempId[4];
 	char tempPos[4];
+	char tempStart[4];
 	sprintf(tempId, "%d", song_id);
 	sprintf(tempPos, "%d", pos);
+	sprintf(tempStart, "%d", isStart);
 	temp[0] = tempId;
 	temp[1] = tempPos;
-	struct Command* cmd = initCmd(16, 2, temp);
+	temp[2] = tempStart;
+	struct Command* cmd = initCmd(16, 3, temp);
 	send(cmd, CMD);
 	killCmd(&cmd);
 }

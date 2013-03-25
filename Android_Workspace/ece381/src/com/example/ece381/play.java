@@ -66,7 +66,7 @@ public class play extends Activity {
 
 		SeekBarTimerTask seek_task = new SeekBarTimerTask();
 		play_timer = new Timer();
-		play_timer.schedule(seek_task, 1000, 500);
+		play_timer.schedule(seek_task, 0, 100);
 	}
 
 	@Override
@@ -187,6 +187,7 @@ public class play extends Activity {
 					//user =fromUser;
 					if(com.getDB().getCurr_song_id() != 0) {
 						com.getDB().getSongs()[com.getDB().getCurr_song_id()].setPos(seek);
+						seekbar2.setProgress(seek);
 					}
 				}		
 			}
@@ -205,7 +206,10 @@ public class play extends Activity {
 	
 	public class SeekBarTimerTask extends TimerTask {
 		public void run() {
-			seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());
+			if(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getStart()) {
+				com.getDB().getSongs()[com.getDB().getCurr_song_id()].incPosByMs(100);
+				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());
+			}
 				
 		} 
 	}

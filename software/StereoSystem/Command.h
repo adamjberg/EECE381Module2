@@ -61,7 +61,7 @@ void syncAddExisitedSongToList(int, int);
 void syncRemoveSongFromList(int, int);
 void removeSongFromList(int, int);
 
-void syncUpdatePos(int, int);
+void syncUpdatePos(int, int, int);
 
 void modifyPlaylistName(int, char*);
 void shuffle(int);

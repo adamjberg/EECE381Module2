@@ -28,12 +28,14 @@ void loadSong(struct Song* this) {
 	if(this->sound != NULL)
 		unloadSong(this);
 	this->sound = loadWavSound(this->song_name);
+	addToMemory(this->sound, this->id);
 	this->size = getSoundLengthMS(this->sound);
 	this->isCached = true;
 }
 
 void unloadSong(struct Song* this) {
 	if(this == NULL || this->sound == NULL) return;
+	printf("unloading song id: %d\n", this->id);
 	unloadSound(this->sound);
 	this->sound = NULL;
 	this->isCached = false;

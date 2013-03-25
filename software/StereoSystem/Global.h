@@ -29,7 +29,6 @@
 #include "Object.h"
 #include "Coder.h"
 #include "Playlist.h"
-#include "Cache.h"
 #include "Database.h"
 #include "Command.h"
 #include "Song.h"
@@ -40,6 +39,7 @@
 #include "sound/AudioDeviceController.h"
 #include "PushKeyController.h"
 #include "Graphic.h"
+#include "MemoryMgr.h"
 
 #define HEADERSIZE 2
 #define SPACE 32
@@ -54,6 +54,7 @@ extern int queue_lock;
 extern struct database db;
 extern int song_id_lock;
 extern int SDIO_lock;
+extern struct MemoryMgr memMgr;
 
 enum msgType {
 	STRING=0, CMD=1, PLAYLIST=2, AUDIO=3
