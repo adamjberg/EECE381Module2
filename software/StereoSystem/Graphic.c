@@ -91,16 +91,20 @@ struct Image* loadSDImage(char* filename) {
 	} printf("offset: %x\n", offset);
 	bytes++;
 	while(bytes < offset){
-		if(bytes == 18) {
-			if((width = alt_up_sd_card_read(file_pointer))< 0) {
+		if(bytes == 18 || bytes == 19) {
+			if((temp = alt_up_sd_card_read(file_pointer))< 0) {
 				alt_up_sd_card_fclose(file_pointer);
 				return false;
-			} printf("width: %d, ", width);
-		} else if(bytes == 22) {
-			if((height = alt_up_sd_card_read(file_pointer))< 0) {
+			} width += (int)temp << (bytes-18)*8 ;
+			if(bytes == 19)
+				printf("width: %d, ", width);
+		} else if(bytes == 22 || bytes == 23) {
+			if((temp = alt_up_sd_card_read(file_pointer))< 0) {
 				alt_up_sd_card_fclose(file_pointer);
 				return false;
-			} printf("height: %d\n", height);
+			} height += (int)temp << (bytes-22)*8 ;
+			if(bytes == 22)
+				printf("height: %d\n", height);
 		} else if(bytes == 34 || bytes == 35 || bytes == 36 || bytes == 37) {
 			if((temp = alt_up_sd_card_read(file_pointer))< 0) {
 				alt_up_sd_card_fclose(file_pointer);
@@ -140,7 +144,7 @@ struct Image* loadSDImage(char* filename) {
  */
 void draw(int pos_x, int pos_y, struct Image* this) {
 	if(this == NULL || this->buffer == NULL) return;
-	if(pos_x < 0 || pos_y < 0 || pos_x + this->width>= 320 || pos_y + this->height>= 240) {
+	if(pos_x < 0 || pos_y < 0 || pos_x + this->width> 320 || pos_y + this->height> 240) {
 		printf("draw image out of boundary\n");
 		return;
 	}
@@ -156,7 +160,7 @@ void draw(int pos_x, int pos_y, struct Image* this) {
 }
 void draw_notransparent(int pos_x, int pos_y, struct Image* this) {
 	if(this == NULL || this->buffer == NULL) return;
-	if(pos_x < 0 || pos_y < 0 || pos_x + this->width>= 320 || pos_y + this->height>= 240) {
+	if(pos_x < 0 || pos_y < 0 || pos_x + this->width> 320 || pos_y + this->height> 240) {
 		printf("draw image out of boundary\n");
 		return;
 	}
