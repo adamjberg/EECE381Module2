@@ -15,7 +15,7 @@
 #define MAX_LISTS 51
 #define MAX_SONGS 101
 #define MAX_SONGS_MIX 11
-#define MAX_CACHE_MEMORY 1000000
+#define MAX_CACHE_MEMORY 1500000
 struct database db;
 
 struct database {

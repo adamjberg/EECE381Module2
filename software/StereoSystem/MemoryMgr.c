@@ -17,23 +17,35 @@ void initMemory() {
 void addToMemory(struct Sound* sound, int id) {
 	memMgr.used_memory += sound->length;
 	if(memMgr.songs[memMgr.curr_index] != 0) {
+		printf("used memory: %u\n", memMgr.used_memory);
 		memMgr.used_memory -= db.songs[memMgr.songs[memMgr.curr_index]]->sound->length;
 		unloadSong(db.songs[memMgr.songs[memMgr.curr_index]]);
+		printf("used memory: %u\n", memMgr.used_memory);
 	}
 	memMgr.songs[memMgr.curr_index++] = id;
-	if(memMgr.curr_index >= 5)
+	if(memMgr.curr_index >= 3)
 		memMgr.curr_index = 0;
 }
 
-void freeMem() {
+void freeMem(int mem) {
 	printf("Free memory from buffer\n");
-	printf("used memory: %d\n", memMgr.used_memory);
-	int freeIndex = memMgr.curr_index+1;
-	if(freeIndex >= 5)
+	int temp = memMgr.used_memory;
+	printf("used memory: %u\n", memMgr.used_memory);
+	int freeIndex = memMgr.curr_index;
+	if(freeIndex >= 3)
 		freeIndex = 0;
-	if(memMgr.songs[freeIndex] != 0) {
-		memMgr.used_memory -= db.songs[memMgr.songs[freeIndex]]->sound->length;
-		unloadSong(db.songs[memMgr.songs[freeIndex]]);
+	while(memMgr.used_memory + mem > MAX_CACHE_MEMORY) {
+		if(memMgr.songs[freeIndex] != 0) {
+			memMgr.used_memory -= db.songs[memMgr.songs[freeIndex]]->sound->length;
+			unloadSong(db.songs[memMgr.songs[freeIndex]]);
+			memMgr.songs[freeIndex] = 0;
+		}
+		freeIndex++;
+		if(freeIndex >= 3)
+			freeIndex = 0;
 	}
-	printf("used memory: %d\n", memMgr.used_memory);
+	if(temp == memMgr.used_memory) {
+		printf("???\n");
+	}
+	printf("used memory: %u\n", memMgr.used_memory);
 }

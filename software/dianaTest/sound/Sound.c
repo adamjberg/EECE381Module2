@@ -57,7 +57,7 @@ struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength
 	int y0 = 0, y1 = 0;
 	int j = 0;
 	if(memMgr.used_memory + destLength > MAX_CACHE_MEMORY) {
-		freeMem(destLength);
+		freeMem();
 	}
 	struct Sound* this = initSound(destLength);
 
@@ -65,11 +65,7 @@ struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength
 		for(i = 0; i < srcLength; i++) {
 			if(j >= destLength) break;
 			x1 = i/(float)fromSampleRate;
-			if((y1 = readInt(filePointer, bytesPerSample)) < 0) {
-				free(this->buffer);
-				free(this);
-				return NULL;
-			}
+			y1 = readInt(filePointer, bytesPerSample);
 			if(y1 > 0x07FFFFF) {
 				y1 = y1 | 0xFF000000;
 			}
@@ -88,11 +84,7 @@ struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength
 		}
 	} else {
 		for(i = 0; i < destLength; i++) {
-			if((this->buffer[i] = readInt(filePointer, bytesPerSample)) < 0) {
-				free(this->buffer);
-				free(this);
-				return NULL;
-			}
+			this->buffer[i] = readInt(filePointer, bytesPerSample);
 		}
 	}
 	return this;
@@ -105,7 +97,7 @@ struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength
  * @param bitsPerSampleFrom - Number of bits used for current sample
  */
 void changeBitsPerSample(struct Sound* this, int bitsPerSampleTo, int bitsPerSampleFrom) {
-	if (bitsPerSampleTo == bitsPerSampleFrom || this == NULL)
+	if (bitsPerSampleTo == bitsPerSampleFrom)
 		return;
 
 	int i;
@@ -126,12 +118,8 @@ int readInt(int file_pointer, int numBytesToRead) {
 	int ret = 0;
 	int i;
 	int bytes[numBytesToRead];
-	memset(bytes, 0, numBytesToRead);
 	for (i = 0; i < numBytesToRead; i++) {
-		if((bytes[i] = alt_up_sd_card_read(file_pointer)) < 0) {
-			printf("read file invalid\n");
-			return -1;
-		}
+		bytes[i] = alt_up_sd_card_read(file_pointer);
 		ret |= (bytes[i] << (8 * i));
 	}
 	return ret;
@@ -215,13 +203,13 @@ struct Sound* loadWavSound(char * filename) {
 	if (file_pointer < 0) {
 		alt_up_sd_card_fclose(file_pointer); //close the file
 		printf("sound file open failed\n");
-		return NULL;
+		return false;
 	}
 	char temp;
 	//Start reading the wav header
 	while (index < SAMPLE_RATE_OFFSET) {
 		temp = alt_up_sd_card_read(file_pointer);
-	//	printf("%d %x\n", index, temp);
+		//printf("%d %x\n", index, temp);
 		index++;
 	}
 
@@ -230,7 +218,7 @@ struct Sound* loadWavSound(char * filename) {
 	printf("sample rate: %d\n", sampleRate);
 	while (index < BITS_PER_SAMPLE_OFFSET) {
 		temp = alt_up_sd_card_read(file_pointer);
-	//	printf("%d %x\n", index, temp);
+		//printf("%d %x\n", index, temp);
 		index++;
 	}
 
@@ -239,21 +227,12 @@ struct Sound* loadWavSound(char * filename) {
 	index += 2;
 	printf("bits/sample %d\n", bits_per_sample);
 	while (index < DATA_LENGTH_OFFSET) {
-		if((temp = alt_up_sd_card_read(file_pointer)) < 0) {
-			printf("read file invalid\n");
-			alt_up_sd_card_fclose(file_pointer);
-			return NULL;
-		}
-	//	printf("%d %x\n", index, temp);
+		temp = alt_up_sd_card_read(file_pointer);
+		//printf("%d %x\n", index, temp);
 		index++;
 	}
 
 	int srcLength = readInt(file_pointer, 4) / bytes_per_sample;
-	if(srcLength == -1) {
-		printf("read file invalid\n");
-		alt_up_sd_card_fclose(file_pointer);
-		return NULL;
-	}
 	printf("length: %u\n", srcLength);
 	sound = loadSoundBuffer(file_pointer, bytes_per_sample, srcLength, DEFAULT_SAMPLE_RATE, sampleRate);
 

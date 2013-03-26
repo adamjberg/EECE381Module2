@@ -16,6 +16,7 @@ bool loadSDCard(alt_up_sd_card_dev* device) {
 	return false;
 }
 
+
 int main()
 {
 	//SD device initialization
@@ -23,6 +24,7 @@ int main()
 	while(!loadSDCard(device_reference)) {
 		printf("SD card is not connected.\n");
 	}
+	int count = 0;
 
 	initVGA();
 	initAudioDeviceController();
@@ -36,38 +38,35 @@ int main()
 	initPushKeyController();
 
 	initDatabase();
-	initMemory();
 	//sync database
-	//dBTester();
 	update();
 
+	initMemory();
+	//enableAudioDeviceController();
+	initPushKeyController();
 
-	struct Cursor* cursor = initCursor(10, 100);
+	//struct Cursor* cursor = initCursor(10, 100);
 	//Test VGA Output
-	struct Image* testImg;
+	/*struct Image* testImg;
 	while((testImg = loadSDImage("TEST.BMP")) == NULL);
 	draw(35, 35, testImg);
 	killImage(testImg);
-	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
-	//graphicTester();
+	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);*/
+	graphicTester();
 	//Test End
+	//struct Frame* mainFrame = initMainFrame();
 
-	int i = 2;
-	playSong(db.songs[1], 100, 0, 0);
-	updateMixer();
-	enableAudioDeviceController();
+	//float x = getCursorX(cursor);
 
-	float x = getCursorX(cursor);
+
 	while(1) {
+		count++;
 		cmdProcessing(scheduler);
 		updateMixer();
-
-		i = soundTester(i);
-
-		updateCursor(cursor, (int)x, 100);
-		x+=0.005;
-		if(x >= 310)
-			x = 0;
+		//updateCursor(cursor, (int)x, 100);
+		//x+=0.005;
+		//if(x >= 310)
+		//	x = 0;
 	}
 
 

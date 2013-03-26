@@ -35,7 +35,7 @@ void initDatabase() {
 	} temp = NULL;
 	loadListsFromSD();
 	loadSongsFromSD();
-	//preloadSongsToPlaylist();
+	preloadSongsToPlaylist();
 }
 
 void update() {
@@ -341,7 +341,7 @@ char** getSongsFromSD(){
 		if (strstr(fileName, ".WAV") != NULL){
 			songNames[numOfWavFiles] = malloc(20 * sizeof(char));
 			strcpy(songNames[numOfWavFiles], fileName);
-			createSong(fileName, 0);
+			//createSong(fileName, 0);
 			numOfWavFiles++;
 		}
 		memset(fileName, 0 , sizeof(fileName));
@@ -392,7 +392,7 @@ int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	while (numOfSongs < MAX_SONGS){
 		line = (char*)malloc(sizeof(char)*501);
 		if((fileStats = readLine(fileHandler, line)) == -2) {
-			printf("File SONGS.TXT cannot be read, reopening...\n");
+			printf("File cannot be read, reopening...\n");
 			if (!alt_up_sd_card_fclose(fileHandler)){
 				printf("File is not closed properly.\n");
 			}
@@ -487,7 +487,7 @@ int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 void loadSongsFromSD(){
 	char** sdsongs = NULL;
 	sdsongs = getSongsFromSD();
-	//getAndUpdateSongsFromTxt(sdsongs);
+	getAndUpdateSongsFromTxt(sdsongs);
 	//while(getAndUpdateSongsFromTxt() != 0);
 
 }
