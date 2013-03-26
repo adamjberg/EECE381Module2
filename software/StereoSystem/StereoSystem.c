@@ -62,7 +62,7 @@ int main()
 		cmdProcessing(scheduler);
 		updateMixer();
 
-		i = soundTester(i);
+		//i = soundTester(i);
 
 		updateCursor(cursor, (int)x, 100);
 		x+=0.005;
