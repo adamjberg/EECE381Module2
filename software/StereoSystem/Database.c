@@ -35,7 +35,7 @@ void initDatabase() {
 	} temp = NULL;
 	loadListsFromSD();
 	loadSongsFromSD();
-	//preloadSongsToPlaylist();
+	preloadSongsToPlaylist();
 }
 
 void update() {
@@ -341,7 +341,7 @@ char** getSongsFromSD(){
 		if (strstr(fileName, ".WAV") != NULL){
 			songNames[numOfWavFiles] = malloc(20 * sizeof(char));
 			strcpy(songNames[numOfWavFiles], fileName);
-			createSong(fileName, 0);
+			//createSong(fileName, 0);
 			numOfWavFiles++;
 		}
 		memset(fileName, 0 , sizeof(fileName));
@@ -487,7 +487,7 @@ int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 void loadSongsFromSD(){
 	char** sdsongs = NULL;
 	sdsongs = getSongsFromSD();
-	//getAndUpdateSongsFromTxt(sdsongs);
+	getAndUpdateSongsFromTxt(sdsongs);
 	//while(getAndUpdateSongsFromTxt() != 0);
 
 }
