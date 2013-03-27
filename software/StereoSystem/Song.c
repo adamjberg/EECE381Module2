@@ -7,7 +7,7 @@
 #include "Song.h"
 
 #define LENGTH_OF_FADE_PERCENT 0.3
-#define MAX_FADE_LENGTH 2500
+#define MAX_FADE_LENGTH 50000
 
 struct Song* initSong(char* songname) {
 	struct Song* this = (struct Song*)malloc(sizeof(struct Song));

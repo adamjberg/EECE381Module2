@@ -506,11 +506,12 @@ int isCurrPlaying(int song_id) {
 }
 
 void removeCurrPlaying(int index) {
+	int j = index;
 	db.total_songs_playing--;
-	int i = index;
-	stopSound(db.songs[db.curr_song_ids[i]]->sound);
-	while(db.curr_song_ids[i] != 0) {
-		db.curr_song_ids[i] = db.curr_song_ids[++i];
+	stopSound(db.songs[db.curr_song_ids[j]]->sound);
+	for(j = index; j <= db.total_songs_playing; j++) {
+
+		db.curr_song_ids[j] = db.curr_song_ids[j+1];
 	}
 }
 

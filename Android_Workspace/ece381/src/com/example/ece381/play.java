@@ -1,25 +1,18 @@
 package com.example.ece381;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.example.ece381.Communication.Stats;
-import com.example.ece381.MainActivity.TCPReadTimerTask;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -38,6 +31,7 @@ public class play extends Activity {
 	private int seek;
 	private Communication com = Communication.getInstance();
 	private Timer play_timer;
+	Handler handler;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,12 +46,14 @@ public class play extends Activity {
 	    }
 		addBarSsound();
 		addBarSeek();
-		
+		handler = new Handler();
 		greetMsg = (TextView) findViewById(R.id.textView1);
 		
 		Toast.makeText(getApplicationContext(), 
 				update(), Toast.LENGTH_SHORT).show();
 		
+		if(com.getDB().getCurr_song_id() != 0)
+			Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
 		SeekBarTimerTask seek_task = new SeekBarTimerTask();
 		play_timer = new Timer();
 		play_timer.schedule(seek_task, 100, 100);
@@ -70,7 +66,6 @@ public class play extends Activity {
 		else {
 			msg = "playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSongName();
 			greetMsg.setText(msg);
-			Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
 		} return msg;
 
 	}
@@ -220,8 +215,11 @@ public class play extends Activity {
 				seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());
 				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());
 			}
-				
-		} 
+			handler.post(new Runnable(){
+                public void run() {
+                   update();
+                }}); 
+		}
 	}
 	
 }

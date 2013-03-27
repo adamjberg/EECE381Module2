@@ -15,6 +15,7 @@
 void initSoundMixer() {
 	soundMixer = (struct SoundMixer*) malloc(sizeof(struct SoundMixer));
 	soundMixer->currIndex = soundMixer->endIndex = soundMixer->indexSize = 0;
+	memset(soundMixer->empty_buffer, 0, sizeof(soundMixer->empty_buffer));
 	clearSoundMixer();
 }
 
@@ -25,7 +26,7 @@ void setGlobalVolume(float volume) {
 void clearSoundMixer() {
 	int i;
 	soundMixer->cleared = true;
-	for(i = 0; i < 100; i++) {
+	for(i = 0; i < 299; i++) {
 		clearIndexBuffer(i);
 	}
 }
@@ -56,7 +57,7 @@ void loadToSoundBuffer(struct Sound* sound) {
 	if(soundMixer->indexSize >=299) return;
 	int i;
 	unsigned int data;
-	if (sound->position <= 1) {
+	if (sound->position <= sound->inFadePosition) {
 		sound->fadeVolume = sound->volume;
 	}
 	for(i = 0; i < MAX_SOUNDMIXBUF; i++) {

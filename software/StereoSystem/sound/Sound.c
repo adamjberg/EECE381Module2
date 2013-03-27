@@ -15,16 +15,16 @@
  * Helper function to convert a millisecond value to the correct position
  * in the sound buffer
  */
-unsigned int convertFromMS(struct Sound* this, unsigned int value) {
+unsigned int convertFromMS(int value) {
 
-	return (unsigned int)(value * DEFAULT_SAMPLE_RATE/1000);
+	return (unsigned int)(value * 32);
 }
 
 /**
  * Helper function to convert a value to its millisecond equivalent based on the
  * sampling rate
  */
-unsigned int convertToMS(struct Sound* this, unsigned int value) {
+unsigned int convertToMS(unsigned int value) {
 	return (unsigned int) ((value * 1000)/ DEFAULT_SAMPLE_RATE);
 }
 
@@ -32,14 +32,14 @@ unsigned int convertToMS(struct Sound* this, unsigned int value) {
  * Returns the length of the sound in milliseconds
  */
 unsigned int getSoundPositionMS(struct Sound* this) {
-	return convertToMS(this, this->position);
+	return convertToMS(this->position);
 }
 
 /**
  * Returns the length of the sound in milliseconds
  */
 unsigned int getSoundLengthMS(struct Sound* this) {
-	return convertToMS(this, this->length);
+	return convertToMS(this->length);
 }
 
 /**
@@ -349,11 +349,11 @@ void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex
 }*/
 
 void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {
-	this->inFadePosition = convertFromMS(this, inFadeLength);
+	this->inFadePosition = inFadeLength;
 }
 
-void setFadeOutLength(struct Sound* this, unsigned int outFadeLength) {
-	this->outFadePosition = this->length - convertFromMS(this, outFadeLength);
+void setFadeOutLength(struct Sound* this, unsigned int len) {
+	this->outFadePosition = this->length - len;
 }
 
 int convertVolumeToInt(float volume) {
@@ -383,6 +383,7 @@ void setSoundVolumeStatic(struct Sound* this, float volume) {
  */
 void setSoundVolume(struct Sound* this, float volume) {
 	this->volume = volume;
+	this->fadeVolume = volume;
 }
 
 /**
@@ -392,7 +393,7 @@ void setSoundVolume(struct Sound* this, float volume) {
  * @param position - The position to seek to in MilliSeconds
  */
 void seekSound(struct Sound* this, unsigned int position) {
-	this->position = convertFromMS(this, position);
+	this->position = convertFromMS(position);
 }
 
 void updatePos(struct Sound* this) {

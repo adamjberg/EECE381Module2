@@ -17,6 +17,8 @@
 #include <altera_up_sd_card_avalon_interface.h>
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
 #include "altera_up_avalon_video_character_buffer_with_dma.h"
+#include "altera_up_avalon_ps2.h"
+#include "altera_up_ps2_mouse.h"
 
 #include "sys/alt_stdio.h"
 #include "sys/alt_irq.h"

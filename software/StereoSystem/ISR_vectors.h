@@ -20,6 +20,7 @@
 struct alt_up_dev {
 	alt_up_rs232_dev *RS232_dev;
 	alt_up_audio_dev *audio_dev;
+	alt_up_ps2_dev *ps2_dev;
 };
 
 void push_key_ISR(struct PushKeyController*, unsigned int);

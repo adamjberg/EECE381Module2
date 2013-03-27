@@ -8,6 +8,12 @@
 #include "Cursor.h"
 
 struct Cursor* initCursor(int x, int y) {
+	up_dev.ps2_dev = alt_up_ps2_open_dev("/dev/ps2_0");
+	up_dev.ps2_dev->timeout = 2000000;
+	alt_up_ps2_clear_fifo(up_dev.ps2_dev);
+	alt_up_ps2_init(up_dev.ps2_dev);
+	unsigned char byte1;
+	while(alt_up_ps2_read_data_byte(up_dev.ps2_dev, &byte1)!=0);
 	struct Cursor* this = (struct Cursor*)malloc(sizeof(struct Cursor));
 	this->super = initObject(initRange(x, y, 10, 10), loadSDImage("AR01.BMP"), (void*)this);
 	int* image = (int*)malloc(sizeof(int)*100);
