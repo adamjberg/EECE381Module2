@@ -45,7 +45,7 @@ int main()
 	struct Cursor* cursor = initCursor(10, 100);
 	//Test VGA Output
 	struct Image* testImg;
-	struct Image* testImg1;
+	//struct Image* testImg1;
 	while((testImg = loadSDImage("TEST.BMP")) == NULL);
 	//while((testImg1 = loadSDImage("ART3.BMP")) == NULL);
 	draw(35, 35, testImg);
@@ -56,16 +56,16 @@ int main()
 	//Test End
 
 	int i = 2;
-	playSong(db.songs[1], 100, 0, 0);
+	/*playSong(db.songs[1], 100, 0, 0);
 	updateMixer();
-	enableAudioDeviceController();
-
+	enableAudioDeviceController();*/
+	syncPlay(1, 100, 0);
 	float x = getCursorX(cursor);
 	while(1) {
 		cmdProcessing(scheduler);
 		updateMixer();
 
-		//i = soundTester(i);
+	//	i = soundTester(i);
 
 		updateCursor(cursor, (int)x, 100);
 		x+=0.005;

@@ -23,6 +23,7 @@ void initDatabase() {
 	db.index_list_song[0][0] = 0;
 	db.playlists[0] = NULL;
 	db.songs[0] = NULL;
+	db.isPaused = false;
 	for(i = 1; i < MAX_LISTS; i++) {
 		temp = (int*)malloc(sizeof(int));
 		*temp = i;
@@ -487,8 +488,8 @@ int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 void loadSongsFromSD(){
 	char** sdsongs = NULL;
 	sdsongs = getSongsFromSD();
-	getAndUpdateSongsFromTxt(sdsongs);
-	//while(getAndUpdateSongsFromTxt() != 0);
+	//getAndUpdateSongsFromTxt(sdsongs);
+	while(getAndUpdateSongsFromTxt(sdsongs) < 0);
 
 }
 

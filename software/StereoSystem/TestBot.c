@@ -349,9 +349,10 @@ int soundTester(int i) {
 	if(isCurrPlaying(i-1) < 0) {
 		if(i > db.num_of_songs)
 			i = 1;
-		playSong(db.songs[i], 100, 0, 0);
-		updateMixer();
-		enableAudioDeviceController();
+		syncPlay(i, 100, 0);
+		//playSong(db.songs[i], 100, 0, 0);
+		//updateMixer();
+		//enableAudioDeviceController();
 		i++;
 	}
 	return i;

@@ -24,11 +24,12 @@ struct Sound {
 	unsigned int inFadePosition;
 	unsigned int outFadePosition;
 	unsigned int position;
+	unsigned int loading_pos;
 	unsigned int length;
 	int loops;
 	unsigned int *buffer;
 	bool playing;
-	float volume;
+	float volume, fadeVolume;
 };
 
 struct Sound* initSound(unsigned int);
@@ -51,4 +52,6 @@ void clearSoundBuffer(struct Sound*);
 bool checkEnd(struct Sound*);
 int readInt(int, int);
 void updatePos(struct Sound*);
+int* loadWavHeader(char*);
+bool loadStreamBuffer(struct Sound*, int*, int);
 #endif /* SOUND_H_ */

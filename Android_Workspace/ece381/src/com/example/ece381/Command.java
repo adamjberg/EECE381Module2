@@ -65,6 +65,7 @@ public class Command {
 	
 	static public void play(int id, int vol, int pos) {
 		Communication com = Communication.getInstance();
+		com.getDB().setCurr_song_id(id);
 		com.getDB().getCurrSongsIds().add(Integer.valueOf(id));
 		com.getDB().getSongs()[id].setVolume(vol);
 		com.getDB().getSongs()[id].setPos(pos);
@@ -80,8 +81,10 @@ public class Command {
 	
 	static public void pause(int id) {
 		Communication com = Communication.getInstance();
-		if(com.getDB().getCurrSongsIds().contains(Integer.valueOf(id)))
+		if(com.getDB().getCurrSongsIds().contains(Integer.valueOf(id))) {
 			com.getDB().getCurrSongsIds().remove(Integer.valueOf(id));
+			com.getDB().getSongs()[Integer.valueOf(id)].startSwitch();
+		}
 		
 	}
 	

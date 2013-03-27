@@ -52,23 +52,28 @@ public class play extends Activity {
 	    }
 		addBarSsound();
 		addBarSeek();
+		
 		greetMsg = (TextView) findViewById(R.id.textView1);
-		//Intent i = getIntent();
-		//String uname = (String) i.getSerializableExtra("USERNAME");
+		
+		Toast.makeText(getApplicationContext(), 
+				update(), Toast.LENGTH_SHORT).show();
+		
+		SeekBarTimerTask seek_task = new SeekBarTimerTask();
+		play_timer = new Timer();
+		play_timer.schedule(seek_task, 100, 100);
+	}
+
+	public String update() {
+		String msg = "No music is currently playing";
 		if(com.getDB().getCurr_song_id() == 0)
 			greetMsg.setText("No song has been selected");
 		else {
-			String msg = "playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSongName();
+			msg = "playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSongName();
 			greetMsg.setText(msg);
-			Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 			Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
-		}
+		} return msg;
 
-		SeekBarTimerTask seek_task = new SeekBarTimerTask();
-		play_timer = new Timer();
-		play_timer.schedule(seek_task, 0, 100);
 	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
@@ -85,6 +90,7 @@ public class play extends Activity {
 			// onBackPressed();
 		    return true;
 		case R.id.songs:
+			finish();
 			Intent intentsong = new Intent(play.this, MainActivity.class);
 		    startActivity(intentsong);   
 		    return true;
@@ -93,6 +99,7 @@ public class play extends Activity {
 					item.getTitle(),Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.playlists:
+			finish();
 			Intent intent = new Intent(play.this, PlaylistActivity.class);
 		    startActivity(intent);   
 		    return true;
@@ -206,8 +213,11 @@ public class play extends Activity {
 	
 	public class SeekBarTimerTask extends TimerTask {
 		public void run() {
+			//update();
+			if(com.getDB().getCurr_song_id() == 0) return;
 			if(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getStart()) {
 				com.getDB().getSongs()[com.getDB().getCurr_song_id()].incPosByMs(100);
+				seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());
 				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());
 			}
 				

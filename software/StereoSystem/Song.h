@@ -21,8 +21,7 @@ struct Song {
 	int size;
 	bool isCached;
 	int id;
-	//struct Song* next;
-	//struct Song* prev;
+	int* property;
 };
 
 struct Song* initSong(char*);
@@ -37,6 +36,7 @@ void resumeSong(struct Song*);
 void seekSong(struct Song*, unsigned int);
 void unloadSong(struct Song*);
 void loadSong(struct Song*);
+void loadStream(struct Song*, int*, int);
 int getSongPosition(struct Song*);
 int getLength(struct Song*);
 #endif /* SONG_H_ */

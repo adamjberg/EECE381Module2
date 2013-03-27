@@ -6,7 +6,7 @@
  */
 #include "Song.h"
 
-#define LENGTH_OF_FADE_PERCENT 0.2
+#define LENGTH_OF_FADE_PERCENT 0.3
 #define MAX_FADE_LENGTH 2500
 
 struct Song* initSong(char* songname) {
@@ -20,6 +20,7 @@ struct Song* initSong(char* songname) {
 	this->volume = 100;
 	this->id = 0;
 	this->sound = NULL;
+	this->property = NULL;
 	return this;
 }
 
@@ -33,6 +34,12 @@ void loadSong(struct Song* this) {
 	addToMemory(this->sound, this->id);
 	this->size = getSoundLengthMS(this->sound);
 	this->isCached = true;
+}
+
+void loadStream(struct Song* this, int* property, int weight) {
+	if(this == NULL || this->sound == NULL || this->sound->loading_pos >= this->sound->length) return;
+	if(!loadStreamBuffer(this->sound, this->property, weight))
+		alt_up_sd_card_fclose(this->property[3]);
 }
 
 void unloadSong(struct Song* this) {
@@ -70,25 +77,49 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 	if(isCurrPlaying(this->id) >= 0|| db.total_songs_playing >= MAX_SONGS_MIX - 1) return;
 	this->pos = startTime;
 	this->volume = (int)volume;
+	db.isPaused = false;
 	if(this->sound == NULL)
 		loadSong(this);
-	/*int fadeLength = (int) (getLength(this) * LENGTH_OF_FADE_PERCENT);
+	int fadeLength = (int) this->sound->length * LENGTH_OF_FADE_PERCENT;
 	if(fadeLength > MAX_FADE_LENGTH) {
 		fadeLength = MAX_FADE_LENGTH;
 	}
 	setFadeInLength(this->sound, fadeLength);
-	setFadeOutLength(this->sound, fadeLength);*/
+	setFadeOutLength(this->sound, fadeLength);
+	this->sound->fadeVolume = volume/100.0;
 	db.curr_song_ids[db.total_songs_playing++] = this->id;
 	db.curr_song_id = this->id;
 	playSound(this->sound, volume/100, startTime, loops);
 	//song_id_lock = 0;
 }
 
+void playStream(struct Song* this, float volume, int startTime, int loops) {
+	if(this == NULL) return;
+	if(isCurrPlaying(this->id) >= 0|| db.total_songs_playing >= MAX_SONGS_MIX - 1) return;
+
+	this->pos = startTime;
+	this->volume = (int)volume;
+	if(this->sound == NULL) {
+		this->property = loadWavHeader(this->song_name);
+		if(memMgr.used_memory + this->property[2] > MAX_CACHE_MEMORY) {
+			freeMem(this->property[2]);
+		}
+		this->sound = initSound(this->property[2]);
+		loadStream(this, this->property, 30);
+		addToMemory(this->sound, this->id);
+	}
+
+	db.curr_song_ids[db.total_songs_playing++] = this->id;
+	db.curr_song_id = this->id;
+	playSound(this->sound, volume/100, startTime, loops);
+
+}
 void pauseSong(struct Song* this) {
 	printf("The music %d start to pause.\n", this->id);
 	int index;
 	if(this == NULL) return;
 	if((index = isCurrPlaying(this->id)) < 0) return;
+	db.isPaused = true;
 	removeCurrPlaying(index);
 	pauseSound(this->sound);
 	printf("The music is paused.\n");

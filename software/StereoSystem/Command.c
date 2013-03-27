@@ -84,6 +84,9 @@ void syncPause(int id) {
 void pause(int id) {
 	disableAudioDeviceController();
 	pauseSong(db.songs[id]);
+	//if(db.curr_playlist_id != 0) {
+		//syncNext();
+	//}
 }
 /*
  * Function to call when need to sync with Android
@@ -141,10 +144,11 @@ void next(int song_id) {
 	printf("Next song is selected.\n");
 	if(db.curr_playlist_id == 0 && song_id < db.num_of_songs) {
 		play(song_id+1, 100, 0);
+		printf("Next song is played.\n");
 	} else if(db.curr_playlist_id != 0 && db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1] != 0) {
 		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1], 100, 0);
+		printf("Next song is played.\n");
 	}
-	printf("Next song is played.\n");
 }
 void syncPrev(int song_id) {
 	syncStop();
@@ -161,10 +165,11 @@ void prev(int song_id) {
 	printf("Previous song is selected.\n");
 	if(db.curr_playlist_id == 0 && song_id > 1) {
 		play(song_id-1, 100, 0);
+		printf("Previous song is played.\n");
 	} else if(db.curr_playlist_id != 0) {
 		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]-1], 100, 0);
+		printf("Previous song is played.\n");
 	}
-	printf("Previous song is played.\n");
 }
 
 /*

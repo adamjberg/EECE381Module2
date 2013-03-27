@@ -50,7 +50,7 @@ unsigned int getSoundLengthMS(struct Sound* this) {
  * @param toSampleRate - sampling rate to convert to
  * @param fromSampleRate - current sound sample rate
  */
-struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength, int toSampleRate, int fromSampleRate) {
+struct Sound* loadSoundBuffer(int* property, int bytesPerSample, int srcLength, int toSampleRate, int fromSampleRate) {
 	int i = 0;
 	int destLength = ((float) srcLength * toSampleRate) / fromSampleRate;
 	float x0 = 0, x1 = 0, x = 0;
@@ -65,7 +65,7 @@ struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength
 		for(i = 0; i < srcLength; i++) {
 			if(j >= destLength) break;
 			x1 = i/(float)fromSampleRate;
-			if((y1 = readInt(filePointer, bytesPerSample)) < 0) {
+			if((y1 = readInt(property[3], bytesPerSample)) < 0) {
 				free(this->buffer);
 				free(this);
 				return NULL;
@@ -88,7 +88,7 @@ struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength
 		}
 	} else {
 		for(i = 0; i < destLength; i++) {
-			if((this->buffer[i] = readInt(filePointer, bytesPerSample)) < 0) {
+			if((this->buffer[i] = readInt(property[3], bytesPerSample)) < 0) {
 				free(this->buffer);
 				free(this);
 				return NULL;
@@ -98,6 +98,20 @@ struct Sound* loadSoundBuffer(int filePointer, int bytesPerSample, int srcLength
 	return this;
 }
 
+bool loadStreamBuffer(struct Sound* this, int* property, int weight) {
+	int i;
+	int size = 288;
+	if(weight != 0)
+		size = this->length*weight/100;
+	for(i = 0; i < size; i++) {
+		if(this->loading_pos < this->length) {
+			this->buffer[this->loading_pos] = readInt(property[3], property[1]/8);
+			this->loading_pos++;
+		} else {
+			return false;
+		}
+	} return true;
+}
 /**
  * Checks to see if the values need to be shifted to match given bytesPerSample
  * @param this - sound to change values of
@@ -152,8 +166,10 @@ struct Sound* initSound(unsigned int length) {
 	//memMgr.used_memory += length;
 	this->playing = false;
 	this->volume = 1;
+	this->fadeVolume = 1;
 	this->inFadePosition = 0;
 	this->outFadePosition = this->length;
+	this->loading_pos = 0;
 	clearSoundBuffer(this);
 	return this;
 }
@@ -203,21 +219,49 @@ void updateSoundPosition(struct Sound* this, int numWritten) {
  *
  * @param id - id of the sound to load
  * @param buffer - buffer to save the sound wave into
- * NOTE: If a NULL buffer is supplied the sound will be saved in the Sound struct
+ * return NULL if failed to read the wave file
  */
 struct Sound* loadWavSound(char * filename) {
-	printf("loading sound: %s\n", filename);
-
 	struct Sound* sound;
-	int index = 0;
+	int* property;
 	SDIO_lock = 1;
+
+	if((property = loadWavHeader(filename)) == NULL) {
+		return NULL;
+	}
+
+	sound = loadSoundBuffer(property, property[1]/8, property[2], DEFAULT_SAMPLE_RATE, property[0]);
+
+	if(sound == NULL) {
+		alt_up_sd_card_fclose(property[3]);
+		free(property);
+		property = NULL;
+		return NULL;
+	}
+
+	alt_up_sd_card_fclose(property[3]);
+	SDIO_lock = 0;
+
+	changeBitsPerSample(sound, DEFAULT_BITS_PER_SAMPLE, property[1]);
+	free(property);
+	property = NULL;
+
+	printf("Sound loading complete\n");
+
+	return sound;
+}
+
+int* loadWavHeader(char* filename) {
+	int index = 0;
+	char temp;
+	int* ret = (int*)malloc(sizeof(int)*4);
+	printf("loading sound: %s\n", filename);
 	int file_pointer = alt_up_sd_card_fopen(filename, false);
 	if (file_pointer < 0) {
 		alt_up_sd_card_fclose(file_pointer); //close the file
 		printf("sound file open failed\n");
 		return NULL;
 	}
-	char temp;
 	//Start reading the wav header
 	while (index < SAMPLE_RATE_OFFSET) {
 		temp = alt_up_sd_card_read(file_pointer);
@@ -228,6 +272,7 @@ struct Sound* loadWavSound(char * filename) {
 	int sampleRate = readInt(file_pointer, 4);
 	index += 4;
 	printf("sample rate: %d\n", sampleRate);
+	ret[0] = sampleRate;
 	while (index < BITS_PER_SAMPLE_OFFSET) {
 		temp = alt_up_sd_card_read(file_pointer);
 	//	printf("%d %x\n", index, temp);
@@ -236,12 +281,15 @@ struct Sound* loadWavSound(char * filename) {
 
 	int bits_per_sample = readInt(file_pointer, 2);
 	int bytes_per_sample = bits_per_sample / BITS_PER_BYTE;
+	ret[1] = bits_per_sample;
 	index += 2;
 	printf("bits/sample %d\n", bits_per_sample);
 	while (index < DATA_LENGTH_OFFSET) {
 		if((temp = alt_up_sd_card_read(file_pointer)) < 0) {
 			printf("read file invalid\n");
 			alt_up_sd_card_fclose(file_pointer);
+			free(ret);
+			ret = NULL;
 			return NULL;
 		}
 	//	printf("%d %x\n", index, temp);
@@ -249,24 +297,18 @@ struct Sound* loadWavSound(char * filename) {
 	}
 
 	int srcLength = readInt(file_pointer, 4) / bytes_per_sample;
+	ret[2] = srcLength;
 	if(srcLength == -1) {
 		printf("read file invalid\n");
 		alt_up_sd_card_fclose(file_pointer);
+		free(ret);
+		ret = NULL;
 		return NULL;
 	}
 	printf("length: %u\n", srcLength);
-	sound = loadSoundBuffer(file_pointer, bytes_per_sample, srcLength, DEFAULT_SAMPLE_RATE, sampleRate);
-
-	alt_up_sd_card_fclose(file_pointer);
-	SDIO_lock = 0;
-
-	changeBitsPerSample(sound, DEFAULT_BITS_PER_SAMPLE, bits_per_sample);
-
-	printf("Sound loading complete\n");
-
-	return sound;
+	ret[3] = file_pointer;
+	return ret;
 }
-
 /**
  * TODO: If a sounds volume is 0 this function should return right away to save processing time
  * Right now there's an ugly bug where the sound won't stop if the volume is set to 0
