@@ -96,7 +96,7 @@ public class SongActivity extends Activity {
         		
     			db.setCurr_song_id(songid);
     			db.setCurr_playlist_id(plid);
-        		
+    			Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
     			//Log.v("setting current playlist", selected_pl_name);
     			
     			Intent goToPlay = new Intent(SongActivity.this, play.class);

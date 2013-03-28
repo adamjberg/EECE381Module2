@@ -65,6 +65,25 @@ void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 	return;
 }
 
+void ps2_ISR(struct Cursor* cursor) {
+	unsigned char byte1, byte2, byte3;
+	if(alt_up_ps2_read_data_byte(up_dev.ps2_dev, &byte1) ==0) {
+		while(alt_up_ps2_read_data_byte(up_dev.ps2_dev, &byte2) != 0) {
+		} printf("byte2 %d\n", byte2);
+		while(alt_up_ps2_read_data_byte(up_dev.ps2_dev, &byte3) !=0 ){}
+		printf("byte3 %d\n", byte3);
+
+		if((byte1 & 0x01) == 1) {
+			cursor->isLeftPressed = true;
+			printf("mouse left is clicked\n");
+		}
+		if((byte1 & 0x02) == 0x02) {
+			cursor->isRightPressed = true;
+			printf("mouse right is clicked\n");
+		}
+		updateCursor(cursor, getCursorX(cursor)+(int)byte2/10, getCursorY(cursor)+(int)byte3/10);
+	}
+}
 alt_u32 RS232_ISR(void* up_dev) {
 	if(queue_lock == 1 || SDIO_lock == 1) return alt_ticks_per_second()/1000;
 	alt_up_rs232_dev *serial_dev = ((struct alt_up_dev*)up_dev)->RS232_dev;

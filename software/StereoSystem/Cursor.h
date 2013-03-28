@@ -20,11 +20,13 @@
 
 struct Cursor {
 	struct Object* super;
-	int leftPressed, rightPressed;
+	//int leftPressed, rightPressed;
 	struct Image* overlapImg;
+	bool isLeftPressed, isRightPressed;
 };
 
 struct Cursor* initCursor(int, int);
+void enableCursorInterrupt(struct Cursor*);
 void memOverlap(struct Cursor*);
 void updateCursor(struct Cursor*, int, int);
 int getCursorX(struct Cursor*);

@@ -186,8 +186,16 @@ public class Database {
 	
 	public int getNextSongInList() {
 		int order = this.list_song_order[this.curr_playlist_id][this.curr_song_id];
+		if(order == 0) return 0;
 		return this.list_order_song[this.curr_playlist_id][order+1];
 	}
+	
+	public int getPrevSongInList() {
+		int order = this.list_song_order[this.curr_playlist_id][this.curr_song_id];
+		if(order == 0) return 0;
+		return this.list_order_song[this.curr_playlist_id][order-1];
+	}
+	
 	public void removeList(int id) {
 		int i;
 		for(i = 1; i <= this.playlists[id].getNum_of_songs(); i++) {

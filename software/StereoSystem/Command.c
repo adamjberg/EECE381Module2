@@ -45,7 +45,7 @@ void killCmd(struct Command** this) {
 void syncPlay(int id, int vol, int pos) {
 	char* temp[3];
 	temp[0] = (char*)malloc(sizeof(char)*4);
-	temp[1] = (char*)malloc(sizeof(char)*4);
+	temp[1] = (char*)malloc(sizeof(char)*8);
 	temp[2] = (char*)malloc(sizeof(char)*4);
 	sprintf(temp[0], "%d", id);
 	sprintf(temp[1], "%d", vol);
@@ -142,14 +142,17 @@ void syncNext(int song_id) {
 }
 //index 6
 void next(int song_id) {
+	int id = 0;
 	printf("Next song is selected.\n");
 	if(db.curr_playlist_id == 0 && song_id < db.num_of_songs) {
-		play(song_id+1, 100, 0);
-		printf("Next song is played.\n");
+		id = song_id+1;
 	} else if(db.curr_playlist_id != 0 && db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1] != 0) {
-		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1], 100, 0);
-		printf("Next song is played.\n");
+		id = db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1];
 	}
+
+	if(id == 0) return;
+	syncPlay(id, db.songs[id]->volume, 0);
+	printf("Next song is played.\n");
 }
 void syncPrev(int song_id) {
 	syncStop();
@@ -164,13 +167,16 @@ void syncPrev(int song_id) {
 //index 7
 void prev(int song_id) {
 	printf("Previous song is selected.\n");
+	int id = 0;
 	if(db.curr_playlist_id == 0 && song_id > 1) {
-		play(song_id-1, 100, 0);
-		printf("Previous song is played.\n");
+		id = song_id-1;
 	} else if(db.curr_playlist_id != 0) {
-		play(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]-1], 100, 0);
-		printf("Previous song is played.\n");
+		id = db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]-1];
 	}
+
+	if(id == 0) return;
+	syncPlay(id, db.songs[id]->volume, 0);;
+	printf("Previous song is played.\n");
 }
 
 /*

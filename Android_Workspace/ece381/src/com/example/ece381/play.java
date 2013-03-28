@@ -52,8 +52,6 @@ public class play extends Activity {
 		Toast.makeText(getApplicationContext(), 
 				update(), Toast.LENGTH_SHORT).show();
 		
-		if(com.getDB().getCurr_song_id() != 0)
-			Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
 		SeekBarTimerTask seek_task = new SeekBarTimerTask();
 		play_timer = new Timer();
 		play_timer.schedule(seek_task, 100, 100);
@@ -132,6 +130,7 @@ public class play extends Activity {
 			seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSize());
 			seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getVolume());
 		} else {
+			if(db.getNextSongInList() == 0) return;
 			msg = "playing "+ com.getDB().getSongs()[db.getNextSongInList()].getSongName();
 			seekbar2.setMax(com.getDB().getSongs()[db.getNextSongInList()].getSize());
 			seekbar2.setProgress(com.getDB().getSongs()[db.getNextSongInList()].getVolume());
@@ -142,14 +141,21 @@ public class play extends Activity {
 	}
 
 	public void onPrev(View view) {
+		Database db = com.getDB();
+		String msg;
 		if(com.getDB().getCurr_playlist_id() == 0) {
 			if(com.getDB().getCurr_song_id() <=1) return;
-			greetMsg.setText("playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSongName());
+			msg = "playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSongName();
 			seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getSize());
 			seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()-1].getVolume());
 		} else {
-			Log.i("COMMAND", "PREV IN PLAYLIST");
+			if(db.getPrevSongInList() == 0) return;
+			msg = "playing "+ com.getDB().getSongs()[db.getPrevSongInList()].getSongName();
+			seekbar2.setMax(db.getSongs()[db.getPrevSongInList()].getSize());
+			seekbar2.setProgress(db.getSongs()[db.getPrevSongInList()].getVolume());
 		}
+		greetMsg.setText(msg);
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 		Command.syncPrev(com.getDB().getCurr_song_id());
 	}
 	private void addBarSsound(){  
