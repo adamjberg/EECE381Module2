@@ -65,7 +65,7 @@ void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 	return;
 }
 
-void ps2_ISR(void* cursor) {/*
+void ps2_ISR(void* cursor) {
 	unsigned char* bytes = (unsigned char*)malloc(sizeof(unsigned char)*3);
 	int i, dx, dy;
 	for(i = 0; i < 3; i++) {
@@ -85,34 +85,7 @@ void ps2_ISR(void* cursor) {/*
 	if((bytes[0] & 0x20) == 0x20)
 		dy |= 0xFFFFFF00;
 	updateCursor((struct Cursor*)cursor, getCursorX((struct Cursor*)cursor)+dx, getCursorY((struct Cursor*)cursor)-dy);
-	free(bytes);*/
-	unsigned char byte1, byte2, byte3;
-int dx = 0;
-int dy = 0;
-while(alt_up_ps2_read_data_byte(up_dev.ps2_dev, &byte1) !=0) ;
-while(alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, &byte2) != 0);
-//} printf("byte2 %d\n", byte2);
-while(alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, &byte3) !=0 );//}
-//printf("byte3 %d\n", byte3);
-
-if((byte1 & 0x01) == 1) {
-((struct Cursor*)cursor)->isLeftPressed = true;
-printf("mouse left is clicked\n");
-}
-if((byte1 & 0x02) == 0x02) {
-((struct Cursor*)cursor)->isRightPressed = true;
-printf("mouse right is clicked\n");
-}
-if((byte1 & 0x10) == 0x10) {
-dx -= 255 - ((int)(byte2) - 1) ;
-} else
-dx = byte2;
-if((byte1 & 0x20) == 0x20) {
-dy -= 255 - ((int)(byte3) - 1);
-} else
-dy = byte3;
-updateCursor((struct Cursor*)cursor, getCursorX((struct Cursor*)cursor)+dx, getCursorY((struct Cursor*)cursor)+dy);
-//}}}
+	free(bytes);
 }
 
 alt_u32 RS232_ISR(void* up_dev) {
