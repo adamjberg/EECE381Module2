@@ -26,6 +26,6 @@ struct alt_up_dev {
 
 void push_key_ISR(struct PushKeyController*, unsigned int);
 void audio_ISR(alt_up_audio_dev*, unsigned int);
-void ps2_ISR(struct Cursor*);
+void ps2_ISR(void*);
 alt_u32 RS232_ISR(void*);
 #endif /* ISR_VECTORS_H_ */

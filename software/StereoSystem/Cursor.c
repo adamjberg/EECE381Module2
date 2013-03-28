@@ -13,7 +13,7 @@ struct Cursor* initCursor(int x, int y) {
 	alt_up_ps2_clear_fifo(up_dev.ps2_dev);
 	alt_up_ps2_init(up_dev.ps2_dev);
 	unsigned char byte1;
-	//while(alt_up_ps2_read_data_byte(up_dev.ps2_dev, &byte1)!=0);
+	while(alt_up_ps2_read_data_byte(up_dev.ps2_dev, &byte1)!=0);
 	struct Cursor* this = (struct Cursor*)malloc(sizeof(struct Cursor));
 	this->super = initObject(initRange(x, y, 10, 10), loadSDImage("AR01.BMP"), (void*)this);
 	int* image = (int*)malloc(sizeof(int)*100);
@@ -21,14 +21,14 @@ struct Cursor* initCursor(int x, int y) {
 	this->overlapImg = initImage(image, 0, 10, 10);
 	this->isLeftPressed = false;
 	this->isRightPressed = false;
-	//enableCursorInterrupt(cursor);
+	enableCursorInterrupt(this);
 	return this;
 }
 
 void enableCursorInterrupt(struct Cursor* this) {
-	alt_irq_register(PS2_0_IRQ, this, (void*)ps2_ISR);
-	alt_irq_enable(PS2_0_IRQ);
 	alt_up_ps2_enable_read_interrupt(up_dev.ps2_dev);
+	alt_irq_register(PS2_0_IRQ, (void*)this, (void*)ps2_ISR);
+	//alt_irq_enable(PS2_0_IRQ);
 }
 void updateCursor(struct Cursor* this, int x, int y) {
 	if((x == this->super->r->x && y == this->super->r->y) || this == NULL) return;
