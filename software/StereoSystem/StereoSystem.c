@@ -63,7 +63,9 @@ int main()
 		updateMixer();
 
 	//	i = soundTester(i);
-/*
+
+
+		/*
 		updateCursor(cursor, (int)x, 100);
 		x+=0.005;
 		if(x >= 310)
