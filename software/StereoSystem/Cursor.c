@@ -17,7 +17,9 @@ struct Cursor* initCursor(int x, int y) {
 	unsigned char byte1;
 	while(alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, &byte1)!=0);
 	struct Cursor* this = (struct Cursor*)malloc(sizeof(struct Cursor));
-	this->super = initObject(initRange(x, y, 10, 10), loadSDImage("AR01.BMP"), (void*)this);
+	struct Image* cursorImg;
+	while(( cursorImg= loadSDImage("AR01.BMP")) == NULL);
+	this->super = initObject(initRange(x, y, 10, 10), cursorImg, (void*)this);
 	int* image = (int*)malloc(sizeof(int)*100);
 	memset(image, 0, sizeof(int)*100);
 	this->overlapImg = initImage(image, 0, 10, 10);

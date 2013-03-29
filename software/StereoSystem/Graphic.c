@@ -244,3 +244,46 @@ void setImagePos(struct Image* this, int pos_x, int pos_y) {
 	this->x = pos_x;
 	this->y = pos_y;
 }
+
+void drawBox(int x1, int y1, int x2, int y2, int color) {
+	if(x1 < 0 || y1 < 0) return;
+	int i, j, x, y, dx, dy, w = x2-x1, h = y2-y1;
+		for(i = 0; i < w; i++) {
+		    for(j = 0; j < h; j++) {
+		    	x = x1+i; y = y1+j;
+		    	// mouse is not used for now
+		    	/*if(mouse != NULL) {
+		    		dx = x-mouse->super->x; dy = y-mouse->super->y;
+		    		if(dx >= 0 && dx < 10 && dy >= 0 && dy < 10)
+		    			*(mouse->overlapImg+dy*10 + dx) = color;
+		    	}*/
+		    	IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((y)*320+x)*2, color);
+		}
+	}
+}
+
+void drawHorizontalLine(int x, int y, int length, int color){
+	int x2, y2, i;
+	i = 0;
+	x2 = x+1;
+	y2 = y+1;
+	while (i <= length){
+		drawBox(x, y, x2, y2, color);
+		x++;
+		x2++;
+		i++;
+	}
+}
+
+void drawVerticalLine(int x, int y, int length, int color){
+	int x2, y2, i;
+	i = 0;
+	x2 = x+1;
+	y2 = y+1;
+	while (i <= length){
+		drawBox(x, y, x2, y2, color);
+		y++;
+		y2++;
+		i++;
+	}
+}

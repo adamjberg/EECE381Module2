@@ -58,15 +58,15 @@ int main()
 	update();
 
 	//Test VGA Output
-	/*struct Image* testImg;
-	//struct Image* testImg1;
+	struct Image* testImg;
 	while((testImg = loadSDImage("TEST.BMP")) == NULL);
-	//while((testImg1 = loadSDImage("ART3.BMP")) == NULL);
 	draw(35, 35, testImg);
-	//draw(0, 20, testImg1);
 	killImage(testImg);
-	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
-	//graphicTester();*/
+	//alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
+	//graphicTester();
+
+	struct Frame* mainFrame = initMainFrame();
+	mainFrame->drawFrame(mainFrame);
 	//Test End
 
 	struct Cursor* cursor = initCursor(10, 100);
@@ -78,7 +78,9 @@ int main()
 
 	while(1) {
 		cmdProcessing(scheduler);
-		//updateMixer();
+
+		checkTxtBtnCollision(cursor, mainFrame->elements[0]->buttons[1]);
+		checkTxtBtnCollision(cursor, mainFrame->elements[0]->buttons[0]);
 
 		i = soundTester(i);
 

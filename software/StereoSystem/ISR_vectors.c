@@ -115,7 +115,7 @@ void animate_ISR(struct Cursor* cursor) {
 	int index;
 	memset(j, 0, sizeof(j));
 	index = soundMixer->currIndex;
-	for(k = 0; k <= 99; k++) {
+	for(k = 15; k <= 99; k++) {
 		for(l = 0; l <= 0x7F; l++) {
 			IOWR_16DIRECT(pixel_buffer->buffer_start_address, (k*320+l+10)<<1, 0);
 		}
@@ -125,7 +125,7 @@ void animate_ISR(struct Cursor* cursor) {
 		if(data <= 0x7F && data != 0) {
 			IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((99 - j[data])*320+data+10)<<1, 0xCCCC);
 			IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((98 - j[data])*320+data+10)<<1, 0xCCCC);
-			if(j[data] < 96)
+			if(j[data] < 80)
 				j[data] +=2;
 		}
 	}
