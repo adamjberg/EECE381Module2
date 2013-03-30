@@ -14,7 +14,6 @@ int MIX_LOCK;
 void initSoundMixer() {
 	soundMixer = (struct SoundMixer*) malloc(sizeof(struct SoundMixer));
 	soundMixer->currIndex = soundMixer->endIndex = soundMixer->indexSize = 0;
-	memset(soundMixer->empty_buffer, 0, sizeof(soundMixer->empty_buffer));
 	clearSoundMixer();
 }
 
@@ -40,7 +39,7 @@ void loadToSoundBuffer(struct Sound* sound) {
 		sound->fadeVolume = sound->volume;
 	}
 	for(i = 0; i < MAX_SOUNDMIXBUF; i++) {
-		if(sound->position >= sound->length) break;
+		if(sound->position >= sound->length) return;
 		//if (allowFade(sound)) {
 
 		if (sound->position > sound->outFadePosition) {
@@ -70,11 +69,11 @@ void incIndex() {
 		disableAudioDeviceController();
 }
 
-void updateMixer() {
+int updateMixer() {
 //	MIX_LOCK = 1;
-	int i, j, isDone = 0;
-	for(i = 0; i < 50; i++) {
-		if(soundMixer->indexSize >=299) return;
+	int i, j, isDone = 0, isFinished = 1;
+	for(i = 0; i < 80; i++) {
+		if(soundMixer->indexSize >=299) return 0;
 		for(j = 0; j < db.total_songs_playing; j++) {
 			if(!checkEnd(db.songs[db.curr_song_ids[j]]->sound)) {
 				loadToSoundBuffer(db.songs[db.curr_song_ids[j]]->sound);
@@ -95,12 +94,15 @@ void updateMixer() {
 	}
 
 	if(soundMixer->indexSize <= 0 && !db.isPaused && db.total_songs_playing > 0) {
+		isFinished = 1;
 		db.isPaused = true;
 		syncPause(db.curr_song_id);
-		if(db.curr_playlist_id != 0) {
+		if(db.curr_playlist_id != 0)
 			syncNext(db.curr_song_id);
-		}
-	}// else
+	} else
+		isFinished= 0;
+	return isFinished;
+	// else
 		//IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
 	//else if(!db.isPaused&& db.total_songs_playing > 0)
 		//enableAudioDeviceController();

@@ -25,10 +25,10 @@ void initAnimate(struct Cursor* cursor) {
 }
 
 void initAudioBuffer() {
-	int timer = 5000000;
+	int timer = 3000000;
 	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 8, timer & 0xFFFF);
 	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 12, timer >> 16);
-	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
+	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x08);
 	alt_irq_register(AUDIOBUFFERPROCESS_IRQ, NULL, (void*)mix_ISR);
 
 }
@@ -62,14 +62,14 @@ int main()
 	while((testImg = loadSDImage("TEST.BMP")) == NULL);
 	draw(35, 35, testImg);
 	killImage(testImg);
-	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
+	//alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
 	//graphicTester();
 
-	//alt_up_pixel_buffer_dma_clear_screen(pixel_buffer, 0);
+	alt_up_pixel_buffer_dma_clear_screen(pixel_buffer, 0);
 	//alt_up_char_buffer_clear(char_buffer);
 
-	//struct Frame* mainFrame = initMainFrame();
-	//mainFrame->drawFrame(mainFrame);
+	struct Frame* mainFrame = initMainFrame();
+	mainFrame->drawFrame(mainFrame);
 
 	//Test End
 	struct Cursor* cursor = initCursor(10, 100);
@@ -83,10 +83,6 @@ int main()
 
 	while(1) {
 		cmdProcessing(scheduler);
-
-		//checkTxtBtnCollision(cursor, mainFrame->elements[0]->buttons[1]);
-		//checkTxtBtnCollision(cursor, mainFrame->elements[0]->buttons[0]);
-
 
 		i = soundTester(i);
 

@@ -69,12 +69,14 @@ void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 }
 
 void ps2_ISR(struct Cursor* cursor) {
+	int tempcontext;
 	unsigned char* bytes = (unsigned char*)malloc(sizeof(unsigned char)*3);
 	int i, dx = 0, dy = 0;
 	for(i = 0; i < 3; i++) {
 		alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, (bytes+i));
 	}
 
+	tempcontext= alt_irq_interruptible(PS2_0_IRQ);
 	if((bytes[0] & 0x08) == 0x08) {
 		if((bytes[0] & 0x01) == 1) {
 			cursor->isLeftPressed = true;
@@ -94,40 +96,83 @@ void ps2_ISR(struct Cursor* cursor) {
 	free(bytes);
 
 	updateCursor(cursor);
+	alt_irq_non_interruptible(tempcontext);
 
 }
-void mix_ISR() {
+void mix_ISR(void) {
 	int tempcontext;
+	int i, j, isDone = 0;
+
 	tempcontext= alt_irq_interruptible(AUDIOBUFFERPROCESS_IRQ);
-	updateMixer();
+	for(i = 0; i < 60; i++) {
+		if(soundMixer->indexSize >=299) break;
+		for(j = 0; j < db.total_songs_playing; j++) {
+			if(!checkEnd(db.songs[db.curr_song_ids[j]]->sound)) {
+				loadToSoundBuffer(db.songs[db.curr_song_ids[j]]->sound);
+				isDone = 1;
+			}
+		}
+
+		if(isDone == 0)
+			break;
+
+		soundMixer->indexSize++;
+
+		soundMixer->endIndex++;
+		if(soundMixer->endIndex > 299)
+			soundMixer->endIndex = 0;
+
+		clearIndexBuffer(soundMixer->endIndex);
+	}
+
 	alt_irq_non_interruptible(tempcontext);
-	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
+	if(soundMixer->indexSize <= 0 && db.total_songs_playing > 0) {
+		db.isPaused = true;
+		syncPause(db.curr_song_id);
+		if(db.curr_playlist_id != 0)
+			syncNext(db.curr_song_id);
+		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
+		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x08);
+	} else {
+		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
+	}
+	//isStopped = updateMixer();
+	//if(!isStopped)
 }
 void animate_ISR(struct Cursor* cursor) {
 	int tempcontext;
-	//updateCursor(cursor);
-	 // Do something which is interruptible
 	tempcontext= alt_irq_interruptible(TIMESTAMP_IRQ);
-	//updateMixer();
-	int k, l;
+
+	int i, k, l;
 	unsigned int data;
-	unsigned int j[0x7F];
-	int index;
+	unsigned int j[0x7FFF];
+	int index, size_index;
 	memset(j, 0, sizeof(j));
 	index = soundMixer->currIndex;
+	size_index = soundMixer->indexSize;
 	for(k = 15; k <= 99; k++) {
-		for(l = 0; l <= 0x7F; l++) {
+		for(l = 0; l < 0xE0; l++) {
 			IOWR_16DIRECT(pixel_buffer->buffer_start_address, (k*320+l+10)<<1, 0);
 		}
 	}
-	for(k = 0; k < 96; k ++) {
-		data = soundMixer->buffer[index][k] >> 16;
-		if(data <= 0x7F && data != 0) {
-			IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((99 - j[data])*320+data+10)<<1, 0xCCCC);
-			IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((98 - j[data])*320+data+10)<<1, 0xCCCC);
-			if(j[data] < 80)
-				j[data] +=2;
+	if(db.curr_song_id != 0) {
+		for(k = 0; k < 96; k ++) {
+			data = soundMixer->buffer[index][k] >> 15;
+			if(data < 0xE0 && data != 0) {
+				if(j[data] < 80)
+					j[data] +=2;
+				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((99 - j[data])*320+data+10)<<1, 0xCCCC);
+				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((98 - j[data])*320+data+10)<<1, 0xCCCC);
+
+			}
 		}
+	/*	for(k = 0; k < 96; k ++) {
+			data = soundMixer->buffer[index][k] >> 8;
+			if(data < 0x7FFF && data != 0) {
+				j[data]++;
+			}
+		}
+*/
 	}
 
 	alt_irq_non_interruptible(tempcontext);

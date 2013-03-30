@@ -31,5 +31,5 @@ void audio_ISR(alt_up_audio_dev*, unsigned int);
 void ps2_ISR(struct Cursor*);
 alt_u32 RS232_ISR(void*);
 void animate_ISR(struct Cursor*);
-void mix_ISR();
+void mix_ISR(void);
 #endif /* ISR_VECTORS_H_ */
