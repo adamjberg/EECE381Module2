@@ -26,6 +26,7 @@ public class Database {
 	private boolean repeat_playlist;
 	private boolean shuffle_playlist;
 	private boolean isEndOfPlaylist;
+	private int selected_list;
 	
 	public Database() {
 		this.playlists = new Playlist[MAX_LISTS];
@@ -33,6 +34,7 @@ public class Database {
 		this.avail_list_index = new ConcurrentLinkedQueue<Integer>();
 		this.curr_song_ids = new ConcurrentLinkedQueue<Integer>();
 		this.curr_song_id = 0;
+		this.selected_list = 0;
 		this.avail_list_index.clear();
 		this.used_list_index = new int[MAX_LISTS];
 		this.list_order_song = new int[MAX_LISTS][MAX_SONGS];
@@ -305,5 +307,11 @@ public class Database {
 	}
 
 	
+	public void setSelectedList(int id) {
+		this.selected_list = id;
+	}
+	public int getSelectedList() {
+		return this.selected_list;
+	}
 
 }

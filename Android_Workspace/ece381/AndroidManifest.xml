@@ -45,7 +45,7 @@
             android:label="@string/title_activity_playlist_builder" >
         </activity>
         <activity
-            android:name=".TextEntryActivity"
+            android:name=".TextEntryDialog"
             android:label="Enter the playlist name"
             android:theme="@android:style/Theme.Dialog" >
         </activity>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -42,13 +43,35 @@ public class PlaylistBuilderActivity extends FragmentActivity {
 	// Callback method from TextEntryDialog, returning the value of user input
 	public void onUserSelectValue(String selectedValue) {
 		
-		// create a new playlist with the name entered
+		String action = null;
+		// Check action; 0 = create; 1 = modify 
+		action = getIntent().getStringExtra("action");
+		
+		Log.v("action", action);
+		
 		if( checkNameValid(selectedValue) ) {
-			Command.syncCreatePlaylist(selectedValue);
+			// Check whether or not the list already exists
+			for(int j = 0; j < db.getListsName().length; j++) {
+				if(db.getListsName()[j] == selectedValue) {
+					Toast.makeText(this, "Playlist already exists!", Toast.LENGTH_SHORT).show();
+					return;
+				}
+			}
+			if(action.equals("create")) {
+				// create a new playlist with the name entered
+				Command.syncCreatePlaylist(selectedValue);
+			}
+			else if(action.equals("rename")) {
+				// modify playlist name
+				Log.v("selectedlist", db.getSelectedList()+"");
+				
+				db.getPlaylists()[db.getSelectedList()].setListName(selectedValue);
+			}
 		}
 		else {
 			Toast.makeText(this, "Invalid playlist name!", Toast.LENGTH_SHORT).show();
 		}
+		
 		// return to PlaylistActivity
 		Intent returnIntent = new Intent();
 		setResult(RESULT_OK, returnIntent);
