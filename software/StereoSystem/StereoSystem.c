@@ -16,11 +16,27 @@ bool loadSDCard(alt_up_sd_card_dev* device) {
 	return false;
 }
 
+void initAnimate(struct Cursor* cursor) {
+	int timer = 2000000;
+	IOWR_16DIRECT(TIMESTAMP_BASE, 8, timer & 0xFFFF);
+	IOWR_16DIRECT(TIMESTAMP_BASE, 12, timer >> 16);
+	IOWR_16DIRECT(TIMESTAMP_BASE, 4, 0x07);
+	alt_irq_register(TIMESTAMP_IRQ, cursor, (void*)animate_ISR);
+}
+
+void initAudioBuffer() {
+	int timer = 4000000;
+	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 8, timer & 0xFFFF);
+	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 12, timer >> 16);
+	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
+	alt_irq_register(AUDIOBUFFERPROCESS_IRQ, NULL, (void*)mix_ISR);
+
+}
 int main()
 {
 	//SD device initialization
-	alt_up_sd_card_dev *device_reference = NULL;
-	while(!loadSDCard(device_reference)) {
+	up_dev.device_reference = NULL;
+	while(!loadSDCard(up_dev.device_reference)) {
 		printf("SD card is not connected.\n");
 	}
 
@@ -41,8 +57,6 @@ int main()
 	//dBTester();
 	update();
 
-
-	struct Cursor* cursor = initCursor(10, 100);
 	//Test VGA Output
 	struct Image* testImg;
 	//struct Image* testImg1;
@@ -55,22 +69,17 @@ int main()
 	//graphicTester();
 	//Test End
 
+	struct Cursor* cursor = initCursor(10, 100);
+	initAnimate(cursor);
+
 	int i = 2;
 	syncPlay(1, 100, 0);
-	//float x = getCursorX(cursor);
+
 	while(1) {
 		cmdProcessing(scheduler);
-		updateMixer();
+		//updateMixer();
 
-	//	i = soundTester(i);
-
-
-		/*
-		updateCursor(cursor, (int)x, 100);
-		x+=0.005;
-		if(x >= 310)
-			x = 0;
-*/
+		i = soundTester(i);
 
 	}
 

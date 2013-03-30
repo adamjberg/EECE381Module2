@@ -28,9 +28,10 @@ struct Cursor {
 struct Cursor* initCursor(int, int);
 void enableCursorInterrupt(struct Cursor*);
 void memOverlap(struct Cursor*);
-void updateCursor(struct Cursor*, int, int);
+void updateCursor(struct Cursor*);
 int getCursorX(struct Cursor*);
 int getCursorY(struct Cursor*);
+void moveCursor(struct Cursor*, int, int);
 /*
 void setPanelToCursor(struct Cursor*, struct Frame*);
 

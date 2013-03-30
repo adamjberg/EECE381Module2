@@ -7,7 +7,6 @@
 
 #include "Sound.h"
 
-#define MIN_VOLUME_BITS 8
 #define DEFAULT_SAMPLE_RATE 32000
 #define DEFAULT_BITS_PER_SAMPLE 24
 
@@ -98,20 +97,6 @@ struct Sound* loadSoundBuffer(int* property, int bytesPerSample, int srcLength, 
 	return this;
 }
 
-bool loadStreamBuffer(struct Sound* this, int* property, int weight) {
-	int i;
-	int size = 288;
-	if(weight != 0)
-		size = this->length*weight/100;
-	for(i = 0; i < size; i++) {
-		if(this->loading_pos < this->length) {
-			this->buffer[this->loading_pos] = readInt(property[3], property[1]/8);
-			this->loading_pos++;
-		} else {
-			return false;
-		}
-	} return true;
-}
 /**
  * Checks to see if the values need to be shifted to match given bytesPerSample
  * @param this - sound to change values of
@@ -174,46 +159,9 @@ struct Sound* initSound(unsigned int length) {
 	return this;
 }
 
-void handleSoundEnd(struct Sound* this) {
-	if (this->loops == 0) {
-		stopSound(this);
-	} else {
-		this->position = 0;
-		if (this->loops > 0)
-			this->loops--;
-	}
-}
-
 bool allowFade(struct Sound* this) {
 	return !(this->inFadePosition == 0 && this->outFadePosition == this->length);
 }
-
-/**
- * Update the position index for this sound.
- * Determines if the sound is complete and allows it to continue playing if
- * it should loop.
- *
- * @param numWritten - The number of values written to the buffer
- *//*
-void updateSoundPosition(struct Sound* this, int numWritten) {
-	if (!this->playing)
-		return;
-	this->position += numWritten;
-
-	if (allowFade(this)) {
-		if (this->position < this->inFadePosition)
-			setSoundVolume(this, 0.9 - ((float) (this->inFadePosition - this->position) / this->inFadePosition));
-		else if (this->position > this->outFadePosition)
-			setSoundVolume(this, 0.9 - ((float) (this->position - this->outFadePosition) / (this->length - this->outFadePosition)));
-		else
-			setSoundVolume(this, 1.0);
-	}
-
-	if (this->position >= this->length) {
-		handleSoundEnd(this);
-	}
-}*/
-
 /**
  * Creates a Sound struct and loads the correct wav file from the SD card
  *
@@ -280,7 +228,7 @@ int* loadWavHeader(char* filename) {
 	}
 
 	int bits_per_sample = readInt(file_pointer, 2);
-	int bytes_per_sample = bits_per_sample / BITS_PER_BYTE;
+	int bytes_per_sample = bits_per_sample / 8;
 	ret[1] = bits_per_sample;
 	index += 2;
 	printf("bits/sample %d\n", bits_per_sample);
@@ -309,44 +257,6 @@ int* loadWavHeader(char* filename) {
 	ret[3] = file_pointer;
 	return ret;
 }
-/**
- * TODO: If a sounds volume is 0 this function should return right away to save processing time
- * Right now there's an ugly bug where the sound won't stop if the volume is set to 0
- *//*
-void combineSounds(struct Sound* sound, struct Sound* soundToAdd, int startIndex, int numToWrite, bool overwrite) {
-	int i;
-	int indexToWrite = startIndex;
-	int indexToRead = soundToAdd->position;
-
-	int numBitsToShift = (int) (2 * DEFAULT_BITS_PER_SAMPLE - (sound->volume + soundToAdd->volume));
-	bool useVolume = numBitsToShift > 0;
-
-	for (i = 0; i < numToWrite; i++) {
-		if (indexToWrite >= sound->length) {
-			indexToWrite = 0;
-		}
-		if (indexToRead >= soundToAdd->length) {
-			handleSoundEnd(soundToAdd);
-			if (!soundToAdd->playing) {
-				return;
-			}
-			indexToRead = 0;
-		}
-		if (overwrite) {
-			if(useVolume)
-				sound->buffer[indexToWrite] = soundToAdd->buffer[indexToRead] >> numBitsToShift;
-			else
-				sound->buffer[indexToWrite] = soundToAdd->buffer[indexToRead];
-		} else {
-			if(useVolume)
-				sound->buffer[indexToWrite] += soundToAdd->buffer[indexToRead] >> numBitsToShift;
-			else
-				sound->buffer[indexToWrite] += soundToAdd->buffer[indexToRead];
-		}
-		indexToRead++;
-		indexToWrite++;
-	}
-}*/
 
 void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {
 	this->inFadePosition = inFadeLength;
@@ -355,24 +265,6 @@ void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {
 void setFadeOutLength(struct Sound* this, unsigned int len) {
 	this->outFadePosition = this->length - len;
 }
-
-int convertVolumeToInt(float volume) {
-	return (int) (volume * (DEFAULT_BITS_PER_SAMPLE - MIN_VOLUME_BITS)) + MIN_VOLUME_BITS;
-}
-
-/**
- * Overwrites the current sound buffer with updated volume
- *
- * IMPORTANT: This will change the raw sound data and after several
- * changes the quality of the sound will degrade.
- *//*
-void setSoundVolumeStatic(struct Sound* this, float volume) {
-	int i;
-	for (i = 0; i < this->length; i++) {
-		this->buffer[i] = this->buffer[i] << convertVolumeToInt(volume);
-	}
-	this->volume = convertVolumeToInt(1);
-}*/
 
 /**
  * Changes the sound volume so that it can be taken into account when
@@ -431,5 +323,5 @@ void unloadSound(struct Sound* sound) {
 }
 
 bool checkEnd(struct Sound* this) {
-	return (this->position >= this->length);
+	return (this->position >= this->length) & this->length != 0;
 }

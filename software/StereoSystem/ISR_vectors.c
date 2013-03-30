@@ -57,7 +57,10 @@ void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 
 		//}
 	}*/
-	if(soundMixer->indexSize <= 0) return;
+	if(soundMixer->indexSize <= 0) {
+		disableAudioDeviceController();
+		return;
+	}
 	alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_LEFT);
 	alt_up_audio_write_fifo(audio_dev, soundMixer->buffer[soundMixer->currIndex], 96, ALT_UP_AUDIO_RIGHT);
 
@@ -65,29 +68,68 @@ void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 	return;
 }
 
-void ps2_ISR(void* cursor) {
+void ps2_ISR(struct Cursor* cursor) {
 	unsigned char* bytes = (unsigned char*)malloc(sizeof(unsigned char)*3);
-	int i, dx, dy;
+	int i, dx = 0, dy = 0;
 	for(i = 0; i < 3; i++) {
 		alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, (bytes+i));
 	}
-	if((bytes[0] & 0x01) == 1) {
-		((struct Cursor*)cursor)->isLeftPressed = true;
-		printf("mouse left is clicked\n");
-	}
-	if((bytes[0] & 0x02) == 0x02) {
-		((struct Cursor*)cursor)->isRightPressed = true;
-		printf("mouse right is clicked\n");
-	}
-	dx = bytes[1]; dy = bytes[2];
-	if((bytes[0] & 0x10) == 0x10)
-		dx |= 0xFFFFFF00;
-	if((bytes[0] & 0x20) == 0x20)
-		dy |= 0xFFFFFF00;
-	updateCursor((struct Cursor*)cursor, getCursorX((struct Cursor*)cursor)+dx, getCursorY((struct Cursor*)cursor)-dy);
-	free(bytes);
-}
 
+	if((bytes[0] & 0x08) == 0x08) {
+		if((bytes[0] & 0x01) == 1) {
+			cursor->isLeftPressed = true;
+			printf("mouse left is clicked\n");
+		}
+		if((bytes[0] & 0x02) == 0x02) {
+			cursor->isRightPressed = true;
+			printf("mouse right is clicked\n");
+		}
+		dx = bytes[1]; dy = bytes[2];
+		if((bytes[0] & 0x10) == 0x10)
+			dx |= 0xFFFFFF00;
+		if((bytes[0] & 0x20) == 0x20)
+			dy |= 0xFFFFFF00;
+		moveCursor(cursor, dx, dy);
+	}
+	free(bytes);
+
+	updateCursor(cursor);
+
+}
+void mix_ISR() {
+	updateMixer();
+	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
+}
+void animate_ISR(struct Cursor* cursor) {
+	int tempcontext;
+	//updateCursor(cursor);
+	 // Do something which is interruptible
+	tempcontext= alt_irq_interruptible(TIMESTAMP_IRQ);
+	updateMixer();
+	int k, l;
+	unsigned int data;
+	unsigned int j[0x7F];
+	int index;
+	memset(j, 0, sizeof(j));
+	index = soundMixer->currIndex;
+	for(k = 0; k <= 99; k++) {
+		for(l = 0; l <= 0x7F; l++) {
+			IOWR_16DIRECT(pixel_buffer->buffer_start_address, (k*320+l+10)<<1, 0);
+		}
+	}
+	for(k = 0; k < 96; k ++) {
+		data = soundMixer->buffer[index][k] >> 16;
+		if(data <= 0x7F && data != 0) {
+			IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((99 - j[data])*320+data+10)<<1, 0xCCCC);
+			IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((98 - j[data])*320+data+10)<<1, 0xCCCC);
+			if(j[data] < 96)
+				j[data] +=2;
+		}
+	}
+	alt_irq_non_interruptible(tempcontext);
+
+	IOWR_16DIRECT(TIMESTAMP_BASE, 0, 0);
+}
 alt_u32 RS232_ISR(void* up_dev) {
 	if(queue_lock == 1 || SDIO_lock == 1) return alt_ticks_per_second()/1000;
 	alt_up_rs232_dev *serial_dev = ((struct alt_up_dev*)up_dev)->RS232_dev;

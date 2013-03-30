@@ -11,10 +11,12 @@
 
 struct Object {
 	struct Range* r;
+	struct Range* next_r;
 	struct Image* img;
 	void* subObj;
 };
 
 struct Object* initObject(struct Range*, struct Image*, void*);
 void setXY(struct Object*, int, int);
+void setNextXY(struct Object*, int, int);
 #endif /* OBJECT_H_ */

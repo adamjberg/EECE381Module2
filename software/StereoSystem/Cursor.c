@@ -7,13 +7,15 @@
 
 #include "Cursor.h"
 
+int cursor_lock;
+
 struct Cursor* initCursor(int x, int y) {
 	up_dev.ps2_dev = alt_up_ps2_open_dev("/dev/ps2_0");
-	up_dev.ps2_dev->timeout = 500000;
+	up_dev.ps2_dev->timeout = 2000000;
 	alt_up_ps2_clear_fifo(up_dev.ps2_dev);
 	alt_up_ps2_init(up_dev.ps2_dev);
 	unsigned char byte1;
-	alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, &byte1);
+	while(alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, &byte1)!=0);
 	struct Cursor* this = (struct Cursor*)malloc(sizeof(struct Cursor));
 	this->super = initObject(initRange(x, y, 10, 10), loadSDImage("AR01.BMP"), (void*)this);
 	int* image = (int*)malloc(sizeof(int)*100);
@@ -21,21 +23,26 @@ struct Cursor* initCursor(int x, int y) {
 	this->overlapImg = initImage(image, 0, 10, 10);
 	this->isLeftPressed = false;
 	this->isRightPressed = false;
-	//enableCursorInterrupt(this);
+	enableCursorInterrupt(this);
 	return this;
 }
 
 void enableCursorInterrupt(struct Cursor* this) {
 	alt_up_ps2_enable_read_interrupt(up_dev.ps2_dev);
-	alt_irq_register(PS2_0_IRQ, (void*)this, (void*)ps2_ISR);
+	alt_irq_register(PS2_0_IRQ, this, (void*)ps2_ISR);
 	//alt_irq_enable(PS2_0_IRQ);
 }
-void updateCursor(struct Cursor* this, int x, int y) {
-	if((x == this->super->r->x && y == this->super->r->y) || this == NULL) return;
+void moveCursor(struct Cursor* this, int dx, int dy) {
+	setNextXY(this->super, this->super->r->x + dx, this->super->r->y - dy);
+}
+void updateCursor(struct Cursor* this) {
+	//cursor_lock = 1;
+	if(((this->super->next_r->x == this->super->r->x) && (this->super->next_r->y == this->super->r->y)) || this == NULL) return;
 	draw_notransparent(this->super->r->x, this->super->r->y, this->overlapImg);
-	setXY(this->super, x, y);
+	setXY(this->super, this->super->next_r->x, this->super->next_r->y);
 	memOverlap(this);
 	draw(this->super->r->x, this->super->r->y, this->super->img);
+	//cursor_lock = 0;
 	/*checkButtonCollision(this);
 		if(this->createdObj != NULL) {
 			setXY_noBound(this->createdObj, x, y);

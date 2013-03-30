@@ -26,7 +26,7 @@ void initAudioDeviceController() {
 void enableAudioDeviceController() {
 	alt_up_audio_enable_write_interrupt(up_dev.audio_dev);
 	alt_irq_register(AUDIO_IRQ, up_dev.audio_dev, (void*) audio_ISR);
-	alt_irq_enable(AUDIO_IRQ);
+	//alt_irq_enable(AUDIO_IRQ);
 }
 
 void disableAudioDeviceController() {

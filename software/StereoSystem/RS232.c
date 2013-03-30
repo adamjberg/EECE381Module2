@@ -8,6 +8,7 @@
 #include "RS232.h"
 
 alt_alarm alarm;
+//alt_alarm mixer_alarm;
 struct alt_up_dev up_dev;
 
 /*

@@ -12,9 +12,6 @@
 struct Song* initSong(char* songname) {
 	struct Song* this = (struct Song*)malloc(sizeof(struct Song));
 	setSongName(this, songname);
-	this->ext[0] = 'W';
-	this->ext[1] = 'A';
-	this->ext[2] = 'V';
 	this->isCached = false;
 	this->pos = this->size = 0;
 	this->volume = 100;
@@ -36,12 +33,6 @@ void loadSong(struct Song* this) {
 	this->isCached = true;
 }
 
-void loadStream(struct Song* this, int* property, int weight) {
-	if(this == NULL || this->sound == NULL || this->sound->loading_pos >= this->sound->length) return;
-	if(!loadStreamBuffer(this->sound, this->property, weight))
-		alt_up_sd_card_fclose(this->property[3]);
-}
-
 void unloadSong(struct Song* this) {
 	if(this == NULL || this->sound == NULL) return;
 	printf("unloading song id: %d\n", this->id);
@@ -50,9 +41,6 @@ void unloadSong(struct Song* this) {
 	this->isCached = false;
 }
 
-void killSong(struct Song** this) {
-
-}
 void setSongName(struct Song* this, char* name) {
 	if(this == NULL || name == NULL) return;
 	int size = strlen(name);
@@ -93,27 +81,6 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 	//song_id_lock = 0;
 }
 
-void playStream(struct Song* this, float volume, int startTime, int loops) {
-	if(this == NULL) return;
-	if(isCurrPlaying(this->id) >= 0|| db.total_songs_playing >= MAX_SONGS_MIX - 1) return;
-
-	this->pos = startTime;
-	this->volume = (int)volume;
-	if(this->sound == NULL) {
-		this->property = loadWavHeader(this->song_name);
-		if(memMgr.used_memory + this->property[2] > MAX_CACHE_MEMORY) {
-			freeMem(this->property[2]);
-		}
-		this->sound = initSound(this->property[2]);
-		loadStream(this, this->property, 30);
-		addToMemory(this->sound, this->id);
-	}
-
-	db.curr_song_ids[db.total_songs_playing++] = this->id;
-	db.curr_song_id = this->id;
-	playSound(this->sound, volume/100, startTime, loops);
-
-}
 void pauseSong(struct Song* this) {
 	printf("The music %d start to pause.\n", this->id);
 	int index;

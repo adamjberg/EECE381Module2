@@ -11,8 +11,7 @@
 #include "../Global.h"
 #define MAX_SOUNDMIXBUF 96
 
-struct SoundMixer* soundMixer; //internal global variable
-
+struct SoundMixer* soundMixer;
 struct SoundMixer {
 	unsigned int buffer[300][MAX_SOUNDMIXBUF];
 	unsigned int empty_buffer[MAX_SOUNDMIXBUF];
@@ -22,8 +21,6 @@ struct SoundMixer {
 
 void initSoundMixer();
 void setGlobalVolume(float);
-void updateSoundMixerLength(unsigned int);
-void updateSoundMixerPosition(int numWritten);
 void updateMixer();
 void clearSoundMixer();
 int negativeToPositive(int);
