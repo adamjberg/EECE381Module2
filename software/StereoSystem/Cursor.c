@@ -15,7 +15,7 @@ struct Cursor* initCursor(int x, int y) {
 	alt_up_ps2_clear_fifo(up_dev.ps2_dev);
 	alt_up_ps2_init(up_dev.ps2_dev);
 	unsigned char byte1;
-	while(alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, &byte1)!=0);
+	//while(alt_up_ps2_read_data_byte_timeout(up_dev.ps2_dev, &byte1)!=0);
 	struct Cursor* this = (struct Cursor*)malloc(sizeof(struct Cursor));
 	struct Image* cursorImg;
 	while(( cursorImg= loadSDImage("AR01.BMP")) == NULL);
