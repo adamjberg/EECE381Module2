@@ -129,6 +129,7 @@ void animate_ISR(struct Cursor* cursor) {
 				j[data] +=2;
 		}
 	}
+
 	alt_irq_non_interruptible(tempcontext);
 
 	IOWR_16DIRECT(TIMESTAMP_BASE, 0, 0);

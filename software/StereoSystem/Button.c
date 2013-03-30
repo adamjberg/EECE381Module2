@@ -9,36 +9,43 @@ struct Button* initButton(){
 	b->buttonType = 3;
 	b->collide = dummyCollide;
 	b->draw = dummyDraw;
+	b->Panel = NULL;
 	return b;
 }
 
-struct Button* initMenuButton(int x, char* name, int color, int type, struct Frame* mainFrame){
+struct Button* initMenuButton(int x, char* name, int type, struct Frame* menuFrame){
 	struct Button* b = initButton();
-	b->range = initRange(x, 1, 5, 10);
+	b->range = initRange(x, 1, 30, 10);
 	b->name = name;
 	b->x_pos = x;
 	b->y_pos = 1; // all menu buttons have to be drawn at y = 1
-	b->draw = drawMenuButton;
+	b->draw = drawTxtButton;
 	b->type = type;
 	b->collide = menuButtonCollide;
-	b->mainPanel = mainFrame;
+	b->Panel = menuFrame;
 	return b;
 }
 
-struct Button* initSongButton(int x, int y, char* name, int color){
+struct Button* initSongButton(int x, int y, char* name, struct Frame* panel){
 	struct Button* sb = initButton();
 	sb->name = name;
+	sb->Panel = panel;
+	sb->range = initRange(x, y, 79, 10);
 	sb->x_pos = x;
 	sb->y_pos = y;
-	sb->draw = drawSongButton;
+	sb->draw = drawTxtButton;
+	sb->collide = songButtonCollide;
 	return sb;
 }
-struct Button* initPlaylistButton(int x, int y, char* name, int color){
+struct Button* initPlaylistButton(int x, int y, char* name, struct Frame* panel){
 	struct Button* pb = initButton();
 	pb->name = name;
 	pb->x_pos = x;
 	pb->y_pos = y;
-	pb->draw = drawMenuButton;
+	pb->draw = drawTxtButton;
+	pb->Panel = panel;
+	pb->range = initRange(x, y, 79, 10);
+	pb->collide = playlistButtonCollide;
 	return pb;
 }
 
@@ -55,33 +62,25 @@ struct Button* initActionButton(int type){
 	return ab;
 }
 
-void drawMenuButton(struct Button* this){
-	// right now just write
+void drawTxtButton(struct Button* this){
 	alt_up_char_buffer_string(char_buffer, this->name, this->x_pos, this->y_pos);
 }
-
-void drawSongButton(struct Button* this){
-	// TODO: draw with different gradient background color,
-	// may need to add integer as parameter.
-	alt_up_char_buffer_string(char_buffer, this->name, this->x_pos, this->y_pos);
-}
-
 void drawActionButton(struct Button* this){
 	draw(this->x_pos, this->y_pos, this->stats[0]);
 }
-
-void dummyDraw(struct Button* this){
-
-}
+void dummyDraw(struct Button* this){}
 
 void menuButtonCollide(struct Button* this){
 	// 0:ALLSONGS, 1:PLAYLISTS
+	draw_notransparent(241, 13, this->Panel->mainFrame->elements[2]->bg_image);
 	switch(this->type){
 	case 0:
 		allSongsMenuButtonCollide(this);
+		this->Panel->mainFrame->currentPanel = 0;
 		break;
 	case 1:
 		playlistMenuButtonCollide(this);
+		this->Panel->mainFrame->currentPanel = 1;
 		break;
 	default:
 		break;
@@ -89,25 +88,37 @@ void menuButtonCollide(struct Button* this){
 }
 void playlistMenuButtonCollide(struct Button* this){
 	clearSongPanel();
-	if (this->mainPanel->elements[3] == NULL){
+	if (this->Panel->mainFrame->elements[3] == NULL){
 		printf("Playlist frame is NULL\n");
 		return;
 	}
-	this->mainPanel->elements[3]->drawFrame(this->mainPanel->elements[3]);
+	this->Panel->mainFrame->elements[3]->drawFrame(this->Panel->mainFrame->elements[3]);
 }
 void allSongsMenuButtonCollide(struct Button* this){
 	clearSongPanel();
-	if (this->mainPanel->elements[2] == NULL){
+	if (this->Panel->mainFrame->elements[2] == NULL){
 		printf("All Songs frame is NULL\n");
 		return;
 	}
-	this->mainPanel->elements[2]->drawFrame(this->mainPanel->elements[2]);
+	this->Panel->mainFrame->elements[2]->drawFrame(this->Panel->mainFrame->elements[2]);
 }
 
 void actionButtonCollide(struct Button* this){
 	switch(this->type){
 	case 0:
 		playButtonCollide(this);
+		break;
+	case 1:
+		stopButtonCollide(this);
+		break;
+	case 2:
+		pauseButtonCollide(this);
+		break;
+	case 3:
+		prevButtonCollide(this);
+		break;
+	case 4:
+		nextButtonCollide(this);
 		break;
 	default:
 		break;
@@ -118,8 +129,47 @@ void playButtonCollide(struct Button* this){
 	printf("Play button is clicked\n");
 }
 
+void pauseButtonCollide(struct Button* this){
+	// TODO: range is still not correct!!
+	printf("Pause button is clicked.\n");
+}
+
+void stopButtonCollide(struct Button* this){
+	printf("Stop button is clicked\n");
+}
+
+void prevButtonCollide(struct Button* this){
+	printf("Prev button is clicked.\n");
+}
+
+void nextButtonCollide(struct Button* this){
+	printf("Next button is clicked.\n");
+}
+
 void dummyCollide(struct Button* this){
 	printf("ERROR:Dummy Collide is called.\n");
+}
+
+void songButtonCollide(struct Button* this){
+	// highlight the song
+	draw_notransparent(241, 13, this->Panel->bg_image);
+	int i = 0;
+	int y = 4* this->y_pos - 2;
+	int x = 4* this->x_pos - 3;
+	for (i = 0; i < 10; i++, y++){
+		drawHorizontalLine(x, y, 76, 0xe711ce);
+	}
+}
+
+void playlistButtonCollide(struct Button* this){
+	// highlight the playlist
+	draw_notransparent(241, 13, this->Panel->bg_image);
+	int i =0;
+	int y = 4* this->y_pos - 2;
+	int x = 4* this->x_pos - 3;
+	for (i = 0; i < 10; i++, y++){
+		drawHorizontalLine(x, y, 76, 0xe711ce);
+	}
 }
 
 int getXActionBtn(int actionBtnType){

@@ -73,7 +73,7 @@ void incIndex() {
 void updateMixer() {
 //	MIX_LOCK = 1;
 	int i, j, isDone = 0;
-	for(i = 0; i < 80; i++) {
+	for(i = 0; i < 50; i++) {
 		if(soundMixer->indexSize >=299) return;
 		for(j = 0; j < db.total_songs_playing; j++) {
 			if(!checkEnd(db.songs[db.curr_song_ids[j]]->sound)) {
@@ -100,8 +100,10 @@ void updateMixer() {
 		if(db.curr_playlist_id != 0) {
 			syncNext(db.curr_song_id);
 		}
-	} //else if(!db.isPaused&& db.total_songs_playing > 0)
-	//	enableAudioDeviceController();
+	}// else
+		//IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
+	//else if(!db.isPaused&& db.total_songs_playing > 0)
+		//enableAudioDeviceController();
 	//MIX_LOCK = 0;
 }
 

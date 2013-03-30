@@ -64,6 +64,7 @@ void play(int id, int vol, int pos) {
 	playSong(db.songs[id], vol, pos, 0);
 	syncUpdatePos(id, pos, 1);
 	updateMixer();
+	//IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
 	enableAudioDeviceController();
 	printf("A song %d is played at %d position.\n", id, pos);
 }

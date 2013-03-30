@@ -17,6 +17,9 @@ struct Range {
 
 struct Range* initRange(int, int, int, int);
 void compareRange(struct Range*, struct Range*, int);
-void checkTxtBtnCollision(void*, void*);
-void checkImgBtnCollision(void*, void*);
+void checkButtonCollision(struct Cursor*, struct Frame*);
+void checkTxtCollisionForMouse(void*, void*);
+void checkImgCollisionForMouse(void*, void*);
+
+
 #endif /* RANGE_H_ */

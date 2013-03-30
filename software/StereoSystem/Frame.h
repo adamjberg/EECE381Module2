@@ -13,7 +13,7 @@ struct Frame{
 	int background_col;
 	int currentPanel; // signify song / list being shown
 	struct Image* bg_image;
-
+	struct Frame* mainFrame;
 
 	void (*drawFrame)(struct Frame*);
 };
@@ -21,9 +21,10 @@ struct Frame{
 struct Frame* initFrame();
 struct Frame* initMainFrame();
 struct Frame* initMenuFrame(struct Frame*);
-struct Frame* initActionFrame();
-struct Frame* initSongPanel();
-struct Frame* initPlaylistPanel();
+struct Frame* initActionFrame(struct Frame*);
+struct Frame* initSongPanel(struct Frame*);
+struct Frame* initPlaylistPanel(struct Frame*);
+
 void drawMainFrame(struct Frame*);
 void drawMenuFrame(struct Frame*);
 void drawActionFrame(struct Frame*);

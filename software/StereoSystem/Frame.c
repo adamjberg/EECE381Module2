@@ -10,27 +10,29 @@ struct Frame* initMainFrame(){
 	struct Frame* f = initFrame();
 	f->elements = (struct Frame**)malloc(4*sizeof(struct Frame*));
 	f->elements[0] = initMenuFrame(f);
-	f->elements[1] = initActionFrame();
-	f->elements[2] = initSongPanel();
-	f->elements[3] = initPlaylistPanel();
+	f->elements[1] = initActionFrame(f);
+	f->elements[2] = initSongPanel(f);
+	f->elements[3] = initPlaylistPanel(f);
 	f->drawFrame = drawMainFrame;
 	f->element_size = 4;
 	f->button_size = 0;
-	f->currentPanel = 0;
+	f->currentPanel = 0; // 0:SONGS, 1:PLAYLIST
 	return f;
 }
 
 struct Frame* initMenuFrame(struct Frame* mainFrame){
 	struct Frame* mf = initFrame();
 	mf->buttons = (struct Button**)malloc(2*sizeof(struct Button*));
-	mf->buttons[0] = initMenuButton(5, "All Songs", 0x123456, 0, mainFrame);
-	mf->buttons[1] = initMenuButton(35, "Playlists", 0x123456, 1, mainFrame);
+	mf->buttons[0] = initMenuButton(5, "All Songs", 0, mf);
+	mf->buttons[1] = initMenuButton(35, "Playlists", 1, mf);
 	mf->drawFrame = drawMenuFrame;
 	mf->button_size = 2;
+	mf->mainFrame = mainFrame;
+	mf->bg_image = NULL;
 	return mf;
 }
 
-struct Frame* initActionFrame(){
+struct Frame* initActionFrame(struct Frame* mainFrame){
 	struct Frame* af = initFrame();
 	//af->bg_image = loadSDImage("GR3.BMP");
 	af->buttons = (struct Button**)malloc(5*sizeof(struct Button*));
@@ -46,35 +48,44 @@ struct Frame* initActionFrame(){
 	while((af->buttons[4]->stats[0] = loadSDImage("NEXT.BMP")) == NULL);
 	af->drawFrame = drawActionFrame;
 	af->button_size = 5;
+	af->mainFrame = mainFrame;
 	return af;
 }
 
-struct Frame* initSongPanel(){
-	struct Frame* sp = initFrame();
-	sp->buttons = (struct Button**)malloc(50*sizeof(struct Button*));
+struct Frame* initSongPanel(struct Frame* frame){
 	int i = 1;
 	int init_song_y = 4;
-	for (i = 1; i < db.num_of_songs; i++){
-		sp->buttons[i] = initSongButton(61, init_song_y, db.songs[i]->song_name, 0x123456);
-		init_song_y = init_song_y+3;
-	}
+	struct Frame* sp = initFrame();
+	sp->buttons = (struct Button**)malloc(50*sizeof(struct Button*));
 	sp->drawFrame = drawSongPanel;
 	sp->background_col = 0;
-	sp->button_size = db.num_of_songs; // starts from 1
+	//sp->bg_image = loadSDImage("AND.BMP");
+	sp->mainFrame = frame;
+	if (db.num_of_songs > 15){
+		sp->button_size = 15; // starts from 1!!
+	} else {
+		sp->button_size = db.num_of_songs;
+	}
+	for (i = 1; i < sp->button_size; i++){
+		sp->buttons[i] = initSongButton(61, init_song_y, db.songs[i]->song_name, sp);
+		init_song_y = init_song_y+3;
+	}
 	return sp;
 }
 
-struct Frame* initPlaylistPanel(){
-	struct Frame* pp = initFrame();
-	pp->buttons = (struct Button**)malloc(50*sizeof(struct Button*));
+struct Frame* initPlaylistPanel(struct Frame* frame){
 	int i = 1;
 	int init_playlist_y = 4;
-	for (i = 1; i < db.num_of_lists; i++){
-		pp->buttons[i] = initPlaylistButton(61, init_playlist_y, db.playlists[i]->list_name, 0x123456);
-		init_playlist_y += 3;
-	}
+	struct Frame* pp = initFrame();
+	pp->buttons = (struct Button**)malloc(50*sizeof(struct Button*));
 	pp->drawFrame = drawPlaylistPanel;
 	pp->button_size = db.num_of_lists; // starts from 1
+	pp->mainFrame = frame;
+	//pp->bg_image = loadSDImage("AND.BMP");
+	for (i = 1; i < db.num_of_lists; i++){
+		pp->buttons[i] = initPlaylistButton(61, init_playlist_y, db.playlists[i]->list_name, pp);
+		init_playlist_y += 3;
+	}
 	return pp;
 }
 
@@ -122,7 +133,7 @@ void drawActionFrame(struct Frame* this){
 
 void drawSongPanel(struct Frame* this){
 	int i = 1;
-	for (i = 1; i < db.num_of_songs; i++){
+	for (i = 1; i < this->button_size; i++){
 		this->buttons[i]->draw(this->buttons[i]);
 	}
 }

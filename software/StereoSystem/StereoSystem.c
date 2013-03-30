@@ -62,27 +62,36 @@ int main()
 	while((testImg = loadSDImage("TEST.BMP")) == NULL);
 	draw(35, 35, testImg);
 	killImage(testImg);
-	//alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
+	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
 	//graphicTester();
 
-	struct Frame* mainFrame = initMainFrame();
-	mainFrame->drawFrame(mainFrame);
-	//Test End
+	//alt_up_pixel_buffer_dma_clear_screen(pixel_buffer, 0);
+	//alt_up_char_buffer_clear(char_buffer);
 
+	//struct Frame* mainFrame = initMainFrame();
+	//mainFrame->drawFrame(mainFrame);
+
+	//Test End
 	struct Cursor* cursor = initCursor(10, 100);
+
 	initAudioBuffer();
 	initAnimate(cursor);
 
 	int i = 2;
+
 	syncPlay(1, 100, 0);
 
 	while(1) {
 		cmdProcessing(scheduler);
 
-		checkTxtBtnCollision(cursor, mainFrame->elements[0]->buttons[1]);
-		checkTxtBtnCollision(cursor, mainFrame->elements[0]->buttons[0]);
+		//checkTxtBtnCollision(cursor, mainFrame->elements[0]->buttons[1]);
+		//checkTxtBtnCollision(cursor, mainFrame->elements[0]->buttons[0]);
+
 
 		i = soundTester(i);
+
+
+		//checkButtonCollision(cursor, mainFrame);
 
 	}
 

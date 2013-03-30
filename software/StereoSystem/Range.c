@@ -46,8 +46,10 @@ void compareRange(struct Range* r1, struct Range* r2, int type){
 	r2->previouslyCollided = r2->currentlyCollided;
 }
 
-
-void checkTxtBtnCollision(void* cursor, void* button){
+/**
+ * checkTextCollisionForMouse
+ */
+void checkTxtCollisionForMouse(void* cursor, void* button){
 	struct Range* r_cursor = ((struct Object*)((struct Cursor*)cursor)->super)->r;
 	struct Range* r_button = (struct Range*)((struct Button*)button)->range;
 
@@ -58,47 +60,84 @@ void checkTxtBtnCollision(void* cursor, void* button){
 	if (x_button_end > 320) {x_button_end = 320;}
 	if (y_button_end > 240) {y_button_end = 240;}
 
-	//TODO: same logic for leftClick
 	if (r_cursor->x >= x_button_start && r_cursor->x < x_button_end &&
 			r_cursor->y >= y_button_start && r_cursor->y < y_button_end){
-		r_button->currentlyCollided = 1;
-	} else {
-		r_button->currentlyCollided = 0;
+		if (((struct Cursor*)cursor)->isLeftPressed){
+			r_button->currentlyCollided = 1;
+		} else {
+			r_button->currentlyCollided = 0;
+		}
 	}
+
 	if (r_button->previouslyCollided == 0 && r_button->currentlyCollided == 1){
-		printf("Collision detected\n");
-		((struct Button*)button)->collide(((struct Button*)button));
+			printf("Collision detected\n");
+			((struct Button*)button)->collide(((struct Button*)button));
+			((struct Cursor*)cursor)->isLeftPressed = false;
 	}
+
 	r_button->previouslyCollided = r_button->currentlyCollided;
 
 	r_cursor = NULL;
 	r_button = NULL;
+
 }
 
-void checkImgBtnCollision(void* cursor, void* button){
-	struct Range* r_cursor = ((struct Object*)((struct Cursor*)cursor)->super)->r;
-	struct Range* r_button = (struct Range*)((struct Button*)button)->range;
+void checkImgCollisionForMouse(void* cursor, void* button){
+	    struct Range* r_cursor = ((struct Object*)((struct Cursor*)cursor)->super)->r;
+		struct Range* r_button = (struct Range*)((struct Button*)button)->range;
 
-	int x_button_start = r_button->x;
-	int y_button_start = r_button->y;
-	int x_button_end = 4 * r_button->x + r_button->width;
-	int y_button_end = 4 * r_button->y + r_button->height;
-	if (x_button_end > 320) {x_button_end = 320;}
-	if (y_button_end > 240) {y_button_end = 240;}
+		int x_button_start = r_button->x;
+		int y_button_start = r_button->y;
+		int x_button_end = 4 * r_button->x + r_button->width;
+		int y_button_end = 4 * r_button->y + r_button->height;
+		if (x_button_end > 320) {x_button_end = 320;}
+		if (y_button_end > 240) {y_button_end = 240;}
 
-	if (r_cursor->x >= x_button_start && r_cursor->x < x_button_end &&
-			r_cursor->y >= y_button_start && r_cursor->y < y_button_end){
-		r_button->currentlyCollided = 1;
+		if (r_cursor->x >= x_button_start && r_cursor->x < x_button_end &&
+				r_cursor->y >= y_button_start && r_cursor->y < y_button_end){
+			if (((struct Cursor*)cursor)->isLeftPressed){
+				r_button->currentlyCollided = 1;
+			} else {
+				r_button->currentlyCollided = 0;
+			}
+		}
+
+		if (r_button->previouslyCollided == 0 && r_button->currentlyCollided == 1){
+			printf("Collision detected\n");
+			((struct Button*)button)->collide(((struct Button*)button));
+			((struct Cursor*)cursor)->isLeftPressed = false;
+			// do whatever we need to do here
+		}
+		r_button->previouslyCollided = r_button->currentlyCollided;
+
+		r_cursor = NULL;
+		r_button = NULL;
+}
+
+void checkButtonCollision(struct Cursor* cursor, struct Frame* mainFrame){
+
+	// check menu buttons
+	checkTxtCollisionForMouse(cursor, mainFrame->elements[0]->buttons[1]);
+	checkTxtCollisionForMouse(cursor, mainFrame->elements[0]->buttons[0]);
+
+	// check action buttons
+	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[0]);
+	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[1]);
+	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[2]);
+
+	// check song panel buttons
+	if (mainFrame->currentPanel == 0){
+		int i = 0;
+		for (i = 1; i <= mainFrame->elements[2]->button_size; i++){
+			checkTxtCollisionForMouse(cursor, mainFrame->elements[2]->buttons[i]);
+		}
 	} else {
-		r_button->currentlyCollided = 0;
+		int i = 0;
+		for (i = 1; i <= mainFrame->elements[3]->button_size; i++){
+			checkTxtCollisionForMouse(cursor, mainFrame->elements[3]->buttons[i]);
+		}
 	}
-	if (r_button->previouslyCollided == 0 && r_button->currentlyCollided == 1){
-		printf("Collision detected\n");
-		((struct Button*)button)->collide(((struct Button*)button));
-	}
-	r_button->previouslyCollided = r_button->currentlyCollided;
 
-	r_cursor = NULL;
-	r_button = NULL;
 }
+
 
