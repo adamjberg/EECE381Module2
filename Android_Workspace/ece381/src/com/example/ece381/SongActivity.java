@@ -3,25 +3,24 @@ package com.example.ece381;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class SongActivity extends Activity {
   
@@ -33,6 +32,10 @@ public class SongActivity extends Activity {
     // create an instance of the database
     private Database db = com.getDB();
   
+    // repeat toggle button
+    private ToggleButton repeatBtn;
+    
+    
   private ListView songListView;
   private ArrayAdapter<String> listAdapter;
   
@@ -40,6 +43,10 @@ public class SongActivity extends Activity {
   private String songPicked = "";
   
   public final String addsong = "Add a song to this playlist...";
+  
+  public int lastItem = 0; // count of how many items in the ArrayAdapter; 
+	   //= 1 if there are no songs due to the "add a song" item
+
   
   /** Called when the activity is first created. */
   @Override
@@ -96,9 +103,9 @@ public class SongActivity extends Activity {
         		
     			db.setCurr_song_id(songid);
     			db.setCurr_playlist_id(plid);
-    			Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
-    			//Log.v("setting current playlist", selected_pl_name);
-    			
+        	
+				Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
+				
     			Intent goToPlay = new Intent(SongActivity.this, play.class);
     			startActivity(goToPlay);
     				
@@ -124,6 +131,9 @@ public class SongActivity extends Activity {
 
     // Set the ArrayAdapter as the ListView's adapter.
     songListView.setAdapter( listAdapter );      
+    
+    // Repeat button
+    repeatBtn = (ToggleButton) findViewById(R.id.repeat_button);
   }
   protected void onActivityResult(int requestCode, int resultCode, Intent data ) {
 	  refreshSonglist();
@@ -173,8 +183,24 @@ public class SongActivity extends Activity {
 	    // "add a song" button
 	  	listAdapter.add(addsong);
 	  	listAdapter.addAll(db.querySongsBylist(db.getCurr_playlist_id()));
-	 
+	  	// set the current last position (end of the list)
+	  	this.lastItem = listAdapter.getCount(); 
+
+	  	/*
+	  	 * item 0 = "add a song"
+	  	 * item 1 ... n = songs
+	  	 */
+	  	
+	  	Log.v("songcount", ""+(this.lastItem-1));
+	  	
 	  	// refresh adapter
 	    listAdapter.notifyDataSetChanged();
   }
+  
+  public void repeatPlaylistToggle(View view) {
+	  // set db flag to reflect if it's toggled on or off
+	  db.setRepeatPlaylist( ((ToggleButton) view).isChecked() );
+	  Log.v("toggledRepeatPlaylist", ""+db.getRepeatPlaylistValue());
+  }
+  
 }

@@ -23,7 +23,9 @@ public class Database {
 	private int[][] list_order_song;
 	private ArrayList<String> songs_name;
 	private ArrayList<String> lists_name;
-	
+	private boolean repeat_playlist;
+	private boolean shuffle_playlist;
+	private boolean isEndOfPlaylist;
 	
 	public Database() {
 		this.playlists = new Playlist[MAX_LISTS];
@@ -185,7 +187,18 @@ public class Database {
 	}
 	
 	public int getNextSongInList() {
+		
 		int order = this.list_song_order[this.curr_playlist_id][this.curr_song_id];
+		
+		// Check if the current song was at the end of playlist and user turned on repeat playlist
+		// (Set by SongActivity)
+		// if true, then return the first song of this playlist
+			if( getIsEndOfPlaylist() && getRepeatPlaylistValue() ) {
+				int first_song = getSongsFromList(this.curr_playlist_id)[1];
+				return this.list_order_song[this.curr_playlist_id][first_song];
+			}
+		
+		
 		if(order == 0) return 0;
 		return this.list_order_song[this.curr_playlist_id][order+1];
 	}
@@ -259,5 +272,38 @@ public class Database {
 		} this.list_order_song[list_id][i] = 0;
 		
 	}
+	
+	
+	public void toggleShufflePlaylist() {
+		this.shuffle_playlist = !this.shuffle_playlist;
+	}
+	
+	public void toggleRepeatPlaylist() {
+		this.repeat_playlist = !this.repeat_playlist;
+	}
+
+	public boolean getShufflePlaylistValue() {
+		return this.shuffle_playlist;
+	}
+	
+	public boolean getRepeatPlaylistValue() {
+		return this.repeat_playlist;
+	}
+	public void setRepeatPlaylist(boolean checked) {
+		// TODO Auto-generated method stub
+		this.repeat_playlist = checked;
+	}
+	public void setShufflePlaylist(boolean checked) {
+		// TODO Auto-generated method stub
+		this.shuffle_playlist = checked;
+	}
+	public void setIsEndOfPlaylist(boolean checked) {
+		this.isEndOfPlaylist = checked;
+	}
+	public boolean getIsEndOfPlaylist() {
+		return this.isEndOfPlaylist;
+	}
+
+	
 
 }

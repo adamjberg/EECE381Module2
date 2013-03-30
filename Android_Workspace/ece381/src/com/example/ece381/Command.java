@@ -2,6 +2,8 @@ package com.example.ece381;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class Command {
 
 	private int cmd_index;
@@ -54,13 +56,13 @@ public class Command {
 	}
 	
 	static public void syncPlay(int id, int vol, int pos) {
-		Communication com = Communication.getInstance();
+		Communication com = Communication.getInstance();	
 		Command cmd = new Command(1);
 		cmd.addParameter(String.valueOf(id));
 		cmd.addParameter(String.valueOf(vol));
 		cmd.addParameter(String.valueOf(pos));
 		com.send(cmd);
-		com.getSched().addCmd(cmd);
+		com.getSched().addCmd(cmd);		
 	}
 	
 	static public void play(int id, int vol, int pos) {
@@ -128,15 +130,44 @@ public class Command {
 	}
 	static public void next(int song_id) {
 		Communication com = Communication.getInstance();
+		
+		// Check for end of playlist
+		int curr_plid = com.getDB().getCurr_playlist_id();
+		int curr_songid = com.getDB().getCurr_song_id();
+		int last_songInList = com.getDB().getPlaylists()[curr_plid].getNum_of_songs();
+		int last_songid = com.getDB().getSongsFromList(curr_plid)[last_songInList];
+		
+		Log.v("current_id; last_id", curr_songid+"; "+last_songid);
+		
+		if( curr_songid == last_songid ) {
+			com.getDB().setIsEndOfPlaylist(true);
+		}
+		else {
+			com.getDB().setIsEndOfPlaylist(false);
+		}
+		Log.v("isEndOfPlaylist", ""+com.getDB().getIsEndOfPlaylist());
+		
+		
 		int next_id = 0;
 		if(com.getDB().getCurr_playlist_id() != 0) {
-			int curr_order =
-					com.getDB().getSongOrderFromList()[com.getDB().getCurr_playlist_id()][song_id];
-			next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order+1];
+			
+			if(com.getDB().getIsEndOfPlaylist() && com.getDB().getRepeatPlaylistValue()) {
+				next_id = com.getDB().getSongsFromList(curr_plid)[1];				
+				Command.syncPlay(next_id, com.getDB().getSongs()[next_id].getVolume(), 0);
+				return;
+			}
+			
+			else {
+				int curr_order =
+						com.getDB().getSongOrderFromList()[com.getDB().getCurr_playlist_id()][song_id];
+				next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order+1];	
+			}
+			
 		} else {
 			next_id = com.getDB().getCurr_song_id()+1;
 		}
 		if(next_id == 0) return;
+		
 		com.getDB().setCurr_song_id(next_id);
 		com.getDB().getSongs()[next_id].setPos(0);
 		//com.getDB().getSongs()[next_id].setVolume(100);

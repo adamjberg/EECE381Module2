@@ -124,6 +124,7 @@ public class play extends Activity {
 		String msg;
 		Database db = com.getDB();
 		if(com.getDB().getCurr_playlist_id() == 0) {
+			
 			if(com.getDB().getCurr_song_id() >= com.getDB().getTotalSongs()) return;
 			msg = "playing "+ com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getSongName();
 			
@@ -131,12 +132,22 @@ public class play extends Activity {
 			seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()+1].getVolume());
 		} else {
 			if(db.getNextSongInList() == 0) return;
+						
 			msg = "playing "+ com.getDB().getSongs()[db.getNextSongInList()].getSongName();
 			seekbar2.setMax(com.getDB().getSongs()[db.getNextSongInList()].getSize());
 			seekbar2.setProgress(com.getDB().getSongs()[db.getNextSongInList()].getVolume());
 		}
 		greetMsg.setText(msg);
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+		
+		
+		if(com.getDB().getIsEndOfPlaylist() && com.getDB().getRepeatPlaylistValue()) {
+			// Then set the current song id 
+			com.getDB().setCurr_song_id(db.getNextSongInList());
+			Log.v("curr songid", ""+db.getCurr_song_id());
+			Log.v("getNextSongInList", ""+db.getNextSongInList());
+			
+		}
 		Command.syncNext(com.getDB().getCurr_song_id());
 	}
 
