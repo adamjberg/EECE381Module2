@@ -8,7 +8,8 @@
 #ifndef SOUND_H_
 #define SOUND_H_
 
-#include "..\Global.h"
+#include "../Global.h"
+#include "../libMad/mad.h"
 
 #define SAMPLE_RATE_OFFSET 24
 #define BITS_PER_SAMPLE_OFFSET 34
@@ -46,4 +47,6 @@ bool checkEnd(struct Sound*);
 int readInt(int, int);
 void updatePos(struct Sound*);
 int* loadWavHeader(char*);
+struct Sound* loadSound(struct Song*);
+struct Sound* loadMP3Sound(char*);
 #endif /* SOUND_H_ */

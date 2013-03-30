@@ -12,6 +12,11 @@
 struct Song* initSong(char* songname) {
 	struct Song* this = (struct Song*)malloc(sizeof(struct Song));
 	setSongName(this, songname);
+	int len = strlen(songname);
+	int i;
+	for(i = 1; i <= 3; i ++) {
+		this->ext[3-i] = songname[len-i];
+	} this->ext[3] = '\0';
 	this->isCached = false;
 	this->pos = this->size = 0;
 	this->volume = 100;
@@ -25,7 +30,7 @@ void loadSong(struct Song* this) {
 	if(this == NULL) return;
 	if(this->sound != NULL)
 		return;
-	while((this->sound = loadWavSound(this->song_name)) == NULL) {
+	while((this->sound = loadSound(this)) == NULL) {
 		printf("load %s failed, reloading..\n", this->song_name);
 	}
 	addToMemory(this->sound, this->id);

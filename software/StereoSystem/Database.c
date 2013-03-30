@@ -327,7 +327,7 @@ void createPlaylistFromTxt(char* line){
 char** getSongsFromSD(){
 	int fileStatus = 0;
 	char fileName[15];
-	int numOfWavFiles = 0;
+	int numOfSounds = 0;
 
 	// songNames is array of strings that store song names.
 	char** songNames = malloc(MAX_SONGS *sizeof(char*));
@@ -340,16 +340,21 @@ char** getSongsFromSD(){
 	}
 	while (fileStatus != -1){
 		if (strstr(fileName, ".WAV") != NULL){
-			songNames[numOfWavFiles] = malloc(20 * sizeof(char));
-			strcpy(songNames[numOfWavFiles], fileName);
+			songNames[numOfSounds] = malloc(20 * sizeof(char));
+			strcpy(songNames[numOfSounds], fileName);
 			//createSong(fileName, 0);
-			numOfWavFiles++;
-		}
+			numOfSounds++;
+		} /*else if(strstr(fileName, ".MP3") != NULL) {
+			songNames[numOfSounds] = malloc(20 * sizeof(char));
+			strcpy(songNames[numOfSounds], fileName);
+			//createSong(fileName, 0);
+			numOfSounds++;
+		}*/
 		memset(fileName, 0 , sizeof(fileName));
 		fileStatus = alt_up_sd_card_find_next(fileName);
 	}
 	// set ending condition, NULL means end of the array
-	songNames[numOfWavFiles] = NULL;
+	songNames[numOfSounds] = NULL;
 	return songNames;
 }
 

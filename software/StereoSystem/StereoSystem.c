@@ -25,7 +25,7 @@ void initAnimate(struct Cursor* cursor) {
 }
 
 void initAudioBuffer() {
-	int timer = 4000000;
+	int timer = 5000000;
 	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 8, timer & 0xFFFF);
 	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 12, timer >> 16);
 	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
@@ -53,12 +53,12 @@ int main()
 
 	initDatabase();
 	initMemory();
+
 	//sync database
-	//dBTester();
 	update();
 
 	//Test VGA Output
-	struct Image* testImg;
+	/*struct Image* testImg;
 	//struct Image* testImg1;
 	while((testImg = loadSDImage("TEST.BMP")) == NULL);
 	//while((testImg1 = loadSDImage("ART3.BMP")) == NULL);
@@ -66,10 +66,11 @@ int main()
 	//draw(0, 20, testImg1);
 	killImage(testImg);
 	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
-	//graphicTester();
+	//graphicTester();*/
 	//Test End
 
 	struct Cursor* cursor = initCursor(10, 100);
+	initAudioBuffer();
 	initAnimate(cursor);
 
 	int i = 2;

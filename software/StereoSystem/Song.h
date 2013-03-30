@@ -15,6 +15,7 @@ int song_id_lock;
 struct Song {
 	struct Sound* sound;
 	char song_name[SONGNAME_LENGTH];
+	char ext[4];
 	int volume;
 	int pos;
 	int size;

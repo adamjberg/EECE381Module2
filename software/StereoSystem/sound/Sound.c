@@ -10,6 +10,13 @@
 #define DEFAULT_SAMPLE_RATE 32000
 #define DEFAULT_BITS_PER_SAMPLE 24
 
+struct buffer {
+	unsigned char *start;
+	unsigned long length;
+};
+
+// Temporary buffer to hold mp3 bytes to be decoded
+struct buffer tempBuffer;
 /**
  * Helper function to convert a millisecond value to the correct position
  * in the sound buffer
@@ -39,6 +46,161 @@ unsigned int getSoundPositionMS(struct Sound* this) {
  */
 unsigned int getSoundLengthMS(struct Sound* this) {
 	return convertToMS(this->length);
+}
+
+
+/*
+ * This is the input callback. The purpose of this callback is to (re)fill
+ * the stream buffer which is to be decoded. In this example, an entire file
+ * has been mapped into memory, so we just call mad_stream_buffer() with the
+ * address and length of the mapping. When this callback is called a second
+ * time, we are finished decoding.
+ */
+
+static enum mad_flow input(void *data, struct mad_stream *stream) {
+	struct Sound* sound = data;
+	unsigned char * buf = tempBuffer.start;
+
+	/* The buffer is the full pre-loaded song, so this function will only
+	 * be called twice:
+	 * 1. At the beginning of processing
+	 * 2. When this buffer is exhausted (end of the song)
+	 */
+	if (tempBuffer.length) {
+		mad_stream_buffer(stream, buf, tempBuffer.length);
+		tempBuffer.length = 0;
+		return MAD_FLOW_CONTINUE;
+	} else {
+		printf("MP3 Successfully decoded\n");
+		free(tempBuffer.start);
+		sound->length = sound->position;
+		sound->position = 0;
+		return MAD_FLOW_STOP;
+	}
+}
+
+/*
+ * This is the output callback function. It is called after each frame of
+ * MPEG audio data has been completely decoded. The purpose of this callback
+ * is to output (or play) the decoded PCM audio.
+ *
+ * (In our case, we simply put the PCM values into a buffer)
+ */
+static enum mad_flow output(void *data, struct mad_header const *header,
+		struct mad_pcm *pcm) {
+	struct Sound* sound = data;
+	unsigned int nchannels, nsamples;
+	mad_fixed_t const *left_ch, *right_ch;
+	int i;
+
+	nchannels = pcm->channels;
+	nsamples = pcm->length;
+	left_ch = pcm->samples[0];
+	right_ch = pcm->samples[1];
+
+	for (i = 0; i < nsamples; i++) {
+		if(sound->position > sound->length) {
+			printf("Trying to write more space than allocated");
+			break;
+		}
+		sound->buffer[sound->position] = (left_ch[i] & 0xFFFFFF00) >> 8;
+		sound->position++;
+	}
+
+	return MAD_FLOW_CONTINUE;
+}
+
+/*
+ * This is the error callback function. It is called whenever a decoding
+ * error occurs. The error is indicated by stream->error; the list of
+ * possible MAD_ERROR_* errors can be found in the mad.h (or stream.h)
+ * header file.
+ */
+static enum mad_flow error(void *data, struct mad_stream *stream,
+		struct mad_frame *frame) {
+	fprintf(stderr, "decoding error 0x%04x (%s) at byte offset %ld\n",
+			stream->error, mad_stream_errorstr(stream), stream->this_frame
+					- tempBuffer.start);
+
+	/* return MAD_FLOW_BREAK here to stop decoding (and propagate an error) */
+	return MAD_FLOW_BREAK;
+
+	return MAD_FLOW_CONTINUE;
+}
+
+/*
+ * This is the function called by main() above to perform all the decoding.
+ * It instantiates a decoder object and configures it with the input,
+ * output, and error callback functions above. A single call to
+ * mad_decoder_run() continues until a callback function returns
+ * MAD_FLOW_STOP (to stop decoding) or MAD_FLOW_BREAK (to stop decoding and
+ * signal an error).
+ */
+
+static int decodeMP3(struct Sound* this, unsigned char *start, unsigned long length) {
+	struct mad_decoder decoder;
+	int result;
+
+	/* initialize our private message structure -
+	 * this structure is for our own purposes, it is
+	 * not a data type that belongs to libMAD*/
+	tempBuffer.start = start;
+	tempBuffer.length = length;
+
+	/* configure input, output, and error functions */
+	mad_decoder_init(&decoder, this, input, 0 /* header */, 0 /* filter */,
+			output, error, 0 /* message */);
+
+	/* start decoding */
+	result = mad_decoder_run(&decoder, MAD_DECODER_MODE_SYNC);
+
+	/* release the decoder */
+	mad_decoder_finish(&decoder);
+
+	return result;
+}
+
+struct Sound* loadMP3Sound(char * file) {
+	int filePointer;
+	int i;
+	unsigned char * buf = NULL;
+	short int byte = 0;
+	int size = 0;
+
+	printf("Reading file size\n");
+	size = 0;
+	filePointer = alt_up_sd_card_fopen(file, false);
+	while (byte != -1) {
+		byte = alt_up_sd_card_read(filePointer);
+		if (size % (1024 * 1024) == 0) {
+			printf("%d MB | ", size / (1024 * 1024));
+		}
+		size++;
+	}
+	alt_up_sd_card_fclose(filePointer);
+	printf("\nFile Size: %d bytes\n", size);
+
+	struct Sound* sound = initSound(4 * size);
+
+	buf = malloc(size);
+	if (!buf) {
+		printf("Malloc failed\n");
+		exit(0);
+	}
+
+	printf("Preloading mp3\n");
+	filePointer = alt_up_sd_card_fopen(file, false);
+	for (i = 0; i < size; i++) {
+		buf[i] = alt_up_sd_card_read(filePointer);
+		if (i % (1024 * 1024) == 0) {
+			printf("%d MB | ", i / (1024 * 1024));
+		}
+	}
+	alt_up_sd_card_fclose(filePointer);
+	printf("\nPreloading complete\n");
+
+	decodeMP3(sound, buf, size);
+	return sound;
 }
 
 /**
@@ -145,10 +307,13 @@ void clearSoundBuffer(struct Sound* sound) {
 
 struct Sound* initSound(unsigned int length) {
 	struct Sound* this = (struct Sound*) malloc(sizeof(struct Sound));
+	if(!this)
+		printf("Failed to allocate space for sound\n");
 	this->length = length;
 	this->position = 0;
 	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
-	//memMgr.used_memory += length;
+	if(!this->buffer)
+		printf("Failed to allocate sound buffer\n");
 	this->playing = false;
 	this->volume = 1;
 	this->fadeVolume = 1;
@@ -256,6 +421,15 @@ int* loadWavHeader(char* filename) {
 	printf("length: %u\n", srcLength);
 	ret[3] = file_pointer;
 	return ret;
+}
+
+struct Sound* loadSound(struct Song* this) {
+	if(this == NULL) return NULL;
+	if (strcmp(this->ext, "MP3") == 0)
+		return loadMP3Sound(this->song_name);
+	else if (strcmp(this->ext, "WAV") == 0)
+		return loadWavSound(this->song_name);
+	return NULL;
 }
 
 void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {

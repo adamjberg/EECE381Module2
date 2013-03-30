@@ -97,7 +97,10 @@ void ps2_ISR(struct Cursor* cursor) {
 
 }
 void mix_ISR() {
+	int tempcontext;
+	tempcontext= alt_irq_interruptible(AUDIOBUFFERPROCESS_IRQ);
 	updateMixer();
+	alt_irq_non_interruptible(tempcontext);
 	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
 }
 void animate_ISR(struct Cursor* cursor) {
@@ -105,7 +108,7 @@ void animate_ISR(struct Cursor* cursor) {
 	//updateCursor(cursor);
 	 // Do something which is interruptible
 	tempcontext= alt_irq_interruptible(TIMESTAMP_IRQ);
-	updateMixer();
+	//updateMixer();
 	int k, l;
 	unsigned int data;
 	unsigned int j[0x7F];
