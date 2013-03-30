@@ -2,7 +2,7 @@ set_global_assignment -entity "nios_system" -library "lib_nios_system" -name IP_
 set_global_assignment -entity "nios_system" -library "lib_nios_system" -name IP_TOOL_VERSION "12.0sp2"
 set_global_assignment -entity "nios_system" -library "lib_nios_system" -name IP_TOOL_ENV "qsys"
 set_global_assignment -library "lib_nios_system" -name MISC_FILE [file join $::quartus(qip_path) ../../nios_system.sopcinfo]
-set_instance_assignment -entity "nios_system" -library "lib_nios_system" -name SLD_INFO "QSYS_NAME nios_system HAS_SOPCINFO 1 GENERATION_ID 1363578456"
+set_instance_assignment -entity "nios_system" -library "lib_nios_system" -name SLD_INFO "QSYS_NAME nios_system HAS_SOPCINFO 1 GENERATION_ID 1364608310"
 set_global_assignment -name SYNTHESIS_ONLY_QIP ON
 set_global_assignment -library "lib_nios_system" -name MISC_FILE [file join $::quartus(qip_path) ../../nios_system.qsys]
 
@@ -46,9 +46,6 @@ set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $
 set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/altera_up_rs232_out_serializer.v]
 set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/altera_up_sync_fifo.v]
 set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/nios_system_rs232_0.v]
-set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/altera_up_character_lcd_communication.v]
-set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/altera_up_character_lcd_initialization.v]
-set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/nios_system_character_lcd_0.v]
 set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/altera_up_ps2.v]
 set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/altera_up_ps2_command_out.v]
 set_global_assignment -library "lib_nios_system" -name VERILOG_FILE [file join $::quartus(qip_path) submodules/altera_up_ps2_data_in.v]

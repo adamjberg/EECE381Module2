@@ -60,6 +60,14 @@
          type = "int";
       }
    }
+   element audioBufferProcess
+   {
+      datum _sortIndex
+      {
+         value = "33";
+         type = "int";
+      }
+   }
    element audio_and_video_config_0
    {
       datum _sortIndex
@@ -72,7 +80,7 @@
    {
       datum baseAddress
       {
-         value = "17314960";
+         value = "17314992";
          type = "long";
       }
    }
@@ -80,7 +88,7 @@
    {
       datum baseAddress
       {
-         value = "17314944";
+         value = "17314976";
          type = "long";
       }
    }
@@ -96,7 +104,7 @@
    {
       datum baseAddress
       {
-         value = "17315080";
+         value = "17315032";
          type = "long";
       }
    }
@@ -104,7 +112,7 @@
    {
       datum baseAddress
       {
-         value = "17314880";
+         value = "17314912";
          type = "long";
       }
    }
@@ -112,7 +120,7 @@
    {
       datum baseAddress
       {
-         value = "17315072";
+         value = "17315024";
          type = "long";
       }
    }
@@ -128,7 +136,7 @@
    {
       datum baseAddress
       {
-         value = "17315088";
+         value = "17315040";
          type = "long";
       }
    }
@@ -136,7 +144,7 @@
    {
       datum baseAddress
       {
-         value = "17315096";
+         value = "17315048";
          type = "long";
       }
    }
@@ -170,6 +178,14 @@
       {
          value = "31";
          type = "int";
+      }
+   }
+   element timestamp.clk
+   {
+      datum _tags
+      {
+         value = "";
+         type = "String";
       }
    }
    element clk_0
@@ -300,6 +316,14 @@
          type = "int";
       }
    }
+   element timestamp.reset
+   {
+      datum _tags
+      {
+         value = "";
+         type = "String";
+      }
+   }
    element rgb_resampler
    {
       datum _sortIndex
@@ -316,19 +340,43 @@
          type = "int";
       }
    }
-   element hex2.s1
+   element Switches.s1
    {
       datum baseAddress
       {
-         value = "17315024";
+         value = "17314944";
          type = "long";
       }
    }
-   element timestamp.s1
+   element sdram.s1
    {
       datum baseAddress
       {
-         value = "17314848";
+         value = "8388608";
+         type = "long";
+      }
+   }
+   element audioBufferProcess.s1
+   {
+      datum baseAddress
+      {
+         value = "17314880";
+         type = "long";
+      }
+   }
+   element hex1.s1
+   {
+      datum baseAddress
+      {
+         value = "17315008";
+         type = "long";
+      }
+   }
+   element LEDR.s1
+   {
+      datum baseAddress
+      {
+         value = "17315008";
          type = "long";
       }
    }
@@ -340,51 +388,11 @@
          type = "long";
       }
    }
-   element hex0.s1
+   element hex2.s1
    {
       datum baseAddress
       {
-         value = "17314992";
-         type = "long";
-      }
-   }
-   element leds.s1
-   {
-      datum baseAddress
-      {
-         value = "17314896";
-         type = "long";
-      }
-   }
-   element LEDR.s1
-   {
-      datum baseAddress
-      {
-         value = "17314976";
-         type = "long";
-      }
-   }
-   element hex3.s1
-   {
-      datum baseAddress
-      {
-         value = "17315040";
-         type = "long";
-      }
-   }
-   element Switches.s1
-   {
-      datum baseAddress
-      {
-         value = "17314912";
-         type = "long";
-      }
-   }
-   element hex1.s1
-   {
-      datum baseAddress
-      {
-         value = "17315008";
+         value = "17315024";
          type = "long";
       }
    }
@@ -401,11 +409,24 @@
          type = "long";
       }
    }
-   element sdram.s1
+   element leds.s1
    {
       datum baseAddress
       {
-         value = "8388608";
+         value = "17314928";
+         type = "long";
+      }
+   }
+   element timestamp.s1
+   {
+      datum _tags
+      {
+         value = "";
+         type = "String";
+      }
+      datum baseAddress
+      {
+         value = "17314848";
          type = "long";
       }
    }
@@ -413,7 +434,23 @@
    {
       datum baseAddress
       {
-         value = "17314928";
+         value = "17314960";
+         type = "long";
+      }
+   }
+   element hex0.s1
+   {
+      datum baseAddress
+      {
+         value = "17314992";
+         type = "long";
+      }
+   }
+   element hex3.s1
+   {
+      datum baseAddress
+      {
+         value = "17315040";
          type = "long";
       }
    }
@@ -434,7 +471,7 @@
       }
       datum megawizard_uipreferences
       {
-         value = "{output_language=VERILOG, output_directory=C:\\Users\\danny\\Documents\\GitHub\\Project2}";
+         value = "{output_language=VERILOG, output_directory=C:\\Users\\danny\\Documents\\GitHub\\EECE381Project2\\EECE381Module2}";
          type = "String";
       }
    }
@@ -493,7 +530,7 @@
  <parameter name="projectName" value="module2.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1362121285465" />
+ <parameter name="timeStamp" value="1364608111558" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
@@ -552,36 +589,11 @@
    internal="ps2_0.external_interface"
    type="conduit"
    dir="end" />
- <interface
-   name="hex0_ex"
-   internal="hex0.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="hex1_ex"
-   internal="hex1.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="hex2_ex"
-   internal="hex2.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="hex3_ex"
-   internal="hex3.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="hex4_ex"
-   internal="hex4.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="character_lcd_0_external_interface"
-   internal="character_lcd_0.external_interface"
-   type="conduit"
-   dir="end" />
+ <interface name="hex0_ex" internal="hex0.external_connection" />
+ <interface name="hex1_ex" internal="hex1.external_connection" />
+ <interface name="hex2_ex" internal="hex2.external_connection" />
+ <interface name="hex3_ex" internal="hex3.external_connection" />
+ <interface name="hex4_ex" internal="hex4.external_connection" />
  <interface
    name="rs232"
    internal="rs232_0.external_interface"
@@ -597,6 +609,9 @@
    internal="clocks.clk_in_secondary"
    type="clock"
    dir="end" />
+ <interface
+   name="character_lcd_0_external_interface"
+   internal="character_lcd_0.external_interface" />
  <module kind="clock_source" version="12.0" enabled="1" name="clk_0">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -696,10 +711,10 @@
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
   <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x800000' end='0x1000000' /><slave name='nios2_processor.jtag_debug_module' start='0x1082800' end='0x1083000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x800000' end='0x1000000' /><slave name='pixel_buffer.avalon_sram_slave' start='0x1000000' end='0x1080000' /><slave name='char_drawer.avalon_char_buffer_slave' start='0x1080000' end='0x1082000' /><slave name='nios2_processor.jtag_debug_module' start='0x1082800' end='0x1083000' /><slave name='SD_Card.avalon_sdcard_slave' start='0x1083000' end='0x1083400' /><slave name='timer.s1' start='0x1083400' end='0x1083420' /><slave name='timestamp.s1' start='0x1083420' end='0x1083440' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x1083440' end='0x1083450' /><slave name='leds.s1' start='0x1083450' end='0x1083460' /><slave name='Switches.s1' start='0x1083460' end='0x1083470' /><slave name='Keys.s1' start='0x1083470' end='0x1083480' /><slave name='audio_and_video_config_0.avalon_av_config_slave' start='0x1083480' end='0x1083490' /><slave name='audio.avalon_audio_slave' start='0x1083490' end='0x10834A0' /><slave name='LEDR.s1' start='0x10834A0' end='0x10834B0' /><slave name='hex0.s1' start='0x10834B0' end='0x10834C0' /><slave name='hex1.s1' start='0x10834C0' end='0x10834D0' /><slave name='hex2.s1' start='0x10834D0' end='0x10834E0' /><slave name='hex3.s1' start='0x10834E0' end='0x10834F0' /><slave name='hex4.s1' start='0x10834F0' end='0x1083500' /><slave name='jtag_uart.avalon_jtag_slave' start='0x1083500' end='0x1083508' /><slave name='char_drawer.avalon_char_control_slave' start='0x1083508' end='0x1083510' /><slave name='ps2_0.avalon_ps2_slave' start='0x1083510' end='0x1083518' /><slave name='rs232_0.avalon_rs232_slave' start='0x1083518' end='0x1083520' /><slave name='character_lcd_0.avalon_lcd_slave' start='0x1083520' end='0x1083522' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x800000' end='0x1000000' /><slave name='pixel_buffer.avalon_sram_slave' start='0x1000000' end='0x1080000' /><slave name='char_drawer.avalon_char_buffer_slave' start='0x1080000' end='0x1082000' /><slave name='nios2_processor.jtag_debug_module' start='0x1082800' end='0x1083000' /><slave name='SD_Card.avalon_sdcard_slave' start='0x1083000' end='0x1083400' /><slave name='timer.s1' start='0x1083400' end='0x1083420' /><slave name='timestamp.s1' start='0x1083420' end='0x1083440' /><slave name='audioBufferProcess.s1' start='0x1083440' end='0x1083460' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x1083460' end='0x1083470' /><slave name='leds.s1' start='0x1083470' end='0x1083480' /><slave name='Switches.s1' start='0x1083480' end='0x1083490' /><slave name='Keys.s1' start='0x1083490' end='0x10834A0' /><slave name='audio_and_video_config_0.avalon_av_config_slave' start='0x10834A0' end='0x10834B0' /><slave name='audio.avalon_audio_slave' start='0x10834B0' end='0x10834C0' /><slave name='LEDR.s1' start='0x10834C0' end='0x10834D0' /><slave name='jtag_uart.avalon_jtag_slave' start='0x10834D0' end='0x10834D8' /><slave name='char_drawer.avalon_char_control_slave' start='0x10834D8' end='0x10834E0' /><slave name='ps2_0.avalon_ps2_slave' start='0x10834E0' end='0x10834E8' /><slave name='rs232_0.avalon_rs232_slave' start='0x10834E8' end='0x10834F0' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="deviceFamilyName" value="Cyclone II" />
-  <parameter name="internalIrqMaskSystemInfo" value="255" />
+  <parameter name="internalIrqMaskSystemInfo" value="511" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="deviceFeaturesSystemInfo">NOT_LISTED 0 INSTALLED 1 IS_DEFAULT_FAMILY 0 ADDRESS_STALL 1 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 0 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 1 EMUL 1 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FITTER_USE_FALLING_EDGE_DELAY 0 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 0 HARDCOPY 0 HAS_18_BIT_MULTS 0 HAS_ACE_SUPPORT 1 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 0 HAS_ADVANCED_IO_INVERTED_CORNER 0 HAS_ADVANCED_IO_POWER_SUPPORT 0 HAS_ADVANCED_IO_TIMING_SUPPORT 0 HAS_ALM_SUPPORT 0 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 0 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 0 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 0 HAS_BSDL_FILE_GENERATION 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 1 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 1 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 0 HAS_DDB_FDI_SUPPORT 0 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 0 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 0 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 0 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_EARLY_TIMING_ESTIMATE_SUPPORT 1 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 1 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 0 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 1 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 0 HAS_HSSI_POWER_CALCULATOR 0 HAS_IBISO_WRITER_SUPPORT 1 HAS_INCREMENTAL_DAT_SUPPORT 0 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 0 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_SMART_RECOMPILE_SUPPORT 1 HAS_JITTER_SUPPORT 0 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 0 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 0 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 1 HAS_PARTIAL_RECONFIG_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 0 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 0 HAS_PLDM_REF_SUPPORT 1 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 0 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 0 HAS_PVA_SUPPORT 1 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 0 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 1 HAS_SPLIT_IO_SUPPORT 0 HAS_SPLIT_LC_SUPPORT 1 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 0 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 0 HAS_TIMING_SIMULATION_SUPPORT 1 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 1 HAS_VCCPD_POWER_RAIL 0 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 1 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 0 HAS_XIBISO_WRITER_SUPPORT 0 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 0 IS_CONFIG_ROM 0 IS_HARDCOPY_FAMILY 0 LVDS_IO 0 M10K_MEMORY 0 M144K_MEMORY 0 M20K_MEMORY 0 M4K_MEMORY 1 M512_MEMORY 0 M9K_MEMORY 0 MLAB_MEMORY 0 MRAM_MEMORY 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 0 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 1 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_SUPPORT 1 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 0 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 0 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RISEFALL_SUPPORT_IS_HIDDEN 1 STRICT_TIMING_DB_CHECKS 0 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 1 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 0 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 0 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 0 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 1 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 0 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 0 TRANSCEIVER_6G_BLOCK 0 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_THIRD_GENERATION_TIMING_MODELS_TIS 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 0 USE_ADVANCED_IO_TIMING_BY_DEFAULT 0 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 0 USE_RISEFALL_ONLY 0 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 0 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 0 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 0</parameter>
   <parameter name="tightlyCoupledDataMaster0MapParam" value="" />
@@ -1022,7 +1037,7 @@
   <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone II" />
  </module>
- <module kind="altera_avalon_pio" version="12.0" enabled="1" name="hex0">
+ <module kind="altera_avalon_pio" version="12.0" enabled="0" name="hex0">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
@@ -1036,7 +1051,7 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="8" />
  </module>
- <module kind="altera_avalon_pio" version="12.0" enabled="1" name="hex1">
+ <module kind="altera_avalon_pio" version="12.0" enabled="0" name="hex1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
@@ -1050,7 +1065,7 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="8" />
  </module>
- <module kind="altera_avalon_pio" version="12.0" enabled="1" name="hex2">
+ <module kind="altera_avalon_pio" version="12.0" enabled="0" name="hex2">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
@@ -1064,7 +1079,7 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="8" />
  </module>
- <module kind="altera_avalon_pio" version="12.0" enabled="1" name="hex3">
+ <module kind="altera_avalon_pio" version="12.0" enabled="0" name="hex3">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
@@ -1078,7 +1093,7 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="8" />
  </module>
- <module kind="altera_avalon_pio" version="12.0" enabled="1" name="hex4">
+ <module kind="altera_avalon_pio" version="12.0" enabled="0" name="hex4">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
@@ -1107,15 +1122,6 @@
   <parameter name="width" value="8" />
  </module>
  <module
-   kind="altera_up_avalon_character_lcd"
-   version="12.0"
-   enabled="1"
-   name="character_lcd_0">
-  <parameter name="cursor" value="Normal" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone II" />
- </module>
- <module
    kind="altera_up_avalon_rs232"
    version="12.0"
    enabled="1"
@@ -1128,6 +1134,31 @@
   <parameter name="stop_bits" value="1" />
   <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone II" />
+ </module>
+ <module
+   kind="altera_up_avalon_character_lcd"
+   version="12.0"
+   enabled="0"
+   name="character_lcd_0">
+  <parameter name="cursor" value="Normal" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone II" />
+ </module>
+ <module
+   kind="altera_avalon_timer"
+   version="12.0"
+   enabled="1"
+   name="audioBufferProcess">
+  <parameter name="alwaysRun" value="false" />
+  <parameter name="counterSize" value="32" />
+  <parameter name="fixedPeriod" value="false" />
+  <parameter name="period" value="1" />
+  <parameter name="periodUnits" value="MSEC" />
+  <parameter name="resetOutput" value="false" />
+  <parameter name="snapshot" value="true" />
+  <parameter name="systemFrequency" value="50000000" />
+  <parameter name="timeoutPulseOutput" value="false" />
+  <parameter name="timerPreset" value="FULL_FEATURED" />
  </module>
  <connection
    kind="avalon"
@@ -1200,7 +1231,7 @@
    start="nios2_processor.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083500" />
+  <parameter name="baseAddress" value="0x010834d0" />
  </connection>
  <connection kind="reset" version="12.0" start="clk_0.clk_reset" end="timer.reset" />
  <connection
@@ -1261,7 +1292,7 @@
    version="12.0"
    start="nios2_processor.d_irq"
    end="timestamp.irq">
-  <parameter name="irqNumber" value="5" />
+  <parameter name="irqNumber" value="6" />
  </connection>
  <connection
    kind="reset"
@@ -1302,7 +1333,7 @@
    start="nios2_processor.data_master"
    end="pixel_buffer_dma_0.avalon_control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083440" />
+  <parameter name="baseAddress" value="0x01083460" />
  </connection>
  <connection
    kind="avalon"
@@ -1403,7 +1434,7 @@
    start="nios2_processor.data_master"
    end="char_drawer.avalon_char_control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083508" />
+  <parameter name="baseAddress" value="0x010834d8" />
  </connection>
  <connection
    kind="avalon"
@@ -1476,7 +1507,7 @@
    start="nios2_processor.data_master"
    end="leds.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083450" />
+  <parameter name="baseAddress" value="0x01083470" />
  </connection>
  <connection
    kind="avalon"
@@ -1522,7 +1553,7 @@
    start="nios2_processor.data_master"
    end="Switches.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083460" />
+  <parameter name="baseAddress" value="0x01083480" />
  </connection>
  <connection
    kind="avalon"
@@ -1530,7 +1561,7 @@
    start="nios2_processor.data_master"
    end="Keys.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083470" />
+  <parameter name="baseAddress" value="0x01083490" />
  </connection>
  <connection kind="clock" version="12.0" start="clocks.sys_clk" end="Keys.clk" />
  <connection kind="clock" version="12.0" start="clocks.sys_clk" end="Switches.clk" />
@@ -1566,7 +1597,7 @@
    start="nios2_processor.data_master"
    end="audio_and_video_config_0.avalon_av_config_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083480" />
+  <parameter name="baseAddress" value="0x010834a0" />
  </connection>
  <connection
    kind="clock"
@@ -1601,7 +1632,7 @@
    start="nios2_processor.data_master"
    end="audio.avalon_audio_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083490" />
+  <parameter name="baseAddress" value="0x010834b0" />
  </connection>
  <connection
    kind="interrupt"
@@ -1615,7 +1646,7 @@
    version="12.0"
    start="nios2_processor.d_irq"
    end="Switches.irq">
-  <parameter name="irqNumber" value="3" />
+  <parameter name="irqNumber" value="8" />
  </connection>
  <connection kind="clock" version="12.0" start="clocks.sys_clk" end="LEDR.clk" />
  <connection kind="reset" version="12.0" start="clk_0.clk_reset" end="LEDR.reset" />
@@ -1625,7 +1656,7 @@
    start="nios2_processor.data_master"
    end="LEDR.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x010834a0" />
+  <parameter name="baseAddress" value="0x010834c0" />
  </connection>
  <connection
    kind="reset"
@@ -1653,14 +1684,14 @@
    start="nios2_processor.data_master"
    end="ps2_0.avalon_ps2_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083510" />
+  <parameter name="baseAddress" value="0x010834e0" />
  </connection>
  <connection
    kind="interrupt"
    version="12.0"
    start="nios2_processor.d_irq"
    end="ps2_0.interrupt">
-  <parameter name="irqNumber" value="6" />
+  <parameter name="irqNumber" value="3" />
  </connection>
  <connection kind="clock" version="12.0" start="clocks.sys_clk" end="hex0.clk" />
  <connection
@@ -1741,29 +1772,6 @@
    kind="clock"
    version="12.0"
    start="clocks.sys_clk"
-   end="character_lcd_0.clock_reset" />
- <connection
-   kind="reset"
-   version="12.0"
-   start="nios2_processor.jtag_debug_module_reset"
-   end="character_lcd_0.clock_reset_reset" />
- <connection
-   kind="reset"
-   version="12.0"
-   start="clk_0.clk_reset"
-   end="character_lcd_0.clock_reset_reset" />
- <connection
-   kind="avalon"
-   version="12.0"
-   start="nios2_processor.data_master"
-   end="character_lcd_0.avalon_lcd_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083520" />
- </connection>
- <connection
-   kind="clock"
-   version="12.0"
-   start="clocks.sys_clk"
    end="rs232_0.clock_reset" />
  <connection
    kind="reset"
@@ -1781,7 +1789,7 @@
    start="nios2_processor.data_master"
    end="rs232_0.avalon_rs232_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x01083518" />
+  <parameter name="baseAddress" value="0x010834e8" />
  </connection>
  <connection
    kind="interrupt"
@@ -1817,4 +1825,57 @@
    version="12.0"
    start="clocks.sys_clk"
    end="nios2_processor.clk" />
+ <connection
+   kind="clock"
+   version="12.0"
+   start="clocks.sys_clk"
+   end="character_lcd_0.clock_reset" />
+ <connection
+   kind="reset"
+   version="12.0"
+   start="nios2_processor.jtag_debug_module_reset"
+   end="character_lcd_0.clock_reset_reset" />
+ <connection
+   kind="reset"
+   version="12.0"
+   start="clk_0.clk_reset"
+   end="character_lcd_0.clock_reset_reset" />
+ <connection
+   kind="avalon"
+   version="12.0"
+   start="nios2_processor.data_master"
+   end="character_lcd_0.avalon_lcd_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x01083520" />
+ </connection>
+ <connection
+   kind="clock"
+   version="12.0"
+   start="clocks.sys_clk"
+   end="audioBufferProcess.clk" />
+ <connection
+   kind="reset"
+   version="12.0"
+   start="nios2_processor.jtag_debug_module_reset"
+   end="audioBufferProcess.reset" />
+ <connection
+   kind="reset"
+   version="12.0"
+   start="clk_0.clk_reset"
+   end="audioBufferProcess.reset" />
+ <connection
+   kind="avalon"
+   version="12.0"
+   start="nios2_processor.data_master"
+   end="audioBufferProcess.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x01083440" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="12.0"
+   start="nios2_processor.d_irq"
+   end="audioBufferProcess.irq">
+  <parameter name="irqNumber" value="5" />
+ </connection>
 </system>

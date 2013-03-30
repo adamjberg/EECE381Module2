@@ -28,10 +28,6 @@ PORT (
 	CLOCK_27 : IN STD_LOGIC;
 	AUD_ADCDAT, AUD_ADCLRCK, AUD_BCLK, AUD_DACLRCK : IN STD_LOGIC;
 	AUD_DACDAT : OUT STD_LOGIC;
-	LCD_DATA: inout std_LOGIC_VECTOR(7 downto 0);
-	LCD_ON, LCD_BLON, LCD_EN,  LCD_RS,  LCD_RW : out std_LOGIC;
-	HEX0, HEX1, HEX2 ,HEX3, HEX4 :out std_LOGIC_VECTOR(7 downto 0);
-	HEX5,HEX6,HEX7 : out std_LOGIC_VECTOR(7 downto 0) := "11111111";
 	LEDG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
 	LEDR : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
 	PS2_CLK : INOUT STD_LOGIC;
@@ -88,13 +84,6 @@ port (
             audio_DACDAT                : out   std_logic;                                        -- DACDAT
             audio_DACLRCK               : in    std_logic                     := 'X';              -- DACLRCK
 				ledrs_export                 : out   std_logic_vector(17 downto 0);
-				character_lcd_0_external_interface_DATA : inout std_LOGIC_VECTOR(7 dowNTO 0);
-				character_lcd_0_external_interface_ON: out std_LOGIC;
-				character_lcd_0_external_interface_BLON: out std_LOGIC;
-			   character_lcd_0_external_interface_EN: out std_LOGIC;
-				character_lcd_0_external_interface_RS: out std_LOGIC;
-				character_lcd_0_external_interface_RW: out std_LOGIC;
-				hex0_ex_export, hex1_ex_export, hex2_ex_export, hex3_ex_export, hex4_ex_export  :out std_LOGIC_VECTOR(7 downto 0);
 				ps2_0_external_interface_CLK : inout std_logic;
 				ps2_0_external_interface_DAT : inout std_logic;
             rs232_RXD                               : in    std_logic                     := 'X';             -- RXD
@@ -152,18 +141,7 @@ port map (
             audio_BCLK                  => AUD_BCLK,                  --                       .BCLK
             audio_DACDAT                => AUD_DACDAT,                --                       .DACDAT
             audio_DACLRCK               => AUD_DACLRCK,                --                       .DACLRCK	
-				character_lcd_0_external_interface_DATA => LCD_DATA,
-				character_lcd_0_external_interface_BLON => LCD_BLON,
-				character_lcd_0_external_interface_ON => LCD_ON,
-				character_lcd_0_external_interface_EN => LCD_EN,
-				character_lcd_0_external_interface_RS => LCD_RS,
-				character_lcd_0_external_interface_RW => LCD_RW,
 				leds_export			 => LEDG(7 DOWNTO 0),
-				hex0_ex_export => HEX0 (7 DOWNTO 0),
-				hex1_ex_export => HEX1 (7 DOWNTO 0),
-				hex2_ex_export => HEX2 (7 DOWNTO 0),
-				hex3_ex_export => HEX3 (7 DOWNTO 0),
-				hex4_ex_export => HEX4 (7 DOWNTO 0),
 				ledrs_export => LEDR(17 downto 0),
 				ps2_0_external_interface_CLK => PS2_CLK,
 				ps2_0_external_interface_DAT => PS2_DAT,
