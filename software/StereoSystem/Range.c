@@ -87,6 +87,8 @@ void checkImgCollisionForMouse(void* cursor, void* button){
 						((struct Cursor*)cursor)->isLeftPressed = false;
 					} else if (((struct Button*)button)->isClicked == 0) {
 						// button is clicked!
+						((struct Button*)button)->startAnimate = 1;
+						animateButton(((struct Button*)button), 1);
 						r_button->currentlyCollided = 1;
 						((struct Button*)button)->isClicked = 1;
 					}
@@ -125,10 +127,11 @@ void checkButtonCollision(void* c, void* mf){
 	checkTxtCollisionForMouse(cursor, mainFrame->elements[0]->buttons[0]);
 
 	// check action buttons
-	//checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[0]);
-	//checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[1]);
-	//checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[2]);
-	//checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[3]);
+	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[0]);
+	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[1]);
+	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[2]);
+	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[3]);
+	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[4]);
 
 	int i;
 	if (mainFrame->currentPanel == 0){
@@ -138,6 +141,34 @@ void checkButtonCollision(void* c, void* mf){
 	} else if (mainFrame->currentPanel == 1){
 		for (i = 1; i <= mainFrame->elements[3]->button_size; i++){
 			checkTxtCollisionForMouse(cursor, mainFrame->elements[3]->buttons[i]);
+		}
+	}
+}
+
+void buttonAnimation(void* mf){
+	struct Frame* mainFrame = (struct Frame*)mf;
+
+	/*if (mainFrame->elements[1]->buttons[0]->startAnimate == 1){
+		mainFrame->elements[1]->buttons[0]->frame++;
+		printf("Frame is %d\n", mainFrame->elements[1]->buttons[0]->frame);
+		if (mainFrame->elements[1]->buttons[0]->frame == 300){
+			mainFrame->elements[1]->buttons[0]->frame = 0;
+			mainFrame->elements[1]->buttons[0]->startAnimate = 0;
+			animateButton(mainFrame->elements[1]->buttons[0], 0);
+			printf("StartAniamte gets 0\n");
+		}
+	}
+	*/
+
+	int i;
+	for (i = 0; i < 5; i++){
+		if (mainFrame->elements[1]->buttons[i]->startAnimate == 1){
+			mainFrame->elements[1]->buttons[i]->frame++;
+			if (mainFrame->elements[1]->buttons[i]->frame == 300){
+				mainFrame->elements[1]->buttons[i]->frame = 0;
+				mainFrame->elements[1]->buttons[i]->startAnimate = 0;
+				animateButton(mainFrame->elements[1]->buttons[i], 0);
+			}
 		}
 	}
 }

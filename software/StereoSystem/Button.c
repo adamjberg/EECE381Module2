@@ -11,6 +11,8 @@ struct Button* initButton(){
 	b->draw = dummyDraw;
 	b->Panel = NULL;
 	b->isClicked = 0;
+	b->startAnimate = 0;
+	b->frame = 0;
 	return b;
 }
 
@@ -27,7 +29,7 @@ struct Button* initMenuButton(int x, char* name, int type, struct Frame* menuFra
 	return b;
 }
 
-struct Button* initSongButton(int x, int y, char* name, struct Frame* panel){
+struct Button* initSongButton(int x, int y, char* name, int id, struct Frame* panel){
 	struct Button* sb = initButton();
 	sb->name = name;
 	sb->Panel = panel;
@@ -36,6 +38,7 @@ struct Button* initSongButton(int x, int y, char* name, struct Frame* panel){
 	sb->y_pos = y;
 	sb->draw = drawTxtButton;
 	sb->collide = songButtonCollide;
+	sb->id = id;
 	return sb;
 }
 struct Button* initPlaylistButton(int x, int y, char* name, struct Frame* panel){
@@ -52,12 +55,13 @@ struct Button* initPlaylistButton(int x, int y, char* name, struct Frame* panel)
 
 // action button type - used for drawing position later
 // 0:PLAY, 1:STOP, 2:PAUSE, 3:PREV, 4:NEXT
-struct Button* initActionButton(int type){
+struct Button* initActionButton(int type, struct Frame* f){
 	struct Button* ab = initButton();
 	ab->x_pos = getXActionBtn(type);
 	ab->y_pos = getYActionBtn(type);
 	ab->range = initRange(ab->x_pos, ab->y_pos, 20, 20);
 	ab->type = type;
+	ab->Panel = f;
 	ab->draw = drawActionButton;
 	ab->collide = actionButtonCollide;
 	return ab;
@@ -139,28 +143,37 @@ void drawRange(struct Button* this){
 }
 
 void playButtonCollide(struct Button* this){
-	drawRange(this);
+	//draw(150, 205, this->stats[1]);
+	if (db.curr_song_id == 0){
+		syncPlay(1, 100, 0);
+		highlightButton(this->Panel->mainFrame->elements[2]->buttons[1]);
+		printf("Play button is clicked\n");
+	}
+	syncPlay(db.curr_song_id, 100, db.songs[db.curr_song_id]->pos);
+	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id]);
 	printf("Play button is clicked\n");
+	//draw(145, 200, this->stats[0]);
 }
 
 void pauseButtonCollide(struct Button* this){
-	// TODO: range is still not correct!!
-	drawRange(this);
+	syncPause(db.curr_song_id);
 	printf("Pause button is clicked.\n");
 }
 
 void stopButtonCollide(struct Button* this){
-	drawRange(this);
+	syncStop();
 	printf("Stop button is clicked\n");
 }
 
 void prevButtonCollide(struct Button* this){
-	drawRange(this);
+	syncPrev(db.curr_song_id);
+	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
 	printf("Prev button is clicked.\n");
 }
 
 void nextButtonCollide(struct Button* this){
-	drawRange(this);
+	syncNext(db.curr_song_id);
+	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
 	printf("Next button is clicked.\n");
 }
 
@@ -169,7 +182,11 @@ void dummyCollide(struct Button* this){
 }
 
 void songButtonCollide(struct Button* this){
-	// highlight the song
+	syncPlay(this->id, 100, 0);
+	highlightButton(this);
+}
+
+void highlightButton(struct Button* this){
 	draw_notransparent(241, 13, this->Panel->bg_image);
 	int i = 0;
 	int y = 4* this->y_pos - 2;
@@ -225,6 +242,10 @@ int getYActionBtn(int actionBtnType){
 		break;
 	}
 	return y;
+}
+
+void animateButton(struct Button* this, int stats_index){
+	draw(getXActionBtn(this->type), getYActionBtn(this->type), this->stats[stats_index]);
 }
 
 

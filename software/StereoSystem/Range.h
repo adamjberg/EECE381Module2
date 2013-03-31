@@ -19,6 +19,7 @@ struct Range* initRange(int, int, int, int);
 void checkButtonCollision(void*, void*);
 void checkTxtCollisionForMouse(void*, void*);
 void checkImgCollisionForMouse(void*, void*);
+void buttonAnimation(void*);
 
 
 #endif /* RANGE_H_ */

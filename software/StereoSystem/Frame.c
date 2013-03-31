@@ -40,18 +40,23 @@ struct Frame* initActionFrame(struct Frame* mainFrame){
 	struct Frame* af = initFrame();
 	while((af->bg_image = loadSDImage("GR3.BMP")) == NULL);
 	af->buttons = (struct Button**)malloc(5*sizeof(struct Button*));
-	af->buttons[0] = initActionButton(0);
+	af->buttons[0] = initActionButton(0, af);
 	af->buttons[0]->range->height = 30;
 	af->buttons[0]->range->width = 30;
 	while((af->buttons[0]->stats[0] = loadSDImage("PLAY2.BMP")) == NULL); //size 30x30
-	af->buttons[1] = initActionButton(1);
+	while((af->buttons[0]->stats[1] = loadSDImage("PLAY5.BMP")) == NULL);
+	af->buttons[1] = initActionButton(1, af);
 	while((af->buttons[1]->stats[0] = loadSDImage("STOP.BMP")) == NULL); //size 20x20
-	af->buttons[2] = initActionButton(2);
+	while((af->buttons[1]->stats[1] = loadSDImage("STOP4.BMP")) == NULL); //size 20x20
+	af->buttons[2] = initActionButton(2, af);
 	while((af->buttons[2]->stats[0] = loadSDImage("PAUSE.BMP")) == NULL);
-	af->buttons[3] = initActionButton(3);
+	while((af->buttons[2]->stats[1] = loadSDImage("PAUSE4.BMP")) == NULL);
+	af->buttons[3] = initActionButton(3, af);
 	while((af->buttons[3]->stats[0] = loadSDImage("PREV.BMP")) == NULL);
-	af->buttons[4] = initActionButton(4);
+	while((af->buttons[3]->stats[1] = loadSDImage("PREV4.BMP")) == NULL);
+	af->buttons[4] = initActionButton(4, af);
 	while((af->buttons[4]->stats[0] = loadSDImage("NEXT.BMP")) == NULL);
+	while((af->buttons[4]->stats[1] = loadSDImage("NEXT4.BMP")) == NULL);
 	af->drawFrame = drawActionFrame;
 	af->button_size = 5;
 	af->mainFrame = mainFrame;
@@ -73,7 +78,7 @@ struct Frame* initSongPanel(struct Frame* frame){
 	}
 	sp->buttons[0] = NULL;
 	for (i = 1; i <= sp->button_size; i++){
-		sp->buttons[i] = initSongButton(61, init_song_y, db.songs[i]->song_name, sp);
+		sp->buttons[i] = initSongButton(61, init_song_y, db.songs[i]->song_name, i, sp);
 		init_song_y = init_song_y+3;
 	}
 	return sp;

@@ -94,6 +94,7 @@ int main()
 		}*/
 		i = soundTester(i);
 
+		buttonAnimation(mainFrame);
 	}
 
 
