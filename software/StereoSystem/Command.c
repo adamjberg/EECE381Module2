@@ -72,8 +72,11 @@ void play(int id, int vol, int pos) {
 		sprintf(temp, "%.2f seconds", db.songs[db.curr_song_id]->size/1000.0);
 		alt_up_char_buffer_string(char_buffer, temp, 3, 38);
 		memset(temp, 0, 30);
-		sprintf(temp, "%.1f kbps", db.songs[db.curr_song_id]->sound->bitRate);
+		sprintf(temp, "%.1f kbps", getBitRateKbps(db.songs[db.curr_song_id]->sound->audioFormat));
 		alt_up_char_buffer_string(char_buffer, temp, 3, 39);
+		memset(temp, 0, 30);
+		sprintf(tem, "%d channels", db.songs[db.curr_song_id]->sound->audioFormat->channels);
+		alt_up_char_buffer_string(char_buffer, temp, 3, 40);
 		printf("A song %d is played at %d position.\n", id, pos);
 	}
 }
@@ -97,6 +100,7 @@ void pause(int id) {
 	alt_up_char_buffer_string(char_buffer, "                          ", 3, 37);
 	alt_up_char_buffer_string(char_buffer, "                          ", 3, 38);
 	alt_up_char_buffer_string(char_buffer, "                          ", 3, 39);
+	alt_up_char_buffer_string(char_buffer, "                          ", 3, 40);
 }
 /*
  * Function to call when need to sync with Android

@@ -26,7 +26,6 @@ struct Sound {
 	unsigned int position;
 	unsigned int loading_pos;
 	unsigned int length;
-	float bitRate;
 	int loops;
 	unsigned int *buffer;
 	volatile float volume;

@@ -7,13 +7,20 @@
 
 #include "AudioFormat.h"
 
-struct AudioFormat* initAudioFormat(int sampleRate, int sampleSizeInBits, int channels) {
+struct AudioFormat* initAudioFormat(int sampleRate, int sampleSizeInBits,
+		int channels, int byteRate) {
 	struct AudioFormat* this = (struct AudioFormat*) malloc(sizeof(struct AudioFormat));
 	this->sampleRate = sampleRate;
 	this->sampleSizeInBits = sampleSizeInBits;
 	this->channels = channels;
-	printf("intializing AudioFormat sampleRate: %d, sampleSizeInBits: %d, channels: %d", sampleRate, sampleSizeInBits, channels);
+	this->bitRateKbps = (float) (byteRate * 8) / 1000;
+	printf("AudioFormat sampleRate: %d, sampleSizeInBits: %d, channels: %d, bitRate(Kbps): %d\n",
+			sampleRate, sampleSizeInBits, channels, this->bitRateKbps);
 	return this;
+}
+
+float getBitRateKbps(struct AudioFormat* this) {
+	return this->bitRateKbps;
 }
 
 int getSampleRate(struct AudioFormat* this) {

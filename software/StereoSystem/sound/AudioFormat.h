@@ -8,13 +8,18 @@
 #ifndef AUDIOFORMAT_H_
 #define AUDIOFORMAT_H_
 
+#include "stdlib.h"
+#include "stdio.h"
+
 struct AudioFormat {
 	int channels;
 	int sampleRate;
 	int sampleSizeInBits;
+	int bitRateKbps;
 };
 
-struct AudioFormat* initAudioFormat(int, int, int);
+struct AudioFormat* initAudioFormat(int, int, int, int);
+float getBitRateKbps(struct AudioFormat*);
 int getSampleRate(struct AudioFormat*);
 int getSampleSizeInBits(struct AudioFormat*);
 int getSampleSizeInBytes(struct AudioFormat*);

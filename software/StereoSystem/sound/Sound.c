@@ -356,7 +356,6 @@ struct Sound* initSound(unsigned int length) {
 	this->inFadePosition = 0;
 	this->outFadePosition = this->length;
 	this->loading_pos = 0;
-	this->bitRate = 0;
 	this->audioFormat = NULL;
 	return this;
 }
@@ -431,19 +430,24 @@ struct Sound* loadWavHeader(int filePointer) {
 	if((sampleRate = readInt(filePointer, 4, false)) < 0)
 		return NULL;
 	index += 4;
+	int byteRate;
+	if((byteRate = readInt(filePointer, 4, false)) < 0)
+		return NULL;
+	index += 4;
 
 	if((index = readFileTilOffset(filePointer, index, BITS_PER_SAMPLE_OFFSET)) < 0)
 		return NULL;
 	int sampleSizeInBits;
 	if((sampleSizeInBits = readInt(filePointer, 2, false)) < 0)
 		return NULL;
+
 	index += 2;
 
 	if((index = readFileTilOffset(filePointer, index, DATA_LENGTH_OFFSET)) < 0)
 		return NULL;
 
 	struct AudioFormat* audioFormat = initAudioFormat(sampleRate,
-			sampleSizeInBits, numChannels);
+			sampleSizeInBits, numChannels, byteRate);
 	int read = readInt(filePointer, 4, false);
 	int srcLength = read / getSampleSizeInBytes(audioFormat);
 	printf("length: %u\n", srcLength);
