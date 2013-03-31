@@ -150,7 +150,7 @@ public class Command {
 			
 			if(com.getDB().getIsEndOfPlaylist() && com.getDB().getRepeatPlaylistValue()) {
 				next_id = com.getDB().getSongsFromList(curr_plid)[1];				
-				Command.syncPlay(next_id, com.getDB().getSongs()[next_id].getVolume(), 0);
+		//		Command.syncPlay(next_id, com.getDB().getSongs()[next_id].getVolume(), 0);
 				return;
 			} else {
 				int curr_order =
@@ -289,5 +289,12 @@ public class Command {
 			com.getDB().getSongs()[song_id].startSwitch();
 		}
 		
+	}
+	//index 17
+	static public void syncRepeatList(int list_id) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(17);
+		cmd.addParameter(String.valueOf(list_id));
+		com.send(cmd);
 	}
 }

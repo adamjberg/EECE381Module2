@@ -63,19 +63,21 @@ void play(int id, int vol, int pos) {
 	printf("A song %d is started at %d volume.\n", id, vol);
 	playSong(db.songs[id], vol, pos, 0);
 	syncUpdatePos(id, pos, 1);
-	updateMixer();
 	//initAudioBuffer();
 	//IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
-	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
-	enableAudioDeviceController();
-	alt_up_char_buffer_string(char_buffer, db.songs[db.curr_song_id]->song_name, 3, 37);
-	char temp[30];
-	sprintf(temp, "%.2f seconds", db.songs[db.curr_song_id]->size/1000.0);
-	alt_up_char_buffer_string(char_buffer, temp, 3, 38);
-	memset(temp, 0, 30);
-	sprintf(temp, "%.1f kbps", db.songs[db.curr_song_id]->sound->bitRate);
-	alt_up_char_buffer_string(char_buffer, temp, 3, 39);
-	printf("A song %d is played at %d position.\n", id, pos);
+	if(db.total_songs_playing <= 1) {
+		updateMixer();
+		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
+		enableAudioDeviceController();
+		alt_up_char_buffer_string(char_buffer, db.songs[db.curr_song_id]->song_name, 3, 37);
+		char temp[30];
+		sprintf(temp, "%.2f seconds", db.songs[db.curr_song_id]->size/1000.0);
+		alt_up_char_buffer_string(char_buffer, temp, 3, 38);
+		memset(temp, 0, 30);
+		sprintf(temp, "%.1f kbps", db.songs[db.curr_song_id]->sound->bitRate);
+		alt_up_char_buffer_string(char_buffer, temp, 3, 39);
+		printf("A song %d is played at %d position.\n", id, pos);
+	}
 }
 /*
  * Function to call when need to sync with Android
@@ -161,8 +163,11 @@ void next(int song_id) {
 	printf("Next song is selected.\n");
 	if(db.curr_playlist_id == 0 && song_id < db.num_of_songs) {
 		id = song_id+1;
-	} else if(db.curr_playlist_id != 0 && db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1] != 0) {
-		id = db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1];
+	} else if(db.curr_playlist_id != 0) {
+		if(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1] != 0)
+			id = db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1];
+		else if(db.isListRepeated == 1)
+			id = db.index_list_order[db.curr_playlist_id][1];
 	}
 
 	if(id == 0) return;
@@ -266,7 +271,7 @@ void createSong(char* song_name, int len) {
  * index: 11
  */
 void syncSelectList(int id) {
-	char* temp[0];
+	char* temp[1];
 	temp[0] = (char*)malloc(sizeof(char)*4);
 	sprintf(temp[0], "%d", id);
 	struct Command* cmd = initCmd(11, 1, temp);
@@ -364,6 +369,19 @@ void syncUpdatePos(int song_id, int pos, int isStart) {
 	free(temp[2]);
 }
 
+//index 17
+void syncRepeatList(int index) {
+	char* temp[1];
+	temp[0] = (char*)malloc(sizeof(char)*4);
+	sprintf(temp[0], "%d", index);
+	struct Command* cmd = initCmd(17, 1, temp);
+	send(cmd, CMD);
+	addCmd(com.scheduler, cmd);
+	free(temp[0]);
+}
+void repeatList(int index) {
+	db.isListRepeated = (db.isListRepeated == 1) ? 0 : 1;
+}
 void modifyPlaylistName(int index, char* new_listname) {
 	setListName(db.playlists[index], new_listname);
 
@@ -381,9 +399,7 @@ void removeList(int index) {
 void play_playlist(int index) {
 	printf("Playlist %d is selected and played\n", index);
 }
-void repeatPlaylist(int index) {
-	printf("Playlist: %d is set to repeated\n", index);
-}
+
 
 void moveSongToIndex(char* song, int index, char* listname) {
 

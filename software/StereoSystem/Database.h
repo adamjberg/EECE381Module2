@@ -33,6 +33,7 @@ struct database {
 	int used_list_index[MAX_LISTS];
 	int used_memory;
 	bool isPaused;
+	int isListRepeated;
 };
 
 void initDatabase();

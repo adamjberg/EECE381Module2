@@ -24,6 +24,7 @@ void initDatabase() {
 	db.playlists[0] = NULL;
 	db.songs[0] = NULL;
 	db.isPaused = false;
+	db.isListRepeated = 0;
 	for(i = 1; i < MAX_LISTS; i++) {
 		temp = (int*)malloc(sizeof(int));
 		*temp = i;
@@ -63,6 +64,7 @@ void update() {
 			}
 		}
 	}
+	syncSelectList(db.curr_playlist_id);
 	syncDBFinish();
 }
 /*

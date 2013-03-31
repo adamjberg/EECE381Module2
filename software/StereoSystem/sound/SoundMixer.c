@@ -65,7 +65,7 @@ void incIndex() {
 		soundMixer->currIndex = 0;
 	}
 	soundMixer->indexSize--;
-	if(soundMixer->indexSize <= 0) {
+	if(soundMixer->indexSize <= 0 && db.total_songs_playing <= 1) {
 		soundMixer->currIndex = soundMixer->endIndex;
 		disableAudioDeviceController();
 	}
@@ -94,7 +94,7 @@ int updateMixer() {
 
 		clearIndexBuffer(soundMixer->endIndex);
 	}
-
+/*
 	if(soundMixer->indexSize <= 0 && !db.isPaused && db.total_songs_playing > 0) {
 		isFinished = 1;
 		db.isPaused = true;
@@ -102,7 +102,7 @@ int updateMixer() {
 		if(db.curr_playlist_id != 0)
 			syncNext(db.curr_song_id);
 	} else
-		isFinished= 0;
+		isFinished= 0;*/
 	return isFinished;
 	// else
 		//IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);

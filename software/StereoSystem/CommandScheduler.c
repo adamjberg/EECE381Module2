@@ -73,6 +73,13 @@ void cmdProcessing(struct CmdScheduler* this) {
 			break;
 		case 15:
 			removeSongFromList(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]));
+			break;
+		case 16:
+			//empty
+			break;
+		case 17:
+			repeatList(atoi(cmd->parameters[0]));
+			break;
 		default:
 			break;
 		}

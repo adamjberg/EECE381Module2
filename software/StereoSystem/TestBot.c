@@ -355,6 +355,7 @@ int soundTester(int i) {
 		if(i > db.num_of_songs)
 			i = 1;
 		syncPlay(i, 100, 0);
+		syncPlay(1, 100, 0);
 		//playSong(db.songs[i], 100, 0, 0);
 		//updateMixer();
 		//enableAudioDeviceController();

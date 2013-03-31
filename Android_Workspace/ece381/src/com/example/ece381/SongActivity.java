@@ -200,6 +200,7 @@ public class SongActivity extends Activity {
   public void repeatPlaylistToggle(View view) {
 	  // set db flag to reflect if it's toggled on or off
 	  db.setRepeatPlaylist( ((ToggleButton) view).isChecked() );
+	  Command.syncRepeatList(db.getCurr_playlist_id());
 	  Log.v("toggledRepeatPlaylist", ""+db.getRepeatPlaylistValue());
   }
   
