@@ -38,8 +38,14 @@ void loadSong(struct Song* this) {
 void unloadSong(struct Song* this) {
 	if(this == NULL || this->sound == NULL) return;
 	printf("unloading song id: %d\n", this->id);
-	free(this->sound->buffer);
-	this->sound->buffer = NULL;
+	if(this->sound->audioFormat != NULL) {
+		free(this->sound->audioFormat);
+		this->sound->audioFormat = NULL;
+	}
+	if(this->sound->buffer != NULL) {
+		free(this->sound->buffer);
+		this->sound->buffer = NULL;
+	}
 	free(this->sound);
 	this->sound = NULL;
 }

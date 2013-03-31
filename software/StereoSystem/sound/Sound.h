@@ -10,7 +10,9 @@
 
 #include "../Global.h"
 #include "../libMad/mad.h"
+#include "AudioFormat.h"
 
+#define NUM_CHANNELS_OFFSET 22
 #define SAMPLE_RATE_OFFSET 24
 #define BITS_PER_SAMPLE_OFFSET 34
 #define DATA_LENGTH_OFFSET 40
@@ -18,6 +20,7 @@
 int SDIO_lock;
 
 struct Sound {
+	struct AudioFormat* audioFormat;
 	unsigned int inFadePosition;
 	unsigned int outFadePosition;
 	unsigned int position;
@@ -31,6 +34,7 @@ struct Sound {
 };
 
 struct Sound* initSound(unsigned int);
+void allocateSoundBuffer(struct Sound*, int);
 void setFadeInLength(struct Sound*, unsigned int);
 void setFadeOutLength(struct Sound*, unsigned int);
 unsigned int getSoundPositionMS(struct Sound*);
@@ -42,9 +46,8 @@ void seekSound(struct Sound*, unsigned int);
 void playSound(struct Sound*, float, int, int);
 void stopSound(struct Sound*);
 bool checkEnd(struct Sound*);
-int readInt(int, int);
-void updatePos(struct Sound*);
-int* loadWavHeader(char*);
+int readInt(int, int, bool);
+struct Sound* loadWavHeader(int);
 struct Sound* loadSound(struct Song*);
 struct Sound* loadMP3Sound(char*);
 #endif /* SOUND_H_ */
