@@ -134,30 +134,25 @@ public class Command {
 		// Check for end of playlist
 		int curr_plid = com.getDB().getCurr_playlist_id();
 		int curr_songid = com.getDB().getCurr_song_id();
-		int last_songInList = com.getDB().getPlaylists()[curr_plid].getNum_of_songs();
-		int last_songid = com.getDB().getSongsFromList(curr_plid)[last_songInList];
-		
-		Log.v("current_id; last_id", curr_songid+"; "+last_songid);
-		
-		if( curr_songid == last_songid ) {
-			com.getDB().setIsEndOfPlaylist(true);
-		}
-		else {
-			com.getDB().setIsEndOfPlaylist(false);
-		}
-		Log.v("isEndOfPlaylist", ""+com.getDB().getIsEndOfPlaylist());
-		
+		int last_songInList, last_songid;
 		
 		int next_id = 0;
 		if(com.getDB().getCurr_playlist_id() != 0) {
+			last_songInList = com.getDB().getPlaylists()[curr_plid].getNum_of_songs();
+			last_songid = com.getDB().getSongsFromList(curr_plid)[last_songInList];
+			
+			if( curr_songid == last_songid ) {
+				com.getDB().setIsEndOfPlaylist(true);
+			}
+			else {
+				com.getDB().setIsEndOfPlaylist(false);
+			}
 			
 			if(com.getDB().getIsEndOfPlaylist() && com.getDB().getRepeatPlaylistValue()) {
 				next_id = com.getDB().getSongsFromList(curr_plid)[1];				
 				Command.syncPlay(next_id, com.getDB().getSongs()[next_id].getVolume(), 0);
 				return;
-			}
-			
-			else {
+			} else {
 				int curr_order =
 						com.getDB().getSongOrderFromList()[com.getDB().getCurr_playlist_id()][song_id];
 				next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order+1];	
