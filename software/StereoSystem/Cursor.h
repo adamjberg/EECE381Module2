@@ -23,9 +23,10 @@ struct Cursor {
 	//int leftPressed, rightPressed;
 	struct Image* overlapImg;
 	bool isLeftPressed, isRightPressed;
+	struct Frame* frame;
 };
 
-struct Cursor* initCursor(int, int);
+struct Cursor* initCursor(int, int, struct Frame*);
 void enableCursorInterrupt(struct Cursor*);
 void memOverlap(struct Cursor*);
 void updateCursor(struct Cursor*);

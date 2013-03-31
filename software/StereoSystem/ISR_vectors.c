@@ -95,6 +95,7 @@ void ps2_ISR(struct Cursor* cursor) {
 	}
 	free(bytes);
 
+	checkButtonCollision(cursor, cursor->frame);
 	updateCursor(cursor);
 	alt_irq_non_interruptible(tempcontext);
 
@@ -148,18 +149,20 @@ void animate_ISR(struct Cursor* cursor) {
 
 	int i, k, l;
 	unsigned int data;
-	unsigned int j[0x7FFF];
-	int index, size_index;
+	int j[0xE0];
+	int sorted_j[0xE0];
+	int index, size_index, temp, temp1;
 	memset(j, 0, sizeof(j));
+	memset(sorted_j, 0, sizeof(sorted_j));
 	index = soundMixer->currIndex;
 	size_index = soundMixer->indexSize;
-	for(k = 15; k <= 99; k++) {
+	for(k = 15; k <= 130; k++) {
 		for(l = 0; l < 0xE0; l++) {
 			IOWR_16DIRECT(pixel_buffer->buffer_start_address, (k*320+l+10)<<1, 0);
 		}
 	}
 	if(db.curr_song_id != 0) {
-		for(k = 0; k < 96; k ++) {
+	/*	for(k = 0; k < 96; k ++) {
 			data = soundMixer->buffer[index][k] >> 15;
 			if(data < 0xE0 && data != 0) {
 				if(j[data] < 80)
@@ -168,14 +171,34 @@ void animate_ISR(struct Cursor* cursor) {
 				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((98 - j[data])*320+data+10)<<1, 0xCCCC);
 
 			}
-		}
-	/*	for(k = 0; k < 96; k ++) {
-			data = soundMixer->buffer[index][k] >> 8;
-			if(data < 0x7FFF && data != 0) {
-				j[data]++;
+		}*/
+		for(k = 0; k < 96; k ++) {
+			data = soundMixer->buffer[index][k] >> 16;
+			if(data < 0x7F && data != 0) {
+				j[data]+= 6;
 			}
 		}
-*/
+
+		for(k = 0; k < 0x7F; k ++) {
+			temp = k;
+			for(i = 0; i < 0x7F; i++) {
+				if(temp == 0 || j[temp] == 0) break;
+				if(j[temp] < j[sorted_j[i]] || sorted_j[i] == 0) {
+					temp1 = sorted_j[i];
+					sorted_j[i] = temp;
+					temp = temp1;
+				}
+			}
+		}
+		drawEqulizer(sorted_j, 0xE0);
+//		i = 0;
+		/*for(k = 0; k < 0x7FFF; k++) {
+			if(j[k] != 0) {
+				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((99 - j[k])*320+i+10)<<1, 0xCCCC);
+				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((98 - j[k])*320+i+10)<<1, 0xCCCC);
+			}
+		}*/
+
 	}
 
 	alt_irq_non_interruptible(tempcontext);

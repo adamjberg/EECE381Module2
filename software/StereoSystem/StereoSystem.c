@@ -1,6 +1,6 @@
 
 #include "Global.h"
-
+struct Cursor* mouse;
 bool loadSDCard(alt_up_sd_card_dev* device) {
 	if((device = alt_up_sd_card_open_dev("/dev/SD_Card")) != NULL) {
 		if (alt_up_sd_card_is_Present()) {
@@ -72,10 +72,10 @@ int main()
 	mainFrame->drawFrame(mainFrame);
 
 	//Test End
-	struct Cursor* cursor = initCursor(10, 100);
+	mouse = initCursor(10, 100, mainFrame);
 
 	initAudioBuffer();
-	initAnimate(cursor);
+	initAnimate(mouse);
 
 	int i = 2;
 
@@ -85,8 +85,6 @@ int main()
 		cmdProcessing(scheduler);
 
 		i = soundTester(i);
-
-		checkButtonCollision(cursor, mainFrame);
 
 	}
 

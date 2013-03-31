@@ -71,6 +71,7 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 	this->pos = startTime;
 	this->volume = (int)volume;
 	db.isPaused = false;
+	db.curr_song_id = 0;
 	if(this->sound == NULL)
 		loadSong(this);
 	int fadeLength = (int) this->sound->length * LENGTH_OF_FADE_PERCENT;

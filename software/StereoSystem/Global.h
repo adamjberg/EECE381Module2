@@ -63,6 +63,7 @@ extern int SDIO_lock;
 extern int MIX_LOCK;
 //extern int cursor_lock;
 extern struct MemoryMgr memMgr;
+extern struct Cursor* mouse;
 
 enum msgType {
 	STRING=0, CMD=1, PLAYLIST=2, AUDIO=3

@@ -32,4 +32,5 @@ void draw_notransparent(int, int, struct Image*);
 void drawBox(int, int, int, int, int);
 void drawHorizontalLine(int, int, int ,int);
 void drawVerticalLine(int, int, int, int);
+void drawEqulizer(int*, int);
 #endif /* GRAPHIC_H_ */

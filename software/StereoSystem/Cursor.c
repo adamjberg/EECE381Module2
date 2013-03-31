@@ -9,7 +9,7 @@
 
 int cursor_lock;
 
-struct Cursor* initCursor(int x, int y) {
+struct Cursor* initCursor(int x, int y, struct Frame* f) {
 	up_dev.ps2_dev = alt_up_ps2_open_dev("/dev/ps2_0");
 	up_dev.ps2_dev->timeout = 2000000;
 	alt_up_ps2_clear_fifo(up_dev.ps2_dev);
@@ -21,6 +21,7 @@ struct Cursor* initCursor(int x, int y) {
 	struct Image* cursorImg;
 	while(( cursorImg= loadSDImage("AR01.BMP")) == NULL);
 	this->super = initObject(initRange(x, y, 10, 10), cursorImg, (void*)this);
+	this->frame = f;
 	int* image = (int*)malloc(sizeof(int)*100);
 	memset(image, 0, sizeof(int)*100);
 	this->overlapImg = initImage(image, 0, 10, 10);

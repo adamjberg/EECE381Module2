@@ -80,7 +80,7 @@ struct Frame* initSongPanel(struct Frame* frame){
 }
 
 struct Frame* initPlaylistPanel(struct Frame* frame){
-	int i = 1;
+	int i = 1, j = 0;
 	int init_playlist_y = 4;
 	struct Frame* pp = initFrame();
 	pp->buttons = (struct Button**)malloc(51*sizeof(struct Button*));
@@ -89,10 +89,14 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 	pp->mainFrame = frame;
 	pp->bg_image = loadSDImage("AND.BMP");
 	pp->buttons[0] = NULL;
-	for (i = 1; i <= db.num_of_lists; i++){
-		pp->buttons[i] = initPlaylistButton(61, init_playlist_y, db.playlists[i]->list_name, pp);
-		printf("Playlist %d name is %s\n", i, db.playlists[i]->list_name);
-		init_playlist_y += 3;
+	for (i = 1; i <= MAX_LISTS; i++){
+		if(j == db.num_of_lists) break;
+		if(db.used_list_index[i] != 0) {
+			pp->buttons[j+1] = initPlaylistButton(61, init_playlist_y, db.playlists[i]->list_name, pp);
+			printf("Playlist %d name is %s\n", i, db.playlists[i]->list_name);
+			init_playlist_y += 3;
+			j++;
+		}
 	}
 	return pp;
 }

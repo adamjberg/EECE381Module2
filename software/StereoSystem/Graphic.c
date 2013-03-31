@@ -248,16 +248,13 @@ void setImagePos(struct Image* this, int pos_x, int pos_y) {
 void drawBox(int x1, int y1, int x2, int y2, int color) {
 	if(x1 < 0 || y1 < 0) return;
 	int i, j, x, y, dx, dy, w = x2-x1, h = y2-y1;
-		for(i = 0; i < w; i++) {
-		    for(j = 0; j < h; j++) {
-		    	x = x1+i; y = y1+j;
-		    	// mouse is not used for now
-		    	/*if(mouse != NULL) {
-		    		dx = x-mouse->super->x; dy = y-mouse->super->y;
-		    		if(dx >= 0 && dx < 10 && dy >= 0 && dy < 10)
-		    			*(mouse->overlapImg+dy*10 + dx) = color;
-		    	}*/
-		    	IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((y)*320+x)*2, color);
+	for(i = 0; i < w; i++) {
+		for(j = 0; j < h; j++) {
+		    x = x1+i; y = y1+j;
+		    dx = x-mouse->super->r->x; dy = y-mouse->super->r->y;
+		    if(dx >= 0 && dx < 10 && dy >= 0 && dy < 10)
+		    	*(mouse->overlapImg->buffer+dy*10 + dx) = color;
+	    	IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((y)*320+x)*2, color);
 		}
 	}
 }
@@ -287,3 +284,17 @@ void drawVerticalLine(int x, int y, int length, int color){
 		i++;
 	}
 }
+
+void drawEqulizer(int* data, int width) {
+	int i;
+	for(i = 0; i < width; i ++) {
+		while(data[i] > 0) {
+			if(data[i] < 110) {
+				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((128 - (data[i]))*320+i*2+10)<<1, 0xCCCC);
+				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((128 - (data[i]))*320+i*2+1+10)<<1, 0xCCCC);
+			}
+			data[i]--;
+		}
+	}
+}
+
