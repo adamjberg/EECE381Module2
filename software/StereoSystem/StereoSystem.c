@@ -58,10 +58,10 @@ int main()
 	update();
 
 	//Test VGA Output
-	struct Image* testImg;
+	/*struct Image* testImg;
 	while((testImg = loadSDImage("TEST.BMP")) == NULL);
 	draw(35, 35, testImg);
-	killImage(testImg);
+	killImage(testImg);*/
 	//alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
 	//graphicTester();
 
@@ -86,8 +86,7 @@ int main()
 
 		i = soundTester(i);
 
-
-		//checkButtonCollision(cursor, mainFrame);
+		checkButtonCollision(cursor, mainFrame);
 
 	}
 

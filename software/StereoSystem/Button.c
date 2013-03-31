@@ -10,6 +10,7 @@ struct Button* initButton(){
 	b->collide = dummyCollide;
 	b->draw = dummyDraw;
 	b->Panel = NULL;
+	b->isClicked = 0;
 	return b;
 }
 
@@ -125,24 +126,41 @@ void actionButtonCollide(struct Button* this){
 	}
 }
 
+/**
+ * helper function for debugging
+ * this will draw the range of a button with white color
+ */
+void drawRange(struct Button* this){
+	int i = 0;
+	int y = this->y_pos;
+	for (i = 0; i < this->range->height; i++, y++){
+		drawHorizontalLine(this->x_pos, y, this->range->width, 0xffffff);
+	}
+}
+
 void playButtonCollide(struct Button* this){
+	drawRange(this);
 	printf("Play button is clicked\n");
 }
 
 void pauseButtonCollide(struct Button* this){
 	// TODO: range is still not correct!!
+	drawRange(this);
 	printf("Pause button is clicked.\n");
 }
 
 void stopButtonCollide(struct Button* this){
+	drawRange(this);
 	printf("Stop button is clicked\n");
 }
 
 void prevButtonCollide(struct Button* this){
+	drawRange(this);
 	printf("Prev button is clicked.\n");
 }
 
 void nextButtonCollide(struct Button* this){
+	drawRange(this);
 	printf("Next button is clicked.\n");
 }
 

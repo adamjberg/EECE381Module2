@@ -9,6 +9,7 @@ struct Button{
 	struct Range* range;
 	int type, bg_color;
 	int x_pos, y_pos;
+	int isClicked;
 	char* name;
 	struct Image* stats[2]; // show diff image when clicked
 	void (*draw)(struct Button*);
@@ -43,5 +44,6 @@ void playlistButtonCollide(struct Button*);
 // helper functions
 int getXActionBtn(int);
 int getYActionBtn(int);
+void drawRange(struct Button*);
 
 #endif /* BUTTON_H_ */
