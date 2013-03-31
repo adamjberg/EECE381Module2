@@ -336,6 +336,7 @@ struct Sound* initSound(unsigned int length) {
 	this->inFadePosition = 0;
 	this->outFadePosition = this->length;
 	this->loading_pos = 0;
+	this->bitRate = 0;
 	clearSoundBuffer(this);
 	return this;
 }
@@ -360,14 +361,13 @@ struct Sound* loadWavSound(char * filename) {
 	}
 
 	sound = loadSoundBuffer(property, property[1]/8, property[2], DEFAULT_SAMPLE_RATE, property[0]);
-
 	if(sound == NULL) {
 		alt_up_sd_card_fclose(property[3]);
 		free(property);
 		property = NULL;
 		return NULL;
 	}
-
+	sound->bitRate = property[0]*property[1]/1000.0;
 	alt_up_sd_card_fclose(property[3]);
 	SDIO_lock = 0;
 

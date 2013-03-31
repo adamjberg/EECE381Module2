@@ -68,6 +68,13 @@ void play(int id, int vol, int pos) {
 	//IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
 	IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
 	enableAudioDeviceController();
+	alt_up_char_buffer_string(char_buffer, db.songs[db.curr_song_id]->song_name, 3, 37);
+	char temp[30];
+	sprintf(temp, "%.2f seconds", db.songs[db.curr_song_id]->size/1000.0);
+	alt_up_char_buffer_string(char_buffer, temp, 3, 38);
+	memset(temp, 0, 30);
+	sprintf(temp, "%.1f kbps", db.songs[db.curr_song_id]->sound->bitRate);
+	alt_up_char_buffer_string(char_buffer, temp, 3, 39);
 	printf("A song %d is played at %d position.\n", id, pos);
 }
 /*
@@ -87,6 +94,9 @@ void syncPause(int id) {
 void pause(int id) {
 	disableAudioDeviceController();
 	pauseSong(db.songs[id]);
+	alt_up_char_buffer_string(char_buffer, "                          ", 3, 37);
+	alt_up_char_buffer_string(char_buffer, "                          ", 3, 38);
+	alt_up_char_buffer_string(char_buffer, "                          ", 3, 39);
 	//if(db.curr_playlist_id != 0) {
 		//syncNext();
 	//}
@@ -121,6 +131,7 @@ void syncSetVol(int id, int vol) {
 	sprintf(temp[0], "%d", id);
 	sprintf(temp[1], "%d", vol);
 	struct Command* cmd = initCmd(4, 2, temp);
+	send(cmd, CMD);
 	addCmd(com.scheduler, cmd);
 	free(temp[0]);
 	free(temp[1]);
@@ -140,6 +151,7 @@ void syncNext(int song_id) {
 	temp[0] = (char*)malloc(sizeof(char)*4);
 	sprintf(temp[0], "%d", song_id);
 	struct Command* cmd = initCmd(6, 1, temp);
+	send(cmd, CMD);
 	addCmd(com.scheduler, cmd);
 	free(temp[0]);
 }
@@ -163,6 +175,7 @@ void syncPrev(int song_id) {
 	temp[0] = (char*)malloc(sizeof(char)*4);
 	sprintf(temp[0], "%d", song_id);
 	struct Command* cmd = initCmd(7, 1, temp);
+	send(cmd, CMD);
 	addCmd(com.scheduler, cmd);
 	free(temp[0]);
 
