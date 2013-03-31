@@ -164,23 +164,39 @@ struct Sound* loadMP3Sound(char * file) {
 	int filePointer;
 	int i;
 	unsigned char * buf = NULL;
-	short int byte = 0;
-	int size = 0;
+	int byte = 0;
+	unsigned int size = 0;
 
-	printf("Reading file size\n");
+	printf("Reading %s file size\n", file);
 	size = 0;
 	filePointer = alt_up_sd_card_fopen(file, false);
+	while(size != 33) {
+		byte = alt_up_sd_card_read(filePointer);
+		size++;
+	}
+	size = (alt_up_sd_card_read(filePointer) << (3*8)) +
+			(alt_up_sd_card_read(filePointer) << (2*8)) +
+			(alt_up_sd_card_read(filePointer) << 8) +
+			alt_up_sd_card_read(filePointer);
+	/*
 	while (byte != -1) {
 		byte = alt_up_sd_card_read(filePointer);
+		printf("%i %x\n", size, byte);
 		if (size % (1024 * 1024) == 0) {
 			printf("%d MB | ", size / (1024 * 1024));
 		}
 		size++;
-	}
+	}*/
 	alt_up_sd_card_fclose(filePointer);
-	printf("\nFile Size: %d bytes\n", size);
-
-	struct Sound* sound = initSound(4 * size);
+	printf("File Size: %d bytes\n", size);
+	if( size*4 > MAX_CACHE_MEMORY) {
+		printf("FILE size too big");
+		return NULL;
+	}
+	if(memMgr.used_memory + size*4 > MAX_CACHE_MEMORY) {
+			freeMem(size*4);
+		}
+	struct Sound* sound = initSound(size*4);
 
 	buf = malloc(size);
 	if (!buf) {

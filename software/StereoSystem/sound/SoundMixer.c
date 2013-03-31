@@ -49,7 +49,7 @@ void loadToSoundBuffer(struct Sound* sound) {
 		data = sound->buffer[sound->position];
 		if(data > 0x07FFFFF)
 			soundMixer->buffer[soundMixer->endIndex][i] += positiveToNegative((negativeToPositive(data)*sound->fadeVolume));
-		else
+		else if( data != 0)
 			soundMixer->buffer[soundMixer->endIndex][i] += data *sound->fadeVolume;
 		sound->position++;
 	}
@@ -65,8 +65,10 @@ void incIndex() {
 		soundMixer->currIndex = 0;
 	}
 	soundMixer->indexSize--;
-	if(soundMixer->indexSize <= 0)
+	if(soundMixer->indexSize <= 0) {
+		soundMixer->currIndex = soundMixer->endIndex;
 		disableAudioDeviceController();
+	}
 }
 
 int updateMixer() {

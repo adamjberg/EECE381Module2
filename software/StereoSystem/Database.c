@@ -344,12 +344,12 @@ char** getSongsFromSD(){
 			strcpy(songNames[numOfSounds], fileName);
 			//createSong(fileName, 0);
 			numOfSounds++;
-		} /*else if(strstr(fileName, ".MP3") != NULL) {
+		} else if(strstr(fileName, ".MP3") != NULL) {
 			songNames[numOfSounds] = malloc(20 * sizeof(char));
 			strcpy(songNames[numOfSounds], fileName);
 			//createSong(fileName, 0);
 			numOfSounds++;
-		}*/
+		}
 		memset(fileName, 0 , sizeof(fileName));
 		fileStatus = alt_up_sd_card_find_next(fileName);
 	}

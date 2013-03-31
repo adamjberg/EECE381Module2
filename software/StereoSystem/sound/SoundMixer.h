@@ -14,9 +14,9 @@
 struct SoundMixer* soundMixer;
 struct SoundMixer {
 	unsigned int buffer[300][MAX_SOUNDMIXBUF];
-	int currIndex;
-	int endIndex;
-	int indexSize;
+	volatile int currIndex;
+	volatile int endIndex;
+	volatile int indexSize;
 	bool cleared;
 };
 
