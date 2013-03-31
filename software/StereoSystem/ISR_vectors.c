@@ -104,7 +104,7 @@ void mix_ISR(void) {
 	int i, j, isDone = 0;
 
 	tempcontext= alt_irq_interruptible(AUDIOBUFFERPROCESS_IRQ);
-	for(i = 0; i < 60; i++) {
+	for(i = 0; i < 80; i++) {
 		if(soundMixer->indexSize >=299) break;
 		for(j = 0; j < db.total_songs_playing; j++) {
 			if(!checkEnd(db.songs[db.curr_song_ids[j]]->sound)) {
