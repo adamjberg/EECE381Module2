@@ -17,12 +17,10 @@ struct Song* initSong(char* songname) {
 	for(i = 1; i <= 3; i ++) {
 		this->ext[3-i] = songname[len-i];
 	} this->ext[3] = '\0';
-	this->isCached = false;
 	this->pos = this->size = 0;
 	this->volume = 100;
 	this->id = 0;
 	this->sound = NULL;
-	this->property = NULL;
 	return this;
 }
 
@@ -35,15 +33,12 @@ void loadSong(struct Song* this) {
 	}
 	addToMemory(this->sound, this->id);
 	this->size = getSoundLengthMS(this->sound);
-	this->isCached = true;
 }
 
 void unloadSong(struct Song* this) {
 	if(this == NULL || this->sound == NULL) return;
 	printf("unloading song id: %d\n", this->id);
 	unloadSound(this->sound);
-	this->sound = NULL;
-	this->isCached = false;
 }
 
 void setSongName(struct Song* this, char* name) {
@@ -70,7 +65,6 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 	if(isCurrPlaying(this->id) >= 0|| db.total_songs_playing >= MAX_SONGS_MIX - 1) return;
 	this->pos = startTime;
 	this->volume = (int)volume;
-	db.isPaused = false;
 	db.curr_song_id = 0;
 	if(this->sound == NULL)
 		loadSong(this);
@@ -92,14 +86,12 @@ void pauseSong(struct Song* this) {
 	int index;
 	if(this == NULL) return;
 	if((index = isCurrPlaying(this->id)) < 0) return;
-	db.isPaused = true;
 	removeCurrPlaying(index);
-	pauseSound(this->sound);
 	printf("The music is paused.\n");
 }
 
 void resumeSong(struct Song* this) {
-	resumeSound(this->sound);
+	//resumeSound(this->sound);
 }
 
 void stopSong(struct Song* this) {
@@ -109,7 +101,7 @@ void stopSong(struct Song* this) {
 	if((index = isCurrPlaying(this->id)) < 0) return;
 	removeCurrPlaying(index);
 	db.curr_song_id = 0;
-	stopSound(this->sound);
+	this->pos = 0;
 	printf("The song is stoped.\n");
 }
 

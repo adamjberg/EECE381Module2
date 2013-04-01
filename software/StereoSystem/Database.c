@@ -7,7 +7,6 @@
 #include "Database.h"
 
 void initDatabase() {
-	//db.cache = initCache();
 	db.curr_song_id = 1;
 	db.curr_playlist_id = 0;
 	db.num_of_lists = 0;
@@ -23,7 +22,6 @@ void initDatabase() {
 	db.index_list_song[0][0] = 0;
 	db.playlists[0] = NULL;
 	db.songs[0] = NULL;
-	db.isPaused = false;
 	db.isListRepeated = 0;
 	for(i = 1; i < MAX_LISTS; i++) {
 		temp = (int*)malloc(sizeof(int));
@@ -395,7 +393,7 @@ int getAndUpdateSongsFromTxt(char** arrFromSDFiles){
 	char* line = NULL;
 	char temp[501];
 	char substr[501];
-	int start, end, i, iteration;
+	int start = 0, end, i, iteration;
 	int numOfSongs = 0, fileStats = 0;
 	while (numOfSongs < MAX_SONGS){
 		line = (char*)malloc(sizeof(char)*501);
@@ -674,7 +672,7 @@ void initializeListWithSongs(char* input){
 
 	char line[1024];
 	char temp[1024];
-	int i, list_id, song_id, cursorPos;
+	int i, list_id = 0, song_id, cursorPos = 0;
 	int iteration = 0;
 	int order = 1;
 	memset(line, 0, sizeof(line)/sizeof(line[0]));

@@ -60,17 +60,15 @@ void syncPlay(int id, int vol, int pos) {
 //index 1
 void play(int id, int vol, int pos) {
 	if(db.songs[id] == NULL || id <= 0 || id > MAX_SONGS) return;
+	char temp[30];
 	printf("A song %d is started at %d volume.\n", id, vol);
 	playSong(db.songs[id], vol, pos, 0);
 	syncUpdatePos(id, pos, 1);
-	//initAudioBuffer();
-	//IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
 	if(db.total_songs_playing <= 1) {
 		updateMixer();
 		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
 		enableAudioDeviceController();
 		alt_up_char_buffer_string(char_buffer, db.songs[db.curr_song_id]->song_name, 3, 37);
-		char temp[30];
 		sprintf(temp, "%.2f seconds", db.songs[db.curr_song_id]->size/1000.0);
 		alt_up_char_buffer_string(char_buffer, temp, 3, 38);
 		memset(temp, 0, 30);
@@ -99,9 +97,6 @@ void pause(int id) {
 	alt_up_char_buffer_string(char_buffer, "                          ", 3, 37);
 	alt_up_char_buffer_string(char_buffer, "                          ", 3, 38);
 	alt_up_char_buffer_string(char_buffer, "                          ", 3, 39);
-	//if(db.curr_playlist_id != 0) {
-		//syncNext();
-	//}
 }
 /*
  * Function to call when need to sync with Android

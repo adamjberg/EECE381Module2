@@ -19,9 +19,7 @@ struct Song {
 	int volume;
 	int pos;
 	int size;
-	bool isCached;
 	int id;
-	int* property;
 };
 
 struct Song* initSong(char*);

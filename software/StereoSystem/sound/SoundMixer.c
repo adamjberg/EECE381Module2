@@ -23,7 +23,6 @@ void setGlobalVolume(float volume) {
 
 void clearSoundMixer() {
 	int i;
-	soundMixer->cleared = true;
 	for(i = 0; i < 299; i++) {
 		clearIndexBuffer(i);
 	}
@@ -69,44 +68,24 @@ void incIndex() {
 	}
 }
 
-int updateMixer() {
-//	MIX_LOCK = 1;
-	int i, j, isDone = 0, isFinished = 1;
+void updateMixer() {
+	int i, j;
 	for(i = 0; i < 80; i++) {
-		if(soundMixer->indexSize >=299) return 0;
+		//if(soundMixer->indexSize >=299) return;
 		for(j = 0; j < db.total_songs_playing; j++) {
 			if(!checkEnd(db.songs[db.curr_song_ids[j]]->sound)) {
 				loadToSoundBuffer(db.songs[db.curr_song_ids[j]]->sound);
-				isDone = 1;
 			}
 		}
 
-		if(isDone == 0)
-			break;
-
 		soundMixer->indexSize++;
-
 		soundMixer->endIndex++;
+
 		if(soundMixer->endIndex > 299)
 			soundMixer->endIndex = 0;
 
 		clearIndexBuffer(soundMixer->endIndex);
 	}
-/*
-	if(soundMixer->indexSize <= 0 && !db.isPaused && db.total_songs_playing > 0) {
-		isFinished = 1;
-		db.isPaused = true;
-		syncPause(db.curr_song_id);
-		if(db.curr_playlist_id != 0)
-			syncNext(db.curr_song_id);
-	} else
-		isFinished= 0;*/
-	return isFinished;
-	// else
-		//IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
-	//else if(!db.isPaused&& db.total_songs_playing > 0)
-		//enableAudioDeviceController();
-	//MIX_LOCK = 0;
 }
 
 int negativeToPositive(int value) {

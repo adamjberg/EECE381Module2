@@ -12,17 +12,17 @@
 #define MAX_SOUNDMIXBUF 96
 
 struct SoundMixer* soundMixer;
+struct Sound;
 struct SoundMixer {
 	unsigned int buffer[300][MAX_SOUNDMIXBUF];
 	volatile int currIndex;
 	volatile int endIndex;
 	volatile int indexSize;
-	bool cleared;
 };
 
 void initSoundMixer();
 void setGlobalVolume(float);
-int updateMixer();
+void updateMixer();
 void clearSoundMixer();
 int negativeToPositive(int);
 int positiveToNegative(int);

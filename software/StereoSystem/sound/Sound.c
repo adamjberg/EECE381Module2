@@ -216,8 +216,6 @@ struct Sound* loadMP3Sound(char * file) {
 	printf("\nPreloading complete\n");
 
 	decodeMP3(sound, buf, size);
-	free(buf);
-	buf = NULL;
 	return sound;
 }
 
@@ -332,7 +330,6 @@ struct Sound* initSound(unsigned int length) {
 	this->buffer = (unsigned int*) malloc(sizeof(int) * length);
 	if(!this->buffer)
 		printf("Failed to allocate sound buffer\n");
-	this->playing = false;
 	this->volume = 1;
 	this->fadeVolume = 1;
 	this->inFadePosition = 0;
@@ -489,20 +486,10 @@ void playSound(struct Sound* sound, float volume, int startTime, int loops) {
 
 	seekSound(sound, startTime);
 	setSoundVolume(sound, volume);
-	sound->playing = true;
 	sound->loops = loops;
 }
 
-void pauseSound(struct Sound* sound) {
-	sound->playing = false;
-}
-
-void resumeSound(struct Sound* sound) {
-	sound->playing = true;
-}
-
 void stopSound(struct Sound* sound) {
-	sound->playing = false;
 	sound->position = 0;
 }
 
@@ -515,5 +502,5 @@ void unloadSound(struct Sound* sound) {
 }
 
 bool checkEnd(struct Sound* this) {
-	return (this->position >= this->length) & this->length != 0;
+	return (this->position >= this->length) && this->length != 0;
 }

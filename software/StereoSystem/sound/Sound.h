@@ -26,7 +26,6 @@ struct Sound {
 	float bitRate;
 	int loops;
 	unsigned int *buffer;
-	bool playing;
 	volatile float volume;
 	volatile float fadeVolume;
 };
@@ -41,8 +40,6 @@ void setSoundVolume(struct Sound*, float);
 void unloadSound(struct Sound*);
 void seekSound(struct Sound*, unsigned int);
 void playSound(struct Sound*, float, int, int);
-void pauseSound(struct Sound*);
-void resumeSound(struct Sound*);
 void stopSound(struct Sound*);
 bool checkEnd(struct Sound*);
 int readInt(int, int);
