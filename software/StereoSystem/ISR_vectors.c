@@ -145,8 +145,6 @@ void mix_ISR(void) {
 			enableAudioDeviceController();
 		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
 	}
-	//isStopped = updateMixer();
-	//if(!isStopped)
 }
 void animate_ISR(struct Cursor* cursor) {
 	int tempcontext;

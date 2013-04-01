@@ -38,7 +38,10 @@ void loadSong(struct Song* this) {
 void unloadSong(struct Song* this) {
 	if(this == NULL || this->sound == NULL) return;
 	printf("unloading song id: %d\n", this->id);
-	unloadSound(this->sound);
+	free(this->sound->buffer);
+	this->sound->buffer = NULL;
+	free(this->sound);
+	this->sound = NULL;
 }
 
 void setSongName(struct Song* this, char* name) {
@@ -60,14 +63,12 @@ void setSongVolume(struct Song* this, float volume) {
 }
 
 void playSong(struct Song* this, float volume, int startTime, int loops) {
-	//song_id_lock = 1;
 	if(this == NULL) return;
 	if(isCurrPlaying(this->id) >= 0|| db.total_songs_playing >= MAX_SONGS_MIX - 1) return;
 	this->pos = startTime;
 	this->volume = (int)volume;
 	db.curr_song_id = 0;
-	if(this->sound == NULL)
-		loadSong(this);
+	loadSong(this);
 	int fadeLength = (int) this->sound->length * LENGTH_OF_FADE_PERCENT;
 	if(fadeLength > MAX_FADE_LENGTH) {
 		fadeLength = MAX_FADE_LENGTH;
@@ -78,7 +79,6 @@ void playSong(struct Song* this, float volume, int startTime, int loops) {
 	db.curr_song_ids[db.total_songs_playing++] = this->id;
 	db.curr_song_id = this->id;
 	playSound(this->sound, volume/100, startTime, loops);
-	//song_id_lock = 0;
 }
 
 void pauseSong(struct Song* this) {
@@ -88,10 +88,6 @@ void pauseSong(struct Song* this) {
 	if((index = isCurrPlaying(this->id)) < 0) return;
 	removeCurrPlaying(index);
 	printf("The music is paused.\n");
-}
-
-void resumeSong(struct Song* this) {
-	//resumeSound(this->sound);
 }
 
 void stopSong(struct Song* this) {

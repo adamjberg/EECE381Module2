@@ -20,7 +20,6 @@
 
 struct Cursor {
 	struct Object* super;
-	//int leftPressed, rightPressed;
 	struct Image* overlapImg;
 	bool isLeftPressed, isRightPressed;
 	struct Frame* frame;

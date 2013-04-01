@@ -31,7 +31,7 @@ void clearSoundMixer() {
  * Load sound's 96 samples to mix buffer
  */
 void loadToSoundBuffer(struct Sound* sound) {
-	if(soundMixer->indexSize >=299) return;
+	//if(soundMixer->indexSize >=299) return;
 	int i;
 	unsigned int data;
 	for(i = 0; i < MAX_SOUNDMIXBUF; i++) {
