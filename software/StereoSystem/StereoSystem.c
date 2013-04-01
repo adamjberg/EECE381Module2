@@ -92,7 +92,7 @@ int main()
 		syncPlay(i+1, 100, 0);
 		i+=2;
 		}*/
-		//i = soundTester(i);
+		i = soundTester(i);
 
 	}
 

@@ -216,6 +216,8 @@ struct Sound* loadMP3Sound(char * file) {
 	printf("\nPreloading complete\n");
 
 	decodeMP3(sound, buf, size);
+	free(buf);
+	buf = NULL;
 	return sound;
 }
 
