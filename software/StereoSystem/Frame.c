@@ -38,7 +38,7 @@ struct Frame* initMenuFrame(struct Frame* mainFrame){
 
 struct Frame* initActionFrame(struct Frame* mainFrame){
 	struct Frame* af = initFrame();
-	af->bg_image = loadSDImage("GR3.BMP");
+	while((af->bg_image = loadSDImage("GR3.BMP")) == NULL);
 	af->buttons = (struct Button**)malloc(5*sizeof(struct Button*));
 	af->buttons[0] = initActionButton(0);
 	af->buttons[0]->range->height = 30;
@@ -64,7 +64,7 @@ struct Frame* initSongPanel(struct Frame* frame){
 	struct Frame* sp = initFrame();
 	sp->buttons = (struct Button**)malloc(51*sizeof(struct Button*));
 	sp->drawFrame = drawSongPanel;
-	sp->bg_image = loadSDImage("AND.BMP");
+	while((sp->bg_image = loadSDImage("AND.BMP")) == NULL);
 	sp->mainFrame = frame;
 	if (db.num_of_songs > 14){
 		sp->button_size = 14; // starts from 1!!
@@ -87,7 +87,7 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 	pp->drawFrame = drawPlaylistPanel;
 	pp->button_size = db.num_of_lists; // starts from 1
 	pp->mainFrame = frame;
-	pp->bg_image = loadSDImage("AND.BMP");
+	while((pp->bg_image = loadSDImage("AND.BMP")) == NULL);
 	pp->buttons[0] = NULL;
 	for (i = 1; i <= MAX_LISTS; i++){
 		if(j == db.num_of_lists) break;
