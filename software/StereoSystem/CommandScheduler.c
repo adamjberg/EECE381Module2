@@ -80,6 +80,12 @@ void cmdProcessing(struct CmdScheduler* this) {
 		case 17:
 			repeatList(atoi(cmd->parameters[0]));
 			break;
+		case 18:
+			modifyListName(atoi(cmd->parameters[0]), cmd->parameters[1]);
+			break;
+		case 19:
+			removeList(atoi(cmd->parameters[0]));
+			break;
 		default:
 			break;
 		}

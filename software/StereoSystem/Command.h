@@ -66,7 +66,7 @@ void syncUpdatePos(int, int, int);
 void syncRepeatList(int);
 void repeatList(int);
 
-void modifyPlaylistName(int, char*);
+void modifyListName(int, char*);
 void shuffle(int);
 
 void moveSongToIndex(char*, int, char*);

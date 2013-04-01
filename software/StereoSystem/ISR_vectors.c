@@ -131,7 +131,7 @@ void mix_ISR(void) {
 	}
 
 	alt_irq_non_interruptible(tempcontext);
-	if(soundMixer->indexSize <= 0 && db.total_songs_playing > 0) {
+	if(soundMixer->indexSize <= 0 && db.total_songs_playing == 1) {
 		syncPause(db.curr_song_id);
 		db.isPaused = true;
 		if(db.curr_playlist_id != 0)

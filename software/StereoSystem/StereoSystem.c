@@ -17,7 +17,7 @@ bool loadSDCard(alt_up_sd_card_dev* device) {
 }
 
 void initAnimate(struct Cursor* cursor) {
-	int timer = 2000000;
+	int timer = 3000000;
 	IOWR_16DIRECT(TIMESTAMP_BASE, 8, timer & 0xFFFF);
 	IOWR_16DIRECT(TIMESTAMP_BASE, 12, timer >> 16);
 	IOWR_16DIRECT(TIMESTAMP_BASE, 4, 0x07);
@@ -83,7 +83,15 @@ int main()
 
 	while(1) {
 		cmdProcessing(scheduler);
-
+	/*	if(db.total_songs_playing == 0) {
+		loadSong(db.songs[i]);
+		loadSong(db.songs[i+1]);
+		if(i+2 >= db.num_of_songs)
+			i = 1;
+		syncPlay(i, 100, 0);
+		syncPlay(i+1, 100, 0);
+		i+=2;
+		}*/
 		//i = soundTester(i);
 
 	}
