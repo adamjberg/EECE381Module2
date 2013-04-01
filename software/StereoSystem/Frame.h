@@ -30,6 +30,7 @@ void drawMenuFrame(struct Frame*);
 void drawActionFrame(struct Frame*);
 void drawSongPanel(struct Frame*);
 void drawPlaylistPanel(struct Frame*);
+void drawScrollFrame(struct Frame*);
 void clearSongPanel();
 void displayLoadingScreenVGA();
 

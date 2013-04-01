@@ -143,32 +143,22 @@ void checkButtonCollision(void* c, void* mf){
 			checkTxtCollisionForMouse(cursor, mainFrame->elements[3]->buttons[i]);
 		}
 	}
+
+	actionBtnAnimation(mainFrame);
 }
 
-void buttonAnimation(void* mf){
+void actionBtnAnimation(void* mf){
 	struct Frame* mainFrame = (struct Frame*)mf;
-
-	/*if (mainFrame->elements[1]->buttons[0]->startAnimate == 1){
-		mainFrame->elements[1]->buttons[0]->frame++;
-		printf("Frame is %d\n", mainFrame->elements[1]->buttons[0]->frame);
-		if (mainFrame->elements[1]->buttons[0]->frame == 300){
-			mainFrame->elements[1]->buttons[0]->frame = 0;
-			mainFrame->elements[1]->buttons[0]->startAnimate = 0;
-			animateButton(mainFrame->elements[1]->buttons[0], 0);
-			printf("StartAniamte gets 0\n");
-		}
-	}
-	*/
 
 	int i;
 	for (i = 0; i < 5; i++){
 		if (mainFrame->elements[1]->buttons[i]->startAnimate == 1){
 			mainFrame->elements[1]->buttons[i]->frame++;
-			if (mainFrame->elements[1]->buttons[i]->frame == 300){
-				mainFrame->elements[1]->buttons[i]->frame = 0;
-				mainFrame->elements[1]->buttons[i]->startAnimate = 0;
-				animateButton(mainFrame->elements[1]->buttons[i], 0);
-			}
+		}
+		if (mainFrame->elements[1]->buttons[i]->frame == 2){
+			mainFrame->elements[1]->buttons[i]->startAnimate = 0;
+			mainFrame->elements[1]->buttons[i]->frame = 0;
+			animateButton(mainFrame->elements[1]->buttons[i], 0);
 		}
 	}
 }

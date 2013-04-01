@@ -67,6 +67,17 @@ struct Button* initActionButton(int type, struct Frame* f){
 	return ab;
 }
 
+struct Button* initScrollButton(int x, int y, int type, struct Frame* f){
+	struct Button* sb = initButton();
+	sb->x_pos = x;
+	sb->y_pos = y;
+	sb->range = initRange(sb->x_pos, sb->y_pos, 10, 10);
+	sb->type = type;
+	sb->draw = drawActionButton;
+	sb->collide = dummyCollide;
+	return sb;
+}
+
 void drawTxtButton(struct Button* this){
 	alt_up_char_buffer_string(char_buffer, this->name, this->x_pos, this->y_pos);
 }
@@ -143,7 +154,6 @@ void drawRange(struct Button* this){
 }
 
 void playButtonCollide(struct Button* this){
-	//draw(150, 205, this->stats[1]);
 	if (db.curr_song_id == 0){
 		syncPlay(1, 100, 0);
 		highlightButton(this->Panel->mainFrame->elements[2]->buttons[1]);
@@ -152,7 +162,6 @@ void playButtonCollide(struct Button* this){
 	syncPlay(db.curr_song_id, 100, db.songs[db.curr_song_id]->pos);
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id]);
 	printf("Play button is clicked\n");
-	//draw(145, 200, this->stats[0]);
 }
 
 void pauseButtonCollide(struct Button* this){
@@ -182,6 +191,7 @@ void dummyCollide(struct Button* this){
 }
 
 void songButtonCollide(struct Button* this){
+	syncStop();
 	syncPlay(this->id, 100, 0);
 	highlightButton(this);
 }
@@ -197,7 +207,6 @@ void highlightButton(struct Button* this){
 }
 
 void playlistButtonCollide(struct Button* this){
-	// highlight the playlist
 	draw_notransparent(241, 13, this->Panel->bg_image);
 	int i =0;
 	int y = 4* this->y_pos - 2;
