@@ -272,7 +272,8 @@ public class Database {
 			this.list_order_song[list_id][i] = this.list_order_song[list_id][i+1];
 			this.list_song_order[list_id][this.list_order_song[list_id][i]] = i;
 		} this.list_order_song[list_id][i] = 0;
-		
+
+		this.playlists[list_id].setNum_of_songs(this.playlists[list_id].getNum_of_songs()-1);
 	}
 	
 	

@@ -102,7 +102,7 @@ public class SongActivity extends Activity {
         		Log.v("clicked songid", songid+"");
         		
     			db.setCurr_song_id(songid);
-    			db.setCurr_playlist_id(plid);
+    			Command.syncSelectList(plid);
         	
 				Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
 				

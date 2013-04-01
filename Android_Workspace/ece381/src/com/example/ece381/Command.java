@@ -297,4 +297,30 @@ public class Command {
 		cmd.addParameter(String.valueOf(list_id));
 		com.send(cmd);
 	}
+	
+	//index 18
+	static public void syncModifyListName(int list_id, String listname) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(18);
+		cmd.addParameter(String.valueOf(list_id));
+		cmd.addParameter(listname);
+		com.send(cmd);
+		com.getSched().addCmd(cmd);
+		
+	}
+	
+	//index 19
+	static public void syncRemoveList(int list_id) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(19);
+		cmd.addParameter(String.valueOf(list_id));
+		com.send(cmd);
+		
+	}
+	
+	static public void removeList(int list_id) {
+		Communication com = Communication.getInstance();
+		com.getDB().removeList(list_id);
+	}
+	
 }

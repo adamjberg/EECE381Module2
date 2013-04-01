@@ -77,6 +77,7 @@ public class PlaylistActivity extends Activity {
     		// Go to PlaylistBuilderActivity
     		if(selected == "Create a new playlist" ) {
     			intent = new Intent(getApplicationContext(), PlaylistBuilderActivity.class);
+    			intent.putExtra("action", "create");
     		}
     		
     		// Go to SongActivity 
@@ -177,21 +178,19 @@ public class PlaylistActivity extends Activity {
 		  String toRemove = listAdapter.getItem(id);
 		 
 		  int plid = db.queryListByName(toRemove);
-		  
+		  int num_of_songs = db.getPlaylists()[plid].getNum_of_songs();
 		  // Only handle deleting if playlist id isn't 0 
 		  if(plid > 0) {
 			  
-			  for(int i = 1; i < db.getTotalSongs()+1; i++) {
+			  for(int i = 1; i < num_of_songs; i++) {
 				  // Remove all songs from list
-				  Command.removeSongFromList(plid, i);
 				  Command.syncRemoveSongFromList(plid, i); 
 				  
 				  // Set current playlist id and songid to 0
-				  com.getDB().setCurr_playlist_id(0);
 			  }
 			  //Command.removeList(plid);
-			  //Command.syncRemoveList(plid);
-			  db.removeList(plid);
+			  Command.syncRemoveList(plid);
+			  Command.syncSelectList(0);
 			  listAdapter.remove(listAdapter.getItem(id));
 			  
 		  }

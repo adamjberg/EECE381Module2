@@ -83,6 +83,13 @@ public class CmdScheduler {
 			case 16:
 				Command.updatePos(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)), Integer.valueOf(cmd.getParameterList().get(2)));
 				break;
+			case 17:
+				break;
+			case 18:
+				break;
+			case 19:
+				Command.removeList(Integer.valueOf(cmd.getParameterList().get(0)));
+				break;
 			default:
 				break;
 			}
