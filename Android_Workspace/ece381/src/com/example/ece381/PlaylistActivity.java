@@ -148,6 +148,7 @@ public class PlaylistActivity extends Activity {
        return true;
    case R.id.songs:
 	  Intent intentsong = new Intent(PlaylistActivity.this, MainActivity.class);
+	  intentsong.putExtra("subActivity", "true");
 	  startActivity(intentsong);
   	  return true;
    case R.id.menu_settings:

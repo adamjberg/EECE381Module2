@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
 	
 	private TextView textview;
 	private ListView m_listview;
+	private boolean isSubActivity;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -63,15 +64,28 @@ public class MainActivity extends Activity {
 		// Set up a timer task.  We will use the timer to check the
 		// input queue every 500 ms
 		
-		TCPReadTimerTask tcp_task = new TCPReadTimerTask();
-		tcp_timer = new Timer();
-		tcp_timer.schedule(tcp_task, 5000, 50);
-		
-		new SocketConnect().execute((Void) null);
-		
-		//Initialize a LoadViewTask object and call the execute() method
-    	new LoadViewTask().execute();    	
+		Bundle extras = getIntent().getExtras();
+		if(extras == null) {
+			this.isSubActivity = false;
+			TCPReadTimerTask tcp_task = new TCPReadTimerTask();
+			tcp_timer = new Timer();
+			tcp_timer.schedule(tcp_task, 5000, 50);
+			
+			new SocketConnect().execute((Void) null);
+			
+			//Initialize a LoadViewTask object and call the execute() method
+	    	new LoadViewTask().execute();    	
+		} else {
+			setContentView(R.layout.activity_main);addListView();  
 
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		         // Show the Up button in the action bar.
+		         MainActivity.this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		         MainActivity.this.getActionBar().show();
+		    }
+			
+			this.isSubActivity = true;
+		}
 
 	}
 
@@ -119,10 +133,12 @@ public class MainActivity extends Activity {
 
 	@Override
 	public void finish() {
-		tcp_timer.cancel();
-		closeSocket();
-		Log.i("LOG", "Socket Closed");
-		com.resetCom();
+		if(!this.isSubActivity) {
+			tcp_timer.cancel();
+			closeSocket();
+			Log.i("LOG", "Socket Closed");
+			com.resetCom();
+		}
 		super.finish();
 	}
 	
