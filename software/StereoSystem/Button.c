@@ -175,13 +175,17 @@ void stopButtonCollide(struct Button* this){
 }
 
 void prevButtonCollide(struct Button* this){
+	if(db.curr_song_id <= 1 || db.curr_song_id == 0) return;
 	syncPrev(db.curr_song_id);
+	if(this == NULL) return;
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
 	printf("Prev button is clicked.\n");
 }
 
 void nextButtonCollide(struct Button* this){
+	if(db.curr_song_id >= db.num_of_songs || db.curr_song_id == 0) return;
 	syncNext(db.curr_song_id);
+	if(this == NULL) return;
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
 	printf("Next button is clicked.\n");
 }

@@ -71,13 +71,15 @@ void play(int id, int vol, int pos) {
 		alt_up_char_buffer_string(char_buffer, db.songs[db.curr_song_id]->song_name, 3, 37);
 		sprintf(temp, "%.2f seconds", db.songs[db.curr_song_id]->size/1000.0);
 		alt_up_char_buffer_string(char_buffer, temp, 3, 38);
-		memset(temp, 0, 30);
-		sprintf(temp, "%.1f kbps", getBitRateKbps(db.songs[db.curr_song_id]->sound->audioFormat));
-		alt_up_char_buffer_string(char_buffer, temp, 3, 39);
-		memset(temp, 0, 30);
-		sprintf(temp, "%d channel(s)", db.songs[db.curr_song_id]->sound->audioFormat->channels);
-		alt_up_char_buffer_string(char_buffer, temp, 3, 40);
-		printf("A song %d is played at %d position.\n", id, pos);
+		if(db.songs[db.curr_song_id]->sound->audioFormat != NULL) {
+			memset(temp, 0, 30);
+			sprintf(temp, "%.1f kbps", getBitRateKbps(db.songs[db.curr_song_id]->sound->audioFormat));
+			alt_up_char_buffer_string(char_buffer, temp, 3, 39);
+			memset(temp, 0, 30);
+			sprintf(temp, "%d channel(s)", db.songs[db.curr_song_id]->sound->audioFormat->channels);
+			alt_up_char_buffer_string(char_buffer, temp, 3, 40);
+			printf("A song %d is played at %d position.\n", id, pos);
+		}
 	}
 }
 /*
@@ -406,6 +408,28 @@ void removeList(int index) {
 		return;
 	} printf("Playlist %d is removed.\n", index);
 }
+
+//index 20
+void playSongFromAllSongs(int id, int vol, int pos) {
+
+}
+//index 21
+void openAllSongPanel() {
+
+}
+//index 22
+void openPlaylistsPanel() {
+
+}
+//index 23
+void openSongsFromList(int list_id) {
+
+}
+//index 24
+void playSongFromList(int song_id, int list_id) {
+
+}
+
 void shuffle(int index) {
 	printf("Playlist %d is shuffled\n", index);
 }
