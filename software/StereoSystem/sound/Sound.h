@@ -27,11 +27,12 @@ struct Sound {
 	unsigned int loading_pos;
 	unsigned int length;
 	int loops;
-	unsigned int *buffer;
+	int *buffer;
 	volatile float volume;
 	volatile float fadeVolume;
 };
 
+unsigned int convertToMS(unsigned int);
 struct Sound* initSound(unsigned int);
 void allocateSoundBuffer(struct Sound*, int);
 void setFadeInLength(struct Sound*, unsigned int);
@@ -40,6 +41,9 @@ unsigned int getSoundPositionMS(struct Sound*);
 unsigned int getSoundLengthMS(struct Sound*);
 struct Sound* loadWavSound(char*);
 void setSoundVolume(struct Sound*, float);
+void setSoundPitch(struct Sound*, float);
+void setSoundPlaybackSpeed(struct Sound*, float);
+int resampleSound(struct Sound*, int, bool, int);
 void unloadSound(struct Sound*);
 void seekSound(struct Sound*, unsigned int);
 void playSound(struct Sound*, float, int, int);

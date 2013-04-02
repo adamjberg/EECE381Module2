@@ -158,7 +158,7 @@ public class Command {
 				next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order+1];	
 			}
 			
-		} else {
+		} else if(song_id < com.getDB().getTotalSongs()){
 			next_id = com.getDB().getCurr_song_id()+1;
 		}
 		if(next_id == 0) return;
@@ -183,7 +183,7 @@ public class Command {
 			int curr_order =
 					com.getDB().getSongOrderFromList()[com.getDB().getCurr_playlist_id()][song_id];
 			next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order-1];
-		} else {
+		} else if(song_id > 1){
 			next_id = com.getDB().getCurr_song_id()-1;
 		}
 		if(next_id == 0) return;

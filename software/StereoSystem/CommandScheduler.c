@@ -86,6 +86,23 @@ void cmdProcessing(struct CmdScheduler* this) {
 		case 19:
 			removeList(atoi(cmd->parameters[0]));
 			break;
+		case 20:
+			playSongFromAllSongs(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]), atoi(cmd->parameters[2]));
+			break;
+		case 21:
+			openAllSongPanel();
+			break;
+		case 22:
+			openPlaylistsPanel();
+			break;
+		case 23:
+			openSongsFromList(atoi(cmd->parameters[0]));
+			break;
+		case 24:
+			playSongFromList(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]));
+			break;
+		case 25:
+			break;
 		default:
 			break;
 		}

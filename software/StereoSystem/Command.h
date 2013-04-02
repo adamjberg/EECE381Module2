@@ -71,7 +71,18 @@ void shuffle(int);
 
 void moveSongToIndex(char*, int, char*);
 void removeList(int);
-void play_playlist(int);
+
+//index 20
+void playSongFromAllSongs(int, int, int);
+//index 21
+void openAllSongPanel();
+//index 22
+void openPlaylistsPanel();
+//index 23
+void openSongsFromList(int);
+//index 24
+void playSongFromList(int, int);
+
 void repeatCurrentSong();
 
 void reverse();

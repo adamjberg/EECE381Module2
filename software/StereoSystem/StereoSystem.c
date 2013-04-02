@@ -88,7 +88,7 @@ int main()
 	while(1) {
 		cmdProcessing(scheduler);
 
-		i = soundTester(i);
+		//i = soundTester(i);
 
 
 	}

@@ -211,7 +211,7 @@ void playButtonCollide(struct Button* this){
 		printf("Play button is clicked\n");
 	}
 	// TODO: change the volume to db.songs[db.curr_song_id]->volume
-	syncPlay(db.curr_song_id, 100, db.songs[db.curr_song_id]->pos);
+	syncPlay(db.curr_song_id, 100, convertToMS(db.songs[db.curr_song_id]->sound->position));
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id]);
 	printf("Play button is clicked\n");
 	updateVolumeValue();
@@ -230,14 +230,18 @@ void stopButtonCollide(struct Button* this){
 }
 
 void prevButtonCollide(struct Button* this){
+	if(db.curr_song_id <= 1 || db.curr_song_id == 0) return;
 	syncPrev(db.curr_song_id);
+	if(this == NULL) return;
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
 	printf("Prev button is clicked.\n");
 	updateVolumeValue();
 }
 
 void nextButtonCollide(struct Button* this){
+	if(db.curr_song_id >= db.num_of_songs || db.curr_song_id == 0) return;
 	syncNext(db.curr_song_id);
+	if(this == NULL) return;
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
 	printf("Next button is clicked.\n");
 	updateVolumeValue();

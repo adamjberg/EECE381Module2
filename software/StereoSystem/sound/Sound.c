@@ -49,6 +49,14 @@ unsigned int getSoundLengthMS(struct Sound* this) {
 	return convertToMS(this->length);
 }
 
+void setSoundPitch(struct Sound* this, float pitch) {
+	setSoundPlaybackSpeed(this, pitch);
+}
+
+void setSoundPlaybackSpeed(struct Sound* this, float speed) {
+	resampleSound(this, (int)(getSampleRate(this->audioFormat) / speed), false, 0);
+}
+
 /*
  * This is the input callback. The purpose of this callback is to (re)fill
  * the stream buffer which is to be decoded. In this example, an entire file
@@ -213,7 +221,7 @@ struct Sound* loadMP3Sound(char * file) {
 /**
  * Resamples a sound from it's current sample rate
  */
-int resampleSound(struct Sound* this, int toSampleRate, int filePointer) {
+int resampleSound(struct Sound* this, int toSampleRate, bool fromFile, int filePointer) {
 	int fromSampleRate = getSampleRate(this->audioFormat);
 	int bytesPerSample = getSampleSizeInBytes(this->audioFormat);
 	int srcLength =  this->length;
@@ -221,39 +229,54 @@ int resampleSound(struct Sound* this, int toSampleRate, int filePointer) {
 	float x0 = 0, x1 = 0, x = 0;
 	int y0 = 0, y1 = 0;
 	int i, j = 0;
+	int* bufferToWriteTo;
 
-	allocateSoundBuffer(this, destLength);
+	if(fromFile) {
+		allocateSoundBuffer(this, destLength);
+		bufferToWriteTo = this->buffer;
+	} else {
+		this->length = destLength;
+		bufferToWriteTo = (int*) malloc(sizeof(int) * this->length);
+	}
 
 	for (i = 0; i < srcLength; i++) {
 		if (j >= this->length)
 			break;
 		x1 = i / (float) fromSampleRate;
-		if ((y1 = readInt(filePointer, bytesPerSample, false)) < 0) {
-			free(this->audioFormat);
-			this->audioFormat = NULL;
-			free(this->buffer);
-			this->buffer = NULL;
-			free(this);
-			this = NULL;
-			return -1;
+		if (fromFile) {
+			if ((y1 = readInt(filePointer, bytesPerSample, false)) < 0) {
+				free(this->audioFormat);
+				this->audioFormat = NULL;
+				free(this->buffer);
+				this->buffer = NULL;
+				free(this);
+				this = NULL;
+				return -1;
+			}
+		} else {
+			y1 = this->buffer[i];
 		}
-
 		if (y1 > 0x07FFFFF) {
 			y1 = y1 | 0xFF000000;
 		}
-		if (x <= x1) {
+		while (x <= x1) {
 			if (x == x1) {
-				this->buffer[j++] = y1;
+				bufferToWriteTo[j++] = y1;
 			} else if (x < x1) {
-				this->buffer[j++] = (y1 - y0) * (x - x0) / (x1 - x0) + y0;
-				if (this->buffer[j - 1] > 0x07FFFFF)
-					this->buffer[j - 1] &= 0x00FFFFFF;
+				bufferToWriteTo[j++] = (y1 - y0) * (x - x0) / (x1 - x0) + y0;
+				if (bufferToWriteTo[j - 1] > 0x07FFFFF)
+					bufferToWriteTo[j - 1] &= 0x00FFFFFF;
 			}
 			x = j / (float) toSampleRate;
 		}
 		x0 = x1;
 		y0 = y1;
-	} return 0;
+	}
+	if (!fromFile) {
+		free(this->buffer);
+		this->buffer = bufferToWriteTo;
+	}
+	return 0;
 }
 
 /**
@@ -263,7 +286,7 @@ int loadSoundBuffer(struct Sound* this, int filePointer) {
 	int i = 0, bytesPerSample;
 
 	if(this->audioFormat->sampleRate != DEFAULT_SAMPLE_RATE)
-		return resampleSound(this, DEFAULT_SAMPLE_RATE, filePointer);
+		return resampleSound(this, DEFAULT_SAMPLE_RATE, true, filePointer);
 	else {
 		bytesPerSample = getSampleSizeInBytes(this->audioFormat);
 		allocateSoundBuffer(this, this->length);
