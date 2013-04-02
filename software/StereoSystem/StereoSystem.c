@@ -63,16 +63,20 @@ int main()
 	draw(35, 35, testImg);
 	killImage(testImg);*/
 	//alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
-	//graphicTester();
+
 
 	alt_up_pixel_buffer_dma_clear_screen(pixel_buffer, 0);
-	//alt_up_char_buffer_clear(char_buffer);
+	alt_up_char_buffer_clear(char_buffer);
+
+	//graphicTester();
 
 	struct Frame* mainFrame = initMainFrame();
 	mainFrame->drawFrame(mainFrame);
 
+
 	//Test End
 	mouse = initCursor(10, 100, mainFrame);
+//	graphicTester();
 
 	initAudioBuffer();
 	initAnimate(mouse);
@@ -86,7 +90,6 @@ int main()
 
 		i = soundTester(i);
 
-		//buttonAnimation(mainFrame);
 	}
 
 

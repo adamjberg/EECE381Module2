@@ -86,9 +86,11 @@ void checkImgCollisionForMouse(void* cursor, void* button){
 						((struct Button*)button)->isClicked = 0;
 						((struct Cursor*)cursor)->isLeftPressed = false;
 					} else if (((struct Button*)button)->isClicked == 0) {
-						// button is clicked!
-						((struct Button*)button)->startAnimate = 1;
-						animateButton(((struct Button*)button), 1);
+						// button is clicked-animate action button
+						if (((struct Button*)button)->buttonType == action){
+							((struct Button*)button)->startAnimate = 1;
+							animateButton(((struct Button*)button), 1);
+						}
 						r_button->currentlyCollided = 1;
 						((struct Button*)button)->isClicked = 1;
 					}
@@ -143,6 +145,10 @@ void checkButtonCollision(void* c, void* mf){
 			checkTxtCollisionForMouse(cursor, mainFrame->elements[3]->buttons[i]);
 		}
 	}
+
+	// check Volume Buttons
+	checkImgCollisionForMouse(cursor, mainFrame->elements[5]->buttons[0]);
+	checkImgCollisionForMouse(cursor, mainFrame->elements[5]->buttons[1]);
 
 	actionBtnAnimation(mainFrame);
 }

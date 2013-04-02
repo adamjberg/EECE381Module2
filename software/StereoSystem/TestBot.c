@@ -15,10 +15,18 @@ void graphicTester() {
 		killImage(picture);
 	}*/
 
-	alt_up_pixel_buffer_dma_clear_screen(pixel_buffer, 0);
-	alt_up_char_buffer_clear(char_buffer);
-	struct Frame* mainFrame = initMainFrame();
-	mainFrame->drawFrame(mainFrame);
+	int i;
+	for (i = 0; i < 5000; i++){
+		drawAllSongs();
+		printf("Iteration %d\n", i);
+	}
+	/*int j;
+	for (i = 0; i < 50; i++){
+		for (j = 0; j < 20; j++){
+			highlightSongWithID(j);
+			printf("highlight iteration %d\n", i);
+		}
+	}*/
 }
 void dBTester() {
 
