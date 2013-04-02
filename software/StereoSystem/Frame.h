@@ -38,6 +38,7 @@ void clearSongPanel();
 void displayLoadingScreenVGA();
 
 void drawAllSongs();
+void drawAllLists();
 
 
 #endif /* FRAME_H_ */

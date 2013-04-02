@@ -20,13 +20,13 @@ void graphicTester() {
 		drawAllSongs();
 		printf("Iteration %d\n", i);
 	}
-	int j;
+	/*int j;
 	for (i = 0; i < 50; i++){
 		for (j = 0; j < 20; j++){
 			highlightSongWithID(j);
 			printf("highlight iteration %d\n", i);
 		}
-	}
+	}*/
 }
 void dBTester() {
 

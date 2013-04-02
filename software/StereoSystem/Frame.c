@@ -255,5 +255,24 @@ void drawAllSongs(){
 		alt_up_char_buffer_string(char_buffer, db.songs[i]->song_name, 61, y_pos);
 		y_pos = y_pos + 3;
 	}
+	mouse->frame->currentPanel = 0;
+}
+
+void drawAllLists(){
+	clearSongPanel();
+	draw_notransparent(241, 13, mouse->frame->elements[3]->bg_image);
+	int i = 0;
+	int y_pos = 4;
+	int totalList = db.num_of_lists;
+	// up and down is not implemented yet
+	// just show from ID 1 to 14
+	if (db.num_of_lists > 14){
+		totalList = 14;
+	}
+	for (i = 1; i <= totalList; i++){
+		alt_up_char_buffer_string(char_buffer, db.playlists[i]->list_name, 61, y_pos);
+		y_pos = y_pos + 3;
+	}
+	mouse->frame->currentPanel = 1;
 }
 
