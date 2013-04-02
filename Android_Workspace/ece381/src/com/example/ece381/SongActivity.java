@@ -142,7 +142,6 @@ public class SongActivity extends Activity {
  public void onResume() {
 	  super.onResume();
 	  refreshSonglist();
-	  Command.syncOpenAllSongPanel();
   }
   
  @Override

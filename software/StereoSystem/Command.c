@@ -411,23 +411,23 @@ void removeList(int index) {
 
 //index 20
 void playSongFromAllSongs(int id, int vol, int pos) {
-
+	printf("play song %d from all song panel\n", id);
 }
 //index 21
 void openAllSongPanel() {
-
+	printf("open songs panel\n");
 }
 //index 22
 void openPlaylistsPanel() {
-
+	printf("open list panel\n");
 }
 //index 23
 void openSongsFromList(int list_id) {
-
+	printf("open songs from list\n");
 }
 //index 24
 void playSongFromList(int song_id, int list_id) {
-
+	printf("play song %d from list %d\n", song_id, list_id);
 }
 
 void shuffle(int index) {
