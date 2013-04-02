@@ -8,16 +8,18 @@ struct Frame* initFrame(){
 
 struct Frame* initMainFrame(){
 	struct Frame* f = initFrame();
-	f->elements = (struct Frame**)malloc(4*sizeof(struct Frame*));
+	f->elements = (struct Frame**)malloc(6*sizeof(struct Frame*));
 	f->elements[0] = initMenuFrame(f);
 	f->elements[1] = initActionFrame(f);
 	f->elements[2] = initSongPanel(f);
 	f->elements[3] = initPlaylistPanel(f);
+	f->elements[4] = initScrollFrame(f);
+	f->elements[5] = initVolumeFrame(f);
 	f->buttons = NULL;
 	f->bg_image = NULL;
 	f->mainFrame = NULL;
 	f->drawFrame = drawMainFrame;
-	f->element_size = 4;
+	f->element_size = 6;
 	f->button_size = 0;
 	f->currentPanel = 0; // 0:SONGS, 1:PLAYLIST
 	return f;
@@ -120,6 +122,22 @@ struct Frame* initScrollFrame(struct Frame* this){
 	return sf;
 }
 
+struct Frame* initVolumeFrame(struct Frame* this){
+	struct Frame* vf = initFrame();
+	vf->buttons = (struct Button**)malloc(2*sizeof(struct Button*));
+	vf->buttons[0] = initVolumeButton(5, 198, 0, this);
+	while((vf->buttons[0]->stats[0] = loadSDImage("VUP.BMP")) == NULL);
+	vf->buttons[0]->stats[1] = vf->buttons[0]->stats[0];
+	vf->buttons[1] = initVolumeButton(5, 218, 1, this);
+	while((vf->buttons[1]->stats[0] = loadSDImage("VDOWN.BMP")) == NULL);
+	vf->buttons[1]->stats[1] = vf->buttons[1]->stats[0];
+	vf->bg_image = NULL;
+	vf->button_size = 2;
+	vf->drawFrame = drawVolumeFrame;
+	vf->mainFrame = this;
+	return vf;
+}
+
 /**
  * Draws all elements of mainFrame. All backgrounds are
  * loaded and drawn in this function.
@@ -127,7 +145,8 @@ struct Frame* initScrollFrame(struct Frame* this){
 void drawMainFrame(struct Frame* this){
 	int i = 0;
 	// do not draw the last element (playlist)
-	for (i = 0; i < this->element_size - 1; i++){
+	for (i = 0; i < this->element_size; i++){
+		if (i == 3) {continue;}
 		this->elements[i]->drawFrame(this->elements[i]);
 	}
 	// TODO: put all backgrounds in here.
@@ -193,6 +212,13 @@ void drawScrollFrame(struct Frame* this){
 	drawHorizontalLine(241, 194, 78, 0xFFFFFF);
 }
 
+void drawVolumeFrame(struct Frame* this){
+	this->buttons[0]->draw(this->buttons[0]);
+	this->buttons[1]->draw(this->buttons[1]);
+	alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
+	alt_up_char_buffer_string(char_buffer, "100", 8, 54); //draw 100 initially, it will get updated
+}
+
 void clearSongPanel(){
 	int y = SONG_Y_POSITION;
 	int i = 0;
@@ -210,5 +236,24 @@ void displayLoadingScreenVGA(){
 	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
 }
 
+/**
+ * Has to be called after mouse gets initialized
+ */
+void drawAllSongs(){
 
+	clearSongPanel();
+	draw_notransparent(241, 13, mouse->frame->elements[2]->bg_image);
+	int i = 0;
+	int y_pos = 4;
+	int totalSong = db.num_of_songs;
+	// up and down is not implemented yet
+	// just show from ID 1 to 14
+	if (db.num_of_songs > 14) {
+		totalSong = 14;
+	}
+	for (i = 1; i <= totalSong; i++){
+		alt_up_char_buffer_string(char_buffer, db.songs[i]->song_name, 61, y_pos);
+		y_pos = y_pos + 3;
+	}
+}
 
