@@ -39,24 +39,6 @@ void push_key_ISR(struct PushKeyController* pushKeyController, unsigned int id)
 ****************************************************************************************/
 void audio_ISR(alt_up_audio_dev* audio_dev, unsigned int id)
 {
-/*	if (alt_up_audio_write_interrupt_pending(audio_dev))	// check for write interrupt
-	{
-		int numWritten = 0, numToWrite;
-		int spaceAvailable = alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT);
-
-		//while(numWritten < spaceAvailable) {
-			if( spaceAvailable + soundMixer->sound->position >= soundMixer->sound->length ) {
-				numToWrite = soundMixer->sound->length - soundMixer->sound->position;
-			} else {
-				numToWrite = spaceAvailable;
-			}
-			alt_up_audio_write_fifo(audio_dev, &(soundMixer->sound->buffer[soundMixer->sound->position]), numToWrite, ALT_UP_AUDIO_LEFT);
-			alt_up_audio_write_fifo(audio_dev, &(soundMixer->sound->buffer[soundMixer->sound->position]), numToWrite, ALT_UP_AUDIO_RIGHT);
-			//numWritten += numToWrite;
-			updateSoundMixerPosition(numToWrite);
-
-		//}
-	}*/
 	if(soundMixer->indexSize <= 0) {
 		disableAudioDeviceController();
 		return;
@@ -167,16 +149,6 @@ void animate_ISR(struct Cursor* cursor) {
 		}
 	}
 	if(db.total_songs_playing > 0) {
-	/*	for(k = 0; k < 96; k ++) {
-			data = soundMixer->buffer[index][k] >> 15;
-			if(data < 0xE0 && data != 0) {
-				if(j[data] < 80)
-					j[data] +=2;
-				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((99 - j[data])*320+data+10)<<1, 0xCCCC);
-				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((98 - j[data])*320+data+10)<<1, 0xCCCC);
-
-			}
-		}*/
 		for(k = 0; k < 96; k ++) {
 			data = soundMixer->buffer[index][k] >> 16;
 			if(data < 0x7F && data != 0) {
@@ -196,13 +168,6 @@ void animate_ISR(struct Cursor* cursor) {
 			}
 		}
 		drawEqulizer(sorted_j, 0xE0);
-//		i = 0;
-		/*for(k = 0; k < 0x7FFF; k++) {
-			if(j[k] != 0) {
-				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((99 - j[k])*320+i+10)<<1, 0xCCCC);
-				IOWR_16DIRECT(pixel_buffer->buffer_start_address, ((98 - j[k])*320+i+10)<<1, 0xCCCC);
-			}
-		}*/
 
 	}
 
@@ -211,7 +176,7 @@ void animate_ISR(struct Cursor* cursor) {
 	IOWR_16DIRECT(TIMESTAMP_BASE, 0, 0);
 }
 alt_u32 RS232_ISR(void* up_dev) {
-	if(queue_lock == 1 || SDIO_lock == 1) return alt_ticks_per_second()/1000;
+	if(queue_lock == 1/* || SDIO_lock == 1*/) return alt_ticks_per_second()/1000;
 	alt_up_rs232_dev *serial_dev = ((struct alt_up_dev*)up_dev)->RS232_dev;
 	unsigned char* cert;
 	int i = 0;
@@ -262,6 +227,7 @@ alt_u32 RS232_ISR(void* up_dev) {
 		} else {
 			com.failReceive++;
 			if(com.failReceive > 100) {
+				printf("fail communication %d at stats %d\n", com.failReceive, *com.stateMachine);
 				reset(serial_dev);
 			}
 		}
@@ -302,6 +268,7 @@ alt_u32 RS232_ISR(void* up_dev) {
 		} else {
 			com.failReceive++;
 			if(com.failReceive > 100) {
+				printf("fail communication %d at stats %d\n", com.failReceive, *com.stateMachine);
 				reset(serial_dev);
 			}
 		}
@@ -324,6 +291,7 @@ alt_u32 RS232_ISR(void* up_dev) {
 		} else {
 			com.failReceive++;
 			if(com.failReceive > 100) {
+				printf("fail communication %d at stats %d\n", com.failReceive, *com.stateMachine);
 				reset(serial_dev);
 			}
 		}
@@ -367,6 +335,7 @@ alt_u32 RS232_ISR(void* up_dev) {
 		} else {
 			com.failReceive++;
 			if(com.failReceive > 100) {
+				printf("fail communication %d at stats %d\n", com.failReceive, *com.stateMachine);
 				reset(serial_dev);
 			}
 		}

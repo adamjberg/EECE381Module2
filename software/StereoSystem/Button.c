@@ -237,19 +237,19 @@ void stopButtonCollide(struct Button* this){
 void prevButtonCollide(struct Button* this){
 	if(db.curr_song_id <= 1 || db.curr_song_id == 0) return;
 	syncPrev(db.curr_song_id);
-	if(this == NULL) return;
-	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
-	printf("Prev button is clicked.\n");
 	updateVolumeValue(db.curr_song_id - 1);
+	if(this == NULL) return;
+	//highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
+	printf("Prev button is clicked.\n");
 }
 
 void nextButtonCollide(struct Button* this){
 	if(db.curr_song_id >= db.num_of_songs || db.curr_song_id == 0) return;
 	syncNext(db.curr_song_id);
-	if(this == NULL) return;
-	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
-	printf("Next button is clicked.\n");
 	updateVolumeValue(db.curr_song_id + 1);
+	if(this == NULL) return;
+	//highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
+	printf("Next button is clicked.\n");
 }
 
 void dummyCollide(struct Button* this){
@@ -339,12 +339,12 @@ void updateVolumeValue(int song_id){
 /**
  * Highlight + play song from All Songs Panel only.
  */
-void playSongsFromSongPanel(int song_id){
+void playSongsFromSongPanel(int song_id, int vol, int pos){
 	// since up and down is not implemented yet,
 	// don't do anything for song_id > 14
 	if (song_id <= 14){
 		syncStop();
-		syncPlay(song_id, 100, 0); // TODO: change to curr volume
+		syncPlay(song_id, vol, pos);
 		if (querySongButtonFromID(song_id) != NULL){
 			highlightButton(querySongButtonFromID(song_id));
 		} else {

@@ -165,15 +165,17 @@ void next(int song_id) {
 	printf("Next song is selected.\n");
 	if(db.curr_playlist_id == 0 && song_id < db.num_of_songs) {
 		id = song_id+1;
+		playSongFromAllSongs(id, db.songs[id]->volume, 0);
 	} else if(db.curr_playlist_id != 0) {
 		if(db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1] != 0)
 			id = db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]+1];
 		else if(db.isListRepeated == 1)
 			id = db.index_list_order[db.curr_playlist_id][1];
+
+		if(id == 0) return;
+		syncPlay(id, db.songs[id]->volume, 0);
 	}
 
-	if(id == 0) return;
-	syncPlay(id, db.songs[id]->volume, 0);
 	printf("Next song is played.\n");
 }
 void syncPrev(int song_id) {
@@ -193,12 +195,14 @@ void prev(int song_id) {
 	int id = 0;
 	if(db.curr_playlist_id == 0 && song_id > 1) {
 		id = song_id-1;
+		playSongFromAllSongs(id, db.songs[id]->volume, 0);
 	} else if(db.curr_playlist_id != 0) {
 		id = db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]-1];
+
+		if(id == 0) return;
+		syncPlay(id, db.songs[id]->volume, 0);
 	}
 
-	if(id == 0) return;
-	syncPlay(id, db.songs[id]->volume, 0);;
 	printf("Previous song is played.\n");
 }
 
@@ -411,10 +415,12 @@ void removeList(int index) {
 
 //index 20
 void playSongFromAllSongs(int id, int vol, int pos) {
+	playSongsFromSongPanel(id, vol, pos);
 	printf("play song %d from all song panel\n", id);
 }
 //index 21
 void openAllSongPanel() {
+	drawAllSongs();
 	printf("open songs panel\n");
 }
 //index 22
