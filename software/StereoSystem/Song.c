@@ -101,6 +101,7 @@ void stopSong(struct Song* this) {
 	int index;
 	if(this == NULL) return;
 	if((index = isCurrPlaying(this->id)) < 0) return;
+	stopSound(db.songs[db.curr_song_ids[index]]->sound);
 	removeCurrPlaying(index);
 	db.curr_song_id = 0;
 	this->pos = 0;

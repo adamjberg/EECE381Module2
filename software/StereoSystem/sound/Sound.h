@@ -32,6 +32,7 @@ struct Sound {
 	volatile float fadeVolume;
 };
 
+unsigned int convertToMS(unsigned int);
 struct Sound* initSound(unsigned int);
 void allocateSoundBuffer(struct Sound*, int);
 void setFadeInLength(struct Sound*, unsigned int);

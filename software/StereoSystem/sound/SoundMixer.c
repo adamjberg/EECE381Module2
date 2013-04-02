@@ -18,7 +18,8 @@ void initSoundMixer() {
 }
 
 void setGlobalVolume(float volume) {
-	setSoundVolume(db.songs[db.curr_song_id]->sound, volume);
+	db.songs[db.curr_song_id]->volume = volume;
+	setSoundVolume(db.songs[db.curr_song_id]->sound, (float)volume/100.0);
 }
 
 void clearSoundMixer() {

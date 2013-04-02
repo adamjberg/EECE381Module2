@@ -113,6 +113,7 @@ void mix_ISR(void) {
 				db.curr_song_id = db.curr_song_ids[j];
 				isDone = 1;
 			} else if(db.total_songs_playing > 1) {
+				stopSound(db.songs[db.curr_song_ids[j]]->sound);
 				removeCurrPlaying(j);
 				enableAudioDeviceController();
 			}
@@ -132,6 +133,7 @@ void mix_ISR(void) {
 
 	alt_irq_non_interruptible(tempcontext);
 	if(soundMixer->indexSize <= 0 && db.total_songs_playing == 1) {
+		stopSound(db.songs[db.curr_song_id]->sound);
 		syncPause(db.curr_song_id);
 		if(db.curr_playlist_id != 0)
 			syncNext(db.curr_song_id);

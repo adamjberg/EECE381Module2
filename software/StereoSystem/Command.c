@@ -75,7 +75,7 @@ void play(int id, int vol, int pos) {
 		sprintf(temp, "%.1f kbps", getBitRateKbps(db.songs[db.curr_song_id]->sound->audioFormat));
 		alt_up_char_buffer_string(char_buffer, temp, 3, 39);
 		memset(temp, 0, 30);
-		sprintf(temp, "%d channels", db.songs[db.curr_song_id]->sound->audioFormat->channels);
+		sprintf(temp, "%d channel(s)", db.songs[db.curr_song_id]->sound->audioFormat->channels);
 		alt_up_char_buffer_string(char_buffer, temp, 3, 40);
 		printf("A song %d is played at %d position.\n", id, pos);
 	}
@@ -119,6 +119,7 @@ void stop() {
 	int i;
 	int size = db.total_songs_playing;
 	for(i = 0; i < size; i++) {
+		stopSound(db.songs[db.curr_song_ids[i]]->sound);
 		removeCurrPlaying(i);
 	}
 	db.curr_song_id = 0;
@@ -139,7 +140,7 @@ void syncSetVol(int id, int vol) {
 }
 //index 4
 void setVolume(int id, int vol) {
-	setGlobalVolume((float)vol/100.0);
+	setGlobalVolume(vol);
 	printf("Volume is set to %d percent\n", vol);
 }
 

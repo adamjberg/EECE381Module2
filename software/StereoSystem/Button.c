@@ -159,7 +159,7 @@ void playButtonCollide(struct Button* this){
 		highlightButton(this->Panel->mainFrame->elements[2]->buttons[1]);
 		printf("Play button is clicked\n");
 	}
-	syncPlay(db.curr_song_id, 100, db.songs[db.curr_song_id]->pos);
+	syncPlay(db.curr_song_id, 100, convertToMS(db.songs[db.curr_song_id]->sound->position));
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id]);
 	printf("Play button is clicked\n");
 }
