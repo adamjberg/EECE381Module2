@@ -50,7 +50,11 @@ unsigned int getSoundLengthMS(struct Sound* this) {
 }
 
 void setSoundPitch(struct Sound* this, float pitch) {
-	resampleSound(this, (int)(getSampleRate(this->audioFormat) / pitch), false, 0);
+	setSoundPlaybackSpeed(this, pitch);
+}
+
+void setSoundPlaybackSpeed(struct Sound* this, float speed) {
+	resampleSound(this, (int)(getSampleRate(this->audioFormat) / speed), false, 0);
 }
 
 /*

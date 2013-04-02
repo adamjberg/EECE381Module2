@@ -41,6 +41,7 @@ unsigned int getSoundLengthMS(struct Sound*);
 struct Sound* loadWavSound(char*);
 void setSoundVolume(struct Sound*, float);
 void setSoundPitch(struct Sound*, float);
+void setSoundPlaybackSpeed(struct Sound*, float);
 int resampleSound(struct Sound*, int, bool, int);
 void unloadSound(struct Sound*);
 void seekSound(struct Sound*, unsigned int);
