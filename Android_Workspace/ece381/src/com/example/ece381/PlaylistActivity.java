@@ -83,8 +83,9 @@ public class PlaylistActivity extends Activity {
     		// Go to SongActivity 
     		else {
     			// Make an intent and start the Activity to view the songs of the playlist
-    			
-    			Command.syncSelectList(db.queryListByName(selected));
+    			int lid = db.queryListByName(selected);
+    			Command.syncSelectList(lid);
+    			Command.syncOpenSongsFromList(lid);
     			intent = new Intent(getApplicationContext(), SongActivity.class);
     			intent.putExtra("selected_pl_name", selected);
     		}
@@ -204,6 +205,7 @@ public class PlaylistActivity extends Activity {
 	  	Log.v("PlaylistAcitivty Resume", "");
 	  	super.onResume();
 	  	refreshPlaylists();
+	  	Command.syncOpenPlaylistsPanel();
 }
   
   protected void onActivityResult(int requestCode, int resultCode, Intent data ) {

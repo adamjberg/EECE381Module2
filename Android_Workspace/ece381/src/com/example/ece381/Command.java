@@ -323,4 +323,46 @@ public class Command {
 		com.getDB().removeList(list_id);
 	}
 	
+	//index 20
+	static public void syncPlaySongFromAllSongs(int id, int vol, int pos) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(20);
+		cmd.addParameter(String.valueOf(id));
+		cmd.addParameter(String.valueOf(vol));
+		cmd.addParameter(String.valueOf(pos));
+		com.send(cmd);
+		com.getSched().addCmd(cmd);	
+
+	}
+	//index 21
+	static public void syncOpenAllSongPanel() {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(21);
+		com.send(cmd);
+
+	}
+	//index 22
+	static public void syncOpenPlaylistsPanel() {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(22);
+		com.send(cmd);
+
+	}
+	//index 23
+	static public void syncOpenSongsFromList(int list_id) {
+
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(23);
+		cmd.addParameter(String.valueOf(list_id));
+		com.send(cmd);
+	}
+	//index 24
+	static public void syncPlaySongFromList(int song_id, int list_id) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(24);
+		cmd.addParameter(String.valueOf(song_id));
+		cmd.addParameter(String.valueOf(list_id));
+		com.send(cmd);
+
+	}
 }

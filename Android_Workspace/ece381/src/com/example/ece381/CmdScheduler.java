@@ -90,6 +90,11 @@ public class CmdScheduler {
 			case 19:
 				Command.removeList(Integer.valueOf(cmd.getParameterList().get(0)));
 				break;
+			case 20:
+				Command.play(Integer.valueOf(cmd.getParameterList().get(0)).intValue(),
+					Integer.valueOf(cmd.getParameterList().get(1)).intValue(),
+					 Integer.valueOf(cmd.getParameterList().get(2)).intValue());
+				break;
 			default:
 				break;
 			}

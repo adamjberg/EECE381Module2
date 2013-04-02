@@ -190,7 +190,8 @@ private void addListView(){
                  long id) {
         	 com.getDB().setCurr_song_id(position+1);
         	 Command.syncSelectList(0);
-   			 Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
+        	 Command.syncPlaySongFromAllSongs(com.getDB().getCurr_song_id(),  com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
+   			 //Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
          	 Intent i = new Intent(MainActivity.this,play.class);
          	 String item = ((TextView)view).getText().toString();
          	 i.putExtra("USERNAME", item);
