@@ -55,6 +55,6 @@ void animateButton(struct Button*, int);
 void updateVolumeValue();
 struct Button* querySongButtonFromID(int);
 
-void playSongsFromSongPanel(int);
+void playSongFromSongPanel(int);
 
 #endif /* BUTTON_H_ */
