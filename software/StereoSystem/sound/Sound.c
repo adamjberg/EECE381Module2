@@ -241,7 +241,7 @@ int resampleSound(struct Sound* this, int toSampleRate, int filePointer) {
 		if (y1 > 0x07FFFFF) {
 			y1 = y1 | 0xFF000000;
 		}
-		if (x <= x1) {
+		while (x <= x1) {
 			if (x == x1) {
 				this->buffer[j++] = y1;
 			} else if (x < x1) {
