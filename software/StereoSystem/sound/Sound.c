@@ -49,6 +49,10 @@ unsigned int getSoundLengthMS(struct Sound* this) {
 	return convertToMS(this->length);
 }
 
+void setSoundPitch(struct Sound* this, float pitch) {
+	resampleSound(this, (int)(getSampleRate(this->audioFormat) / pitch), false, 0);
+}
+
 /*
  * This is the input callback. The purpose of this callback is to (re)fill
  * the stream buffer which is to be decoded. In this example, an entire file
