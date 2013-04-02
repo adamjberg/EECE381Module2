@@ -155,19 +155,22 @@ void actionButtonCollide(struct Button* this){
 	}
 }
 
-// TODO: this functions should work
-// however, syncSetVol does not seem to update the volume of songs..
 void volumeButtonCollide(struct Button* this){
 	printf("db current song id is %d", db.curr_song_id);
 	int song_id = db.curr_song_id;
-	if (song_id == 0){
-		song_id = 1;
-	}
+	if (song_id == 0){return;}
+	if (db.songs[song_id]->sound == NULL){return;}
 	switch(this->type){
 	case 0:
 		if (db.songs[song_id]->volume < 100){
 			syncSetVol(song_id, db.songs[song_id]->volume + 1);
 			printf("Volume of %s is %d\n", db.songs[song_id]->song_name, db.songs[song_id]->volume);
+			// update the value
+			char temp[4];
+			memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
+			sprintf(temp, "%d", db.songs[song_id]->volume + 1);
+			alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
+			alt_up_char_buffer_string(char_buffer, temp, 8, 54);
 		} else {
 			printf("Maximum volume reached.");
 		}
@@ -176,6 +179,12 @@ void volumeButtonCollide(struct Button* this){
 		if (db.songs[song_id]->volume > 0){
 			syncSetVol(song_id, db.songs[song_id]->volume - 1);
 			printf("Volume of %s is %d\n", db.songs[song_id]->song_name, db.songs[song_id]->volume);
+			// update the value
+			char temp[4];
+			memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
+			sprintf(temp, "%d", db.songs[song_id]->volume - 1);
+			alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
+			alt_up_char_buffer_string(char_buffer, temp, 8, 54);
 		} else {
 			printf("Minimum volume reached.");
 		}
@@ -183,12 +192,7 @@ void volumeButtonCollide(struct Button* this){
 	default:
 		break;
 	}
-	// update the value
-	char temp[4];
-	memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
-	sprintf(temp, "%d", db.songs[song_id]->volume);
-	alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
-	alt_up_char_buffer_string(char_buffer, temp, 8, 54);
+
 }
 
 
@@ -206,27 +210,28 @@ void drawRange(struct Button* this){
 
 void playButtonCollide(struct Button* this){
 	if (db.curr_song_id == 0){
-		syncPlay(1, 100, 0);
+		syncPlay(1, db.songs[1]->volume, 0);
 		highlightButton(this->Panel->mainFrame->elements[2]->buttons[1]);
 		printf("Play button is clicked\n");
+		updateVolumeValue(1);
+	} else {
+		syncPlay(db.curr_song_id, db.songs[db.curr_song_id]->volume, convertToMS(db.songs[db.curr_song_id]->sound->position));
+		highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id]);
+		printf("Play button is clicked\n");
+		updateVolumeValue(db.curr_song_id);
 	}
-	// TODO: change the volume to db.songs[db.curr_song_id]->volume
-	syncPlay(db.curr_song_id, 100, convertToMS(db.songs[db.curr_song_id]->sound->position));
-	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id]);
-	printf("Play button is clicked\n");
-	updateVolumeValue();
 }
 
 void pauseButtonCollide(struct Button* this){
 	syncPause(db.curr_song_id);
 	printf("Pause button is clicked.\n");
-	updateVolumeValue();
+	updateVolumeValue(db.curr_song_id);
 }
 
 void stopButtonCollide(struct Button* this){
 	syncStop();
 	printf("Stop button is clicked\n");
-	updateVolumeValue();
+	updateVolumeValue(db.curr_song_id);
 }
 
 void prevButtonCollide(struct Button* this){
@@ -235,7 +240,7 @@ void prevButtonCollide(struct Button* this){
 	if(this == NULL) return;
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
 	printf("Prev button is clicked.\n");
-	updateVolumeValue();
+	updateVolumeValue(db.curr_song_id - 1);
 }
 
 void nextButtonCollide(struct Button* this){
@@ -244,7 +249,7 @@ void nextButtonCollide(struct Button* this){
 	if(this == NULL) return;
 	highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
 	printf("Next button is clicked.\n");
-	updateVolumeValue();
+	updateVolumeValue(db.curr_song_id + 1);
 }
 
 void dummyCollide(struct Button* this){
@@ -253,10 +258,9 @@ void dummyCollide(struct Button* this){
 
 void songButtonCollide(struct Button* this){
 	syncStop();
-	// TODO: db.songs[this->id]->volume
-	syncPlay(this->id, 100, 0);
+	syncPlay(this->id, db.songs[this->id]->volume, 0);
 	highlightButton(this);
-	updateVolumeValue();
+	updateVolumeValue(this->id);
 }
 
 void highlightButton(struct Button* this){
@@ -321,9 +325,8 @@ void animateButton(struct Button* this, int stats_index){
 	draw(getXActionBtn(this->type), getYActionBtn(this->type), this->stats[stats_index]);
 }
 
-void updateVolumeValue(){
+void updateVolumeValue(int song_id){
 	char temp[4];
-	int song_id = db.curr_song_id;
 	if (song_id == 0){
 		song_id = 1;
 	}
@@ -347,7 +350,7 @@ void playSongsFromSongPanel(int song_id){
 		} else {
 			printf("Query returns NULL song ID > 14\n");
 		}
-		updateVolumeValue();
+		updateVolumeValue(song_id);
 	} else {
 		printf("Song ID > 14\n");
 	}

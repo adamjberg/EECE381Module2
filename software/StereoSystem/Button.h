@@ -52,7 +52,7 @@ int getXActionBtn(int);
 int getYActionBtn(int);
 void drawRange(struct Button*);
 void animateButton(struct Button*, int);
-void updateVolumeValue();
+void updateVolumeValue(int);
 struct Button* querySongButtonFromID(int);
 
 void playSongFromSongPanel(int);
