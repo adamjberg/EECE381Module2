@@ -318,6 +318,9 @@ int resampleSound(struct Sound* this, int toSampleRate, bool fromFile, int fileP
 				this = NULL;
 				return -1;
 			}
+			if (getNumChannels(this->audioFormat) > 1) {
+				readInt(filePointer, bytesPerSample, false);
+			}
 		} else {
 			y1 = this->buffer[i];
 		}
@@ -366,6 +369,9 @@ int loadSoundBuffer(struct Sound* this, int filePointer) {
 				this = NULL;
 				return -1;
 			}
+		}
+		if(getNumChannels(this->audioFormat) > 1) {
+			readInt(filePointer, bytesPerSample, false);
 		}
 	}
 	return 0;
@@ -538,7 +544,7 @@ struct Sound* loadWavHeader(int filePointer) {
 	struct AudioFormat* audioFormat = initAudioFormat(sampleRate,
 			sampleSizeInBits, numChannels, byteRate);
 	int read = readInt(filePointer, 4, false);
-	int srcLength = read / getSampleSizeInBytes(audioFormat);
+	int srcLength = (read / getSampleSizeInBytes(audioFormat)) / getNumChannels(audioFormat);
 	printf("length: %u\n", srcLength);
 	struct Sound* this = initSound(srcLength);
 	this->audioFormat = audioFormat;
