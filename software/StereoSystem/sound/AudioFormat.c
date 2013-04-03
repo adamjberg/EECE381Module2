@@ -38,3 +38,7 @@ int getSampleSizeInBytes(struct AudioFormat* this) {
 int getChannels(struct AudioFormat* this) {
 	return this->channels;
 }
+
+void setSampleRate(struct AudioFormat* this, int sampleRate) {
+	this->sampleRate = sampleRate;
+}
