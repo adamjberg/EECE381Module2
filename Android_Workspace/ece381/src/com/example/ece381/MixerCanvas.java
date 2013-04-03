@@ -167,8 +167,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			iD = findID();
 			xstart = x + progress;
 			ystart = y;
-			length = 1000;
-			//length = MixerActivity.theMix.listContents().get(MixerActivity.clipIndex).getLength();
+			length = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
 			notifyClip();
 		}
 		

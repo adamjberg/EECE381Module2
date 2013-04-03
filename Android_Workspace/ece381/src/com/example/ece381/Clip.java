@@ -42,6 +42,13 @@ public class Clip {
 		length = end - start;
 	}
 	
+	public Clip(String s, int temp, int id) {
+		// TODO Auto-generated constructor stub
+		this.name = name;
+		this.length = length;
+		this.ID = id;
+	}
+
 	//create a new clip from a old clip by chopping off the ending starting from location
 	public Clip split(int location){
 		if(length > location && location > 0){

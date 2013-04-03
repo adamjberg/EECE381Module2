@@ -30,6 +30,10 @@ public class Mix {
 		return new Clip();
 	}
 	
+	public Clip getClipat(int index){
+		return usedClips.get(index);
+	}
+	
 	public void deleteClip(int index){
 		usedClips.remove(index);
 	}

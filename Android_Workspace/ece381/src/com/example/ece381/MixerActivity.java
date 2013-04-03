@@ -29,14 +29,14 @@ public class MixerActivity extends Activity{
 	
 	public static Mix theMix;
 	private SeekBar Timeline;
-	public static int clipIndex;
+	public static int indexOfSel;
 	public static MixerCanvas mixerCanvas;
 	private TextView textprog;
 	private ListView songList;
 	private Point p = new Point();
 	public static ArrayList <String> songs = new ArrayList<String>();
 	public static int idOfSongSelected = 1;
-	public static boolean selSong = true; //true = a song is selected| false = mixelement is selected if songid =0
+	public static boolean selSong = false; //true = a song is selected| false = mixelement is selected if songid =0
 	private ArrayAdapter<String> listAdapter ;
 	
 	private Communication com = Communication.getInstance();
@@ -75,9 +75,11 @@ public class MixerActivity extends Activity{
 		songList.setOnItemClickListener(new OnItemClickListener(){
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View v, int index,
+			public void onItemClick(AdapterView<?> adv, View v, int index,
 					long it) {
 				// TODO Auto-generated method stub
+				selSong = true;
+				indexOfSel = index;
 				
 			}
 			
@@ -111,7 +113,7 @@ public class MixerActivity extends Activity{
 	
 	private void addTimeline() {
 		Timeline = (SeekBar) findViewById(R.id.scroll);
-		Timeline.setMax(theMix.lengthOf() + 30000 /*30 sec*/);
+		Timeline.setMax(theMix.lengthOf() + 3000 /*30 sec*/);
 		Timeline.setProgress(0);
 		Timeline.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 			@Override 
@@ -140,10 +142,19 @@ public class MixerActivity extends Activity{
 	}
 	
 	public void populateSongs(){
+		songs.add("Sheep1");
+		songs.add("Sheep2");
+		songs.add("sheep3");
+		songs.add("Popsicle");
 		/*
 	    for(int i = 1; i <= db.getTotalSongs(); i++ ) {
 			   songs.add(db.getSongs()[i].getSongName());
 	    }*/
+		int temp =200;
+		for(String s: songs){
+			int id = songs.indexOf(s);
+			theMix.addClip(new Clip(s, temp , id));
+		}
 	}
 	
 	public void onPlay(){
@@ -190,8 +201,8 @@ public class MixerActivity extends Activity{
 	  
 	
 	public void refreshList() {
-		listAdapter.clear();
+		//listAdapter.clear();
 		//listAdapter.addAll(db.getSongsName());
-		listAdapter.notifyDataSetChanged();
+		//listAdapter.notifyDataSetChanged();
 		}
 }
