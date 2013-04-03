@@ -3,6 +3,7 @@
 struct Frame* initFrame(){
 	struct Frame* f = (struct Frame*)malloc(sizeof(struct Frame));
 	f->element_size = 0;
+	f->currentPlaylist = 0;
 	return f;
 }
 

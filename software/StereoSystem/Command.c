@@ -290,6 +290,7 @@ void syncSelectList(int id) {
 void selectList(int id) {
 	printf("list %d is selected\n", id);
 	db.curr_playlist_id = id;
+	mouse->frame->elements[3]->currentPlaylist = id;
 }
 
 /*

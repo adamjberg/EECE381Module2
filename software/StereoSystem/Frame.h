@@ -10,7 +10,7 @@ struct Frame{
 	struct Frame** elements;
 	struct Button** buttons;
 	int element_size, button_size;
-	int currentPanel; // signify song / list being shown
+	int currentPanel, currentPlaylist; // signify song / list being shown
 	struct Image* bg_image;
 	struct Frame* mainFrame;
 
