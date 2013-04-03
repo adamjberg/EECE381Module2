@@ -7,8 +7,8 @@ struct Button* initButton(){
 	b->x_pos = 0;
 	b->y_pos = 0;
 	b->buttonType = 3;
-	b->collide = dummyCollide;
-	b->draw = dummyDraw;
+	b->collide = NULL;
+	b->draw = NULL;
 	b->Panel = NULL;
 	b->isClicked = 0;
 	b->startAnimate = 0;
@@ -81,17 +81,6 @@ struct Button* initActionButton(int type, struct Frame* f){
 	return ab;
 }
 
-struct Button* initScrollButton(int x, int y, int type, struct Frame* f){
-	struct Button* sb = initButton();
-	sb->x_pos = x;
-	sb->y_pos = y;
-	sb->range = initRange(sb->x_pos, sb->y_pos, 10, 10);
-	sb->type = type;
-	sb->draw = drawActionButton;
-	sb->collide = dummyCollide;
-	return sb;
-}
-
 struct Button* initVolumeButton(int x, int y, int type, struct Frame* panel){
 	struct Button* vb = initButton();
 	vb->x_pos = x;
@@ -110,7 +99,6 @@ void drawTxtButton(struct Button* this){
 void drawActionButton(struct Button* this){
 	draw(this->x_pos, this->y_pos, this->stats[0]);
 }
-void dummyDraw(struct Button* this){}
 
 void menuButtonCollide(struct Button* this){
 	// 0:ALLSONGS, 1:PLAYLISTS
@@ -170,13 +158,15 @@ void volumeButtonCollide(struct Button* this){
 	//printf("db current song id is %d", db.curr_song_id);
 	int song_id = db.curr_song_id;
 	int vol = db.songs[song_id]->volume;
-	if (song_id == 0 || vol >= 100 || vol <= 0){return;}
+	if (song_id == 0){return;}
 	if (db.songs[song_id]->sound == NULL){return;}
 	switch(this->type){
 	case 0:
+		if(vol >= 100) return;
 		syncSetVol(song_id, db.songs[song_id]->volume + 1);
 		break;
 	case 1:
+		if(vol <= 0) return;
 		syncSetVol(song_id, db.songs[song_id]->volume - 1);
 		break;
 	default:
@@ -244,10 +234,6 @@ void nextButtonCollide(struct Button* this){
 	//if(this == NULL) return;
 	//highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
 	printf("Next button is clicked.\n");
-}
-
-void dummyCollide(struct Button* this){
-	printf("ERROR:Dummy Collide is called.\n");
 }
 
 void songButtonCollide(struct Button* this){

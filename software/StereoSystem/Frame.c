@@ -18,7 +18,7 @@ struct Frame* initMainFrame(){
 	f->elements[1] = initActionFrame(f);
 	f->elements[2] = initSongPanel(f);
 	f->elements[3] = initPlaylistPanel(f);
-	f->elements[4] = initScrollFrame(f);
+	f->elements[4] = NULL;
 	f->elements[5] = initVolumeFrame(f);
 	f->drawFrame = drawMainFrame;
 	f->element_size = 6;
@@ -72,7 +72,7 @@ struct Frame* initSongPanel(struct Frame* frame){
 	struct Frame* sp = initFrame();
 	sp->buttons = (struct Button**)malloc(15*sizeof(struct Button*));
 	sp->drawFrame = drawSongPanel;
-	while((sp->bg_image = loadSDImage("AND2.BMP")) == NULL);
+	while((sp->bg_image = loadSDImage("AND.BMP")) == NULL);
 	sp->mainFrame = frame;
 	if (db.num_of_songs > 14){
 		sp->button_size = 14; // starts from 1!!
@@ -102,7 +102,7 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 	pp->drawFrame = drawPlaylistPanel;
 	pp->button_size = db.num_of_lists; // starts from 1
 	pp->mainFrame = frame;
-	while((pp->bg_image = loadSDImage("AND2.BMP")) == NULL);
+	while((pp->bg_image = loadSDImage("AND.BMP")) == NULL);
 	pp->buttons[0] = NULL;
 	for (i = 1; i <= MAX_LISTS; i++){
 		if(j == db.num_of_lists) break;
@@ -114,19 +114,6 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 		}
 	}
 	return pp;
-}
-
-struct Frame* initScrollFrame(struct Frame* this){
-	struct Frame* sf = initFrame();
-	sf->buttons = (struct Button**)malloc(2*sizeof(struct Button*));
-	sf->button_size = 2;
-	sf->buttons[0] = initScrollButton(265, 184, 0, this);
-	while((sf->buttons[0]->stats[0] = loadSDImage("UP1.BMP")) == NULL);
-	sf->buttons[1] = initScrollButton(285, 184, 1, this);
-	while((sf->buttons[1]->stats[0] = loadSDImage("DOWN1.BMP")) == NULL);
-	sf->drawFrame = drawScrollFrame;
-	sf->mainFrame = this;
-	return sf;
 }
 
 struct Frame* initVolumeFrame(struct Frame* this){
@@ -191,7 +178,7 @@ void drawMainFrame(struct Frame* this){
 	int i = 0;
 	// do not draw the last element (playlist)
 	for (i = 0; i < this->element_size; i++){
-		if (i == 3) {continue;}
+		if (i == 3 || i == 4) {continue;}
 		this->elements[i]->drawFrame(this->elements[i]);
 	}
 	// TODO: put all backgrounds in here.
@@ -243,23 +230,6 @@ void drawPlaylistPanel(struct Frame* this){
 	for (i = 1; i <= total_lists; i++){
 		this->buttons[i]->draw(this->buttons[i]);
 	}
-}
-
-void drawScrollFrame(struct Frame* this){
-	int i;
-	/*int y = 184;
-	for (i = 0; i < 11; i++, y++){
-	drawHorizontalLine(241, y, 78, 0xFFFFFF);
-	}*/
-	this->buttons[0]->draw(this->buttons[0]);
-	this->buttons[1]->draw(this->buttons[1]);
-	int y = 184;
-	for (i = 0; i < 10; i++, y++){
-	drawHorizontalLine(241, y, 24, 0xFFFFFF);
-	drawHorizontalLine(275, y, 10, 0xFFFFFF);
-	drawHorizontalLine(295, y, 24, 0xFFFFFF);
-	}
-	drawHorizontalLine(241, 194, 78, 0xFFFFFF);
 }
 
 void drawVolumeFrame(struct Frame* this){

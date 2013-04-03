@@ -46,6 +46,7 @@
 #include "Cursor.h"
 #include "Button.h"
 #include "Frame.h"
+#include "sound/AudioFormat.h"
 
 #define HEADERSIZE 2
 

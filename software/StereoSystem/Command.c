@@ -63,7 +63,6 @@ void play(int id, int vol, int pos) {
 	char temp[30];
 	printf("A song %d is started at %d volume.\n", id, vol);
 	playSong(db.songs[id], vol, pos, 0);
-	syncUpdatePos(id, pos, 1);
 	if(db.total_songs_playing <= 1) {
 		updateMixer();
 		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
@@ -73,13 +72,14 @@ void play(int id, int vol, int pos) {
 		alt_up_char_buffer_string(char_buffer, temp, 3, 38);
 		if(db.songs[db.curr_song_id]->sound->audioFormat != NULL) {
 			memset(temp, 0, 30);
-			sprintf(temp, "%.1f kbps", getBitRateKbps(db.songs[db.curr_song_id]->sound->audioFormat));
+			sprintf(temp, "%d kbps", db.songs[db.curr_song_id]->sound->audioFormat->bitRateKbps);
 			alt_up_char_buffer_string(char_buffer, temp, 3, 39);
 			memset(temp, 0, 30);
 			sprintf(temp, "%d channel(s)", db.songs[db.curr_song_id]->sound->audioFormat->channels);
 			alt_up_char_buffer_string(char_buffer, temp, 3, 40);
 			printf("A song %d is played at %d position.\n", id, pos);
 		}
+		syncUpdatePos(id, pos, 1);
 	}
 }
 /*
@@ -440,31 +440,16 @@ void playSongFromList(int song_id, int list_id) {
 	printf("play song %d from list %d\n", song_id, list_id);
 }
 
+
 void shuffle(int index) {
 	printf("Playlist %d is shuffled\n", index);
 }
-
-void updateSongToPlaylist(int song_index, int list_index, int order) {
-
-}
-void play_playlist(int index) {
-	printf("Playlist %d is selected and played\n", index);
-}
-
 
 void moveSongToIndex(char* song, int index, char* listname) {
 
 }
 
 void repeatCurrentSong() {
-
-}
-
-void reverse() {
-
-}
-
-void updateDBIndex() {
 
 }
 

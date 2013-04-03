@@ -231,7 +231,10 @@ public class play extends Activity {
 			if(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getStart()) {
 				com.getDB().getSongs()[com.getDB().getCurr_song_id()].incPosByMs(100);
 				seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());
-				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());
+				if (com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos()> (com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize())){
+				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());}
+				else{
+					seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());}
 			}
 			handler.post(new Runnable(){
                 public void run() {

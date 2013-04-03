@@ -80,6 +80,16 @@ public class Database {
 			} i++;
 		} return -1;
 	}
+	public int querySongByName(String song_name) {
+		int i = 1;
+		while(i <= MAX_SONGS) {
+			//if(this.used_list_index[i] == 1) {				
+				if(this.songs[i].getSongName().equals(song_name)) {
+					return i;
+				}
+			 i++;
+		} return -1;
+	}
 	public Queue<Integer> getCurrSongsIds() {
 		return this.curr_song_ids;
 	}
@@ -307,12 +317,16 @@ public class Database {
 		return this.isEndOfPlaylist;
 	}
 
-	
 	public void setSelectedList(int id) {
 		this.selected_list = id;
 	}
 	public int getSelectedList() {
 		return this.selected_list;
+	}
+	public int num_of_songs_in_list(int plid)
+	{
+		return this.playlists[plid].getNum_of_songs();
+		
 	}
 
 }

@@ -80,6 +80,9 @@ public class CmdScheduler {
 			case 14:
 				Command.addExisitedSongToList(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
 				break;
+			case 15:
+				Command.removeSongFromList(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)));
+				break;
 			case 16:
 				Command.updatePos(Integer.valueOf(cmd.getParameterList().get(0)), Integer.valueOf(cmd.getParameterList().get(1)), Integer.valueOf(cmd.getParameterList().get(2)));
 				break;
@@ -94,6 +97,8 @@ public class CmdScheduler {
 				Command.play(Integer.valueOf(cmd.getParameterList().get(0)).intValue(),
 					Integer.valueOf(cmd.getParameterList().get(1)).intValue(),
 					 Integer.valueOf(cmd.getParameterList().get(2)).intValue());
+				break;
+			case 25:
 				break;
 			default:
 				break;
