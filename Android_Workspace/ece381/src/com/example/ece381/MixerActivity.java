@@ -95,7 +95,7 @@ public class MixerActivity extends Activity{
 				p.x=(int) mE.getX();
 				p.y=(int) mE.getY();
 				p.y = decodePoint(p);
-				if(selSong = true && idOfSongSelected != 0){
+				if(selSong = true && idOfSongSelected != 0 && indexOfSel >= 0){
 				mixerCanvas.addElement(p);
 				//Timeline.setMax(theMix.lengthOf() + 3000 /*30 sec*/);
 				}
@@ -105,6 +105,9 @@ public class MixerActivity extends Activity{
 						selSong = false;
 					}
 				}
+				
+
+				
 				return false;
 			}
 		});

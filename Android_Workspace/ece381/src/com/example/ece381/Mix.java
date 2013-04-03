@@ -44,7 +44,7 @@ public class Mix {
 	}
 	
 	public void addClip(Clip a){
-		if(usedClips.size() <= 8){
+		if(usedClips.size() <= 50){
 			usedClips.add(a);
 		}
 	}
@@ -71,7 +71,7 @@ public class Mix {
 	}
 	
 	public int lengthOf(){
-		int temp=0;
+		int temp = 0;
 		for(Clip c: usedClips){
 			for(Integer t: c.timesUsed()){
 				if( (t + c.getLength()) > temp){

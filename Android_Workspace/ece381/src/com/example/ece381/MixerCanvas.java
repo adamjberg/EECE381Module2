@@ -187,6 +187,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			MixerActivity.theMix.getClipat(mixIndex).wipePlayData();
 			for(MixUIData m: mD){
 				MixerActivity.theMix.getClipat(mixIndex).setToPlayAt(xstart);
+				System.out.println(MixerActivity.theMix.getClipat(mixIndex).timesUsed().iterator());
 			}
 		}
 		
@@ -243,8 +244,8 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		//TODO change when implemented
-		MixerActivity.idOfSongSelected = 1;
-		MixerActivity.selSong = true;
+		//MixerActivity.idOfSongSelected = 0;
+		//MixerActivity.selSong = false;
 		selIndex = -1;
 		this.invalidate();
 		return false;
