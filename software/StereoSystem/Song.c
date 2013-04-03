@@ -68,8 +68,8 @@ void setSongVolume(struct Song* this, float volume) {
 	setSoundVolume(this->sound, volume);
 }
 
-void setSongPitch(struct Song* this, float pitch) {
-	setSoundPitch(this->sound, pitch);
+void setSongPitch(struct Song* this, float pitch, int quality) {
+	setSoundPitch(this->sound, pitch, quality);
 }
 
 void playSong(struct Song* this, float volume, int startTime, int loops) {
