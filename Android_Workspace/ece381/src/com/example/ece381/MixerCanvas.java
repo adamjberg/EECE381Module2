@@ -166,12 +166,12 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		public MixUIData( int x, int y ){
 			//TODO fix constructor
 			iD = findID();
+			mixIndex = MixerActivity.indexOfSel;
 			xstart = x + progress;
 			ystart = y;
-			length = 100;
-					//MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
+			length = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
 			
-			System.out.println(MixerActivity.indexOfSel + "   " + MixerActivity.theMix );
+			System.out.println(MixerActivity.indexOfSel + "   " + MixerActivity.theMix.lengthOf()  + "  " + length);
 			notifyClip();
 		}
 		
@@ -184,7 +184,10 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		public void notifyClip(){
-			
+			MixerActivity.theMix.getClipat(mixIndex).wipePlayData();
+			for(MixUIData m: mD){
+				MixerActivity.theMix.getClipat(mixIndex).setToPlayAt(xstart);
+			}
 		}
 		
 	}

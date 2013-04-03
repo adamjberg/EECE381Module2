@@ -11,7 +11,6 @@ public class Clip {
 	private String name;
 	private int numberOfPlays = 0;
 	private ArrayList<Integer> startTimes = new ArrayList<Integer>();
-	ArrayList<Integer> ofTheSet = new ArrayList<Integer>();
 	private int length;
 	private int volume;
 	private int location; 
@@ -42,9 +41,9 @@ public class Clip {
 		length = end - start;
 	}
 	
-	public Clip(String s, int temp, int id) {
+	public Clip(String s, int length, int id) {
 		// TODO Auto-generated constructor stub
-		this.name = name;
+		this.name = s;
 		this.length = length;
 		this.ID = id;
 	}
@@ -63,19 +62,16 @@ public class Clip {
 	public void setToPlayAt(int time){
 		numberOfPlays++;
 		startTimes.add(time);
-		this.ofTheSet.add(1);
 	}
 	
 	public void setToPlayAt(int time, int set){
 		numberOfPlays++;
 		startTimes.add(time);
-		this.ofTheSet.add(set);
 	}
 	
 	//remove a play time at an index
 	public void removePlayAt(int index){
 		startTimes.remove(index);
-		this.ofTheSet.remove(index);
 		numberOfPlays--;
 	}
 	
@@ -111,7 +107,6 @@ public class Clip {
 	
 	public void wipePlayData(){
 		numberOfPlays = 0;
-		this.ofTheSet.clear();
 		startTimes.clear();
 	}
 
