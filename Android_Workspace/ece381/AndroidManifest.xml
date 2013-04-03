@@ -55,9 +55,9 @@
         </activity>
         
         <activity
-            android:name=".MixerActivity"
+            android:name="com.example.ece381.MixerActivity"
             android:label="@string/MixerActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="landscape">"
         </activity>
     </application>
 </manifest>

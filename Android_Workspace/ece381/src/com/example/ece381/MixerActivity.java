@@ -26,6 +26,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class MixerActivity extends Activity{
+	
 	public static Mix theMix;
 	private SeekBar Timeline;
 	public static int clipIndex;
@@ -66,7 +67,6 @@ public class MixerActivity extends Activity{
 		textprog.setTextColor(Color.BLUE);
 		songList = (ListView) findViewById(R.id.listView1);
 		theMix = new Mix();
-		populateSongs();
 		addTimeline();
 		String temp =  "0" + " / " + Integer.toString(Timeline.getMax());
 		textprog.setText(temp);
@@ -102,13 +102,8 @@ public class MixerActivity extends Activity{
 			}
 		});
 		songList.setAdapter(listAdapter); 
+		populateSongs();
 		
-		
-
-	    // iterate thru playlist array; retrieve the names of each playlist, and add it to arraylist
-	    for(int i = 1; i <= db.getTotalSongs(); i++ ) {
-			   songs.add(db.getSongs()[i].getSongName());
-	    }
 	    
 		//may add more init in here
 		
@@ -145,7 +140,10 @@ public class MixerActivity extends Activity{
 	}
 	
 	public void populateSongs(){
-		
+		/*
+	    for(int i = 1; i <= db.getTotalSongs(); i++ ) {
+			   songs.add(db.getSongs()[i].getSongName());
+	    }*/
 	}
 	
 	public void onPlay(){
@@ -193,7 +191,7 @@ public class MixerActivity extends Activity{
 	
 	public void refreshList() {
 		listAdapter.clear();
-		listAdapter.addAll(db.getListsName());
+		//listAdapter.addAll(db.getSongsName());
 		listAdapter.notifyDataSetChanged();
 		}
 }

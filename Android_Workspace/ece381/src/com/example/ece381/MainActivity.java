@@ -55,8 +55,6 @@ public class MainActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 
-		Intent i = new Intent(this, MixerActivity.class);
-		startActivity(i);
 		
 		 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			 getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
@@ -65,14 +63,10 @@ public class MainActivity extends Activity {
 
 		// Set up a timer task.  We will use the timer to check the
 		// input queue every 500 ms
-		 /***
-		  * here
-		  * fdadsfs
-		  * sdfsdfsf
-		  * sfsdfsdf
-		  */
-
 		 
+		 
+
+		
 		 
 		Bundle extras = getIntent().getExtras();
 		if(extras == null) {
@@ -96,6 +90,16 @@ public class MainActivity extends Activity {
 			
 			this.isSubActivity = true;
 		}
+		
+		 /* TODO
+		  * here
+		  * fdadsfs
+		  * sdfsdfsf
+		  * sfsdfsdf
+		  */
+		 Intent i = new Intent(this, MixerActivity.class);
+			startActivity(i);
+		 //*/
 
 	}
 
@@ -129,7 +133,7 @@ public class MainActivity extends Activity {
 		     Toast.LENGTH_LONG).show();
 		  return true;
 	  case R.id.playlists:
-		  Intent intent = new Intent(MainActivity.this, PlaylistActivity.class);
+		  Intent intent = new Intent(MainActivity.this, MixerActivity.class);
           startActivity(intent);   
 		  return true;
 	  case R.id.playMenu:

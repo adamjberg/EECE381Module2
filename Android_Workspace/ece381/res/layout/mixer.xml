@@ -81,7 +81,7 @@
         android:layout_toRightOf="@id/listView1"
   		 />
   	 
-  	 <com.example.mixer.MixerCanvas
+  	 <com.example.ece381.MixerCanvas
 	    android:id="@+id/drawSurface"
 	    android:layout_width="700dip"
 	    android:layout_height="380dip"
