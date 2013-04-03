@@ -56,5 +56,5 @@ void updateVolumeValue(int);
 struct Button* querySongButtonFromID(int);
 
 void playSongsFromSongPanel(int, int, int);
-
+void killSongButton(struct Button**);
 #endif /* BUTTON_H_ */

@@ -143,6 +143,7 @@ void syncSetVol(int id, int vol) {
 //index 4
 void setVolume(int id, int vol) {
 	setGlobalVolume(vol);
+	updateVolumeValue(id);
 	printf("Volume is set to %d percent\n", vol);
 }
 
@@ -425,6 +426,7 @@ void openAllSongPanel() {
 }
 //index 22
 void openPlaylistsPanel() {
+	drawAllLists();
 	printf("open list panel\n");
 }
 //index 23

@@ -42,6 +42,18 @@ struct Button* initSongButton(int x, int y, char* name, int id, struct Frame* pa
 	sb->id = id;
 	return sb;
 }
+
+void killSongButton(struct Button** this) {
+	if(this == NULL || (*this) == NULL) return;
+	free((*this)->range);
+	(*this)->range = NULL;
+	(*this)->Panel = NULL;
+	free((*this)->name);
+	(*this)->name = NULL;
+	free((*this));
+	*this = NULL;
+}
+
 struct Button* initPlaylistButton(int x, int y, char* name, struct Frame* panel){
 	struct Button* pb = initButton();
 	pb->name = name;
@@ -166,11 +178,6 @@ void volumeButtonCollide(struct Button* this){
 			syncSetVol(song_id, db.songs[song_id]->volume + 1);
 			printf("Volume of %s is %d\n", db.songs[song_id]->song_name, db.songs[song_id]->volume);
 			// update the value
-			char temp[4];
-			memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
-			sprintf(temp, "%d", db.songs[song_id]->volume + 1);
-			alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
-			alt_up_char_buffer_string(char_buffer, temp, 8, 54);
 		} else {
 			printf("Maximum volume reached.");
 		}
@@ -180,11 +187,6 @@ void volumeButtonCollide(struct Button* this){
 			syncSetVol(song_id, db.songs[song_id]->volume - 1);
 			printf("Volume of %s is %d\n", db.songs[song_id]->song_name, db.songs[song_id]->volume);
 			// update the value
-			char temp[4];
-			memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
-			sprintf(temp, "%d", db.songs[song_id]->volume - 1);
-			alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
-			alt_up_char_buffer_string(char_buffer, temp, 8, 54);
 		} else {
 			printf("Minimum volume reached.");
 		}
