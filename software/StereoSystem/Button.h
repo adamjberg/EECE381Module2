@@ -46,6 +46,7 @@ void songButtonCollide(struct Button*);
 void playlistButtonCollide(struct Button*);
 void highlightButton(struct Button*);
 void highlightSongInList(int, int);
+void playlistButtonClicked(int);
 
 // helper functions
 int getXActionBtn(int);
@@ -54,6 +55,7 @@ void drawRange(struct Button*);
 void animateButton(struct Button*, int);
 void updateVolumeValue(int);
 struct Button* querySongButtonFromID(int);
+struct Button* getPlaylistButtonFromID(int);
 bool songButtonExistsInList(int, int);
 
 void playSongsFromSongPanel(int, int, int);

@@ -427,6 +427,7 @@ void openAllSongPanel() {
 }
 //index 22
 void openPlaylistsPanel() {
+	printf("open playlist panel\n");
 	drawAllLists();
 }
 //index 23

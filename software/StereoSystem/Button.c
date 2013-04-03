@@ -316,6 +316,8 @@ void playlistButtonCollide(struct Button* this){
 	highlightButton(this);
 	this->Panel->mainFrame->currentPanel = 2;
 	mouse->frame->currentPanel = 2;
+	//mouse->frame->elements[3]->elements[0] = initSongInListPanel(mouse->frame->mainFrame, list_id);
+	//mouse->frame->elements[3]->drawFrame(mouse->frame->elements[3]->elements[0]);
 	this->Panel->elements[0] = initSongInListPanel(this->Panel->mainFrame, this->id);
 	this->Panel->elements[0]->drawFrame(this->Panel->elements[0]);
 }
@@ -395,6 +397,18 @@ struct Button* querySongButtonFromID(int song_id){
 			return mouse->frame->elements[2]->buttons[i];
 		}
 	}
+	return NULL;
+}
+
+
+struct Button* getPlaylistButtonFromID(int list_id){
+	int i = 1;
+	for (i = 1; i <= mouse->frame->elements[3]->button_size; i++){
+		if (mouse->frame->elements[3]->buttons[i]->id == list_id){
+			return mouse->frame->elements[3]->buttons[i];
+		}
+	}
+	printf("list id is %d and our playlist button size is %d\n", list_id, mouse->frame->elements[3]->button_size);
 	return NULL;
 }
 

@@ -336,17 +336,30 @@ void drawAllLists(){
 }
 
 void drawAllSongsInList(int list_id){
-	if (mouse->frame->elements[3]->buttons[list_id]->id != list_id){
+	if (db.used_list_index[list_id] == 0){
 		printf("No playlist with such ID\n");
 		return;
 	}
-	// TODO: call kill elements[0] on this playlist here
 	if (mouse->frame->elements[3]->elements[0] != NULL){
 		killSongInListPanel(&(mouse->frame->elements[3]->elements[0]));
 	}
 	clearSongPanel();
-	playlistButtonCollide(mouse->frame->elements[3]->buttons[list_id]);
-	draw_notransparent(241, 13, mouse->frame->elements[3]->bg_image);
-	mouse->frame->currentPanel = 2;
+	if (getPlaylistButtonFromID(list_id) == NULL){
+		printf("No playlist button exist for this list_id, creating playlist..\n");
+		mouse->frame->elements[3]->buttons[db.num_of_lists] = initPlaylistButton(61, 4+((db.num_of_lists-1) * 3),db.playlists[list_id]->list_name, list_id, mouse->frame->elements[3] );
+		mouse->frame->elements[3]->button_size = db.num_of_lists;
+		printf("Button size is %d\n", mouse->frame->elements[3]->button_size);
+	}
+	// additional check
+	struct Button* list_button = getPlaylistButtonFromID(list_id);
+	if (list_button == NULL){
+		printf("playlist button for this id is still null\n");
+		return;
+	} else {
+		playlistButtonCollide(list_button);
+		list_button = NULL;
+		draw_notransparent(241, 13, mouse->frame->elements[3]->bg_image);
+		mouse->frame->currentPanel = 2;
+	}
 }
 
