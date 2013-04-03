@@ -424,15 +424,14 @@ void playSongFromAllSongs(int id, int vol, int pos) {
 //index 21
 void openAllSongPanel() {
 	drawAllSongs();
-	printf("open songs panel\n");
 }
 //index 22
 void openPlaylistsPanel() {
 	drawAllLists();
-	printf("open list panel\n");
 }
 //index 23
 void openSongsFromList(int list_id) {
+	drawAllSongsInList(list_id);
 	printf("open songs from list\n");
 }
 //index 24

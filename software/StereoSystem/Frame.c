@@ -5,6 +5,9 @@ struct Frame* initFrame(){
 	f->element_size = 0;
 	f->currentPlaylist = 0;
 	f->elements = NULL;
+	f->buttons = NULL;
+	f->bg_image = NULL;
+	f->mainFrame = NULL;
 	return f;
 }
 
@@ -17,9 +20,6 @@ struct Frame* initMainFrame(){
 	f->elements[3] = initPlaylistPanel(f);
 	f->elements[4] = initScrollFrame(f);
 	f->elements[5] = initVolumeFrame(f);
-	f->buttons = NULL;
-	f->bg_image = NULL;
-	f->mainFrame = NULL;
 	f->drawFrame = drawMainFrame;
 	f->element_size = 6;
 	f->button_size = 0;
@@ -32,7 +32,6 @@ struct Frame* initMenuFrame(struct Frame* mainFrame){
 	mf->buttons = (struct Button**)malloc(2*sizeof(struct Button*));
 	mf->buttons[0] = initMenuButton(5, "All Songs", 0, mf);
 	mf->buttons[1] = initMenuButton(35, "Playlists", 1, mf);
-	mf->elements = NULL;
 	mf->drawFrame = drawMenuFrame;
 	mf->button_size = 2;
 	mf->mainFrame = mainFrame;
@@ -120,7 +119,6 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 struct Frame* initScrollFrame(struct Frame* this){
 	struct Frame* sf = initFrame();
 	sf->buttons = (struct Button**)malloc(2*sizeof(struct Button*));
-	sf->bg_image = NULL;
 	sf->button_size = 2;
 	sf->buttons[0] = initScrollButton(265, 184, 0, this);
 	while((sf->buttons[0]->stats[0] = loadSDImage("UP1.BMP")) == NULL);
@@ -140,7 +138,6 @@ struct Frame* initVolumeFrame(struct Frame* this){
 	vf->buttons[1] = initVolumeButton(5, 218, 1, this);
 	while((vf->buttons[1]->stats[0] = loadSDImage("VDOWN.BMP")) == NULL);
 	vf->buttons[1]->stats[1] = vf->buttons[1]->stats[0];
-	vf->bg_image = NULL;
 	vf->button_size = 2;
 	vf->drawFrame = drawVolumeFrame;
 	vf->mainFrame = this;

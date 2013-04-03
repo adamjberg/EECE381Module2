@@ -274,7 +274,7 @@ int loadListsFromSD() {
 	char* line = NULL;
 	int i = 0;
 	int stats = 0;
-	for(i = 0; i < 50; i++) {
+	for(i = 1; i < MAX_LISTS; i++) {
 		line = (char*)malloc(sizeof(char)*501);
 		stats = readLine(fileHandler, line);
 
@@ -633,8 +633,8 @@ void preloadSongsToPlaylist(){
 	char* line = NULL;
 	int i, fileStats;
 
-	i = 0;
-	while (i < 50){
+	i = 1;
+	while (i < MAX_LISTS){
 		line = (char*)malloc(sizeof(char)*501);
 		fileStats = readLine(fileHandler, line);
 		if (fileStats == -2){

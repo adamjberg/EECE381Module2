@@ -87,8 +87,8 @@ void mix_ISR(void) {
 	int i, j, isDone = 0;
 
 	tempcontext= alt_irq_interruptible(AUDIOBUFFERPROCESS_IRQ);
-	for(i = 0; i < 180; i++) {
-		if(soundMixer->indexSize >=299) break;
+	for(i = 0; i < 150; i++) {
+		if(soundMixer->indexSize >=249) break;
 		for(j = 0; j < db.total_songs_playing; j++) {
 			if(!checkEnd(db.songs[db.curr_song_ids[j]]->sound)) {
 				loadToSoundBuffer(db.songs[db.curr_song_ids[j]]->sound);
@@ -107,7 +107,7 @@ void mix_ISR(void) {
 		soundMixer->indexSize++;
 
 		soundMixer->endIndex++;
-		if(soundMixer->endIndex > 299)
+		if(soundMixer->endIndex > 249)
 			soundMixer->endIndex = 0;
 
 		clearIndexBuffer(soundMixer->endIndex);
@@ -176,7 +176,7 @@ void animate_ISR(struct Cursor* cursor) {
 	IOWR_16DIRECT(TIMESTAMP_BASE, 0, 0);
 }
 alt_u32 RS232_ISR(void* up_dev) {
-	if(queue_lock == 1/* || SDIO_lock == 1*/) return alt_ticks_per_second()/1000;
+	if(queue_lock == 1 /*|| SDIO_lock == 1*/) return alt_ticks_per_second()/1000;
 	alt_up_rs232_dev *serial_dev = ((struct alt_up_dev*)up_dev)->RS232_dev;
 	unsigned char* cert;
 	int i = 0;
