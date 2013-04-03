@@ -317,7 +317,6 @@ public class Database {
 		return this.isEndOfPlaylist;
 	}
 
-	
 	public void setSelectedList(int id) {
 		this.selected_list = id;
 	}

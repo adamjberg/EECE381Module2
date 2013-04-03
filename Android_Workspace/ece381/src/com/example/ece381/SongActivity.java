@@ -1,11 +1,14 @@
 package com.example.ece381;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -21,7 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-import java.util.Random;
 //import com.example.ece381.Playlist;
 public class SongActivity extends Activity {
   
@@ -36,6 +38,8 @@ public class SongActivity extends Activity {
     // repeat toggle button
     private ToggleButton repeatBtn;
     
+    // Progress dialog
+    private ProgressDialog pd = null;
     
   private ListView songListView;
   private ArrayAdapter<String> listAdapter;
@@ -69,6 +73,12 @@ public class SongActivity extends Activity {
 
     // Create ArrayAdapter using the planet list.
     listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names);    
+    
+    // Instantiate the progress dialog
+    pd = new ProgressDialog(this);
+    pd.setMessage("Updating database - please wait");
+    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    
     
 	refreshSonglist();
     
@@ -222,7 +232,11 @@ public class SongActivity extends Activity {
 		 
 		// listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names); 
 		 Command.syncOpenSongsFromList(db.getCurr_playlist_id());
-		 		 refreshSonglist();
+		
+		 //refreshSonglist();
+		 showDelayDialog(x.length);
+		 refreshSonglist();
+		 refreshSonglist();
 		 
 		
 	 }
@@ -247,6 +261,18 @@ public class SongActivity extends Activity {
 	  db.setRepeatPlaylist( ((ToggleButton) view).isChecked() );
 	  Command.syncRepeatList(db.getCurr_playlist_id());
 	  Log.v("toggledRepeatPlaylist", ""+db.getRepeatPlaylistValue());
+  }
+  
+  public void showDelayDialog(int numSongs) {
+	  pd.show();
+	  
+	  int effective_delay = 1000*2*numSongs; // 2 seconds per song
+	  
+	  	Handler handler = new Handler();
+	  	handler.postDelayed(new Runnable() {
+	  		public void run() {
+	  			pd.dismiss();
+	  		}}, effective_delay);
   }
   
 }
