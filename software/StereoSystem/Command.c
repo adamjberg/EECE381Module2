@@ -359,6 +359,7 @@ void removeSongFromList(int list_id, int song_id) {
 	printf("remove song %d from list %d\n", song_id, list_id);
 	db.index_list_order[list_id][db.index_list_song[list_id][song_id]] = 0;
 	db.index_list_song[list_id][song_id] = 0;
+	db.playlists[list_id]->num_of_songs--;
 }
 
 //index 16
