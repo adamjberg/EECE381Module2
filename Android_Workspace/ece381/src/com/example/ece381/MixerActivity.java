@@ -31,7 +31,7 @@ public class MixerActivity extends Activity{
 	private SeekBar Timeline;
 	public static MixerCanvas mixerCanvas;
 	private TextView textprog;
-	private ListView songList;
+	public static ListView songList;
 	private Point p = new Point();
 	public static ArrayList <String> songs = new ArrayList<String>();
 	public static int idOfSongSelected = 0;
@@ -129,6 +129,7 @@ public class MixerActivity extends Activity{
 										  boolean fromUser) {
 				if(fromUser){
 					theMix.seekTime(progress);
+					Timeline.setMax(theMix.lengthOf() + 3000);
 					Timeline.setProgress(progress);
 					mixerCanvas.setProgress(progress);
 					String temp = Integer.toString(progress) + " / " + Integer.toString(Timeline.getMax());
@@ -158,10 +159,13 @@ public class MixerActivity extends Activity{
 	    for(int i = 1; i <= db.getTotalSongs(); i++ ) {
 			   songs.add(db.getSongs()[i].getSongName());
 	    }*/
-		int temp =200;
+		int temp =200;//length of song
+		
 		for(String s: songs){
 			int id = songs.indexOf(s)+1;
-			theMix.addClip(new Clip(s, temp +(10* songs.indexOf(s)) , id));
+			//id = getSelectedSongId(s);
+			//temp =  db.getSongs()[id].getLength();
+			theMix.addClip(new Clip(s, temp , id));
 			System.out.println( "when populating name: " + s + " ID: " + id);
 		}
 	}

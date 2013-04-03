@@ -29,7 +29,9 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	 public int space = 50;
 	 public static ArrayList <MixUIData> mD = new ArrayList <MixUIData>();
 	 public int selIndex = -1;
-	 public int playScroll;
+	 
+	 public static int playScroll;
+	 public boolean toPlay = false;
 
 	public MixerCanvas(Context context) {
 		super(context);
@@ -86,6 +88,14 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		paint.setColor(Color.CYAN);
 		MixUIData j = mD.get(selIndex);
 		canvas.drawLine(j.xstart - progress, (j.ystart *100)+ 50, (j.xstart+j.length)-progress, (j.ystart *100)+ 50, paint);}
+	
+	
+		if(toPlay){
+			drawPlaybar(canvas);
+			this.invalidate();
+		}
+	
+	
 	}
 
 	@Override
@@ -213,8 +223,9 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	}
 
 	private boolean aliastest(Point p) {
-	//TODO set 1000 to equal current selected song.length
+	//TODO set 100 to equal current selected song.length
 		int temp =100;//length of currently select song
+		//temp = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
 		for(MixUIData j: mD){
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
@@ -234,7 +245,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 				MixerActivity.idOfSongSelected = 0;
 				MixerActivity.indexOfSel = -1;
 				MixerActivity.selSong = false;
-				
+				MixerActivity.songList.setSelected(false);
 				Log.v("indexj", Integer.toString(mD.indexOf(j)));
 				
 				selIndex = mD.indexOf(j);
@@ -249,5 +260,21 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		selIndex = -1;
 		this.invalidate();
 		return false;
+	}
+	
+	
+	
+	public void drawPlaybar(Canvas c){
+		Paint p = new Paint();
+		p.setColor(Color.LTGRAY);
+		p.setStrokeWidth(5);
+		c.drawLine(playScroll, 0, playScroll, 600, p);
+		/*if(playScroll%2 ==0){
+			this.invalidate();
+		}*/
+		if(playScroll > 3000){
+			toPlay = false;
+		}
+		playScroll++;
 	}
 }

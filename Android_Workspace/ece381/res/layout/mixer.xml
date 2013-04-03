@@ -14,7 +14,9 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="right|top"
         android:clickable="true"
-        android:scrollbarAlwaysDrawVerticalTrack="false" >    	
+        android:scrollbarAlwaysDrawVerticalTrack="false" 
+        android:choiceMode="singleChoice"
+        android:listSelector="@color/grey">"
 	</ListView>
 	
     <ImageButton
