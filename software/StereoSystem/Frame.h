@@ -43,4 +43,5 @@ void drawAllSongs();
 void drawAllLists();
 
 void killSongPanel(struct Frame**);
+void killSongInListPanel(struct Frame**);
 #endif /* FRAME_H_ */

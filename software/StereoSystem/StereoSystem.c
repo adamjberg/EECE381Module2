@@ -83,12 +83,12 @@ int main()
 
 	int i = 2;
 
-	syncPlay(1, 100, 0);
+	//syncPlay(1, 100, 0);
 
 	while(1) {
 		cmdProcessing(scheduler);
 
-		i = soundTester(i);
+		//i = soundTester(i);
 
 	}
 
