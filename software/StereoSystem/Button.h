@@ -45,7 +45,6 @@ void dummyCollide(struct Button*);
 void songButtonCollide(struct Button*);
 void playlistButtonCollide(struct Button*);
 void highlightButton(struct Button*);
-void highlightSongWithID(int);
 
 // helper functions
 int getXActionBtn(int);
