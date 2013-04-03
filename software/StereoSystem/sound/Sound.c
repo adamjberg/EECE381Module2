@@ -491,6 +491,7 @@ struct Sound* loadWavSound(char * filename) {
 	SDIO_lock = 0;
 
 	changeBitsPerSample(sound, DEFAULT_BITS_PER_SAMPLE);
+
 	printf("Sound loading complete\n");
 
 	return sound;
@@ -545,6 +546,12 @@ struct Sound* loadWavHeader(int filePointer) {
 	int read = readInt(filePointer, 4, false);
 	int srcLength = (read / getSampleSizeInBytes(audioFormat)) / getNumChannels(audioFormat);
 	printf("length: %u\n", srcLength);
+
+	if(!isAudioFormatValid(audioFormat)) {
+		free(audioFormat);
+		return NULL;
+	}
+
 	struct Sound* this = initSound(srcLength);
 	this->audioFormat = audioFormat;
 	return this;

@@ -8,6 +8,7 @@
 #ifndef AUDIOFORMAT_H_
 #define AUDIOFORMAT_H_
 
+#include "stdbool.h"
 #include "stdlib.h"
 #include "stdio.h"
 
@@ -19,6 +20,7 @@ struct AudioFormat {
 };
 
 struct AudioFormat* initAudioFormat(int, int, int, int);
+bool isAudioFormatValid(struct AudioFormat*);
 float getBitRateKbps(struct AudioFormat*);
 int getSampleRate(struct AudioFormat*);
 int getSampleSizeInBits(struct AudioFormat*);
