@@ -59,7 +59,7 @@ void syncPlay(int id, int vol, int pos) {
 }
 //index 1
 void play(int id, int vol, int pos) {
-	if(db.songs[id] == NULL || id <= 0 || id > MAX_SONGS) return;
+	if(db.songs[id] == NULL || id <= 0 || id > db.num_of_songs) return;
 	char temp[30];
 	printf("A song %d is started at %d volume.\n", id, vol);
 	playSong(db.songs[id], vol, pos, 0);

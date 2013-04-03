@@ -104,8 +104,8 @@ public class SongActivity extends Activity {
     			db.setCurr_song_id(songid);
     			Command.syncSelectList(plid);
         	
-				Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
-				
+				//Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
+    			Command.syncPlaySongFromList(songid, plid);
     			Intent goToPlay = new Intent(SongActivity.this, play.class);
     			startActivity(goToPlay);
     				

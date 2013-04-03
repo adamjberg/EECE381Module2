@@ -344,18 +344,14 @@ void updateVolumeValue(int song_id){
 void playSongsFromSongPanel(int song_id, int vol, int pos){
 	// since up and down is not implemented yet,
 	// don't do anything for song_id > 14
-	if (song_id <= 14){
-		syncStop();
-		syncPlay(song_id, vol, pos);
-		if (querySongButtonFromID(song_id) != NULL){
-			highlightButton(querySongButtonFromID(song_id));
-		} else {
-			printf("Query returns NULL song ID > 14\n");
-		}
-		updateVolumeValue(song_id);
+	syncStop();
+	syncPlay(song_id, vol, pos);
+	if (querySongButtonFromID(song_id) != NULL){
+		highlightButton(querySongButtonFromID(song_id));
 	} else {
-		printf("Song ID > 14\n");
+		printf("Query returns NULL song ID > 14\n");
 	}
+	updateVolumeValue(song_id);
 }
 
 struct Button* querySongButtonFromID(int song_id){
