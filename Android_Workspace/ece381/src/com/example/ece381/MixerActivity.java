@@ -17,6 +17,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -35,16 +37,75 @@ public class MixerActivity extends Activity{
 	public static int idOfSongSelected = 1;
 	public static boolean selSong = true; //true = a song is selected| false = mixelement is selected if songid =0
 	private ArrayAdapter<String> listAdapter ;
-	private Communication com = Communication.getInstance();
 	
+	private Communication com = Communication.getInstance();
+	private Database db = com.getDB();
 	
 	@Override		
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.mixer);
 		setUP();
+		refreshList();
 
 
+	}
+
+	public void onResume() {
+		Log.v("PlaylistAcitivty Resume", "");
+		super.onResume();
+		refreshList();
+		Command.syncOpenPlaylistsPanel();
+	}
+	
+	public void onPause(){
+		refreshList();
+		mixerCanvas.invalidate();
+	}
+	
+	public void setUP(){
+		textprog = (TextView) findViewById(R.id.progress);
+		textprog.setTextColor(Color.BLUE);
+		songList = (ListView) findViewById(R.id.listView1);
+		theMix = new Mix();
+		populateSongs();
+		addTimeline();
+		String temp =  "0" + " / " + Integer.toString(Timeline.getMax());
+		textprog.setText(temp);
+		listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, songs);
+		
+		songList.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int index,
+					long it) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		mixerCanvas = (MixerCanvas) this.findViewById(R.id.drawSurface);
+		mixerCanvas.setBackgroundColor(Color.BLUE);
+		mixerCanvas.setOnTouchListener(new OnTouchListener(){
+			@Override
+			public boolean onTouch(View v, MotionEvent mE) {
+				p.x=(int) mE.getX();
+				p.y=(int) mE.getY();
+				p.y = decodePoint(p);
+				if(selSong = true && idOfSongSelected != 0){
+				mixerCanvas.addElement(p);}
+				else{
+					if(mixerCanvas.trySelElement(p)){
+						idOfSongSelected = 0;
+						selSong = false;
+					}
+				}
+				return false;
+			}
+		});
+		songList.setAdapter(listAdapter); 
+		//may add more init in here
+		
 	}
 	
 	private void addTimeline() {
@@ -71,48 +132,14 @@ public class MixerActivity extends Activity{
 		});
 	}
 	
-	public void setUP(){
-		textprog = (TextView) findViewById(R.id.progress);
-		textprog.setTextColor(Color.BLACK);
-		songList = (ListView) findViewById(R.id.listView1);
-		theMix = new Mix();
-		populateSongs();
-		addTimeline();
-		String temp =  "0" + " / " + Integer.toString(Timeline.getMax());
-		textprog.setText(temp);
-		
-		listAdapter = new ArrayAdapter<String>(this, 0, songs);
-		
-		mixerCanvas = (MixerCanvas) this.findViewById(R.id.drawSurface);
-		mixerCanvas.setBackgroundColor(Color.BLUE);
-		mixerCanvas.setOnTouchListener(new OnTouchListener(){
-			@Override
-			public boolean onTouch(View v, MotionEvent mE) {
-				// TODO Auto-generated method stub
-				p.x=(int) mE.getX();
-				p.y=(int) mE.getY();
-				p.y = decodePoint(p);
-				if(selSong = true && idOfSongSelected != 0){
-				mixerCanvas.addElement(p);}
-				else{
-					if(mixerCanvas.trySelElement(p)){
-						idOfSongSelected = 0;
-						selSong = false;
-					}
-				}
-				return false;
-			}
-		});
-		//may add more init in here
-		
-	}
+
 	
 	public int decodePoint(Point p){
-		//Log.v("p", p.toString());
 		return (p.y/100);
 	}
 	
 	public void populateSongs(){
+		
 	}
 	
 	public void onPlay(){
@@ -147,4 +174,21 @@ public class MixerActivity extends Activity{
 	public void onProperties(){
 		
 	}
+	
+	public int getSelectedSongId(String selectedValue) {
+		int songid = 0;
+		for(int i = 1; i < db.getTotalSongs()+1; i++) {
+			if(selectedValue == db.getSongs()[i].getSongName() )
+				songid = i;
+			}
+		return songid;
+	}
+	  
+	
+	public void refreshList() {
+		listAdapter.clear();
+		listAdapter.add("Create a new playlist");
+		listAdapter.addAll(db.getListsName());
+		listAdapter.notifyDataSetChanged();
+		}
 }
