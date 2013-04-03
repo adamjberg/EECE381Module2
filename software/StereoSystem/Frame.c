@@ -88,10 +88,6 @@ struct Frame* initSongPanel(struct Frame* frame){
 
 void killSongPanel(struct Frame** frame) {
 	if(frame == NULL || *frame == NULL) return;
-	int i;
-	for(i = 0; i < (*frame)->button_size; i++) {
-
-	}
 }
 struct Frame* initPlaylistPanel(struct Frame* frame){
 	int i = 1, j = 0;
@@ -309,7 +305,7 @@ void drawAllSongs(){
 void drawAllLists(){
 	clearSongPanel();
 	draw_notransparent(241, 13, mouse->frame->elements[3]->bg_image);
-	int i = 0;
+	int i = 0, j = 0;
 	int y_pos = 4;
 	int totalList = db.num_of_lists;
 	// up and down is not implemented yet
@@ -317,9 +313,13 @@ void drawAllLists(){
 	if (db.num_of_lists > 14){
 		totalList = 14;
 	}
-	for (i = 1; i <= totalList; i++){
-		alt_up_char_buffer_string(char_buffer, db.playlists[i]->list_name, 61, y_pos);
-		y_pos = y_pos + 3;
+	for (i = 1; i < MAX_LISTS; i++){
+		if(j >= totalList) break;
+		if(db.used_list_index[i] == 1) {
+			alt_up_char_buffer_string(char_buffer, db.playlists[i]->list_name, 61, y_pos);
+			y_pos = y_pos + 3;
+			j++;
+		}
 	}
 	mouse->frame->currentPanel = 1;
 }

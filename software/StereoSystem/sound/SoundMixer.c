@@ -71,7 +71,7 @@ void incIndex() {
 
 void updateMixer() {
 	int i, j;
-	for(i = 0; i < 140; i++) {
+	for(i = 0; i < 150; i++) {
 		//if(soundMixer->indexSize >=299) return;
 		for(j = 0; j < db.total_songs_playing; j++) {
 			if(!checkEnd(db.songs[db.curr_song_ids[j]]->sound)) {

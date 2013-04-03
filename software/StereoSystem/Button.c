@@ -42,7 +42,19 @@ struct Button* initSongButton(int x, int y, char* name, int id, struct Frame* pa
 	sb->id = id;
 	return sb;
 }
-struct Button* initPlaylistButton(int x, int y, char* name, int id, struct Frame* panel){
+
+void killSongButton(struct Button** this) {
+	if(this == NULL || (*this) == NULL) return;
+	free((*this)->range);
+	(*this)->range = NULL;
+	(*this)->Panel = NULL;
+	free((*this)->name);
+	(*this)->name = NULL;
+	free((*this));
+	*this = NULL;
+}
+
+struct Button* initPlaylistButton(int x, int y, char* name, struct Frame* panel){
 	struct Button* pb = initButton();
 	pb->name = name;
 	pb->x_pos = x;
@@ -167,11 +179,6 @@ void volumeButtonCollide(struct Button* this){
 			syncSetVol(song_id, db.songs[song_id]->volume + 1);
 			printf("Volume of %s is %d\n", db.songs[song_id]->song_name, db.songs[song_id]->volume);
 			// update the value
-			char temp[4];
-			memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
-			sprintf(temp, "%d", db.songs[song_id]->volume + 1);
-			alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
-			alt_up_char_buffer_string(char_buffer, temp, 8, 54);
 		} else {
 			printf("Maximum volume reached.");
 		}
@@ -181,11 +188,6 @@ void volumeButtonCollide(struct Button* this){
 			syncSetVol(song_id, db.songs[song_id]->volume - 1);
 			printf("Volume of %s is %d\n", db.songs[song_id]->song_name, db.songs[song_id]->volume);
 			// update the value
-			char temp[4];
-			memset(temp, 0 , sizeof(temp)/sizeof(temp[0]));
-			sprintf(temp, "%d", db.songs[song_id]->volume - 1);
-			alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
-			alt_up_char_buffer_string(char_buffer, temp, 8, 54);
 		} else {
 			printf("Minimum volume reached.");
 		}
@@ -245,10 +247,10 @@ void prevButtonCollide(struct Button* this){
 	if (mouse->frame->currentPanel != 1){
 		if(db.curr_song_id <= 1 || db.curr_song_id == 0) return;
 		syncPrev(db.curr_song_id);
-		if(this == NULL) return;
-		highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
-		printf("Prev button is clicked.\n");
 		updateVolumeValue(db.curr_song_id - 1);
+		if(this == NULL) return;
+		//highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
+		printf("Prev button is clicked.\n");
 	}
 }
 
@@ -256,10 +258,11 @@ void nextButtonCollide(struct Button* this){
 	if (mouse->frame->currentPanel != 1){
 		if(db.curr_song_id >= db.num_of_songs || db.curr_song_id == 0) return;
 		syncNext(db.curr_song_id);
-		if(this == NULL) return;
-		highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
-		printf("Next button is clicked.\n");
 		updateVolumeValue(db.curr_song_id + 1);
+		if(this == NULL) return;
+		//highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id+1]);
+		printf("Next button is clicked.\n");
+
 	}
 }
 
@@ -349,22 +352,17 @@ void updateVolumeValue(int song_id){
 /**
  * Highlight + play song from All Songs Panel only.
  */
-void playSongsFromSongPanel(int song_id){
+void playSongsFromSongPanel(int song_id, int vol, int pos){
 	// since up and down is not implemented yet,
 	// don't do anything for song_id > 14
-	if (song_id <= 14){
-		syncStop();
-		syncPlay(song_id, 100, 0); // TODO: change to curr volume
-			if (querySongButtonFromID(song_id) != NULL){
-				highlightButton(querySongButtonFromID(song_id));
-			} else {
-				printf("Query returns NULL song ID > 14\n");
-			}
-			updateVolumeValue(song_id);
-
+	syncStop();
+	syncPlay(song_id, vol, pos);
+	if (querySongButtonFromID(song_id) != NULL){
+		highlightButton(querySongButtonFromID(song_id));
 	} else {
-		printf("Song ID > 14\n");
+		printf("Query returns NULL song ID > 14\n");
 	}
+	updateVolumeValue(song_id);
 }
 
 struct Button* querySongButtonFromID(int song_id){
