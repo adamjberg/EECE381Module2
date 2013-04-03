@@ -84,8 +84,9 @@ public class PlaylistActivity extends Activity {
     		// Go to SongActivity 
     		else {
     			// Make an intent and start the Activity to view the songs of the playlist
-    			db.setSelectedList(db.queryListByName(selected));
-    			Command.syncOpenSongsFromList(db.getCurr_playlist_id());
+    			int plid = db.queryListByName(selected);
+    			db.setSelectedList(plid);
+    			Command.syncOpenSongsFromList(plid);
     			//Command.syncSelectList(db.queryListByName(selected));
     			intent = new Intent(getApplicationContext(), SongActivity.class);
     			intent.putExtra("selected_pl_name", selected);

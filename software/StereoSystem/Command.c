@@ -432,6 +432,7 @@ void openPlaylistsPanel() {
 }
 //index 23
 void openSongsFromList(int list_id) {
+	printf("List id is %d\n\n\n", list_id);
 	drawAllSongsInList(list_id);
 	printf("open songs from list\n");
 }

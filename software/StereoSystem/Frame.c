@@ -153,7 +153,7 @@ struct Frame* initSongInListPanel(struct Frame* f, int list_id){
 	}
 	psp->mainFrame = f;
 	psp->drawFrame = drawSongInListPanel;
-	while((psp->bg_image = loadSDImage("AND2.BMP")) == NULL);
+	while((psp->bg_image = loadSDImage("AND.BMP")) == NULL);
 	return psp;
 }
 
@@ -311,6 +311,7 @@ void drawAllSongsInList(int list_id){
 		return;
 	}
 	if (mouse->frame->elements[3]->elements[0] != NULL){
+		printf("Killing song panel\n");
 		killSongInListPanel(&(mouse->frame->elements[3]->elements[0]));
 	}
 	clearSongPanel();
