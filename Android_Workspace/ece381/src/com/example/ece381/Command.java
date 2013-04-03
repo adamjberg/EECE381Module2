@@ -283,6 +283,7 @@ public class Command {
 		
 	}
 	static public void updatePos(int song_id, int pos, int isStart) {
+		Log.i("UpdatePos", String.valueOf(isStart));
 		Communication com = Communication.getInstance();
 		com.getDB().getSongs()[song_id].setPos(pos);
 		com.getDB().getSongs()[song_id].setTrigger(isStart);
