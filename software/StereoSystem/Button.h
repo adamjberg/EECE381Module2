@@ -20,7 +20,7 @@ struct Button{
 struct Button* initButton();
 struct Button* initMenuButton(int, char*, int, struct Frame*);
 struct Button* initSongButton(int, int, char*, int, struct Frame*);
-struct Button* initPlaylistButton(int, int, char*, struct Frame*);
+struct Button* initPlaylistButton(int, int, char*, int, struct Frame*);
 struct Button* initActionButton(int, struct Frame*);
 struct Button* initScrollButton(int, int, int, struct Frame*);
 struct Button* initVolumeButton(int, int, int, struct Frame*);

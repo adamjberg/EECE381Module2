@@ -144,6 +144,10 @@ void checkButtonCollision(void* c, void* mf){
 		for (i = 1; i <= mainFrame->elements[3]->button_size; i++){
 			checkTxtCollisionForMouse(cursor, mainFrame->elements[3]->buttons[i]);
 		}
+	} else if (mainFrame->currentPanel == 2){
+		for (i = 1; i <= mainFrame->elements[3]->elements[0]->button_size; i++){
+			checkTxtCollisionForMouse(cursor, mainFrame->elements[3]->elements[0]->buttons[i]);
+		}
 	}
 
 	// check Volume Buttons

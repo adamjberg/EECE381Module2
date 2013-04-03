@@ -26,6 +26,7 @@ struct Frame* initSongPanel(struct Frame*);
 struct Frame* initPlaylistPanel(struct Frame*);
 struct Frame* initScrollFrame(struct Frame*);
 struct Frame* initVolumeFrame(struct Frame*);
+struct Frame* initSongInListPanel(struct Frame*, int);
 
 void drawMainFrame(struct Frame*);
 void drawMenuFrame(struct Frame*);
@@ -34,6 +35,7 @@ void drawSongPanel(struct Frame*);
 void drawPlaylistPanel(struct Frame*);
 void drawScrollFrame(struct Frame*);
 void drawVolumeFrame(struct Frame*);
+void drawSongInListPanel(struct Frame*);
 void clearSongPanel();
 void displayLoadingScreenVGA();
 

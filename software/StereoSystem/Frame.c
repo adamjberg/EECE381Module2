@@ -97,6 +97,8 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 	int i = 1, j = 0;
 	int init_playlist_y = 4;
 	struct Frame* pp = initFrame();
+	pp->elements = (struct Frame**)malloc(sizeof(struct Frame*)); // to display songs in that list
+	pp->element_size = 1;
 	pp->buttons = (struct Button**)malloc(51*sizeof(struct Button*));
 	pp->drawFrame = drawPlaylistPanel;
 	pp->button_size = db.num_of_lists; // starts from 1
@@ -106,7 +108,7 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 	for (i = 1; i <= MAX_LISTS; i++){
 		if(j == db.num_of_lists) break;
 		if(db.used_list_index[i] != 0) {
-			pp->buttons[j+1] = initPlaylistButton(61, init_playlist_y, db.playlists[i]->list_name, pp);
+			pp->buttons[j+1] = initPlaylistButton(61, init_playlist_y, db.playlists[i]->list_name, i, pp);
 			printf("Playlist %d name is %s\n", i, db.playlists[i]->list_name);
 			init_playlist_y += 3;
 			j++;
@@ -143,6 +145,32 @@ struct Frame* initVolumeFrame(struct Frame* this){
 	vf->drawFrame = drawVolumeFrame;
 	vf->mainFrame = this;
 	return vf;
+}
+
+struct Frame* initSongInListPanel(struct Frame* f, int list_id){
+	struct Frame* psp = initFrame();
+	if (db.playlists[list_id] == NULL) {return NULL;}
+	// TODO: what if the list does not have any songs
+	// song number is 0?
+	// up and down is not implemented yet
+	// max of 14 songs per list for now
+	if (db.playlists[list_id]->num_of_songs > 14){
+		psp->button_size = 14;
+	} else {
+		psp->button_size = db.playlists[list_id]->num_of_songs;
+	}
+	psp->buttons = (struct Button**)malloc(51*sizeof(struct Button*));
+	int i = 0;
+	int y = 4;
+	psp->buttons[0] = NULL;
+	for (i = 1; i <= psp->button_size; i++){
+		psp->buttons[i] = initSongButton(61, y, db.songs[db.index_list_order[list_id][i]]->song_name, db.index_list_order[list_id][i], psp);
+		y = y + 3;
+	}
+	psp->mainFrame = f;
+	psp->drawFrame = drawSongInListPanel;
+	while((psp->bg_image = loadSDImage("AND2.BMP")) == NULL);
+	return psp;
 }
 
 /**
@@ -224,6 +252,19 @@ void drawVolumeFrame(struct Frame* this){
 	this->buttons[1]->draw(this->buttons[1]);
 	alt_up_char_buffer_string(char_buffer, "     ", 7, 54);
 	alt_up_char_buffer_string(char_buffer, "100", 8, 54); //draw 100 initially, it will get updated
+}
+
+void drawSongInListPanel(struct Frame* songInListPanelFrame){
+	draw_notransparent(241, 13, songInListPanelFrame->bg_image);
+	clearSongPanel();
+	//mouse->frame->currentPanel = 2;
+	int i = 0;
+	if (songInListPanelFrame->button_size > 0){
+		for (i = 1; i <= songInListPanelFrame->button_size; i++){
+			songInListPanelFrame->buttons[i]->draw(songInListPanelFrame->buttons[i]);
+		}
+	}
+	//alt_up_char_buffer_string(char_buffer, "List is clicked", 61, 4);
 }
 
 void clearSongPanel(){
