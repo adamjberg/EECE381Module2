@@ -21,7 +21,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
+import java.util.Random;
+//import com.example.ece381.Playlist;
 public class SongActivity extends Activity {
   
     // Create an arraylist of strings to display onto the Adapter
@@ -196,6 +197,49 @@ public class SongActivity extends Activity {
 	  	
 	  	// refresh adapter
 	    listAdapter.notifyDataSetChanged();
+  }
+  public void onShuffle(View view ){
+	  String[] x=db.querySongsBylist(db.getCurr_playlist_id()); 
+	  shuffleArray(x);
+	  
+	  for(int j = 0; j < x.length; j++)
+	  Log.v("songorder", x[j]);
+	  
+		 int i=1;
+		
+		 while (x.length >= i){
+		 Command.syncRemoveSongFromList(db.getCurr_playlist_id(),db.querySongByName(x[i-1]));
+		// Command.syncAddSongToList(db.getCurr_playlist_id(),db.querySongByName(x[i-1]));
+		 i++;
+  }
+		 int k=1;
+		 while (x.length >= k){
+			// Command.syncRemoveSongFromList(db.getCurr_playlist_id(),db.querySongByName(x[i-1]));
+			 Command.syncAddSongToList(db.getCurr_playlist_id(),db.querySongByName(x[k-1]));
+			 k++;
+	  }
+		// listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names);    
+		 
+		// listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names); 
+		 Command.syncOpenSongsFromList(db.getCurr_playlist_id());
+		 		 refreshSonglist();
+		 
+		
+	 }
+  public static void shuffleArray(String[] ar)
+  {
+    Random rnd = new Random();
+    for (int i = ar.length - 1; i >= 0; i--)
+    {
+      int index = rnd.nextInt(i + 1);
+      // Simple swap
+      String a = ar[index];
+      //int x= f[index];
+      ar[index]=ar[i];
+     // f[index]=f[i];
+      ar[i]= a;
+      //f[i]=x;
+    }
   }
   
   public void repeatPlaylistToggle(View view) {

@@ -17,7 +17,18 @@
             android:text="@string/repeat_button"
             android:textOff="@string/repeat_button"
             android:textOn="@string/repeat_button"
-            android:onClick="repeatPlaylistToggle" />
+            />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/shu"
+            android:textOff="@string/repeat_button"
+            android:textOn="@string/repeat_button"
+            android:onClick="onShuffle" />
+
     </LinearLayout>
 
     <ListView
