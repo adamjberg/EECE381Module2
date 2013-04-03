@@ -8,8 +8,10 @@
 #ifndef SOUND_H_
 #define SOUND_H_
 
+#include "math.h"
 #include "../Global.h"
 #include "../libMad/mad.h"
+#include "../DSP/PhaseVocoder.h"
 #include "AudioFormat.h"
 
 #define NUM_CHANNELS_OFFSET 22
@@ -41,7 +43,7 @@ unsigned int getSoundPositionMS(struct Sound*);
 unsigned int getSoundLengthMS(struct Sound*);
 struct Sound* loadWavSound(char*);
 void setSoundVolume(struct Sound*, float);
-void setSoundPitch(struct Sound*, float);
+void setSoundPitch(struct Sound*, float, int);
 void setSoundPlaybackSpeed(struct Sound*, float);
 int resampleSound(struct Sound*, int, bool, int);
 void unloadSound(struct Sound*);

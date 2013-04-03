@@ -171,6 +171,19 @@ struct Frame* initSongInListPanel(struct Frame* f, int list_id){
 	return psp;
 }
 
+void killSongInListPanel(struct Frame** this) {
+	if(this == NULL || *this == NULL) return;
+	int i;
+	for(i = 1; i <= (*this)->button_size; i++) {
+		killSongButton(&((*this)->buttons[i]));
+	} killImage((*this)->bg_image);
+	(*this)->mainFrame = NULL;
+	(*this)->drawFrame = NULL;
+	free((*this)->buttons);
+	(*this)->buttons = NULL;
+	free((*this));
+	(*this) = NULL;
+}
 /**
  * Draws all elements of mainFrame. All backgrounds are
  * loaded and drawn in this function.
@@ -223,7 +236,12 @@ void drawSongPanel(struct Frame* this){
 
 void drawPlaylistPanel(struct Frame* this){
 	int i = 1;
-	for (i = 1; i <= db.num_of_lists; i++){
+	int total_lists = 0;
+	if(db.num_of_lists > 14)
+		total_lists = 14;
+	else
+		total_lists = db.num_of_lists;
+	for (i = 1; i <= total_lists; i++){
 		this->buttons[i]->draw(this->buttons[i]);
 	}
 }
