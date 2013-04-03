@@ -65,6 +65,7 @@ void play(int id, int vol, int pos) {
 	playSong(db.songs[id], vol, pos, 0);
 	if(db.total_songs_playing <= 1) {
 		updateMixer();
+		syncUpdatePos(id, pos, 1);
 		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
 		enableAudioDeviceController();
 		alt_up_char_buffer_string(char_buffer, db.songs[db.curr_song_id]->song_name, 3, 37);
@@ -79,7 +80,6 @@ void play(int id, int vol, int pos) {
 			alt_up_char_buffer_string(char_buffer, temp, 3, 40);
 			printf("A song %d is played at %d position.\n", id, pos);
 		}
-		syncUpdatePos(id, pos, 1);
 	}
 }
 /*

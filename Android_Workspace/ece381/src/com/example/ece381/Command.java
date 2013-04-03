@@ -85,7 +85,6 @@ public class Command {
 		Communication com = Communication.getInstance();
 		if(com.getDB().getCurrSongsIds().contains(Integer.valueOf(id))) {
 			com.getDB().getCurrSongsIds().remove(Integer.valueOf(id));
-			com.getDB().getSongs()[Integer.valueOf(id)].startSwitch();
 		}
 		
 	}
@@ -101,7 +100,6 @@ public class Command {
 		if(com.getDB().getCurr_song_id() == 0) return;
 		com.getDB().getSongs()[com.getDB().getCurr_song_id()].setPos(0);
 		com.getDB().getSongs()[com.getDB().getCurr_song_id()].setVolume(100);
-		com.getDB().getSongs()[com.getDB().getCurr_song_id()].startSwitch();
 	}
 	//index 4
 	static public void syncSetVol(int id, int vol) {

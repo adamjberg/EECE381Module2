@@ -54,6 +54,6 @@ public class Song {
 		return this.isStart;
 	}
 	public void setTrigger(int isStart) {
-		this.isStart = (isStart == 1) ? true : false;
+		this.isStart = (isStart == 1);
 	}
 }
