@@ -80,7 +80,9 @@ public class MixerActivity extends Activity{
 				// TODO Auto-generated method stub
 				selSong = true;
 				indexOfSel = index;
-				
+				idOfSongSelected = theMix.getClipat(indexOfSel).getID();
+				mixerCanvas.selIndex = -1;
+				System.out.println( "When Clicked" + indexOfSel );
 			}
 			
 		});
@@ -153,7 +155,8 @@ public class MixerActivity extends Activity{
 		int temp =200;
 		for(String s: songs){
 			int id = songs.indexOf(s);
-			theMix.addClip(new Clip(s, temp , id));
+			theMix.addClip(new Clip(s, temp +(10* songs.indexOf(s)) , id));
+
 		}
 	}
 	

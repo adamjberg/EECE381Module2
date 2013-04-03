@@ -206,7 +206,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 
 	private boolean aliastest(Point p) {
 	//TODO set 1000 to equal current selected song.length
-		int temp =1000;
+		int temp =100;
 		for(MixUIData j: mD){
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
@@ -224,6 +224,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 					(p.x+progress) <= (j.xstart+j.length)&&
 					p.y == j.ystart){
 				MixerActivity.idOfSongSelected = 0;
+				MixerActivity.indexOfSel = -1;
 				MixerActivity.selSong = false;
 				Log.v("indexj", Integer.toString(mD.indexOf(j)));
 				selIndex = mD.indexOf(j);

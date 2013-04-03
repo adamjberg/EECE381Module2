@@ -135,4 +135,9 @@ public class Clip {
 		startTimes.add(index, time);
 		startTimes.remove(index ++);
 	}
+
+	public int getID() {
+		// TODO Auto-generated method stub
+		return ID;
+	}
 }
