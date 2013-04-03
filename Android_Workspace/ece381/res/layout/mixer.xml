@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	android:id="@+id/mixer"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="left"
+    android:orientation="horizontal" >
+
+   	<ListView
+        android:id="@+id/listView1"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="right|top"
+        android:clickable="true"
+        android:scrollbarAlwaysDrawVerticalTrack="false" >    	
+	</ListView>
+	
+    <ImageButton
+        android:id="@+id/play"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/listView1"
+         />
+
+    <ImageButton
+        android:id="@+id/stop"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/play"
+         />
+
+    <ImageButton
+        android:id="@+id/properties"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/stop"
+         />
+    
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/properties"
+         />
+    
+    <ImageButton
+        android:id="@+id/save"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight= "true"
+         />
+    
+    <TextView
+        android:id="@+id/progress"
+        android:layout_width="200dip"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/save"
+        android:editable="true"
+        android:textSize="20sp" />
+
+    <SeekBar
+        android:id="@+id/volume"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/delete" />
+
+ 
+  	 <SeekBar
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/listView1"
+  		 />
+  	 
+  	 <com.example.mixer.MixerCanvas
+	    android:id="@+id/drawSurface"
+	    android:layout_width="700dip"
+	    android:layout_height="380dip"
+	    android:layout_below="@id/scroll"
+	    android:layout_toRightOf="@id/listView1"
+	    android:scrollbars="horizontal" />
+  	 
+
+
+		
+</RelativeLayout>
