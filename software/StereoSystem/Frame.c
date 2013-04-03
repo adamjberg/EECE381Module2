@@ -162,7 +162,6 @@ struct Frame* initSongInListPanel(struct Frame* f, int list_id){
 	psp->buttons[0] = NULL;
 	for (i = 1; i <= psp->button_size; i++){
 		psp->buttons[i] = initSongButton(61, y, db.songs[db.index_list_order[list_id][i]]->song_name, db.index_list_order[list_id][i], psp);
-		//psp->buttons[i] = initSongButton(61, y, "h", 1, psp);
 		y = y + 3;
 	}
 	psp->mainFrame = f;

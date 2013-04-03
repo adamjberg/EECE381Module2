@@ -184,7 +184,6 @@ void volumeButtonCollide(struct Button* this){
 	}
 }
 
-
 /**
  * helper function for debugging
  * this will draw the range of a button with white color
@@ -234,7 +233,7 @@ void prevButtonCollide(struct Button* this){
 	syncPrev(db.curr_song_id);
 	updateVolumeValue(db.curr_song_id - 1);
 	//if(this == NULL) return;
-		//highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
+	//highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id-1]);
 	printf("Prev button is clicked.\n");
 }
 
@@ -256,6 +255,7 @@ void songButtonCollide(struct Button* this){
 		playSongsFromSongPanel(this->id, db.songs[this->id]->volume, db.songs[this->id]->pos);
 	} else if (mouse->frame->currentPanel == 2){
 		db.curr_playlist_id = mouse->frame->elements[3]->currentPlaylist;
+		highlightSongInList(db.curr_playlist_id, this->id);
 		syncStop();
 		syncPlay(this->id, db.songs[this->id]->volume, 0);
 		updateVolumeValue(this->id);
@@ -272,6 +272,42 @@ void highlightButton(struct Button* this){
 		drawHorizontalLine(x, y, 76, 0xe711ce);
 	}
 
+}
+
+/**
+ * This function will highlight a song in given list,
+ * provided that the LIST is opened.
+ * If the list is not opened, it will not do anything.
+ */
+void highlightSongInList(int list_id, int song_id){
+	if (mouse->frame->currentPanel != 2){return;}
+	if (mouse->frame->elements[3]->currentPlaylist != list_id) {return;}
+	if (!songButtonExistsInList(list_id, song_id)){
+		printf("No such song button on the list panel VGA.\n");
+		return;
+	}
+	draw_notransparent(241, 13, mouse->frame->elements[2]->bg_image);
+	// TODO: check if the playlist element is the right one? not sure
+	highlightButton(mouse->frame->elements[3]->elements[0]->buttons[db.index_list_song[list_id][song_id]]);
+}
+
+/**
+ * This function checks if the song BUTTON exists, not if the song exists
+ * in the playlist. It is possible where song exists at order 17,
+ * but we only have 14 buttons.
+ */
+bool songButtonExistsInList(int list_id, int song_id){
+	int i = 0;
+	int totalSong = db.playlists[list_id]->num_of_songs;
+	if (totalSong > 14){
+		totalSong = 14;
+	}
+	for (i = 1; i <= totalSong; i++){
+		if (db.index_list_order[list_id][i] == song_id){
+			return true;
+		}
+	}
+	return false;
 }
 
 void playlistButtonCollide(struct Button* this){
@@ -340,8 +376,6 @@ void updateVolumeValue(int song_id){
  * Highlight + play song from All Songs Panel only.
  */
 void playSongsFromSongPanel(int song_id, int vol, int pos){
-	// since up and down is not implemented yet,
-	// don't do anything for song_id > 14
 	syncStop();
 	syncSelectList(0);
 	syncPlay(song_id, vol, pos);
@@ -353,8 +387,6 @@ void playSongsFromSongPanel(int song_id, int vol, int pos){
 
 struct Button* querySongButtonFromID(int song_id){
 	int i = 1;
-	// don't do anything since up and down is not
-	// implemented yet
 	if (song_id > 14){
 		return NULL;
 	}

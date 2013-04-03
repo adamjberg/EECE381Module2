@@ -78,10 +78,6 @@ int main()
 	mouse = initCursor(10, 100, mainFrame);
 	//graphicTester();
 
-	//drawAllSongsInList(2);
-	//drawAllSongsInList(2);
-
-
 	initAudioBuffer();
 	initAnimate(mouse);
 
