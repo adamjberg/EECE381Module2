@@ -44,5 +44,7 @@
     <string name="create_playlist">Create Playlist</string>
     <string name="modify_playlist_name">Modify Playlist Name</string>
      <string name="shu">"shuffle "</string>
+     <string name="repeat">RepeatSong</string>
+     <string name="repeats">RpeatSong</string>
     
 </resources>

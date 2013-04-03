@@ -233,9 +233,7 @@ public class SongActivity extends Activity {
 		// listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names); 
 		 Command.syncOpenSongsFromList(db.getSelectedList());
 		
-		 //refreshSonglist();
 		 showDelayDialog(x.length);
-		 
 		
 	 }
   public static void shuffleArray(String[] ar)
@@ -258,8 +256,7 @@ public class SongActivity extends Activity {
 	  // set db flag to reflect if it's toggled on or off
 	  db.setRepeatPlaylist( ((ToggleButton) view).isChecked() );
 	  Command.syncRepeatList(db.getCurr_playlist_id());
-	  Log.v("toggledRepeatPlaylist", ""+db.getRepeatPlaylistValue());
-  }
+   }
   
   public void showDelayDialog(int numSongs) {
 	  pd.show();
@@ -270,7 +267,7 @@ public class SongActivity extends Activity {
 	  	handler.postDelayed(new Runnable() {
 	  		public void run() {
 	  			pd.dismiss();
-	  			refreshSonglist();
+	  			 refreshSonglist();
 	  		}}, effective_delay);
   }
   
