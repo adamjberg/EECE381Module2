@@ -49,21 +49,31 @@ public class MainActivity extends Activity {
 		
 		// This call will result in better error messages if you
 		// try to do things in the wrong thread.
-		
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 				.detectDiskReads().detectDiskWrites().detectNetwork()
 				.penaltyLog().build());
 
 		super.onCreate(savedInstanceState);
 
+		Intent i = new Intent(this, MixerActivity.class);
+		startActivity(i);
+		
 		 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			 getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 			 this.getActionBar().hide();
 		 }
-		 
+
 		// Set up a timer task.  We will use the timer to check the
 		// input queue every 500 ms
-		
+		 /***
+		  * here
+		  * fdadsfs
+		  * sdfsdfsf
+		  * sfsdfsdf
+		  */
+
+		 
+		 
 		Bundle extras = getIntent().getExtras();
 		if(extras == null) {
 			this.isSubActivity = false;

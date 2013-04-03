@@ -47,8 +47,6 @@ public class MixerActivity extends Activity{
 		this.setContentView(R.layout.mixer);
 		setUP();
 		refreshList();
-
-
 	}
 
 	public void onResume() {
@@ -104,6 +102,14 @@ public class MixerActivity extends Activity{
 			}
 		});
 		songList.setAdapter(listAdapter); 
+		
+		
+
+	    // iterate thru playlist array; retrieve the names of each playlist, and add it to arraylist
+	    for(int i = 1; i <= db.getTotalSongs(); i++ ) {
+			   songs.add(db.getSongs()[i].getSongName());
+	    }
+	    
 		//may add more init in here
 		
 	}
@@ -187,7 +193,6 @@ public class MixerActivity extends Activity{
 	
 	public void refreshList() {
 		listAdapter.clear();
-		listAdapter.add("Create a new playlist");
 		listAdapter.addAll(db.getListsName());
 		listAdapter.notifyDataSetChanged();
 		}
