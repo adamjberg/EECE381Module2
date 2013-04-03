@@ -29,15 +29,15 @@ public class MixerActivity extends Activity{
 	
 	public static Mix theMix;
 	private SeekBar Timeline;
-	public static int indexOfSel;
 	public static MixerCanvas mixerCanvas;
 	private TextView textprog;
 	private ListView songList;
 	private Point p = new Point();
 	public static ArrayList <String> songs = new ArrayList<String>();
-	public static int idOfSongSelected = 1;
+	public static int idOfSongSelected = 0;
 	public static boolean selSong = false; //true = a song is selected| false = mixelement is selected if songid =0
-	private ArrayAdapter<String> listAdapter ;
+	public static int indexOfSel = -1;
+	private ArrayAdapter<String> listAdapter;
 	
 	private Communication com = Communication.getInstance();
 	private Database db = com.getDB();
@@ -82,7 +82,8 @@ public class MixerActivity extends Activity{
 				indexOfSel = index;
 				idOfSongSelected = theMix.getClipat(indexOfSel).getID();
 				mixerCanvas.selIndex = -1;
-				System.out.println( "When Clicked" + indexOfSel );
+				System.out.println( "When Clicked" + indexOfSel + " ID:" + idOfSongSelected  );
+				mixerCanvas.invalidate();
 			}
 			
 		});
@@ -95,7 +96,9 @@ public class MixerActivity extends Activity{
 				p.y=(int) mE.getY();
 				p.y = decodePoint(p);
 				if(selSong = true && idOfSongSelected != 0){
-				mixerCanvas.addElement(p);}
+				mixerCanvas.addElement(p);
+				//Timeline.setMax(theMix.lengthOf() + 3000 /*30 sec*/);
+				}
 				else{
 					if(mixerCanvas.trySelElement(p)){
 						idOfSongSelected = 0;
@@ -154,9 +157,9 @@ public class MixerActivity extends Activity{
 	    }*/
 		int temp =200;
 		for(String s: songs){
-			int id = songs.indexOf(s);
+			int id = songs.indexOf(s)+1;
 			theMix.addClip(new Clip(s, temp +(10* songs.indexOf(s)) , id));
-
+			System.out.println( "when populating name: " + s + " ID: " + id);
 		}
 	}
 	

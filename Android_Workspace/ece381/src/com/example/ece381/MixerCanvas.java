@@ -29,6 +29,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	 public int space = 50;
 	 public static ArrayList <MixUIData> mD = new ArrayList <MixUIData>();
 	 public int selIndex = -1;
+	 public int playScroll;
 
 	public MixerCanvas(Context context) {
 		super(context);
@@ -167,7 +168,10 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			iD = findID();
 			xstart = x + progress;
 			ystart = y;
-			length = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
+			length = 100;
+					//MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
+			
+			System.out.println(MixerActivity.indexOfSel + "   " + MixerActivity.theMix );
 			notifyClip();
 		}
 		
@@ -198,7 +202,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	}
 
 	public void addElement(Point p) {
-		if(!trySelElement(p)&& !aliastest(p)){
+		if(!trySelElement(p)&& !aliastest(p) && p.y!= 0){
 		mD.add(new MixUIData(p.x, p.y));
 		this.invalidate();
 		}
@@ -206,7 +210,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 
 	private boolean aliastest(Point p) {
 	//TODO set 1000 to equal current selected song.length
-		int temp =100;
+		int temp =100;//length of currently select song
 		for(MixUIData j: mD){
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
@@ -226,7 +230,9 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 				MixerActivity.idOfSongSelected = 0;
 				MixerActivity.indexOfSel = -1;
 				MixerActivity.selSong = false;
+				
 				Log.v("indexj", Integer.toString(mD.indexOf(j)));
+				
 				selIndex = mD.indexOf(j);
 				this.invalidate();
 				return true;
