@@ -235,8 +235,8 @@ public class SongActivity extends Activity {
 		
 		 //refreshSonglist();
 		 showDelayDialog(x.length);
-		 refreshSonglist();
-		 refreshSonglist();
+	
+		// refreshSonglist();
 		 
 		
 	 }
@@ -260,18 +260,18 @@ public class SongActivity extends Activity {
 	  // set db flag to reflect if it's toggled on or off
 	  db.setRepeatPlaylist( ((ToggleButton) view).isChecked() );
 	  Command.syncRepeatList(db.getCurr_playlist_id());
-	  Log.v("toggledRepeatPlaylist", ""+db.getRepeatPlaylistValue());
-  }
+   }
   
   public void showDelayDialog(int numSongs) {
 	  pd.show();
 	  
-	  int effective_delay = 1000*2*numSongs; // 2 seconds per song
+	  int effective_delay = 1000*numSongs/2; // 2 seconds per song
 	  
 	  	Handler handler = new Handler();
 	  	handler.postDelayed(new Runnable() {
 	  		public void run() {
 	  			pd.dismiss();
+	  			 refreshSonglist();
 	  		}}, effective_delay);
   }
   

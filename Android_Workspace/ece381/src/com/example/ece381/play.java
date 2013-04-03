@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.ToggleButton;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -170,6 +172,13 @@ public class play extends Activity {
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 		Command.syncPrev(com.getDB().getCurr_song_id());
 	}
+	public void repeatSongToggle(View view) {
+		  // set db flag to reflect if it's toggled on or off
+		  com.getDB().setRepeatSong( ((ToggleButton) view).isChecked() );
+		 // Command.syncRepeatList(com.getDB().getCurr_playlist_id());
+		 // Log.v("toggledRepeatPlaylist", ""+com.getDB().getRepeatPlaylistValue());
+	  }
+	  
 	private void addBarSsound(){  
 		textview= (TextView)  findViewById(R.id.textView7);
 		seekbar = (SeekBar) findViewById(R.id.seekBar1);
@@ -234,8 +243,21 @@ public class play extends Activity {
 				if (com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos()> (com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize())){
 				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());}
 				else{
-					seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());}
+					seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());
+					}
 			}
+				else
+				{    seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());
+				
+				if (com.getDB().getRepeatSongValue())
+				{
+				//next_id=curr_songid;
+		
+				Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);}
+				
+				
+				}
+						
 			handler.post(new Runnable(){
                 public void run() {
                    update();

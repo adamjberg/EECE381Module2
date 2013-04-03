@@ -24,6 +24,7 @@ public class Database {
 	private ArrayList<String> songs_name;
 	private ArrayList<String> lists_name;
 	private boolean repeat_playlist;
+	private boolean repeat_song;
 	private boolean shuffle_playlist;
 	private boolean isEndOfPlaylist;
 	private int selected_list;
@@ -305,6 +306,13 @@ public class Database {
 	public void setRepeatPlaylist(boolean checked) {
 		// TODO Auto-generated method stub
 		this.repeat_playlist = checked;
+	}
+	public boolean getRepeatSongValue() {
+		return this.repeat_song;
+	}
+	public void setRepeatSong(boolean checked) {
+		// TODO Auto-generated method stub
+		this.repeat_song = checked;
 	}
 	public void setShufflePlaylist(boolean checked) {
 		// TODO Auto-generated method stub

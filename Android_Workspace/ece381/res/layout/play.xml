@@ -82,4 +82,15 @@
         android:layout_centerHorizontal="true"
         android:src="@android:drawable/ic_lock_silent_mode_off" />
 
+    <ToggleButton
+        android:id="@+id/repeatSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageButton1"
+        android:layout_alignParentLeft="true"
+        android:textOff="@string/repeat"
+            android:textOn="@string/repeat"
+            android:onClick="repeatSongToggle"
+        />
+
 </RelativeLayout>

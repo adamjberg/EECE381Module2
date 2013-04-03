@@ -137,7 +137,14 @@ public class Command {
 		int last_songInList, last_songid;
 		
 		int next_id = 0;
-		if(com.getDB().getCurr_playlist_id() != 0) {
+			if (com.getDB().getRepeatSongValue())
+			{
+			//next_id=curr_songid;
+	
+			Command.syncPlay(song_id, com.getDB().getSongs()[song_id].getVolume(), 0);
+			return;
+			}
+		else if(com.getDB().getCurr_playlist_id() != 0) {
 			last_songInList = com.getDB().getPlaylists()[curr_plid].getNum_of_songs();
 			last_songid = com.getDB().getSongsFromList(curr_plid)[last_songInList];
 			
@@ -148,17 +155,23 @@ public class Command {
 				com.getDB().setIsEndOfPlaylist(false);
 			}
 			
-			if(com.getDB().getIsEndOfPlaylist() && com.getDB().getRepeatPlaylistValue()) {
+			
+			
+			
+				if(com.getDB().getIsEndOfPlaylist() && com.getDB().getRepeatPlaylistValue()) {
 				next_id = com.getDB().getSongsFromList(curr_plid)[1];				
 		//		Command.syncPlay(next_id, com.getDB().getSongs()[next_id].getVolume(), 0);
 				return;
-			} else {
-				int curr_order =
-						com.getDB().getSongOrderFromList()[com.getDB().getCurr_playlist_id()][song_id];
-				next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order+1];	
-			}
+				
+				} 
 			
-		} else if(song_id < com.getDB().getTotalSongs()){
+				else {
+					int curr_order =
+							com.getDB().getSongOrderFromList()[com.getDB().getCurr_playlist_id()][song_id];
+					next_id = com.getDB().getSongIdFromOrder()[com.getDB().getCurr_playlist_id()][curr_order+1];	
+				}
+			}
+		 else if(song_id < com.getDB().getTotalSongs()){
 			next_id = com.getDB().getCurr_song_id()+1;
 		}
 		if(next_id == 0) return;
