@@ -179,13 +179,13 @@ public class play extends Activity {
 		   @Override 
 		   public void onProgressChanged(SeekBar seekBar, int progress,
 	               boolean fromUser) {
-			   Command.syncSetVol(com.getDB().getCurr_song_id(), progress);
 	       }
 	
 	       @Override
 	       public void onStartTrackingTouch(SeekBar seekBar) {}
 	       @Override
-	       public void onStopTrackingTouch(SeekBar seekBar) {}}
+	       public void onStopTrackingTouch(SeekBar seekBar) {
+			   Command.syncSetVol(com.getDB().getCurr_song_id(), seekbar.getProgress());}}
 	   );
 	}
 	
@@ -231,10 +231,10 @@ public class play extends Activity {
 			if(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getStart()) {
 				com.getDB().getSongs()[com.getDB().getCurr_song_id()].incPosByMs(100);
 				seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());
-				if (com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos()> (com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize())){
-				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());}
-				else{
-					seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());}
+				//if (com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos()> (com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize())){
+				//seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());}
+				//else{
+				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());//}
 			}
 			handler.post(new Runnable(){
                 public void run() {
