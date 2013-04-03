@@ -43,5 +43,6 @@
     <string name="delete_playlist">Delete Playlist</string>
     <string name="create_playlist">Create Playlist</string>
     <string name="modify_playlist_name">Modify Playlist Name</string>
+     <string name="shu">"shuffle "</string>
     
 </resources>

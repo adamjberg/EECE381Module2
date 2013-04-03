@@ -6,7 +6,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -31,6 +34,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
+import android.widget.SimpleAdapter;
+
 
 import com.example.ece381.Communication.Stats;
 
@@ -192,40 +197,55 @@ public class MainActivity extends Activity {
 		}
 	}
 
-private void addListView(){
-	
-	
-	 m_listview = (ListView) findViewById(R.id.listView1);
-	    
-	    ArrayAdapter<String> adapter =
-	      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, com.getDB().getSongsName());
-	 //   ArrayAdapter<String> adapter2 =
-	  	//      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, items);
-	    //setListAdapter(new ArrayAdapter<String>(this, R.layout.simple_list_item_1,items));
-	 
-	    m_listview.setAdapter(adapter);
-	 //   m_listview.setAdapter(adapter2);
-	    m_listview.setOnItemClickListener(new OnItemClickListener() {
-         @Override
-         public void onItemClick(AdapterView<?> parent, View view, int position,
-                 long id) {
-        	 com.getDB().setCurr_song_id(position+1);
-        	 Command.syncSelectList(0);
-        	 Command.syncPlaySongFromAllSongs(com.getDB().getCurr_song_id(),  com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
-   			 //Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
-         	 Intent i = new Intent(MainActivity.this,play.class);
-         	 String item = ((TextView)view).getText().toString();
-         	 i.putExtra("USERNAME", item);
-         	 startActivity(i);
-             //String item = ((TextView)view).getText().toString();
-             
-            // Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-             
-         }
-     });
-	
-}
-
+	private void addListView(){
+		
+		
+		 m_listview = (ListView) findViewById(R.id.listView1);
+		 
+		  	    //}
+		  List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+		  for (int i = 1; i <=  com.getDB().getTotalSongs(); i++  ) {
+		      Map<String, String> datum = new HashMap<String, String>(2);
+		      datum.put("songname", "Song Name: "+com.getDB().getSongs()[i].getSongName());
+		      datum.put("length", "Song Length: "+ com.getDB().getSongs()[i].getSize()/1000);
+		      data.add(datum);
+		  }
+		   //String[] from = { "songname","length",};
+		   //int[] to = { R.id.txt,R.id.cur};
+		  SimpleAdapter adapter = new SimpleAdapter(this, data,
+		                                            R.layout.row_layout,
+		                                            new String[] {"songname", "length"},
+		                                            new int[] { R.id.txt,R.id.cur});
+		  	    
+		  	    
+		 // m_listview.setAdapter(adapter);
+		    
+		 //   ArrayAdapter<String> adapter2 =
+		  	//      new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, items);
+		    //setListAdapter(new ArrayAdapter<String>(this, R.layout.simple_list_item_1,items));
+		 
+		    m_listview.setAdapter(adapter);
+		 //   m_listview.setAdapter(adapter2);
+		    m_listview.setOnItemClickListener(new OnItemClickListener() {
+	         @Override
+	         public void onItemClick(AdapterView<?> parent, View view, int position,
+	                 long id) {
+	        	 com.getDB().setCurr_song_id(position+1);
+	        	 Command.syncSelectList(0);
+	        	 Command.syncPlaySongFromAllSongs(com.getDB().getCurr_song_id(),  com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
+	   			 //Command.syncPlay(com.getDB().getCurr_song_id(), com.getDB().getSongs()[com.getDB().getCurr_song_id()].getVolume(), 0);
+	         	 Intent i = new Intent(MainActivity.this,play.class);
+	         	// String item = ((TextView)view).getText().toString();
+	         	 //i.putExtra("USERNAME", item);
+	         	 startActivity(i);
+	             //String item = ((TextView)view).getText().toString();
+	             
+	            // Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+	             
+	         }
+	     });
+		
+	}
 	 //To use the AsyncTask, it must be subclassed
     private class LoadViewTask extends AsyncTask<Void, Integer, Void>
     {
