@@ -26,7 +26,6 @@ struct Button* initVolumeButton(int, int, int, struct Frame*);
 
 void drawTxtButton(struct Button*);
 void drawActionButton(struct Button*);
-void dummyDraw(struct Button*);
 
 void menuButtonCollide(struct Button*);
 void playlistMenuButtonCollide(struct Button*);

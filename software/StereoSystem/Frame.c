@@ -102,7 +102,7 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 	pp->drawFrame = drawPlaylistPanel;
 	pp->button_size = db.num_of_lists; // starts from 1
 	pp->mainFrame = frame;
-	while((pp->bg_image = loadSDImage("AND2.BMP")) == NULL);
+	while((pp->bg_image = loadSDImage("AND.BMP")) == NULL);
 	pp->buttons[0] = NULL;
 	for (i = 1; i <= MAX_LISTS; i++){
 		if(j == db.num_of_lists) break;
