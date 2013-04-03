@@ -90,6 +90,7 @@ struct Frame* initSongPanel(struct Frame* frame){
 void killSongPanel(struct Frame** frame) {
 	if(frame == NULL || *frame == NULL) return;
 }
+// buttons start from 1
 struct Frame* initPlaylistPanel(struct Frame* frame){
 	int i = 1, j = 0;
 	int init_playlist_y = 4;
@@ -143,7 +144,7 @@ struct Frame* initVolumeFrame(struct Frame* this){
 	vf->mainFrame = this;
 	return vf;
 }
-
+//button starts from 1
 struct Frame* initSongInListPanel(struct Frame* f, int list_id){
 	struct Frame* psp = initFrame();
 	if (db.playlists[list_id] == NULL) {return NULL;}
@@ -323,5 +324,30 @@ void drawAllLists(){
 		}
 	}
 	mouse->frame->currentPanel = 1;
+}
+
+void drawAllSongsInList(int list_id){
+	if (mouse->frame->elements[3]->buttons[list_id]->id != list_id){
+		printf("No playlist with such ID\n");
+		return;
+	}
+	// TODO: call kill elements[0] on this playlist here
+	playlistButtonCollide(mouse->frame->elements[3]->buttons[list_id]);
+	if (mouse->frame->elements[3]->elements[0] == NULL){
+		printf("SongInListPanel is null, should not be null.");
+		return;
+	}
+	draw_notransparent(241, 13, mouse->frame->elements[3]->bg_image);
+	clearSongPanel();
+	int i = 0;
+	if (mouse->frame->elements[3]->elements[0]->button_size > 0){
+		for (i = 1; i <= mouse->frame->elements[3]->elements[0]->button_size; i++){
+			mouse->frame->elements[3]->elements[0]->buttons[i]->draw(mouse->frame->elements[3]->elements[0]->buttons[0]);
+		}
+	} else {
+		// just for debugging
+		printf("List has no songs.\n");
+	}
+	mouse->frame->currentPanel = 2;
 }
 
