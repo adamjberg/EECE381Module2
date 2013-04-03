@@ -35,7 +35,7 @@ int getSampleSizeInBytes(struct AudioFormat* this) {
 	return this->sampleSizeInBits / 8;
 }
 
-int getChannels(struct AudioFormat* this) {
+int getNumChannels(struct AudioFormat* this) {
 	return this->channels;
 }
 
