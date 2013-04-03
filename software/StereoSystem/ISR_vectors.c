@@ -87,7 +87,7 @@ void mix_ISR(void) {
 	int i, j, isDone = 0;
 
 	tempcontext= alt_irq_interruptible(AUDIOBUFFERPROCESS_IRQ);
-	for(i = 0; i < 150; i++) {
+	for(i = 0; i < 180; i++) {
 		if(soundMixer->indexSize >=299) break;
 		for(j = 0; j < db.total_songs_playing; j++) {
 			if(!checkEnd(db.songs[db.curr_song_ids[j]]->sound)) {
@@ -125,7 +125,7 @@ void mix_ISR(void) {
 		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
 		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x08);
 	} else {
-		if(db.total_songs_playing > 1)
+		if(soundMixer->indexSize > 0)
 			enableAudioDeviceController();
 		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 0, 0);
 	}

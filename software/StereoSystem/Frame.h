@@ -41,6 +41,7 @@ void displayLoadingScreenVGA();
 
 void drawAllSongs();
 void drawAllLists();
+void drawAllSongsInList(int);
 
 void killSongPanel(struct Frame**);
 void killSongInListPanel(struct Frame**);
