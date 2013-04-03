@@ -73,7 +73,7 @@ void play(int id, int vol, int pos) {
 		alt_up_char_buffer_string(char_buffer, temp, 3, 38);
 		if(db.songs[db.curr_song_id]->sound->audioFormat != NULL) {
 			memset(temp, 0, 30);
-			sprintf(temp, "%.1f kbps", getBitRateKbps(db.songs[db.curr_song_id]->sound->audioFormat));
+			sprintf(temp, "%.1f kbps", db.songs[db.curr_song_id]->sound->audioFormat->bitRateKbps);
 			alt_up_char_buffer_string(char_buffer, temp, 3, 39);
 			memset(temp, 0, 30);
 			sprintf(temp, "%d channel(s)", db.songs[db.curr_song_id]->sound->audioFormat->channels);

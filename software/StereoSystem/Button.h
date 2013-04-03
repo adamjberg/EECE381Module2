@@ -22,7 +22,6 @@ struct Button* initMenuButton(int, char*, int, struct Frame*);
 struct Button* initSongButton(int, int, char*, int, struct Frame*);
 struct Button* initPlaylistButton(int, int, char*, int, struct Frame*);
 struct Button* initActionButton(int, struct Frame*);
-struct Button* initScrollButton(int, int, int, struct Frame*);
 struct Button* initVolumeButton(int, int, int, struct Frame*);
 
 void drawTxtButton(struct Button*);
@@ -40,7 +39,6 @@ void pauseButtonCollide(struct Button*);
 void prevButtonCollide(struct Button*);
 void nextButtonCollide(struct Button*);
 void volumeButtonCollide(struct Button*);
-void dummyCollide(struct Button*);
 
 void songButtonCollide(struct Button*);
 void playlistButtonCollide(struct Button*);

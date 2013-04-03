@@ -19,24 +19,12 @@ struct AudioFormat* initAudioFormat(int sampleRate, int sampleSizeInBits,
 	return this;
 }
 
-float getBitRateKbps(struct AudioFormat* this) {
-	return this->bitRateKbps;
-}
-
 int getSampleRate(struct AudioFormat* this) {
 	return this->sampleRate;
 }
 
-int getSampleSizeInBits(struct AudioFormat* this) {
-	return this->sampleSizeInBits;
-}
-
 int getSampleSizeInBytes(struct AudioFormat* this) {
 	return this->sampleSizeInBits / 8;
-}
-
-int getNumChannels(struct AudioFormat* this) {
-	return this->channels;
 }
 
 void setSampleRate(struct AudioFormat* this, int sampleRate) {

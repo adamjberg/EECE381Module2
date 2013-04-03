@@ -136,10 +136,25 @@ void checkButtonCollision(void* c, void* mf){
 	checkImgCollisionForMouse(cursor, mainFrame->elements[1]->buttons[4]);
 
 	int i;
+	struct Frame* f;
+	switch(mainFrame->currentPanel) {
+	case 0:
+		f = mainFrame->elements[2];
+		break;
+	case 1:
+		f = mainFrame->elements[3];
+		break;
+	case 2:
+		f = mainFrame->elements[3]->elements[0];
+		break;
+	default:
+		break;
+	}
+	for (i = 1; i <= f->button_size; i++){
+		checkTxtCollisionForMouse(cursor, f->buttons[i]);
+	}
+	/*
 	if (mainFrame->currentPanel == 0){
-		for (i = 1; i <= mainFrame->elements[2]->button_size; i++){
-			checkTxtCollisionForMouse(cursor, mainFrame->elements[2]->buttons[i]);
-		}
 	} else if (mainFrame->currentPanel == 1){
 		for (i = 1; i <= mainFrame->elements[3]->button_size; i++){
 			checkTxtCollisionForMouse(cursor, mainFrame->elements[3]->buttons[i]);
@@ -149,7 +164,7 @@ void checkButtonCollision(void* c, void* mf){
 			checkTxtCollisionForMouse(cursor, mainFrame->elements[3]->elements[0]->buttons[i]);
 		}
 	}
-
+*/
 	// check Volume Buttons
 	checkImgCollisionForMouse(cursor, mainFrame->elements[5]->buttons[0]);
 	checkImgCollisionForMouse(cursor, mainFrame->elements[5]->buttons[1]);

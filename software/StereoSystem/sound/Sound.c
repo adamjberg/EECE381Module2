@@ -378,7 +378,7 @@ int loadSoundBuffer(struct Sound* this, int filePointer) {
  */
 void changeBitsPerSample(struct Sound* this, int bitsPerSampleTo) {
 	if(this == NULL) return;
-	int bitsPerSampleFrom = getSampleSizeInBits(this->audioFormat);
+	int bitsPerSampleFrom = this->audioFormat->sampleSizeInBits;
 	if (bitsPerSampleTo == bitsPerSampleFrom)
 		return;
 
