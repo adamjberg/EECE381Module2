@@ -17,13 +17,13 @@ void graphicTester() {
 
 	// click one playlist
 	//playlistButtonCollide(mouse->frame->elements[3]->buttons[1]);
-	//drawAllSongsInList(1);
+
 	//drawAllSongsInList();
-	int i;
+	/*int i;
 	for (i = 0; i < 5000; i++){
-		drawAllSongsInList(1);
+		drawAllSongsInList(5);
 		printf("Iteration %d\n", i);
-	}
+	}*/
 	/*int j;
 	for (i = 0; i < 50; i++){
 		for (j = 0; j < 20; j++){

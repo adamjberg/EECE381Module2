@@ -4,6 +4,7 @@ struct Frame* initFrame(){
 	struct Frame* f = (struct Frame*)malloc(sizeof(struct Frame));
 	f->element_size = 0;
 	f->currentPlaylist = 0;
+	f->elements = NULL;
 	return f;
 }
 
@@ -70,7 +71,7 @@ struct Frame* initSongPanel(struct Frame* frame){
 	int i = 1;
 	int init_song_y = 4;
 	struct Frame* sp = initFrame();
-	sp->buttons = (struct Button**)malloc(51*sizeof(struct Button*));
+	sp->buttons = (struct Button**)malloc(15*sizeof(struct Button*));
 	sp->drawFrame = drawSongPanel;
 	while((sp->bg_image = loadSDImage("AND2.BMP")) == NULL);
 	sp->mainFrame = frame;
@@ -97,7 +98,8 @@ struct Frame* initPlaylistPanel(struct Frame* frame){
 	struct Frame* pp = initFrame();
 	pp->elements = (struct Frame**)malloc(sizeof(struct Frame*)); // to display songs in that list
 	pp->element_size = 1;
-	pp->buttons = (struct Button**)malloc(51*sizeof(struct Button*));
+	pp->elements[0] = NULL;
+	pp->buttons = (struct Button**)malloc(30*sizeof(struct Button*));
 	pp->drawFrame = drawPlaylistPanel;
 	pp->button_size = db.num_of_lists; // starts from 1
 	pp->mainFrame = frame;
@@ -157,12 +159,13 @@ struct Frame* initSongInListPanel(struct Frame* f, int list_id){
 	} else {
 		psp->button_size = db.playlists[list_id]->num_of_songs;
 	}
-	psp->buttons = (struct Button**)malloc(51*sizeof(struct Button*));
+	psp->buttons = (struct Button**)malloc((psp->button_size+1)*sizeof(struct Button*));
 	int i = 0;
 	int y = 4;
 	psp->buttons[0] = NULL;
 	for (i = 1; i <= psp->button_size; i++){
 		psp->buttons[i] = initSongButton(61, y, db.songs[db.index_list_order[list_id][i]]->song_name, db.index_list_order[list_id][i], psp);
+		//psp->buttons[i] = initSongButton(61, y, "h", 1, psp);
 		y = y + 3;
 	}
 	psp->mainFrame = f;
@@ -291,14 +294,6 @@ void clearSongPanel(){
 		y += 3;
 	}
 }
-void displayLoadingScreenVGA(){
-	struct Image* testImg;
-	while ((testImg = loadSDImage("TEST.BMP")) == NULL);
-	draw(35, 35, testImg);
-	killImage(testImg);
-	alt_up_char_buffer_clear(char_buffer);
-	alt_up_char_buffer_string(char_buffer, "Initialization Completed", 27, 5);
-}
 
 /**
  * Has to be called after mouse gets initialized
@@ -350,22 +345,12 @@ void drawAllSongsInList(int list_id){
 		return;
 	}
 	// TODO: call kill elements[0] on this playlist here
-	playlistButtonCollide(mouse->frame->elements[3]->buttons[list_id]);
-	if (mouse->frame->elements[3]->elements[0] == NULL){
-		printf("SongInListPanel is null, should not be null.");
-		return;
+	if (mouse->frame->elements[3]->elements[0] != NULL){
+		killSongInListPanel(&(mouse->frame->elements[3]->elements[0]));
 	}
-	draw_notransparent(241, 13, mouse->frame->elements[3]->bg_image);
 	clearSongPanel();
-	int i = 0;
-	if (mouse->frame->elements[3]->elements[0]->button_size > 0){
-		for (i = 1; i <= mouse->frame->elements[3]->elements[0]->button_size; i++){
-			mouse->frame->elements[3]->elements[0]->buttons[i]->draw(mouse->frame->elements[3]->elements[0]->buttons[0]);
-		}
-	} else {
-		// just for debugging
-		printf("List has no songs.\n");
-	}
+	playlistButtonCollide(mouse->frame->elements[3]->buttons[list_id]);
+	draw_notransparent(241, 13, mouse->frame->elements[3]->bg_image);
 	mouse->frame->currentPanel = 2;
 }
 

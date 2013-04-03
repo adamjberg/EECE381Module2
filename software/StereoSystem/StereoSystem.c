@@ -78,10 +78,21 @@ int main()
 	mouse = initCursor(10, 100, mainFrame);
 	//graphicTester();
 
+	//drawAllSongsInList(2);
+	//drawAllSongsInList(2);
+	int i;
+	struct Frame* b;
+	for (i = 0; i < 5000; i++){
+		drawAllSongsInList(2);
+		//b = initSongInListPanel(mainFrame, 2);
+		//killSongInListPanel(&b);
+		printf("Iteration %d\n", i);
+	}
+
 	initAudioBuffer();
 	initAnimate(mouse);
 
-	int i = 2;
+	//int i = 2;
 
 	//syncPlay(1, 100, 0);
 

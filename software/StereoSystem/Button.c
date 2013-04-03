@@ -48,7 +48,7 @@ void killSongButton(struct Button** this) {
 	free((*this)->range);
 	(*this)->range = NULL;
 	(*this)->Panel = NULL;
-	free((*this)->name);
+	//free((*this)->name);
 	(*this)->name = NULL;
 	free((*this));
 	*this = NULL;

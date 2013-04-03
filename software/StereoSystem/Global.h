@@ -34,7 +34,7 @@
 #include "Database.h"
 #include "Command.h"
 #include "Song.h"
-#include "TestBot.h"
+//#include "TestBot.h"
 #include "CommandScheduler.h"
 #include "sound/SoundMixer.h"
 #include "sound/Sound.h"
