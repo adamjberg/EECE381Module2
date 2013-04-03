@@ -345,6 +345,7 @@ void playSongsFromSongPanel(int song_id, int vol, int pos){
 	// since up and down is not implemented yet,
 	// don't do anything for song_id > 14
 	syncStop();
+	syncSelectList(0);
 	syncPlay(song_id, vol, pos);
 	if (querySongButtonFromID(song_id) != NULL){
 		highlightButton(querySongButtonFromID(song_id));
