@@ -76,7 +76,7 @@ int main()
 
 	//Test End
 	mouse = initCursor(10, 100, mainFrame);
-//	graphicTester();
+	//graphicTester();
 
 	initAudioBuffer();
 	initAnimate(mouse);

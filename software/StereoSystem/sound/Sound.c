@@ -9,7 +9,8 @@
 
 #define DEFAULT_SAMPLE_RATE 32000
 #define DEFAULT_BITS_PER_SAMPLE 24
-#define MP3_DECODE_MULTIPLIER 4
+#define MP3_DECODE_MULTIPLIER 2.7
+#define MAX_QUALITY 4
 
 struct buffer {
 	unsigned char *start;
@@ -49,8 +50,68 @@ unsigned int getSoundLengthMS(struct Sound* this) {
 	return convertToMS(this->length);
 }
 
-void setSoundPitch(struct Sound* this, float pitch) {
-	setSoundPlaybackSpeed(this, pitch);
+int getMaxSoundValue(struct Sound* this) {
+	int i, maxVal = 0, nextVal;
+
+	for (i = 0; i < this->length; i++) {
+		nextVal = this->buffer[i] < 0 ? -this->buffer[i] : this->buffer[i];
+		maxVal = nextVal > maxVal ? nextVal : maxVal;
+	}
+	return maxVal;
+}
+
+void setSoundPitch(struct Sound* this, float pitch, int quality) {
+	int i, origSampleRate, maxVal, fftFrameSize = 2048;
+	float *soundBuffer;
+	long oSamp, downSampleAmount;
+
+	printf("Changing sound pitch to: %f with quality: %d\n", pitch, quality);
+
+	switch (quality) {
+	case 0:
+		setSoundPlaybackSpeed(this, pitch);
+		return;
+	case 1:
+		downSampleAmount = 10;
+		oSamp = 1;
+		break;
+	case 2:
+		downSampleAmount = 5;
+		oSamp = 2;
+		break;
+	case 3:
+		downSampleAmount = 3;
+		oSamp = 3;
+		break;
+	case 4:
+		downSampleAmount = 2;
+		oSamp = 4;
+		break;
+	default:
+		downSampleAmount = 10;
+		oSamp = 1;
+		break;
+	}
+
+	origSampleRate = getSampleRate(this->audioFormat);
+	resampleSound(this, origSampleRate / downSampleAmount, false, 0);
+	maxVal = getMaxSoundValue(this);
+	soundBuffer = (float *) malloc(sizeof(float) * this->length);
+
+	for (i = 0; i < this->length; i++) {
+		soundBuffer[i] = (float) (this->buffer[i]) / maxVal;
+	}
+
+	pitchShift(pitch, this->length, fftFrameSize, oSamp, getSampleRate(this->audioFormat), soundBuffer, soundBuffer);
+
+	for (i = 0; i < this->length; i++) {
+		this->buffer[i] = (int) (soundBuffer[i] * maxVal);
+	}
+
+	resampleSound(this, origSampleRate, false, 0);
+	free(soundBuffer);
+	soundBuffer = NULL;
+	printf("Pitch Successfully Updated");
 }
 
 void setSoundPlaybackSpeed(struct Sound* this, float speed) {
@@ -231,6 +292,10 @@ int resampleSound(struct Sound* this, int toSampleRate, bool fromFile, int fileP
 	int i, j = 0;
 	int* bufferToWriteTo;
 
+	if(fromSampleRate == toSampleRate) {
+		return 0;
+	}
+
 	if(fromFile) {
 		allocateSoundBuffer(this, destLength);
 		bufferToWriteTo = this->buffer;
@@ -276,6 +341,7 @@ int resampleSound(struct Sound* this, int toSampleRate, bool fromFile, int fileP
 		free(this->buffer);
 		this->buffer = bufferToWriteTo;
 	}
+	setSampleRate(this->audioFormat, toSampleRate);
 	return 0;
 }
 
@@ -312,7 +378,7 @@ int loadSoundBuffer(struct Sound* this, int filePointer) {
  */
 void changeBitsPerSample(struct Sound* this, int bitsPerSampleTo) {
 	if(this == NULL) return;
-	int bitsPerSampleFrom = getSampleSizeInBits(this->audioFormat);
+	int bitsPerSampleFrom = this->audioFormat->sampleSizeInBits;
 	if (bitsPerSampleTo == bitsPerSampleFrom)
 		return;
 
@@ -359,7 +425,7 @@ void allocateSoundBuffer(struct Sound* this, int length) {
 	if (this->buffer != NULL) {
 		free(this->buffer);
 	}
-	this->buffer = (unsigned int*) malloc(sizeof(unsigned int) * length);
+	this->buffer = (int*) malloc(sizeof(int) * length);
 
 	this->length = length;
 	if (!this->buffer)

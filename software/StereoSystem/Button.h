@@ -20,14 +20,12 @@ struct Button{
 struct Button* initButton();
 struct Button* initMenuButton(int, char*, int, struct Frame*);
 struct Button* initSongButton(int, int, char*, int, struct Frame*);
-struct Button* initPlaylistButton(int, int, char*, struct Frame*);
+struct Button* initPlaylistButton(int, int, char*, int, struct Frame*);
 struct Button* initActionButton(int, struct Frame*);
-struct Button* initScrollButton(int, int, int, struct Frame*);
 struct Button* initVolumeButton(int, int, int, struct Frame*);
 
 void drawTxtButton(struct Button*);
 void drawActionButton(struct Button*);
-void dummyDraw(struct Button*);
 
 void menuButtonCollide(struct Button*);
 void playlistMenuButtonCollide(struct Button*);
@@ -40,12 +38,12 @@ void pauseButtonCollide(struct Button*);
 void prevButtonCollide(struct Button*);
 void nextButtonCollide(struct Button*);
 void volumeButtonCollide(struct Button*);
-void dummyCollide(struct Button*);
 
 void songButtonCollide(struct Button*);
 void playlistButtonCollide(struct Button*);
 void highlightButton(struct Button*);
-void highlightSongWithID(int);
+void highlightSongInList(int, int);
+void playlistButtonClicked(int);
 
 // helper functions
 int getXActionBtn(int);
@@ -54,6 +52,8 @@ void drawRange(struct Button*);
 void animateButton(struct Button*, int);
 void updateVolumeValue(int);
 struct Button* querySongButtonFromID(int);
+struct Button* getPlaylistButtonFromID(int);
+bool songButtonExistsInList(int, int);
 
 void playSongsFromSongPanel(int, int, int);
 void killSongButton(struct Button**);

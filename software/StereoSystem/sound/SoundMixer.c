@@ -24,7 +24,7 @@ void setGlobalVolume(float volume) {
 
 void clearSoundMixer() {
 	int i;
-	for(i = 0; i < 299; i++) {
+	for(i = 0; i < 249; i++) {
 		clearIndexBuffer(i);
 	}
 }
@@ -59,7 +59,7 @@ void clearIndexBuffer(int index){
 
 void incIndex() {
 	soundMixer->currIndex++;
-	if(soundMixer->currIndex > 299) {
+	if(soundMixer->currIndex > 249) {
 		soundMixer->currIndex = 0;
 	}
 	soundMixer->indexSize--;
@@ -82,7 +82,7 @@ void updateMixer() {
 		soundMixer->indexSize++;
 		soundMixer->endIndex++;
 
-		if(soundMixer->endIndex > 299)
+		if(soundMixer->endIndex > 249)
 			soundMixer->endIndex = 0;
 
 		clearIndexBuffer(soundMixer->endIndex);

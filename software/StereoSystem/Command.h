@@ -82,8 +82,9 @@ void openPlaylistsPanel();
 void openSongsFromList(int);
 //index 24
 void playSongFromList(int, int);
+//index 25
+void syncStartPlay();
 
 void repeatCurrentSong();
 
-void reverse();
 #endif /* COMMAND_H_ */

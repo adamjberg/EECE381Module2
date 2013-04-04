@@ -88,7 +88,7 @@ struct Image* loadSDImage(char* filename) {
 	if((offset = alt_up_sd_card_read(file_pointer))< 0) {
 		alt_up_sd_card_fclose(file_pointer);
 		return NULL;
-	} printf("offset: %x\n", offset);
+	} //printf("offset: %x\n", offset);
 	bytes++;
 	while(bytes < offset){
 		if(bytes == 18 || bytes == 19) {
@@ -96,22 +96,22 @@ struct Image* loadSDImage(char* filename) {
 				alt_up_sd_card_fclose(file_pointer);
 				return NULL;
 			} width += (int)temp << (bytes-18)*8 ;
-			if(bytes == 19)
-				printf("width: %d, ", width);
+			//if(bytes == 19)
+				//printf("width: %d, ", width);
 		} else if(bytes == 22 || bytes == 23) {
 			if((temp = alt_up_sd_card_read(file_pointer))< 0) {
 				alt_up_sd_card_fclose(file_pointer);
 				return NULL;
 			} height += (int)temp << (bytes-22)*8 ;
-			if(bytes == 22)
-				printf("height: %d\n", height);
+			//if(bytes == 22)
+				//printf("height: %d\n", height);
 		} else if(bytes == 34 || bytes == 35 || bytes == 36 || bytes == 37) {
 			if((temp = alt_up_sd_card_read(file_pointer))< 0) {
 				alt_up_sd_card_fclose(file_pointer);
 				return NULL;
 			}  size += (int)(temp << 8*(count++));
 			if(bytes == 37) {
-				printf("data size: %d\n", size/2);
+				//printf("data size: %d\n", size/2);
 				result = (int*)malloc(sizeof(int)*(size/2));
 			}
 		} else if((temp = alt_up_sd_card_read(file_pointer)) < 0) {

@@ -32,11 +32,11 @@ struct RS232 initRS232(struct CmdScheduler* sched) {
 	com_local.packetBuf = NULL;
 	com_local.scheduler = sched;
 
-	printf("UART Initialization\n");
+	//printf("UART Initialization\n");
 	alt_up_rs232_dev* uart = alt_up_rs232_open_dev(RS232_0_NAME);
 	up_dev.RS232_dev = uart;
 
-	printf("Clearing read buffer to start\n");
+	//printf("Clearing read buffer to start\n");
 	while (alt_up_rs232_get_used_space_in_read_FIFO(uart)) {
 		alt_up_rs232_read_data(uart, &com.data[0], &com.parity);
 	}
@@ -59,10 +59,6 @@ int send(void* data, enum msgType type) {
 		break;
 	case CMD:
 		encodeCmd((struct Command*)data, com.sendPackets);
-		break;
-	case PLAYLIST:
-		break;
-	case AUDIO:
 		break;
 	default:
 		return -1;
@@ -188,8 +184,6 @@ void failReceive(enum States pastState) {
 void setStates(enum States s) {
 	*(com.pastState) = *(com.stateMachine);
 	*(com.stateMachine) = s;
-	//printf("past state: %d\n", *(com.pastState));
-	//printf("current state: %d\n", *(com.stateMachine));
 }
 /*
  * Reset the RS232 communication to initial state

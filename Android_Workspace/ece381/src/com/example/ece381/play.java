@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.ToggleButton;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +48,7 @@ public class play extends Activity {
 	    }
 		addBarSsound();
 		addBarSeek();
+		com.getDB().resume();
 		handler = new Handler();
 		greetMsg = (TextView) findViewById(R.id.textView1);
 		
@@ -170,6 +173,14 @@ public class play extends Activity {
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 		Command.syncPrev(com.getDB().getCurr_song_id());
 	}
+	public void repeatSongToggle(View view) {
+		  // set db flag to reflect if it's toggled on or off
+		  //com.getDB().setRepeatSong( ((ToggleButton) view).isChecked() );
+		com.getDB().switchRepeatSong();
+		 // Command.syncRepeatList(com.getDB().getCurr_playlist_id());
+		 // Log.v("toggledRepeatPlaylist", ""+com.getDB().getRepeatPlaylistValue());
+	  }
+	  
 	private void addBarSsound(){  
 		textview= (TextView)  findViewById(R.id.textView7);
 		seekbar = (SeekBar) findViewById(R.id.seekBar1);
@@ -179,13 +190,13 @@ public class play extends Activity {
 		   @Override 
 		   public void onProgressChanged(SeekBar seekBar, int progress,
 	               boolean fromUser) {
-			   Command.syncSetVol(com.getDB().getCurr_song_id(), progress);
 	       }
 	
 	       @Override
 	       public void onStartTrackingTouch(SeekBar seekBar) {}
 	       @Override
-	       public void onStopTrackingTouch(SeekBar seekBar) {}}
+	       public void onStopTrackingTouch(SeekBar seekBar) {
+			   Command.syncSetVol(com.getDB().getCurr_song_id(), seekbar.getProgress());}}
 	   );
 	}
 	
@@ -227,17 +238,22 @@ public class play extends Activity {
 	public class SeekBarTimerTask extends TimerTask {
 		public void run() {
 			//update();
-			if(com.getDB().getCurr_song_id() == 0) return;
+			if(com.getDB().getCurr_song_id() == 0 || com.getDB().isPaused()) return;
 			if(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getStart()) {
 				com.getDB().getSongs()[com.getDB().getCurr_song_id()].incPosByMs(100);
 				seekbar2.setMax(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());
-				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());
+				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getPos());//}
+
+			} else {
+				seekbar2.setProgress(com.getDB().getSongs()[com.getDB().getCurr_song_id()].getSize());
+				//com.getDB().getSongs()[com.getDB().getCurr_song_id()].setPos(0);
 			}
+						
 			handler.post(new Runnable(){
                 public void run() {
                    update();
                 }}); 
-		}
+			}
 	}
 	
 }

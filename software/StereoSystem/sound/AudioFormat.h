@@ -8,8 +8,7 @@
 #ifndef AUDIOFORMAT_H_
 #define AUDIOFORMAT_H_
 
-#include "stdlib.h"
-#include "stdio.h"
+#include "../Global.h"
 
 struct AudioFormat {
 	int channels;
@@ -19,10 +18,8 @@ struct AudioFormat {
 };
 
 struct AudioFormat* initAudioFormat(int, int, int, int);
-float getBitRateKbps(struct AudioFormat*);
 int getSampleRate(struct AudioFormat*);
-int getSampleSizeInBits(struct AudioFormat*);
 int getSampleSizeInBytes(struct AudioFormat*);
-int getChannels(struct AudioFormat*);
+void setSampleRate(struct AudioFormat*, int);
 
 #endif /* AUDIOFORMAT_H_ */

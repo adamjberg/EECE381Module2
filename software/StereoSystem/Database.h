@@ -12,8 +12,8 @@
 #define SONGFILE "SONGS.TXT"
 #define LISTORDERFILE "LORDER.TXT"
 #define LISTSONGFILE "LSONG.TXT"
-#define MAX_LISTS 51
-#define MAX_SONGS 101
+#define MAX_LISTS 31
+#define MAX_SONGS 51
 #define MAX_SONGS_MIX 11
 #define MAX_CACHE_MEMORY 1000000
 struct database db;

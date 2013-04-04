@@ -46,10 +46,9 @@
 #include "Cursor.h"
 #include "Button.h"
 #include "Frame.h"
+#include "sound/AudioFormat.h"
 
 #define HEADERSIZE 2
-#define SPACE 32
-#define NEWLINE 10
 
 extern alt_alarm alarm;
 extern struct alt_up_dev up_dev;
@@ -58,7 +57,6 @@ extern alt_up_char_buffer_dev* char_buffer;
 extern struct RS232 com;
 extern int queue_lock;
 extern struct database db;
-extern int song_id_lock;
 extern int SDIO_lock;
 extern int MIX_LOCK;
 //extern int cursor_lock;

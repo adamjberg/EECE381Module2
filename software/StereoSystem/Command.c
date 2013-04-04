@@ -63,9 +63,9 @@ void play(int id, int vol, int pos) {
 	char temp[30];
 	printf("A song %d is started at %d volume.\n", id, vol);
 	playSong(db.songs[id], vol, pos, 0);
-	syncUpdatePos(id, pos, 1);
 	if(db.total_songs_playing <= 1) {
 		updateMixer();
+		syncUpdatePos(id, pos, 1);
 		IOWR_16DIRECT(AUDIOBUFFERPROCESS_BASE, 4, 0x07);
 		enableAudioDeviceController();
 		alt_up_char_buffer_string(char_buffer, db.songs[db.curr_song_id]->song_name, 3, 37);
@@ -73,7 +73,7 @@ void play(int id, int vol, int pos) {
 		alt_up_char_buffer_string(char_buffer, temp, 3, 38);
 		if(db.songs[db.curr_song_id]->sound->audioFormat != NULL) {
 			memset(temp, 0, 30);
-			sprintf(temp, "%.1f kbps", getBitRateKbps(db.songs[db.curr_song_id]->sound->audioFormat));
+			sprintf(temp, "%d kbps", db.songs[db.curr_song_id]->sound->audioFormat->bitRateKbps);
 			alt_up_char_buffer_string(char_buffer, temp, 3, 39);
 			memset(temp, 0, 30);
 			sprintf(temp, "%d channel(s)", db.songs[db.curr_song_id]->sound->audioFormat->channels);
@@ -174,7 +174,8 @@ void next(int song_id) {
 			id = db.index_list_order[db.curr_playlist_id][1];
 
 		if(id == 0) return;
-		syncPlay(id, db.songs[id]->volume, 0);
+		playSongFromList(id, db.curr_playlist_id);
+		//syncPlay(id, db.songs[id]->volume, 0);
 	}
 
 	printf("Next song is played.\n");
@@ -201,7 +202,8 @@ void prev(int song_id) {
 		id = db.index_list_order[db.curr_playlist_id][db.index_list_song[db.curr_playlist_id][song_id]-1];
 
 		if(id == 0) return;
-		syncPlay(id, db.songs[id]->volume, 0);
+		playSongFromList(id, db.curr_playlist_id);
+		//syncPlay(id, db.songs[id]->volume, 0);
 	}
 
 	printf("Previous song is played.\n");
@@ -290,6 +292,7 @@ void syncSelectList(int id) {
 void selectList(int id) {
 	printf("list %d is selected\n", id);
 	db.curr_playlist_id = id;
+	mouse->frame->elements[3]->currentPlaylist = id;
 }
 
 /*
@@ -358,6 +361,7 @@ void removeSongFromList(int list_id, int song_id) {
 	printf("remove song %d from list %d\n", song_id, list_id);
 	db.index_list_order[list_id][db.index_list_song[list_id][song_id]] = 0;
 	db.index_list_song[list_id][song_id] = 0;
+	db.playlists[list_id]->num_of_songs--;
 }
 
 //index 16
@@ -389,6 +393,7 @@ void syncRepeatList(int index) {
 }
 void repeatList(int index) {
 	db.isListRepeated = (db.isListRepeated == 1) ? 0 : 1;
+	printf("Repeat list %d is %d\n", index, db.isListRepeated);
 }
 
 //index18
@@ -417,52 +422,37 @@ void removeList(int index) {
 //index 20
 void playSongFromAllSongs(int id, int vol, int pos) {
 	playSongsFromSongPanel(id, vol, pos);
-	printf("play song %d from all song panel\n", id);
 }
 //index 21
 void openAllSongPanel() {
 	drawAllSongs();
-	printf("open songs panel\n");
 }
 //index 22
 void openPlaylistsPanel() {
 	drawAllLists();
-	printf("open list panel\n");
 }
 //index 23
 void openSongsFromList(int list_id) {
-	printf("open songs from list\n");
+	drawAllSongsInList(list_id);
 }
 //index 24
 void playSongFromList(int song_id, int list_id) {
+	syncSelectList(list_id);
+	highlightSongInList(list_id, song_id);
+	play(song_id, db.songs[song_id]->volume, db.songs[song_id]->pos);
 	printf("play song %d from list %d\n", song_id, list_id);
 }
+
 
 void shuffle(int index) {
 	printf("Playlist %d is shuffled\n", index);
 }
-
-void updateSongToPlaylist(int song_index, int list_index, int order) {
-
-}
-void play_playlist(int index) {
-	printf("Playlist %d is selected and played\n", index);
-}
-
 
 void moveSongToIndex(char* song, int index, char* listname) {
 
 }
 
 void repeatCurrentSong() {
-
-}
-
-void reverse() {
-
-}
-
-void updateDBIndex() {
 
 }
 

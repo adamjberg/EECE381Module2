@@ -24,9 +24,11 @@ public class Database {
 	private ArrayList<String> songs_name;
 	private ArrayList<String> lists_name;
 	private boolean repeat_playlist;
+	private boolean repeat_song;
 	private boolean shuffle_playlist;
 	private boolean isEndOfPlaylist;
 	private int selected_list;
+	private boolean isPaused;
 	
 	public Database() {
 		this.playlists = new Playlist[MAX_LISTS];
@@ -41,6 +43,8 @@ public class Database {
 		this.list_song_order = new int[MAX_LISTS][MAX_SONGS];
 		this.songs_name = new ArrayList<String>();
 		this.lists_name = new ArrayList<String>();
+		this.repeat_song = false;
+		this.isPaused = false;
 		int i;
 		for(i = 1; i < MAX_LISTS; i++) {
 			this.avail_list_index.add(Integer.valueOf(i));
@@ -68,8 +72,22 @@ public class Database {
 		this.curr_song_ids.clear();
 		this.songs_name.clear();
 		this.lists_name.clear();
+
+		this.repeat_song = false;
+		this.isPaused = false;
 	}	
 	
+	public void setPaused() {
+		this.isPaused = true;
+	}
+	
+	public boolean isPaused() {
+		return isPaused;
+	}
+	
+	public void resume() {
+		this.isPaused = false;
+	}
 	public int queryListByName(String list_name) {
 		int i = 1;
 		while(i <= MAX_LISTS) {
@@ -78,6 +96,16 @@ public class Database {
 					return i;
 				}
 			} i++;
+		} return -1;
+	}
+	public int querySongByName(String song_name) {
+		int i = 1;
+		while(i <= MAX_SONGS) {
+			//if(this.used_list_index[i] == 1) {				
+				if(this.songs[i].getSongName().equals(song_name)) {
+					return i;
+				}
+			 i++;
 		} return -1;
 	}
 	public Queue<Integer> getCurrSongsIds() {
@@ -135,15 +163,7 @@ public class Database {
 	}
 	
 	public String[] getListsName() {
-		String result[] = new String[this.num_of_lists];
-		
-		int i;
-		for(i = 0; i < this.num_of_lists; i++) {
-			if(this.lists_name.get(i) != "") {
-				result[i] = (String) this.lists_name.get(i);
-			}
-		}
-		return result;
+		return this.lists_name.toArray(new String[lists_name.size()]);
 	}
 	
 	public void addList(Playlist pl) {
@@ -296,6 +316,17 @@ public class Database {
 		// TODO Auto-generated method stub
 		this.repeat_playlist = checked;
 	}
+	public boolean getRepeatSongValue() {
+		return this.repeat_song;
+	}
+	public void setRepeatSong(boolean checked) {
+		// TODO Auto-generated method stub
+		this.repeat_song = checked;
+	}
+	
+	public void switchRepeatSong() {
+		this.repeat_song = !this.repeat_song;
+	}
 	public void setShufflePlaylist(boolean checked) {
 		// TODO Auto-generated method stub
 		this.shuffle_playlist = checked;
@@ -307,12 +338,16 @@ public class Database {
 		return this.isEndOfPlaylist;
 	}
 
-	
 	public void setSelectedList(int id) {
 		this.selected_list = id;
 	}
 	public int getSelectedList() {
 		return this.selected_list;
+	}
+	public int num_of_songs_in_list(int plid)
+	{
+		return this.playlists[plid].getNum_of_songs();
+		
 	}
 
 }
