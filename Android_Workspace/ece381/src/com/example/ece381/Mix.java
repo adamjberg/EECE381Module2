@@ -101,9 +101,15 @@ public class Mix {
 	}
 	
 	
-	public void play(){
-		//TODO play this mix back
+	public void play() {
+		for (int i = 0; i < lengthOf(); i++) {
+			usedClips.get(i).play();
+		}
 	}
 	
-	
+	public void stop() {
+		for (int i = 0; i < lengthOf(); i++) {
+			usedClips.get(i).stop();
+		}
+	}
 }
