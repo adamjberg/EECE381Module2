@@ -69,7 +69,6 @@ public class MixerActivity extends Activity {
 	}
 	
 	public void setUP() {
-		populateSongs();
 		textprog = (TextView) findViewById(R.id.progress);
 		textprog.setTextColor(Color.BLUE);
 		songList = (ListView) findViewById(R.id.listView1);
@@ -130,20 +129,6 @@ public class MixerActivity extends Activity {
 	
 	public int decodePoint(Point p){
 		return (p.y/100);
-	}
-	
-	public void populateSongs() {
-		db.addSong(new Song("Sheep1"));
-		db.addSong(new Song("Sheep2"));
-		db.addSong(new Song("Sheep3"));
-		db.addSong(new Song("Popsicle"));
-		
-		Song[] songs = db.getSongs();
-		for(int i = 0; i < db.getTotalSongs(); i++) {
-			if(songs[i] != null) {
-				songs[i].setSize(200);
-			}
-		}
 	}
 	
 	public void onPlayPressed(View view) {
