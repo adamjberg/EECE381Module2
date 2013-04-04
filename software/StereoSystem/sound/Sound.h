@@ -33,8 +33,8 @@ struct Sound {
 	volatile float fadeVolume;
 };
 
-unsigned int convertToMS(unsigned int);
-struct Sound* initSound(unsigned int);
+int convertToMS(int);
+struct Sound* initSound(int);
 void allocateSoundBuffer(struct Sound*, int);
 void setFadeInLength(struct Sound*, unsigned int);
 void setFadeOutLength(struct Sound*, unsigned int);
@@ -46,7 +46,7 @@ void setSoundPitch(struct Sound*, float, int);
 void setSoundPlaybackSpeed(struct Sound*, float);
 int resampleSound(struct Sound*, int, bool, int);
 void unloadSound(struct Sound*);
-void seekSound(struct Sound*, unsigned int);
+void seekSound(struct Sound*, int);
 void playSound(struct Sound*, float, int, int);
 void stopSound(struct Sound*);
 bool checkEnd(struct Sound*);
