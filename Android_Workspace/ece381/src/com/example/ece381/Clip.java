@@ -126,6 +126,10 @@ public class Clip {
 		Command.syncSetVol(ID, volume);
 	}
 	
+	public void reload() {
+		Command.syncReloadSong(ID);
+	}
+	
 	public void play() {
 		Command.syncPlay(ID, volume, position);
 	}
