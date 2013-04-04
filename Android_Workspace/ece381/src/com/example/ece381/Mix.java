@@ -112,4 +112,9 @@ public class Mix {
 			usedClips.get(i).stop();
 		}
 	}
+	
+	public void removeClipPlay(int index, int time) {
+		// TODO Auto-generated method stub
+		usedClips.get(index).timesUsed();
+	}
 }
