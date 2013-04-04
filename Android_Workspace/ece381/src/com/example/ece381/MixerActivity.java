@@ -148,24 +148,24 @@ public class MixerActivity extends Activity {
 		}
 	}
 	
-	public void onPlayMix(View view) {
+	public void onPlayPressed(View view) {
 		theMix.play();
 	}
 
-	public void onStopMix(View view) {
+	public void onStopPressed(View view) {
 		theMix.stop();
 	}
 
-	public void onOpenProperties(View view) {
+	public void onPropertiesPressed(View view) {
 		Intent i = new Intent(this, SongPropertyActivity.class);
 		startActivity(i);
 	}
 	
-	public void onSave(View view) {
+	public void onSavePressed(View view) {
 
 	}
 
-	public void onDelete(View view) {
+	public void onDeletePressed(View view) {
 		if (selSong == true && idOfSongSelected != 0) {
 			mixerCanvas.deleteAllInstanceOf(idOfSongSelected);
 		} else if (selSong == false && idOfSongSelected == 0) {
@@ -198,13 +198,6 @@ public class MixerActivity extends Activity {
 		public void onProgressChanged(SeekBar Timeline, int progress,
 				boolean fromUser) {
 			if (fromUser) {
-				theMix.seekTime(progress);
-				Timeline.setProgress(progress);
-				mixerCanvas.setProgress(progress);
-				String temp = Integer.toString(progress) + " / "
-						+ Integer.toString(Timeline.getMax());
-				textprog.setText(temp);
-				mixerCanvas.invalidate();
 			}
 		}
 
