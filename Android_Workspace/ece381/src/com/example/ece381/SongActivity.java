@@ -171,35 +171,35 @@ public class SongActivity extends Activity {
  	return true;
  }
 
- @Override
- public boolean onOptionsItemSelected(MenuItem item) {
-	  // TODO Auto-generated method stub
-	  switch(item.getItemId()){
-	  case android.R.id.home:
-	 	 finish();
-	     // NavUtils.navigateUpFromSameTask(this);
-	 	 // onBackPressed();
-	      return true;
-	  case R.id.songs:
-		  Intent intentsong = new Intent(SongActivity.this, MainActivity.class);
-		  intentsong.putExtra("subActivity", "true");
-		  startActivity(intentsong);
-	 	  return true;
-	  case R.id.menu_settings:
-	 	  Toast.makeText(SongActivity.this,
-	 	    item.getTitle(),
-	 	     Toast.LENGTH_LONG).show();
-	 	  return true;
-	  case R.id.playlists:
-		  finish(); 
-	 	  return true;
-	  case R.id.playMenu:
-		  Intent intent = new Intent(SongActivity.this, play.class);
-		  startActivity(intent);   
-	 	  return true;
-	  }
-	  return super.onOptionsItemSelected(item);
-  } 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			// NavUtils.navigateUpFromSameTask(this);
+			// onBackPressed();
+			return true;
+		case R.id.songs:
+			intent = new Intent(SongActivity.this, MainActivity.class);
+			intent.putExtra("subActivity", "true");
+			startActivity(intent);
+			return true;
+		case R.id.menu_settings:
+			intent = new Intent(SongActivity.this, MixerActivity.class);
+			startActivity(intent);
+			return true;
+		case R.id.playlists:
+			finish();
+			return true;
+		case R.id.playMenu:
+			intent = new Intent(SongActivity.this, play.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
   public void refreshSonglist() {
 	  	listAdapter.clear();
 	    // "add a song" button
