@@ -120,6 +120,12 @@ public class Clip {
 		startTimes.clear();
 	}
 
+	public void updateSongInDatabase() {
+		Command.syncSetPitch(ID, pitch, 0);
+		Command.syncSetPlaybackSpeed(ID, playbackSpeed);
+		Command.syncSetVol(ID, volume);
+	}
+	
 	public void play() {
 		Command.syncPlay(ID, volume, position);
 	}
