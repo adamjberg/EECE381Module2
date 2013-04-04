@@ -62,43 +62,41 @@
         android:id="@+id/play"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onPlayPressed"
-        android:src="@android:drawable/ic_media_play" />
+        android:background="@drawable/av_play"
+        android:onClick="onPlayPressed" />
 
     <ImageButton
         android:id="@+id/stop"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onStopPressed" 
-        android:src="@android:drawable/ic_media_stop"/>
+        android:background="@drawable/ic_media_stop"
+        android:onClick="onStopPressed"/>
 
     <ImageButton
         android:id="@+id/properties"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onPropertiesPressed" 
-        android:src="@android:drawable/ic_menu_settings_holo_light"/>
+        android:background="@drawable/ic_menu_preferences"
+        android:onClick="onPropertiesPressed" />
     
     <ImageButton
         android:id="@+id/delete"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onDeletePressed" 
-        android:src="@android:drawable/btn_dialog_disable"/>
+        android:background="@drawable/ic_menu_delete"
+        android:onClick="onDeletePressed" />
 
     <SeekBar
         android:id="@+id/volume"
         android:layout_width="120dip"
         android:layout_height="40dip" />
 
-
-
     <ImageButton
         android:id="@+id/save"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onSavePressed" 
-        android:src="@android:drawable/ic_menu_save"/>
+        android:background="@drawable/ic_menu_save"
+        android:onClick="onSavePressed" />
         
 	</LinearLayout>
    
