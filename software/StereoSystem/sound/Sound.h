@@ -25,8 +25,8 @@ struct Sound {
 	struct AudioFormat* audioFormat;
 	unsigned int inFadePosition;
 	unsigned int outFadePosition;
-	unsigned int position;
-	unsigned int length;
+	int position;
+	int length;
 	int loops;
 	int *buffer;
 	volatile float volume;

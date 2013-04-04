@@ -42,12 +42,17 @@ void loadToSoundBuffer(struct Sound* sound) {
 			sound->fadeVolume *= 0.9999;
 		}
 
-		data = sound->buffer[sound->position];
-		if(data != 0) {
-			if(data > 0x07FFFFF)
-				soundMixer->buffer[soundMixer->endIndex][i] += positiveToNegative((negativeToPositive(data)*sound->fadeVolume));
-			else
-				soundMixer->buffer[soundMixer->endIndex][i] += data *sound->fadeVolume;
+		if (sound->position >= 0) {
+			data = sound->buffer[sound->position];
+			if (data != 0) {
+				if (data > 0x07FFFFF)
+					soundMixer->buffer[soundMixer->endIndex][i]
+							+= positiveToNegative((negativeToPositive(data)
+									* sound->fadeVolume));
+				else
+					soundMixer->buffer[soundMixer->endIndex][i] += data
+							* sound->fadeVolume;
+			}
 		}
 		sound->position++;
 	}

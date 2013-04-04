@@ -27,17 +27,17 @@ struct buffer tempBuffer;
  * Helper function to convert a millisecond value to the correct position
  * in the sound buffer
  */
-unsigned int convertFromMS(int value) {
+int convertFromMS(int value) {
 
-	return (unsigned int) (value * 32);
+	return (int) (value * 32);
 }
 
 /**
  * Helper function to convert a value to its millisecond equivalent based on the
  * sampling rate
  */
-unsigned int convertToMS(unsigned int value) {
-	return (unsigned int) ((value * 1000) / DEFAULT_SAMPLE_RATE);
+int convertToMS(int value) {
+	return (int) ((value * 1000) / DEFAULT_SAMPLE_RATE);
 }
 
 /**
@@ -445,7 +445,7 @@ void allocateSoundBuffer(struct Sound* this, int length) {
 	clearSoundBuffer(this);
 }
 
-struct Sound* initSound(unsigned int length) {
+struct Sound* initSound(int length) {
 	struct Sound* this = (struct Sound*) malloc(sizeof(struct Sound));
 	if (!this)
 		printf("Failed to allocate space for sound\n");
@@ -596,7 +596,7 @@ void setSoundVolume(struct Sound* this, float volume) {
  * @param this - The sound to change
  * @param position - The position to seek to in MilliSeconds
  */
-void seekSound(struct Sound* this, unsigned int position) {
+void seekSound(struct Sound* this, int position) {
 	this->position = convertFromMS(position);
 }
 
