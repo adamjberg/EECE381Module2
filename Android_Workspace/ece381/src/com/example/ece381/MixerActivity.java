@@ -44,7 +44,7 @@ public class MixerActivity extends Activity {
 
 	@Override
 	public void onResume() {
-		Log.v("PlaylistAcitivty Resume", "");
+		//Log.v("PlaylistAcitivty Resume", "");
 		super.onResume();
 		refreshList();
 		Command.syncOpenPlaylistsPanel();
@@ -90,7 +90,7 @@ public class MixerActivity extends Activity {
 				selectedClip = theMix.getClipat(index);
 				idOfSongSelected = selectedClip.getID();
 				mixerCanvas.selIndex = -1;
-				System.out.println( "When Clicked" + indexOfSel + " ID:" + idOfSongSelected  );
+				//System.out.println( "When Clicked" + indexOfSel + " ID:" + idOfSongSelected  );
 				mixerCanvas.invalidate();
 			}
 			

@@ -178,7 +178,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			ystart = y;
 			length = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
 			
-			System.out.println(MixerActivity.indexOfSel + "   " + MixerActivity.theMix.lengthOf()  + "  " + length);
+			//System.out.println(MixerActivity.indexOfSel + "   " + MixerActivity.theMix.lengthOf()  + "  " + length);
 			notifyClip();
 		}
 		
@@ -193,7 +193,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		
 		public void notifyClip(){
 				MixerActivity.theMix.getClipat(mixIndex).setToPlayAt(xstart);
-				System.out.println(MixerActivity.theMix.getClipat(mixIndex).timesUsed().iterator());
+				//System.out.println(MixerActivity.theMix.getClipat(mixIndex).timesUsed().iterator());
 		}
 		
 	}
@@ -234,7 +234,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
 					p.x+progress + temp < j.xstart +j.length){
-					Log.v("selected", j.toString());
+					//Log.v("selected", j.toString());
 				return true;
 			}
 		}
@@ -247,7 +247,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
 					p.x+progress + temp < j.xstart +j.length){
-					Log.v("selected", j.toString());
+					//Log.v("selected", j.toString());
 				return true;
 			}
 		}
@@ -263,7 +263,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 				MixerActivity.indexOfSel = -1;
 				MixerActivity.selSong = false;
 				MixerActivity.songList.setSelected(false);
-				Log.v("indexj", Integer.toString(mD.indexOf(j)));
+				//Log.v("indexj", Integer.toString(mD.indexOf(j)));
 				
 				selIndex = mD.indexOf(j);
 				this.invalidate();
@@ -307,7 +307,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 					for(Integer t: p.timesUsed()){
 						if(u.xstart == t){
 							u.length = p.getLength();
-							Log.v("inside final checkclips", Integer.toString(u.length) + Integer.toString(p.getLength()));
+							//Log.v("inside final checkclips", Integer.toString(u.length) + Integer.toString(p.getLength()));
 						}
 					}
 				}
