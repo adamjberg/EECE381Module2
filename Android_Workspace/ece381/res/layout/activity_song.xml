@@ -18,7 +18,6 @@
             android:text="@string/repeat_button"
             android:textOff="@string/repeat_button"
             android:textOn="@string/repeat_button"
-            android:onClick="repeatPlaylistToggle"
             />
 
         <Button
