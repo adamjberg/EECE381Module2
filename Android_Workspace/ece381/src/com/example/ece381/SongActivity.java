@@ -288,15 +288,15 @@ private TouchInterceptor.DropListener mDropListener =
 		        public void drop(int from, int to) {
 		            System.out.println("Droplisten from:"+from+" to:"+to);
 
-		            if(from == 0) {
+		            if(from == 0 || to == 0) {
 		            	return;
 		            }
 		            
 		            //Assuming that item is moved up the list
 		            int loop_start = from;
 		            int loop_end = to;
-		            String[] temp = new String[ db.querySongsBylist(db.getCurr_playlist_id()).length +1 ];
-		            temp = db.querySongsBylist(db.getCurr_playlist_id());
+		            String[] temp = new String[ db.querySongsBylist(db.getSelectedList()).length +1 ];
+		            temp = db.querySongsBylist(db.getSelectedList());
 		            
 		            String target = temp[from-1];
 		            Log.v("target", temp[from-1]);
@@ -322,7 +322,7 @@ private TouchInterceptor.DropListener mDropListener =
 		            int j = 1;
 		            while(temp.length >= j) {
 		            	int id = db.querySongByName(temp[j-1]);
-		            	Command.syncRemoveSongFromList(db.getCurr_playlist_id(), id);
+		            	Command.syncRemoveSongFromList(db.getSelectedList(), id);
 		            //	Log.v("removeiteration", ""+j);
 		            	j++;
 		            }
@@ -330,7 +330,7 @@ private TouchInterceptor.DropListener mDropListener =
 		            int k = 1;
 		            while(temp.length >= k) {
 		            	int id2 = db.querySongByName(temp[k-1]);
-		            	Command.syncAddSongToList(db.getCurr_playlist_id(), id2);
+		            	Command.syncAddSongToList(db.getSelectedList(), id2);
 		            //	Log.v("addIteration", ""+k);
 		            	k++;
 		            }
