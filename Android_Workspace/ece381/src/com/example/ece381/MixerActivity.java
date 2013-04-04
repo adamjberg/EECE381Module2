@@ -68,7 +68,8 @@ public class MixerActivity extends Activity {
 		}
 	}
 	
-	public void setUP(){
+	public void setUP() {
+		populateSongs();
 		textprog = (TextView) findViewById(R.id.progress);
 		textprog.setTextColor(Color.BLUE);
 		songList = (ListView) findViewById(R.id.listView1);
@@ -117,7 +118,6 @@ public class MixerActivity extends Activity {
 			}
 		});
 		songList.setAdapter(listAdapter); 
-		populateSongs();
 		createClipsFromSongs();
 	}
 	
