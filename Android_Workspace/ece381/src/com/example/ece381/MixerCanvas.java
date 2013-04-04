@@ -44,6 +44,9 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
+		if(canvas == null) {
+			return;
+		}
 		//Bitmap sweet = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		//canvas.drawColor(color.black);
 		//canvas.drawBitmap(sweet, (float) Math.random()*100, (float) Math.random()*100, null);
