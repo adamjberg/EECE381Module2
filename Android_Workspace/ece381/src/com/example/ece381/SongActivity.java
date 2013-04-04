@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,9 @@ public class SongActivity extends Activity {
   
   public final String addsong = "Add a song to this playlist...";
   
+  // TouchInterceptor
+  private TouchInterceptor mList;
+  
   public int lastItem = 0; // count of how many items in the ArrayAdapter; 
 	   //= 1 if there are no songs due to the "add a song" item
 
@@ -72,8 +76,8 @@ public class SongActivity extends Activity {
     songListView = (ListView) findViewById( R.id.songListView );
 
     // Create ArrayAdapter using the planet list.
-    listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names);    
-    
+    listAdapter = new ArrayAdapter<String>(this, R.layout.drag_drop_row, song_names);    
+
     // Instantiate the progress dialog
     pd = new ProgressDialog(this);
     pd.setMessage("Updating database - please wait");
@@ -123,8 +127,8 @@ public class SongActivity extends Activity {
     		}
     	}
     });
-    
 
+    
     // On long press, create a context menu window
     songListView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
     	
@@ -138,13 +142,19 @@ public class SongActivity extends Activity {
     			menu.add(0, 3, 0, "Properties");
     		}
         }
-    }); 
+    });
+
 
     // Set the ArrayAdapter as the ListView's adapter.
     songListView.setAdapter( listAdapter );      
     
     // Repeat button
     repeatBtn = (ToggleButton) findViewById(R.id.repeat_button);
+	
+	// TouchInterceptor
+	mList = (TouchInterceptor) songListView;
+    mList.setDropListener(mDropListener);
+    registerForContextMenu(mList);
   }
   protected void onActivityResult(int requestCode, int resultCode, Intent data ) {
 	  refreshSonglist();
@@ -233,10 +243,7 @@ public class SongActivity extends Activity {
 		// listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names); 
 		 Command.syncOpenSongsFromList(db.getCurr_playlist_id());
 		
-		 //refreshSonglist();
 		 showDelayDialog(x.length);
-		 refreshSonglist();
-		 refreshSonglist();
 		 
 		
 	 }
@@ -266,13 +273,75 @@ public class SongActivity extends Activity {
   public void showDelayDialog(int numSongs) {
 	  pd.show();
 	  
-	  int effective_delay = 1000*2*numSongs; // 2 seconds per song
+	  int effective_delay = 500*numSongs; // 0.5 seconds per song
 	  
 	  	Handler handler = new Handler();
 	  	handler.postDelayed(new Runnable() {
 	  		public void run() {
 	  			pd.dismiss();
+	  			refreshSonglist();
 	  		}}, effective_delay);
   }
+
+// TouchInterceptor for drag and drop
+private TouchInterceptor.DropListener mDropListener =
+		    new TouchInterceptor.DropListener() {
+		        public void drop(int from, int to) {
+		            System.out.println("Droplisten from:"+from+" to:"+to);
+
+		            if(from == 0) {
+		            	return;
+		            }
+		            
+		            //Assuming that item is moved up the list
+		            int loop_start = from;
+		            int loop_end = to;
+		            String[] temp = new String[ db.querySongsBylist(db.getCurr_playlist_id()).length +1 ];
+		            temp = db.querySongsBylist(db.getCurr_playlist_id());
+		            
+		            String target = temp[from-1];
+		            Log.v("target", temp[from-1]);
+		            
+		            //For instance where the item is dragged down the list
+		            if(from < to) { // go down the list
+			            for(int i = loop_start-1; i < loop_end-1; i++ ) {
+			            	temp[i] = temp[i+1];
+			            }
+		            }
+		            else { // go up the list
+		            	for(int i = loop_start-1; i > loop_end-1; i--) {
+		            		temp[i] = temp[i-1];
+		            	}
+		            }
+
+
+		            temp[to-1] = target;
+		        
+		            showDelayDialog(temp.length);
+		            
+		            // android side
+		            int j = 1;
+		            while(temp.length >= j) {
+		            	int id = db.querySongByName(temp[j-1]);
+		            	Command.syncRemoveSongFromList(db.getCurr_playlist_id(), id);
+		            //	Log.v("removeiteration", ""+j);
+		            	j++;
+		            }
+		            
+		            int k = 1;
+		            while(temp.length >= k) {
+		            	int id2 = db.querySongByName(temp[k-1]);
+		            	Command.syncAddSongToList(db.getCurr_playlist_id(), id2);
+		            //	Log.v("addIteration", ""+k);
+		            	k++;
+		            }
+		            
+		            
+		            Command.syncOpenSongsFromList(db.getSelectedList());
+		            showDelayDialog(temp.length);
+					
+		        }
+		    };
+  
   
 }

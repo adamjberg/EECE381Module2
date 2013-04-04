@@ -32,10 +32,13 @@
 
     </LinearLayout>
 
-    <ListView
+    <com.example.ece381.TouchInterceptor 
         android:id="@+id/songListView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false"
+        android:fastScrollEnabled="true"
+        android:textSize="18sp" />
 	
 </LinearLayout>
