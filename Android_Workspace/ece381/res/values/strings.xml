@@ -44,5 +44,10 @@
     <string name="create_playlist">Create Playlist</string>
     <string name="modify_playlist_name">Modify Playlist Name</string>
     <string name="MixerActivity">MixerActivity</string>
+    <string name="volume">Volume:</string>
+    <string name="pitch">Pitch:</string>
+    <string name="length">Length:</string>
+    <string name="playbackSpeed">Playback Speed:</string>
+    <string name="songName">Song Name</string>
     
 </resources>
