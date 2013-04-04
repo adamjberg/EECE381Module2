@@ -60,6 +60,7 @@ public class PlaylistBuilderActivity extends FragmentActivity {
 			if(action.equals("create")) {
 				// create a new playlist with the name entered
 				Command.syncCreatePlaylist(selectedValue);
+				//Command.syncOpenPlaylistsPanel();
 			}
 			else if(action.equals("rename")) {
 				// modify playlist name

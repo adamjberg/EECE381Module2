@@ -73,8 +73,10 @@ public class AllSongsListActivity extends Activity {
 		       Log.d("setCurr_songid: ", ""+songid);
 			   // add song to database
 			   Command.syncAddSongToList(db.getSelectedList(), db.getCurr_song_id());
-			   Command.syncPlaySongFromList(songid, db.getSelectedList());
+			   Command.syncOpenSongsFromList(db.getSelectedList());
+			   //Command.syncPlaySongFromList(songid, db.getSelectedList());
 		       Log.d("getCurr_plid: ", ""+db.getSelectedList());
+		       Log.d("add song id", String.valueOf(db.getCurr_song_id()));
 			//  db.addSongToList(db.getCurr_playlist_id(), db.getCurr_song_id());
 			   
 			   // Return intent

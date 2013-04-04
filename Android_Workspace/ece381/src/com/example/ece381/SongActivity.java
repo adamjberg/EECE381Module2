@@ -151,8 +151,8 @@ public class SongActivity extends Activity {
   }
   
  public void onResume() {
-	  super.onResume();
 	  refreshSonglist();
+	  super.onResume();
   }
   
  @Override
@@ -194,7 +194,7 @@ public class SongActivity extends Activity {
 	  	listAdapter.clear();
 	    // "add a song" button
 	  	listAdapter.add(addsong);
-	  	listAdapter.addAll(db.querySongsBylist(db.getCurr_playlist_id()));
+	  	listAdapter.addAll(db.querySongsBylist(db.getSelectedList()));
 	  	// set the current last position (end of the list)
 	  	this.lastItem = listAdapter.getCount(); 
 
@@ -235,8 +235,6 @@ public class SongActivity extends Activity {
 		
 		 //refreshSonglist();
 		 showDelayDialog(x.length);
-		 refreshSonglist();
-		 refreshSonglist();
 		 
 		
 	 }
@@ -266,12 +264,13 @@ public class SongActivity extends Activity {
   public void showDelayDialog(int numSongs) {
 	  pd.show();
 	  
-	  int effective_delay = 1000*2*numSongs; // 2 seconds per song
+	  int effective_delay = 100*numSongs; // 2 seconds per song
 	  
 	  	Handler handler = new Handler();
 	  	handler.postDelayed(new Runnable() {
 	  		public void run() {
 	  			pd.dismiss();
+	  			refreshSonglist();
 	  		}}, effective_delay);
   }
   
