@@ -280,4 +280,9 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		playScroll++;
 	}
+	
+	
+	public void checkClips(){
+		
+	}
 }
