@@ -139,6 +139,6 @@ public class SongPropertyActivity extends Activity {
 	}
 	
 	public void onPlayPressed(View view) {
-		clip.play();
+		clip.play(0);
 	}
 }

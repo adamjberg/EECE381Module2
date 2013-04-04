@@ -126,9 +126,15 @@ public class Clip {
 	}
 	
 	public void play() {
-		Command.syncPlay(ID, volume, position);
+		if(startTimes.size() > 0) {
+			Command.syncPlay(ID, volume, -startTimes.get(0) * 10);			
+		}
 	}
 
+	public void play(int startPos) {
+		Command.syncPlay(ID, volume, startPos);			
+	}
+	
 	public void stop() {
 		Command.syncPause(ID);
 	}

@@ -99,7 +99,7 @@ public class Mix {
 	
 	
 	public void play() {
-		for (int i = 0; i < lengthOf(); i++) {
+		for (int i = 0; i < usedClips.size(); i++) {
 			usedClips.get(i).play();
 		}
 	}
