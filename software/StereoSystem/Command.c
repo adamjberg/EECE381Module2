@@ -455,6 +455,13 @@ void setPlaybackSpeed(int id, int speed) {
 	setSongPlaybackSpeed(db.songs[id], speed);
 }
 
+// index 27
+void reloadSongById(int id) {
+	if(db.songs[id] == NULL || id <= 0 || id > db.num_of_songs) return;
+	unloadSong(db.songs[id]);
+	loadSong(db.songs[id]);
+}
+
 void shuffle(int index) {
 	printf("Playlist %d is shuffled\n", index);
 }

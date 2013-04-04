@@ -84,6 +84,10 @@ void openSongsFromList(int);
 void playSongFromList(int, int);
 //index 25
 void syncStartPlay();
+// index 26
+void setPlaybackSpeed(int, int);
+// index 27
+void reloadSongById(int);
 
 void repeatCurrentSong();
 

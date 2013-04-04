@@ -107,6 +107,9 @@ void cmdProcessing(struct CmdScheduler* this) {
 		case 26:
 			setPlaybackSpeed(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]));
 			break;
+		case 27:
+			reloadSongById(atoi(cmd->parameters[0]));
+			break;
 		default:
 			break;
 		}
