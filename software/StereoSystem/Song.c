@@ -69,7 +69,11 @@ void setSongVolume(struct Song* this, float volume) {
 }
 
 void setSongPitch(struct Song* this, float pitch, int quality) {
-	setSoundPitch(this->sound, pitch, quality);
+	setSoundPitch(this->sound, (pitch * 0.01), quality);
+}
+
+void setSongPlaybackSpeed(struct Song* this, int speed) {
+	setSoundPlaybackSpeed(this->sound, (speed * 0.01));
 }
 
 void playSong(struct Song* this, float volume, int startTime, int loops) {
