@@ -12,7 +12,7 @@ public class Clip {
 	private ArrayList<Integer> startTimes = new ArrayList<Integer>();
 	private int length;
 	private int volume;
-	private int position;
+	private int position = 0;
 	private int playbackSpeed=50;
 	private int pitch=50;
 
