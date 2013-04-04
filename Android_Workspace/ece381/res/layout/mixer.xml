@@ -16,7 +16,7 @@
         android:clickable="true"
         android:scrollbarAlwaysDrawVerticalTrack="false" 
         android:choiceMode="singleChoice"
-        android:listSelector="@color/grey">"
+        android:listSelector="@color/grey">
 	</ListView>
 	
     <ImageButton
@@ -25,7 +25,7 @@
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/listView1"
-         />
+        android:onClick="onPlayPressed" />
 
     <ImageButton
         android:id="@+id/stop"
@@ -33,7 +33,7 @@
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/play"
-         />
+        android:onClick="onStopPressed" />
 
     <ImageButton
         android:id="@+id/properties"
@@ -41,7 +41,7 @@
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/stop"
-         />
+        android:onClick="onPropertiesPressed" />
     
     <ImageButton
         android:id="@+id/delete"
@@ -49,15 +49,15 @@
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/properties"
-         />
+        android:onClick="onDeletePressed" />
     
     <ImageButton
         android:id="@+id/save"
         android:layout_width="60dip"
         android:layout_height="60dip"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight= "true"
-         />
+        android:layout_alignParentRight="true"
+        android:onClick="onSavePressed" />
     
     <TextView
         android:id="@+id/progress"
