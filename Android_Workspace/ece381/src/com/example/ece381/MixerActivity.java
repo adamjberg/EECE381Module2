@@ -87,9 +87,11 @@ public class MixerActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adv, View v, int index,
 					long it) {
+				indexOfSel = index;
 				selectedClip = theMix.getClipat(index);
 				idOfSongSelected = selectedClip.getID();
 				mixerCanvas.selIndex = -1;
+				System.out.println( "When Clicked" + indexOfSel + " ID:" + idOfSongSelected  );
 				mixerCanvas.invalidate();
 			}
 			
