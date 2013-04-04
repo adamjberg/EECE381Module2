@@ -49,5 +49,6 @@
     <string name="length">Length:</string>
     <string name="playbackSpeed">Playback Speed:</string>
     <string name="songName">Song Name</string>
+    <string name="SongPropertyActivity">Song Properties</string>
     
 </resources>
