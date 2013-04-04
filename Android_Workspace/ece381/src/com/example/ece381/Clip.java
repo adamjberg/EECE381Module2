@@ -13,8 +13,8 @@ public class Clip {
 	private int length;
 	private int volume;
 	private int position;
-	private int playbackSpeed;
-	private int pitch;
+	private int playbackSpeed=50;
+	private int pitch=50;
 
 	// TODO: DE2 implementation of clips
 
