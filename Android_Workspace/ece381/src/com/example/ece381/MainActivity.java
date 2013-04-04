@@ -4,12 +4,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -20,22 +21,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
-import android.widget.SimpleAdapter;
-
 
 import com.example.ece381.Communication.Stats;
 
@@ -95,17 +90,6 @@ public class MainActivity extends Activity {
 			
 			this.isSubActivity = true;
 		}
-		
-		 /* TODO
-		  * here
-		  * fdadsfs
-		  * sdfsdfsf
-		  * sfsdfsdf
-		  */
-		 Intent i = new Intent(this, MixerActivity.class);
-			startActivity(i);
-		 //*/
-
 	}
 
 	@Override
@@ -118,37 +102,36 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+
 	@Override
-	 public boolean onOptionsItemSelected(MenuItem item) {
-	  // TODO Auto-generated method stub
-	  switch(item.getItemId()){
-	  case android.R.id.home:
-		  finish();
-        //  NavUtils.navigateUpFromSameTask(this);
-		 // onBackPressed();
-          return true;
-	  case R.id.songs:
-		  Toast.makeText(MainActivity.this,
-		    "Already in song list",
-		     Toast.LENGTH_LONG).show();
-		  return true;
-	  case R.id.menu_settings:
-		  Toast.makeText(MainActivity.this,
-		    item.getTitle(),
-		     Toast.LENGTH_LONG).show();
-		  return true;
-	  case R.id.playlists:
-		  Intent intent = new Intent(MainActivity.this, MixerActivity.class);
-          startActivity(intent);   
-		  return true;
-	  case R.id.playMenu:
-		  //com.getDB().setCurr_playlist_id(0);
-		  Intent intent2 = new Intent(MainActivity.this, play.class);
-          startActivity(intent2);   
-		  return true;
-	  }
-	  return super.onOptionsItemSelected(item);
-	 } 
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			// NavUtils.navigateUpFromSameTask(this);
+			// onBackPressed();
+			return true;
+		case R.id.songs:
+			Toast.makeText(MainActivity.this, "Already in song list",
+					Toast.LENGTH_LONG).show();
+			return true;
+		case R.id.menu_settings:
+			intent = new Intent(MainActivity.this, MixerActivity.class);
+			startActivity(intent);
+			return true;
+		case R.id.playlists:
+			intent = new Intent(MainActivity.this, PlaylistActivity.class);
+			startActivity(intent);
+			return true;
+		case R.id.playMenu:
+			// com.getDB().setCurr_playlist_id(0);
+			intent = new Intent(MainActivity.this, play.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	@Override
 	public void finish() {
