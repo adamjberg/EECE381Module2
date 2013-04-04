@@ -60,7 +60,7 @@ public class MixerActivity extends Activity {
 	public void createClipsFromSongs() {
 		Song[] songs = db.getSongs();
 		Song nextSong;
-		for(int i = 0; i < songs.length; i++) {
+		for(int i = 0; i < db.getTotalSongs(); i++) {
 			nextSong = songs[i];
 			if(nextSong != null) {
 				theMix.addClip(new Clip(nextSong));
@@ -137,10 +137,12 @@ public class MixerActivity extends Activity {
 		db.addSong(new Song("Sheep2"));
 		db.addSong(new Song("Sheep3"));
 		db.addSong(new Song("Popsicle"));
-
+		
 		Song[] songs = db.getSongs();
-		for(int i = 0; i < 4; i++) {
-			songs[i].setSize(200);
+		for(int i = 0; i < db.getTotalSongs(); i++) {
+			if(songs[i] != null) {
+				songs[i].setSize(200);
+			}
 		}
 	}
 	
