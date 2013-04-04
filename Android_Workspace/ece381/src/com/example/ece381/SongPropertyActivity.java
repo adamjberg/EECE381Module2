@@ -13,7 +13,6 @@ public class SongPropertyActivity extends Activity {
 	private Clip clip;
 	private SeekBar volumeBar;
 	private SeekBar pitchBar;
-	private SeekBar lengthBar;
 	private SeekBar speedBar;
 	
 	@Override
@@ -28,7 +27,6 @@ public class SongPropertyActivity extends Activity {
 	private void initializeProgressBars() {
 		volumeBar = (SeekBar) findViewById(R.id.volumeBar);
 		pitchBar = (SeekBar) findViewById(R.id.pitchBar);
-		lengthBar = (SeekBar) findViewById(R.id.lengthBar);
 		speedBar = (SeekBar) findViewById(R.id.speedBar);
 		
 		volumeBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -67,24 +65,6 @@ public class SongPropertyActivity extends Activity {
 			}
 		});
 		
-		lengthBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				clip.setLength(lengthBar.getProgress());
-			}
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				
-			}
-		});
-		
 		speedBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
@@ -105,7 +85,6 @@ public class SongPropertyActivity extends Activity {
 		
 		volumeBar.setProgress(clip.getVolume());
 		pitchBar.setProgress(clip.getPitch());
-		lengthBar.setProgress(clip.getLength());
 		speedBar.setProgress(clip.getPlaybackSpeed());
 	}
 	
@@ -120,10 +99,6 @@ public class SongPropertyActivity extends Activity {
 
 	public void onPitchChanged(ProgressBar bar) {
 		clip.setPitch(bar.getProgress());
-	}
-
-	public void onLengthChanged(ProgressBar bar) {
-		clip.setLength(bar.getProgress());
 	}
 
 	public void onPlayBackSpeedChanged(ProgressBar bar) {
