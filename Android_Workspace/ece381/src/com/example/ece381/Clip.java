@@ -5,7 +5,6 @@ import java.util.ArrayList;
 //Clips are mutable Android objects representations of sound clips that are physically on the DE2. Manipulation of Clips
 //in Android will directly or indirectly affect the physical representations on the DE2
 
-
 public class Clip {
 	private int ID;
 	private String name;
@@ -13,34 +12,36 @@ public class Clip {
 	private ArrayList<Integer> startTimes = new ArrayList<Integer>();
 	private int length;
 	private int volume;
-	private int location; 
-	
-	//TODO: DE2 implementation of clips
-	
-	//defualt constructor
-	public Clip(){
-		name= "default";
+	private int position;
+	private int playbackSpeed;
+	private int pitch;
+
+	// TODO: DE2 implementation of clips
+
+	// defualt constructor
+	public Clip() {
+		name = "default";
 		numberOfPlays = 0;
 	}
-	
-	//constructor with name and length of song
-	public Clip(String name, int length){
+
+	// constructor with name and length of song
+	public Clip(String name, int length) {
 		this.name = name;
 		this.length = length;
 	}
-	
-	//conctructor to add 2 clips together
-	public Clip(Clip a, Clip b){
+
+	// conctructor to add 2 clips together
+	public Clip(Clip a, Clip b) {
 		name = "new appended clip";
-		length =a.length + b.length;
+		length = a.length + b.length;
 	}
-	
-	//constructor to make a new sub clip 
-	public Clip(Clip a, int start, int end){
+
+	// constructor to make a new sub clip
+	public Clip(Clip a, int start, int end) {
 		name = "newsubclip";
 		length = end - start;
 	}
-	
+
 	public Clip(String s, int length, int id) {
 		// TODO Auto-generated constructor stub
 		this.name = s;
@@ -48,87 +49,140 @@ public class Clip {
 		this.ID = id;
 	}
 
-	//create a new clip from a old clip by chopping off the ending starting from location
-	public Clip split(int location){
-		if(length > location && location > 0){
+	public Clip(Song song) {
+		this.name = song.getSongName();
+		this.ID = song.getId();
+		this.length = song.getSize();
+		this.volume = song.getVolume();
+		this.position = song.getPos();
+		this.pitch = 50;
+		this.playbackSpeed = 50;
+	}
+
+	// create a new clip from a old clip by chopping off the ending starting
+	// from location
+	public Clip split(int location) {
+		if (length > location && location > 0) {
 			return new Clip("new clip", length - location);
-		}
-		else{
+		} else {
 			return null;
 		}
 	}
-	
-	//set up a clip to be played at a time
-	public void setToPlayAt(int time){
+
+	// set up a clip to be played at a time
+	public void setToPlayAt(int time) {
 		numberOfPlays++;
 		startTimes.add(time);
 	}
-	
-	public void setToPlayAt(int time, int set){
+
+	public void setToPlayAt(int time, int set) {
 		numberOfPlays++;
 		startTimes.add(time);
 	}
-	
-	//remove a play time at an index
-	public void removePlayAt(int index){
+
+	// remove a play time at an index
+	public void removePlayAt(int index) {
 		startTimes.remove(index);
 		numberOfPlays--;
 	}
-	
-	//chop current clip from both ends at start to end
-	public void cutClip(int start, int end){
-		if(end - start < length){
-			//TODO Chop clip on DE2 
+
+	// chop current clip from both ends at start to end
+	public void cutClip(int start, int end) {
+		if (end - start < length) {
+			// TODO Chop clip on DE2
 			length = end - start;
-		}
-		else{
+		} else {
 			System.out.println("did not cut");
 		}
 	}
-	
-	//attach another clip to the end of current clip
-	public void appendClip(Clip other){
-		//TODO append on DE2
-		if(this.numberOfPlays ==0){
-		length += other.length;
+
+	// attach another clip to the end of current clip
+	public void appendClip(Clip other) {
+		// TODO append on DE2
+		if (this.numberOfPlays == 0) {
+			length += other.length;
 		}
-		
-		else{
+
+		else {
 			new Clip(this, other);
 		}
 	}
-	
-	//merge the sound of 2 clips
-	public Clip mergeClips( Clip other){
-		//TODO merge sounds on DE2
-		Clip temp = (other.length>this.length) ? other : this;
+
+	// merge the sound of 2 clips
+	public Clip mergeClips(Clip other) {
+		// TODO merge sounds on DE2
+		Clip temp = (other.length > this.length) ? other : this;
 		return temp;
 	}
-	
-	public void wipePlayData(){
+
+	public void wipePlayData() {
 		numberOfPlays = 0;
 		startTimes.clear();
+	}
+
+	public void play() {
+		Command.syncPlay(ID, volume, position);
+	}
+
+	public void stop() {
+		Command.syncPause(ID);
+	}
+
+	public int getVolume() {
+		return volume;
+	}
+
+	public int getPosition() {
+		return position;
 	}
 
 	public int getLength() {
 		return length;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
-	
-	public void setName(String newName){
+
+	public int getPitch() {
+		return pitch;
+	}
+
+	public int getPlaybackSpeed() {
+		return playbackSpeed;
+	}
+
+	public void setVolume(int volume) {
+		this.volume = volume;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public void setPitch(int pitch) {
+		this.pitch = pitch;
+	}
+
+	public void setPlaybackSpeed(int playbackSpeed) {
+		this.playbackSpeed = playbackSpeed;
+	}
+
+	public void setName(String newName) {
 		name = newName;
 	}
-	
-	public ArrayList<Integer> timesUsed(){
+
+	public ArrayList<Integer> timesUsed() {
 		return (ArrayList<Integer>) startTimes.clone();
 	}
-	
-	public void changePlayTime(int index, int time){
+
+	public void changePlayTime(int index, int time) {
 		startTimes.add(index, time);
-		startTimes.remove(index ++);
+		startTimes.remove(index++);
 	}
 
 	public int getID() {
