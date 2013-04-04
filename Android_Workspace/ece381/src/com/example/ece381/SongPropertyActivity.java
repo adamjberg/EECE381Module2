@@ -130,8 +130,15 @@ public class SongPropertyActivity extends Activity {
 		clip.setPlaybackSpeed(bar.getProgress());
 	}
 
-	public void onPlayPressed(View view) {
+	public void onSyncPressed(View view) {
 		clip.updateSongInDatabase();
+	}
+	
+	public void onReloadSong(View view) {
+		clip.reload();
+	}
+	
+	public void onPlayPressed(View view) {
 		clip.play();
 	}
 }
