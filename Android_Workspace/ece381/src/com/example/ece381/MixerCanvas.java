@@ -213,9 +213,15 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	}
 
 	public void deleteSelectedSeg() {
-		MixerActivity.theMix.removeClipPlay(MixerActivity.indexOfSel, mD.get(selIndex).xstart);
-		mD.remove(selIndex);
-		
+		int tempindex = -1;
+		for(Clip p :MixerActivity.theMix.listContents()){
+			if(p.getID() == mD.get(selIndex).iD){
+				tempindex = MixerActivity.theMix.listContents().indexOf(p);
+			}
+		}
+		if(tempindex !=-1){
+		MixerActivity.theMix.removeClipPlay(tempindex, mD.get(selIndex).xstart);
+		mD.remove(selIndex);}
 	}
 
 
@@ -229,7 +235,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	private boolean aliastest(Point p) {
 	//TODO set 100 to equal current selected song.length
 		int temp =100;//length of currently select song
-		//temp = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
+		temp = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
 		for(MixUIData j: mD){
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
@@ -262,15 +268,21 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		//MixerActivity.idOfSongSelected = 0;
 		//MixerActivity.selSong = false;
 		//selIndex = -1;
-		if(selIndex >=0){
-		this.deleteSelectedSeg();
-		this.addElement(p);
-		this.selIndex= mD.size()-1;}
 		this.invalidate();
 		return false;
 	}
 	
-	
+	public void replace(Point p){
+		if(selIndex >=0 && !trySelElement(p)){
+		//this.deleteSelectedSeg();
+		//this.addElement(p);
+		//this.selIndex= mD.size()-1;
+			MixerActivity.theMix.getClipat(mD.get(selIndex).mixIndex).setToPlayAt(p.x);
+			MixerActivity.theMix.removeClipPlay(mD.get(selIndex).mixIndex, mD.get(selIndex).xstart);
+			mD.get(selIndex).xstart = p.x;
+		}
+		this.invalidate();
+	}
 	
 	public void drawPlaybar(Canvas c){
 		Paint p = new Paint();
