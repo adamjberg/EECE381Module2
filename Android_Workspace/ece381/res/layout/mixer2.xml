@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mixerfixed"
+    android:id="@+id/mixer2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:orientation="horizontal">
+	android:orientation="horizontal" 
+	android:baselineAligned="false">
     
     <ListView
         android:id="@+id/listView1"
@@ -30,7 +31,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="46" />
 
-    <com.example.mixer.MixerCanvas
+    <com.example.ece381.MixerCanvas
         android:id="@+id/drawSurface"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -81,7 +82,7 @@
     <ImageButton
         android:id="@+id/save"
         android:layout_width="40dip"
-        android:layout_height="40dip"/>"
+        android:layout_height="40dip"/>
 
         
 	</LinearLayout>

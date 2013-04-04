@@ -37,7 +37,7 @@ public class MixerActivity extends Activity {
 	@Override		
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.mixer);
+		this.setContentView(R.layout.mixer2);
 		setUP();
 		refreshList();
 	}
