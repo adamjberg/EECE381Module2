@@ -62,25 +62,29 @@
         android:id="@+id/play"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onPlayPressed" />
+        android:onClick="onPlayPressed"
+        android:src="@android:drawable/ic_media_play" />
 
     <ImageButton
         android:id="@+id/stop"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onStopPressed" />
+        android:onClick="onStopPressed" 
+        android:src="@android:drawable/ic_media_stop"/>
 
     <ImageButton
         android:id="@+id/properties"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onPropertiesPressed" />
+        android:onClick="onPropertiesPressed" 
+        android:src="@android:drawable/ic_menu_settings_holo_light"/>
     
     <ImageButton
         android:id="@+id/delete"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onDeletePressed" />
+        android:onClick="onDeletePressed" 
+        android:src="@android:drawable/btn_dialog_disable"/>
 
     <SeekBar
         android:id="@+id/volume"
@@ -93,7 +97,8 @@
         android:id="@+id/save"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:onClick="onSavePressed" />
+        android:onClick="onSavePressed" 
+        android:src="@android:drawable/ic_menu_save"/>
         
 	</LinearLayout>
    
