@@ -102,6 +102,10 @@ void cmdProcessing(struct CmdScheduler* this) {
 			playSongFromList(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]));
 			break;
 		case 25:
+			setPitch(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]), atoi(cmd->parameters[2]));
+			break;
+		case 26:
+			setPlaybackSpeed(atoi(cmd->parameters[0]), atoi(cmd->parameters[1]));
 			break;
 		default:
 			break;
