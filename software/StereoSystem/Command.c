@@ -422,7 +422,6 @@ void removeList(int index) {
 //index 20
 void playSongFromAllSongs(int id, int vol, int pos) {
 	playSongsFromSongPanel(id, vol, pos);
-	printf("play song %d from all song panel\n", id);
 }
 //index 21
 void openAllSongPanel() {
@@ -430,14 +429,11 @@ void openAllSongPanel() {
 }
 //index 22
 void openPlaylistsPanel() {
-	printf("open playlist panel\n");
 	drawAllLists();
 }
 //index 23
 void openSongsFromList(int list_id) {
-	printf("List id is %d\n\n\n", list_id);
 	drawAllSongsInList(list_id);
-	printf("open songs from list\n");
 }
 //index 24
 void playSongFromList(int song_id, int list_id) {

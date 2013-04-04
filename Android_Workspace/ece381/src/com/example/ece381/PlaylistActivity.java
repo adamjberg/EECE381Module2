@@ -242,7 +242,7 @@ public class PlaylistActivity extends Activity {
   public void refreshPlaylists() {
 	  	listAdapter.clear();
 	  	listAdapter.add("Create a new playlist");
-	  	listAdapter.addAll(db.getListsName());
+  		listAdapter.addAll(db.getListsName());
 	    listAdapter.notifyDataSetChanged();
   }
   

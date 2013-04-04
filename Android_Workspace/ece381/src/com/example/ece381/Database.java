@@ -145,15 +145,7 @@ public class Database {
 	}
 	
 	public String[] getListsName() {
-		String result[] = new String[this.num_of_lists];
-		
-		int i;
-		for(i = 0; i < this.num_of_lists; i++) {
-			if(this.lists_name.get(i) != "") {
-				result[i] = (String) this.lists_name.get(i);
-			}
-		}
-		return result;
+		return this.lists_name.toArray(new String[lists_name.size()]);
 	}
 	
 	public void addList(Playlist pl) {

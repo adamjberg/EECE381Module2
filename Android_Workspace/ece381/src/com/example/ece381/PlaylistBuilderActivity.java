@@ -51,6 +51,7 @@ public class PlaylistBuilderActivity extends FragmentActivity {
 		
 		if( checkNameValid(selectedValue) ) {
 			// Check whether or not the list already exists
+			
 			for(int j = 0; j < db.getListsName().length; j++) {
 				if(db.getListsName()[j] == selectedValue) {
 					Toast.makeText(this, "Playlist already exists!", Toast.LENGTH_SHORT).show();

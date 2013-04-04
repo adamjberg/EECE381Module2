@@ -209,7 +209,7 @@ public class SongActivity extends Activity {
 	    listAdapter.notifyDataSetChanged();
   }
   public void onShuffle(View view ){
-	  String[] x=db.querySongsBylist(db.getCurr_playlist_id()); 
+	  String[] x=db.querySongsBylist(db.getSelectedList()); 
 	  shuffleArray(x);
 	  
 	  for(int j = 0; j < x.length; j++)
@@ -217,21 +217,21 @@ public class SongActivity extends Activity {
 	  
 		 int i=1;
 		
-		 while (x.length >= i){
-		 Command.syncRemoveSongFromList(db.getCurr_playlist_id(),db.querySongByName(x[i-1]));
-		// Command.syncAddSongToList(db.getCurr_playlist_id(),db.querySongByName(x[i-1]));
-		 i++;
-  }
+		 while (x.length >= i) {
+			 Command.syncRemoveSongFromList(db.getSelectedList(),db.querySongByName(x[i-1]));
+			 // Command.syncAddSongToList(db.getCurr_playlist_id(),db.querySongByName(x[i-1]));
+			 i++;
+		 }
 		 int k=1;
 		 while (x.length >= k){
 			// Command.syncRemoveSongFromList(db.getCurr_playlist_id(),db.querySongByName(x[i-1]));
-			 Command.syncAddSongToList(db.getCurr_playlist_id(),db.querySongByName(x[k-1]));
+			 Command.syncAddSongToList(db.getSelectedList(),db.querySongByName(x[k-1]));
 			 k++;
-	  }
+		 }
 		// listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names);    
 		 
 		// listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, song_names); 
-		 Command.syncOpenSongsFromList(db.getCurr_playlist_id());
+		 Command.syncOpenSongsFromList(db.getSelectedList());
 		
 		 //refreshSonglist();
 		 showDelayDialog(x.length);
