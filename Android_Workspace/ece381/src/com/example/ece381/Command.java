@@ -384,4 +384,12 @@ public class Command {
 		cmd.addParameter(String.valueOf(speed));
 		com.send(cmd);
 	}
+	
+	// index 27
+	static public void syncReloadSong(int song_id) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(27);
+		cmd.addParameter(String.valueOf(song_id));
+		com.send(cmd);
+	}
 }
