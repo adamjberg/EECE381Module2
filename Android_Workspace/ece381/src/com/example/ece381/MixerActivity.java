@@ -1,6 +1,7 @@
 package com.example.ece381;
 
 
+import java.util.Timer;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -30,6 +31,7 @@ public class MixerActivity extends Activity {
 	public static boolean selSong = false; //true = a song is selected| false = mixelement is selected if songid =0
 	public static int indexOfSel = -1;
 	private ArrayAdapter<String> listAdapter;
+	private Timer play_timer = new Timer();
 	
 	private Communication com = Communication.getInstance();
 	private Database db = com.getDB();
