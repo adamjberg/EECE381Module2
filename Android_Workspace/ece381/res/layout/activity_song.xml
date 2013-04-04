@@ -14,10 +14,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="repeatPlaylistToggle"
             android:text="@string/repeat_button"
             android:textOff="@string/repeat_button"
             android:textOn="@string/repeat_button"
-            android:onClick="repeatPlaylistToggle"
             />
 
         <Button
@@ -32,10 +32,13 @@
 
     </LinearLayout>
 
-    <ListView
+    <com.example.ece381.TouchInterceptor 
         android:id="@+id/songListView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false"
+        android:fastScrollEnabled="true"
+        android:textSize="18sp" />
 	
 </LinearLayout>

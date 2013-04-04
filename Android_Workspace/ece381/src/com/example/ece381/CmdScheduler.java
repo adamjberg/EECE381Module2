@@ -98,6 +98,8 @@ public class CmdScheduler {
 					Integer.valueOf(cmd.getParameterList().get(1)).intValue(),
 					 Integer.valueOf(cmd.getParameterList().get(2)).intValue());
 				break;
+			case 25:
+				break;
 			default:
 				break;
 			}

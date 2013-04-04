@@ -51,6 +51,7 @@ public class PlaylistBuilderActivity extends FragmentActivity {
 		
 		if( checkNameValid(selectedValue) ) {
 			// Check whether or not the list already exists
+			
 			for(int j = 0; j < db.getListsName().length; j++) {
 				if(db.getListsName()[j] == selectedValue) {
 					Toast.makeText(this, "Playlist already exists!", Toast.LENGTH_SHORT).show();
@@ -60,6 +61,7 @@ public class PlaylistBuilderActivity extends FragmentActivity {
 			if(action.equals("create")) {
 				// create a new playlist with the name entered
 				Command.syncCreatePlaylist(selectedValue);
+				//Command.syncOpenPlaylistsPanel();
 			}
 			else if(action.equals("rename")) {
 				// modify playlist name

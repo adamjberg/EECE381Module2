@@ -452,7 +452,7 @@ public class MainActivity extends Activity {
 								if(com.getBit(buf[0], 1) == 1 && ((int)buf[1] + (int)buf[2]) != 0) {
 									com.setState(Stats.sendAck0);
 									com.setReceivePacketSize((int)(buf[1]<<8)+(int)buf[2]);
-									Log.i("MY_MESSAGE", "packet received: "+String.valueOf(com.getReceivePacketSize()));
+									//Log.i("MY_MESSAGE", "packet received: "+String.valueOf(com.getReceivePacketSize()));
 								} else
 									com.setState(Stats.sendStates);
 							} else {
