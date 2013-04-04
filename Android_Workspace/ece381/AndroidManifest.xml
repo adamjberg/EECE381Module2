@@ -57,7 +57,11 @@
         <activity
             android:name="com.example.ece381.MixerActivity"
             android:label="@string/MixerActivity"
-            android:screenOrientation="landscape">"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".SongPropertyActivity"
+            android:label="@string/SongPropertyActivity">
         </activity>
     </application>
 </manifest>
