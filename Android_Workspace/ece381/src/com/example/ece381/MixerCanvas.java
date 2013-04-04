@@ -291,9 +291,9 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		//this.deleteSelectedSeg();
 		//this.addElement(p);
 		//this.selIndex= mD.size()-1;
-			MixerActivity.theMix.getClipat(mD.get(selIndex).mixIndex).setToPlayAt(p.x);
+			MixerActivity.theMix.getClipat(mD.get(selIndex).mixIndex).setToPlayAt(p.x + progress);
 			MixerActivity.theMix.removeClipPlay(mD.get(selIndex).mixIndex, mD.get(selIndex).xstart);
-			mD.get(selIndex).xstart = p.x;
+			mD.get(selIndex).xstart = p.x + progress;
 			mD.get(selIndex).ystart = p.y;
 		}
 		this.invalidate();
