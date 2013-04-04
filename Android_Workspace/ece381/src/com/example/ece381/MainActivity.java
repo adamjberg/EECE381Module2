@@ -60,21 +60,6 @@ public class MainActivity extends Activity {
 			 getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 			 this.getActionBar().hide();
 		 }
-
-		// Set up a timer task.  We will use the timer to check the
-		// input queue every 500 ms
-		 
-		      /* TODO
-		       * here
-		       * fdadsfs
-		       * sdfsdfsf
-		       * sfsdfsdf
-		       */
-		     Intent i = new Intent(this, MixerActivity.class);
-		       startActivity(i);
-		      //*/ 
-
-		
 		 
 		Bundle extras = getIntent().getExtras();
 		if(extras == null) {
