@@ -107,15 +107,13 @@ public class MixerActivity extends Activity {
 				mixerCanvas.addElement(p);
 				//Timeline.setMax(theMix.lengthOf() + 3000 /*30 sec*/);
 				}
-				else{
-					if(mixerCanvas.trySelElement(p)){
+				else if(mixerCanvas.trySelElement(p)){
 						idOfSongSelected = 0;
 						selSong = false;
 					}
+				else{
+					mixerCanvas.replace(p);
 				}
-				
-
-				
 				return false;
 			}
 		});

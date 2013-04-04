@@ -64,7 +64,15 @@ public class MainActivity extends Activity {
 		// Set up a timer task.  We will use the timer to check the
 		// input queue every 500 ms
 		 
-		 
+		      /* TODO
+		       * here
+		       * fdadsfs
+		       * sdfsdfsf
+		       * sfsdfsdf
+		       */
+		     Intent i = new Intent(this, MixerActivity.class);
+		       startActivity(i);
+		      //*/ 
 
 		
 		 
