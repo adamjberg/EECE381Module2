@@ -259,9 +259,10 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		//MixerActivity.idOfSongSelected = 0;
 		//MixerActivity.selSong = false;
 		//selIndex = -1;
+		if(selIndex >=0){
 		this.deleteSelectedSeg();
 		this.addElement(p);
-		this.selIndex= mD.size()-1;
+		this.selIndex= mD.size()-1;}
 		this.invalidate();
 		return false;
 	}
