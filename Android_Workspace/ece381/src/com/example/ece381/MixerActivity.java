@@ -145,7 +145,8 @@ public class MixerActivity extends Activity {
 	}
 	
 	public void onSavePressed(View view) {
-
+		//insert a name for the mix
+		theMix.saveMix();
 	}
 
 	public void onDeletePressed(View view) {

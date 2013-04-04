@@ -47,11 +47,6 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		if(canvas == null) {
 			return;
 		}
-		//Bitmap sweet = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-		//canvas.drawColor(color.black);
-		//canvas.drawBitmap(sweet, (float) Math.random()*100, (float) Math.random()*100, null);
-		
-		
 		int offset = progress % 100;
 		Paint paint = new Paint();
 		paint.setStyle(Paint.Style.STROKE);
@@ -233,7 +228,6 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	}
 
 	private boolean aliastest(Point p) {
-	//TODO set 100 to equal current selected song.length
 		int temp =100;//length of currently select song
 		temp = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getLength();
 		for(MixUIData j: mD){
@@ -247,9 +241,8 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		return false;
 	}
 	
-	private boolean aliastest(Point p, int c) {
-	//TODO set 100 to equal current selected song.length
-		int temp = c;
+	private boolean aliastest(Point p, int length) {
+		int temp = length;
 		for(MixUIData j: mD){
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
@@ -278,19 +271,12 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			}
 		}
 		
-		//TODO change when implemented
-		//MixerActivity.idOfSongSelected = 0;
-		//MixerActivity.selSong = false;
-		//selIndex = -1;
 		this.invalidate();
 		return false;
 	}
 	
 	public void replace(Point p){
 		if(selIndex >=0 && !trySelElement(p) && !aliastest(p , mD.get(selIndex).length)){
-		//this.deleteSelectedSeg();
-		//this.addElement(p);
-		//this.selIndex= mD.size()-1;
 			MixerActivity.theMix.getClipat(mD.get(selIndex).mixIndex).setToPlayAt(p.x + progress);
 			MixerActivity.theMix.removeClipPlay(mD.get(selIndex).mixIndex, mD.get(selIndex).xstart);
 			mD.get(selIndex).xstart = p.x + progress;

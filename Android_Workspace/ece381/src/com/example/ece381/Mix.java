@@ -19,13 +19,11 @@ public class Mix {
 		timeLine = 0;
 	}
 	
-	//TODO implement and design functions
 	
 	public void removeAllInstanceOf(int index){
 		usedClips.get(index).wipePlayData();
 	}
 	
-	//TODO make segment
 	public static Clip makeNewSegment(){
 		return new Clip();
 	}
@@ -39,7 +37,6 @@ public class Mix {
 	}
 	
 	public void repeatClip(int index, int times){
-		//TODO repeat
 		usedClips.get(index).setToPlayAt(usedClips.get(index).getLength());
 	}
 	
@@ -114,7 +111,6 @@ public class Mix {
 	}
 	
 	public void removeClipPlay(int index, int time) {
-		// TODO Auto-generated method stub
 		for(Integer t: usedClips.get(index).timesUsed()){
 			if(t == time){
 				usedClips.get(index).removePlayAt(usedClips.get(index).timesUsed().indexOf(t));

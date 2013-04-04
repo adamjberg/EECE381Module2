@@ -16,7 +16,6 @@ public class Clip {
 	private int playbackSpeed=50;
 	private int pitch=50;
 
-	// TODO: DE2 implementation of clips
 
 	// defualt constructor
 	public Clip() {
@@ -43,7 +42,6 @@ public class Clip {
 	}
 
 	public Clip(String s, int length, int id) {
-		// TODO Auto-generated constructor stub
 		this.name = s;
 		this.length = length;
 		this.ID = id;
@@ -89,7 +87,6 @@ public class Clip {
 	// chop current clip from both ends at start to end
 	public void cutClip(int start, int end) {
 		if (end - start < length) {
-			// TODO Chop clip on DE2
 			length = end - start;
 		} else {
 			System.out.println("did not cut");
@@ -98,7 +95,6 @@ public class Clip {
 
 	// attach another clip to the end of current clip
 	public void appendClip(Clip other) {
-		// TODO append on DE2
 		if (this.numberOfPlays == 0) {
 			length += other.length;
 		}
@@ -110,7 +106,6 @@ public class Clip {
 
 	// merge the sound of 2 clips
 	public Clip mergeClips(Clip other) {
-		// TODO merge sounds on DE2
 		Clip temp = (other.length > this.length) ? other : this;
 		return temp;
 	}
@@ -196,7 +191,6 @@ public class Clip {
 	}
 
 	public int getID() {
-		// TODO Auto-generated method stub
 		return ID;
 	}
 }
