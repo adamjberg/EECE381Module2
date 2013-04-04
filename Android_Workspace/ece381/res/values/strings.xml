@@ -53,6 +53,7 @@
     <string name="playbackSpeed">Playback Speed:</string>
     <string name="songName">Song Name</string>
     <string name="SongPropertyActivity">Song Properties</string>
+    <string name="pitch_quality">Pitch Quality</string>
      
     
 </resources>

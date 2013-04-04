@@ -50,7 +50,7 @@ public class play extends Activity {
 		addBarSeek();
 		com.getDB().resume();
 		handler = new Handler();
-		greetMsg = (TextView) findViewById(R.id.textView1);
+		greetMsg = (TextView) findViewById(R.id.pitchQuality);
 		
 		Toast.makeText(getApplicationContext(), 
 				update(), Toast.LENGTH_SHORT).show();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout2"
+    android:id="@+id/MainLinearLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -14,119 +14,13 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
-        android:layout_width="296dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/volumeTextView"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="25dp"
-                android:text="@string/volume"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp" />
-
-            <SeekBar
-                android:id="@+id/volumeBar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="19dp"
-                android:progress="100" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/pitchTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="20dp"
-                android:text="@string/pitch"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="12sp" />
-
-            <SeekBar
-                android:id="@+id/pitchBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="24dp"
-                android:progress="50" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
-
-            <TextView
-                android:id="@+id/lengthTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:layout_weight="0.5"
-                android:text="@string/length"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="12sp" />
-
-            <SeekBar
-                android:id="@+id/lengthBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_weight="0.5"
-                android:progress="100" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
-
-            <TextView
-                android:id="@+id/playbackSpeedText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/playbackSpeed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
-
-            <SeekBar
-                android:id="@+id/speedBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="0.5"
-                android:progress="50" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
         <ImageButton
             android:id="@+id/syncButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_weight="1"
             android:onClick="onSyncPressed"
@@ -134,8 +28,8 @@
 
         <ImageButton
             android:id="@+id/playButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:onClick="onPlayPressed"
@@ -143,13 +37,110 @@
 
         <ImageButton
             android:id="@+id/refreshButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:layout_weight="1"
+                        android:layout_weight="1"
+            
             android:onClick="onReloadSong"
-            android:src="@drawable/av_rewind" />
-
+            android:src="@drawable/ic_popup_sync" />
     </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/volumeTextView"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:text="@string/volume"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/activity_horizontal_margin" />
+
+            <SeekBar
+                android:id="@+id/volumeBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:progress="100" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" >
+
+            <TextView
+                android:id="@+id/playbackSpeedText"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/playbackSpeed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="@dimen/activity_horizontal_margin" />
+
+            <SeekBar
+                android:id="@+id/speedBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:progress="50" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/pitchTextView"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/pitch"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/activity_horizontal_margin" />
+
+            <SeekBar
+                android:id="@+id/pitchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:progress="50" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/pitchQuality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pitch_quality"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/activity_horizontal_margin" />
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+        </TableRow>
+
+    </TableLayout>
 
 </LinearLayout>
