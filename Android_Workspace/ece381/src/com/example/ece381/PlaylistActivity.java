@@ -111,9 +111,9 @@ public class PlaylistActivity extends Activity {
     		// set database selected playlist
     		db.setSelectedList(info.position);
     		
-    		menu.setHeaderTitle(selectedWord + "Options");
+    		menu.setHeaderTitle("Options for "+selectedWord);
             menu.add(0, 1, 0, "Rename playlist");
-            menu.add(0, 2, 0, "Delete playlist"); 
+            //menu.add(0, 2, 0, "Delete playlist"); 
         }
     }); 
 
@@ -135,9 +135,9 @@ public class PlaylistActivity extends Activity {
 		  intent.putExtra("action", "rename");
 		  startActivity(intent);
 	  }
-	  else if(item.getTitle() == "Delete playlist") {
+	  /*else if(item.getTitle() == "Delete playlist") {
 		  HandleDeletePlaylist(position);
-	  }
+	  }*/
 	  else
 		  return false;
 	  
@@ -183,6 +183,7 @@ public class PlaylistActivity extends Activity {
   } 
   // Handler functions for context menus
   
+  /*
   public void HandleDeletePlaylist(int id) {
 	  
 	  
@@ -217,6 +218,7 @@ public class PlaylistActivity extends Activity {
 		  }
   }
   
+  */
   
   public void onResume() {
 	  	Log.v("PlaylistAcitivty Resume", "");
