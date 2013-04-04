@@ -190,15 +190,14 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		public int findID(){
+			
+			//TODO: get song ID;
 			return -1;
 		}
 		
 		public void notifyClip(){
-			MixerActivity.theMix.getClipat(mixIndex).wipePlayData();
-			for(MixUIData m: mD){
 				MixerActivity.theMix.getClipat(mixIndex).setToPlayAt(xstart);
 				System.out.println(MixerActivity.theMix.getClipat(mixIndex).timesUsed().iterator());
-			}
 		}
 		
 	}
@@ -208,12 +207,16 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			if(mD.get(i).iD == idOfSongSelected){
 				mD.remove(i);
 			}
-		}
+		}		
+		MixerActivity.theMix.removeAllInstanceOf(MixerActivity.indexOfSel);
 	}
 
 	public void deleteSelectedSeg() {
+		MixerActivity.theMix.removeClipPlay(MixerActivity.indexOfSel, mD.get(selIndex).xstart);
 		mD.remove(selIndex);
+		
 	}
+
 
 	public void addElement(Point p) {
 		if(!trySelElement(p)&& !aliastest(p) && p.y!= 0){
