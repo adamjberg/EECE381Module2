@@ -26,7 +26,6 @@ struct Sound {
 	unsigned int inFadePosition;
 	unsigned int outFadePosition;
 	unsigned int position;
-	unsigned int loading_pos;
 	unsigned int length;
 	int loops;
 	int *buffer;

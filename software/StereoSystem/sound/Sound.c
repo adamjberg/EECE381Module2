@@ -456,7 +456,6 @@ struct Sound* initSound(unsigned int length) {
 	this->fadeVolume = 1;
 	this->inFadePosition = 0;
 	this->outFadePosition = this->length;
-	this->loading_pos = 0;
 	this->audioFormat = NULL;
 	return this;
 }
