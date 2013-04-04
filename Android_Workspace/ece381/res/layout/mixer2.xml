@@ -48,25 +48,25 @@
         android:id="@+id/play"
         android:layout_width="40dip"
         android:layout_height="40dip"
-         />
+        android:onClick="onPlayPressed" />
 
     <ImageButton
         android:id="@+id/stop"
         android:layout_width="40dip"
         android:layout_height="40dip"
-         />
+        android:onClick="onStopPressed" />
 
     <ImageButton
         android:id="@+id/properties"
         android:layout_width="40dip"
         android:layout_height="40dip"
-         />
+        android:onClick="onPropertiesPressed" />
     
     <ImageButton
         android:id="@+id/delete"
         android:layout_width="40dip"
         android:layout_height="40dip"
-         />
+        android:onClick="onDeletePressed" />
 	
     <SeekBar
         android:id="@+id/volume"
@@ -82,8 +82,8 @@
     <ImageButton
         android:id="@+id/save"
         android:layout_width="40dip"
-        android:layout_height="40dip"/>
-
+        android:layout_height="40dip"
+        android:onClick="onSavePressed" />
         
 	</LinearLayout>
    
