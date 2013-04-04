@@ -174,7 +174,6 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		public MixUIData( int x, int y ){
-			//TODO fix constructor
 			iD = findID();
 			mixIndex = MixerActivity.indexOfSel;
 			xstart = x + progress;
@@ -190,9 +189,8 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		public int findID(){
-			
-			//TODO: get song ID;
-			return -1;
+			int temp = MixerActivity.theMix.getClipat(MixerActivity.indexOfSel).getID();
+			return temp;
 		}
 		
 		public void notifyClip(){
@@ -260,7 +258,10 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		//TODO change when implemented
 		//MixerActivity.idOfSongSelected = 0;
 		//MixerActivity.selSong = false;
-		selIndex = -1;
+		//selIndex = -1;
+		this.deleteSelectedSeg();
+		this.addElement(p);
+		this.selIndex= mD.size()-1;
 		this.invalidate();
 		return false;
 	}
@@ -283,6 +284,21 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	
 	
 	public void checkClips(){
-		
+		for(MixUIData u : mD){
+			for(Clip p: MixerActivity.theMix.listContents()){
+				if(u.iD == p.getID()){
+					for(Integer t: p.timesUsed()){
+						if(u.xstart == t){
+							u.length = p.getLength();
+							Log.v("inside final checkclips", Integer.toString(u.length) + Integer.toString(p.getLength()));
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void ClipEditedLength(){
+		mD.get(selIndex).length = MixerActivity.theMix.getClipat(mD.get(selIndex).mixIndex).getLength();
 	}
 }
