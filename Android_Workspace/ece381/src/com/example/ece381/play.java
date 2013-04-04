@@ -78,36 +78,35 @@ public class play extends Activity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		switch(item.getItemId()){
+		Intent intent;
+		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
-		    // NavUtils.navigateUpFromSameTask(this);
+			// NavUtils.navigateUpFromSameTask(this);
 			// onBackPressed();
-		    return true;
+			return true;
 		case R.id.songs:
 			finish();
-			Intent intentsong = new Intent(play.this, MainActivity.class);
-			intentsong.putExtra("subActivity", "true");
-		    startActivity(intentsong);   
-		    return true;
+			intent = new Intent(play.this, MainActivity.class);
+			intent.putExtra("subActivity", "true");
+			startActivity(intent);
+			return true;
 		case R.id.menu_settings:
-			Toast.makeText(play.this,
-					item.getTitle(),Toast.LENGTH_LONG).show();
+			intent = new Intent(play.this, MixerActivity.class);
+			startActivity(intent);
 			return true;
 		case R.id.playlists:
 			finish();
-			Intent intent = new Intent(play.this, PlaylistActivity.class);
-		    startActivity(intent);   
-		    return true;
+			intent = new Intent(play.this, PlaylistActivity.class);
+			startActivity(intent);
+			return true;
 		case R.id.playMenu:
-			Toast.makeText(play.this,
-				    "Already in play menu.",
-				    Toast.LENGTH_LONG).show(); 
+			Toast.makeText(play.this, "Already in play menu.",
+					Toast.LENGTH_LONG).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	} 
+	}
 
 	@Override
 	public void finish() {

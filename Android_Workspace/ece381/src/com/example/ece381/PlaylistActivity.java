@@ -151,36 +151,35 @@ public class PlaylistActivity extends Activity {
   	return true;
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-   // TODO Auto-generated method stub
-   switch(item.getItemId()){
-   case android.R.id.home:
-  	 finish();
-      // NavUtils.navigateUpFromSameTask(this);
-  	 // onBackPressed();
-       return true;
-   case R.id.songs:
-	  Intent intentsong = new Intent(PlaylistActivity.this, MainActivity.class);
-	  startActivity(intentsong);
-  	  return true;
-   case R.id.menu_settings:
-  	  Toast.makeText(PlaylistActivity.this,
-  	    item.getTitle(),
-  	     Toast.LENGTH_LONG).show();
-  	  return true;
-   case R.id.playlists:
-	   Toast.makeText(PlaylistActivity.this,
- 			    "Already in Playlist.",
- 			    Toast.LENGTH_LONG).show();   
-  	  return true;
-   case R.id.playMenu:
-	  Intent intent = new Intent(PlaylistActivity.this, play.class);
-	  startActivity(intent);   
-  	  return true;
-   }
-   return super.onOptionsItemSelected(item);
-  } 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			// NavUtils.navigateUpFromSameTask(this);
+			// onBackPressed();
+			return true;
+		case R.id.songs:
+			intent = new Intent(PlaylistActivity.this, MainActivity.class);
+			startActivity(intent);
+			return true;
+		case R.id.menu_settings:
+			intent = new Intent(PlaylistActivity.this, MixerActivity.class);
+			startActivity(intent);
+			return true;
+		case R.id.playlists:
+			Toast.makeText(PlaylistActivity.this, "Already in Playlist.",
+					Toast.LENGTH_LONG).show();
+			return true;
+		case R.id.playMenu:
+			intent = new Intent(PlaylistActivity.this, play.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
   // Handler functions for context menus
   
   /*

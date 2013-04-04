@@ -7,6 +7,10 @@
 
 #include "Sound.h"
 
+#define MAX_PITCH 2.0
+#define MIN_PITCH 0.5
+#define MIN_SPEED 0.2
+#define MAX_SPEED 4
 #define DEFAULT_SAMPLE_RATE 32000
 #define DEFAULT_BITS_PER_SAMPLE 24
 #define MP3_DECODE_MULTIPLIER 2.7
@@ -67,6 +71,8 @@ void setSoundPitch(struct Sound* this, float pitch, int quality) {
 
 	printf("Changing sound pitch to: %f with quality: %d\n", pitch, quality);
 
+	pitch = pitch * (MAX_PITCH - MIN_PITCH) + MIN_PITCH;
+
 	switch (quality) {
 	case 0:
 		setSoundPlaybackSpeed(this, pitch);
@@ -115,6 +121,7 @@ void setSoundPitch(struct Sound* this, float pitch, int quality) {
 }
 
 void setSoundPlaybackSpeed(struct Sound* this, float speed) {
+	speed = speed * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
 	resampleSound(this, (int)(getSampleRate(this->audioFormat) / speed), false, 0);
 }
 

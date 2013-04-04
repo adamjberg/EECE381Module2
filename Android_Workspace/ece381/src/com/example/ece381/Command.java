@@ -365,4 +365,23 @@ public class Command {
 		com.send(cmd);
 
 	}
+	
+	// index 25
+	static public void syncSetPitch(int song_id, int pitch, int quality) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(25);
+		cmd.addParameter(String.valueOf(song_id));
+		cmd.addParameter(String.valueOf(pitch));
+		cmd.addParameter(String.valueOf(quality));
+		com.send(cmd);
+	}
+	
+	// index 26
+	static public void syncSetPlaybackSpeed(int song_id, int speed) {
+		Communication com = Communication.getInstance();
+		Command cmd = new Command(26);
+		cmd.addParameter(String.valueOf(song_id));
+		cmd.addParameter(String.valueOf(speed));
+		com.send(cmd);
+	}
 }
