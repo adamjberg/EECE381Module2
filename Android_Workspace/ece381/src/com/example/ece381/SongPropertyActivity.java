@@ -131,6 +131,7 @@ public class SongPropertyActivity extends Activity {
 	}
 
 	public void onPlayPressed(View view) {
+		clip.updateSongInDatabase();
 		clip.play();
 	}
 }
