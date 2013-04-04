@@ -19,12 +19,36 @@ struct AudioFormat* initAudioFormat(int sampleRate, int sampleSizeInBits,
 	return this;
 }
 
+bool isSampleRateValid(int sampleRate) {
+	return sampleRate > 0 && sampleRate <= 96000;
+}
+
+bool isSampleSizeInBitsValid(int sampleSizeInBits) {
+	return sampleSizeInBits <= 32 && sampleSizeInBits > 0;
+}
+
+bool isNumChannelsValid(int numChannels) {
+	return numChannels == 1 || numChannels == 0;
+}
+
+bool isAudioFormatValid(struct AudioFormat* this) {
+	return isSampleRateValid(this->sampleRate) && isSampleSizeInBitsValid(this->sampleSizeInBits) && isNumChannelsValid(this->channels);
+}
+
+float getBitRateKbps(struct AudioFormat* this) {
+	return this->bitRateKbps;
+}
+
 int getSampleRate(struct AudioFormat* this) {
 	return this->sampleRate;
 }
 
 int getSampleSizeInBytes(struct AudioFormat* this) {
 	return this->sampleSizeInBits / 8;
+}
+
+int getNumChannels(struct AudioFormat* this) {
+	return this->channels;
 }
 
 void setSampleRate(struct AudioFormat* this, int sampleRate) {

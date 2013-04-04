@@ -69,6 +69,8 @@ public class SongActivity extends Activity {
         // Show the Up button in the action bar.
         this.getActionBar().setDisplayHomeAsUpEnabled(true);
     }
+    repeatBtn = (ToggleButton) findViewById( R.id.repeat_button );
+    repeatBtn.setChecked(db.getRepeatPlaylistValue());
     // Get the passed in playlist name
     selected_pl_name = getIntent().getExtras().getString("selected_pl_name");
     

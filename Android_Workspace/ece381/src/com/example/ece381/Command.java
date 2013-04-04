@@ -149,8 +149,8 @@ public class Command {
 			if(curr_songid == last_songid && com.getDB().getRepeatPlaylistValue()) {
 				next_id = com.getDB().getSongsFromList(curr_plid)[1];			
 				com.getDB().setIsEndOfPlaylist(true);	
-		//		Command.syncPlay(next_id, com.getDB().getSongs()[next_id].getVolume(), 0);
-				//return;
+				Command.syncPlay(next_id, com.getDB().getSongs()[next_id].getVolume(), 0);
+				return;
 			} else {
 					com.getDB().setIsEndOfPlaylist(false);
 					int curr_order =
