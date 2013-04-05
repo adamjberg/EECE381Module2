@@ -3,7 +3,6 @@ package com.example.ece381;
 
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -136,23 +135,11 @@ public class MixerActivity extends Activity {
 	}
 	
 	public void onPlayPressed(View view) {
-		mixerCanvas.toPlay = true;
-		play_timer.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				mixerCanvas.playScroll++;
-				if(mixerCanvas.playScroll % 10 == 1){
-					mixerCanvas.invalidate();
-				}
-			}
-		}, 1, 1);
 		theMix.play(globalVolumeBar.getProgress());
 	}
 
 	public void onStopPressed(View view) {
 		theMix.stop();
-		mixerCanvas.toPlay = false;
 	}
 
 	public void onPropertiesPressed(View view) {

@@ -82,7 +82,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	
 		if(toPlay){
 			drawPlaybar(canvas);
-			//this.invalidate();
+			this.invalidate();
 		}
 	
 	
@@ -297,11 +297,15 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	public void drawPlaybar(Canvas c){
 		Paint p = new Paint();
 		p.setColor(Color.LTGRAY);
-		p.setStrokeWidth(3);
-		c.drawLine(playScroll/10, 0, playScroll/10, 600, p);
-		if(playScroll > (MixerActivity.theMix.lengthOf() *10) + 1000){
+		p.setStrokeWidth(5);
+		c.drawLine(playScroll, 0, playScroll, 600, p);
+		/*if(playScroll%2 ==0){
+			this.invalidate();
+		}*/
+		if(playScroll > 3000){
 			toPlay = false;
-		};
+		}
+		playScroll++;
 	}
 	
 	
