@@ -50,7 +50,7 @@ public class Clip {
 	public Clip(Song song) {
 		this.name = song.getSongName();
 		this.ID = song.getId();
-		this.length = song.getSize();
+		this.length = song.getSize() / 10;
 		this.volume = song.getVolume();
 		this.position = song.getPos();
 		this.pitch = 50;
