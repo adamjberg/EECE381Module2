@@ -43,14 +43,14 @@ int convertToMS(int value) {
 /**
  * Returns the length of the sound in milliseconds
  */
-unsigned int getSoundPositionMS(struct Sound* this) {
+int getSoundPositionMS(struct Sound* this) {
 	return convertToMS(this->position);
 }
 
 /**
  * Returns the length of the sound in milliseconds
  */
-unsigned int getSoundLengthMS(struct Sound* this) {
+int getSoundLengthMS(struct Sound* this) {
 	return convertToMS(this->length);
 }
 
@@ -592,11 +592,11 @@ struct Sound* loadSound(struct Song* this) {
 	return NULL;
 }
 
-void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {
+void setFadeInLength(struct Sound* this, int inFadeLength) {
 	this->inFadePosition = inFadeLength;
 }
 
-void setFadeOutLength(struct Sound* this, unsigned int len) {
+void setFadeOutLength(struct Sound* this, int len) {
 	this->outFadePosition = this->length - len;
 }
 
