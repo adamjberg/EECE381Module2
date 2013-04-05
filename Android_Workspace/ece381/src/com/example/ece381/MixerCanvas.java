@@ -82,7 +82,7 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			canvas.drawLine(j.xstart - progress, (j.ystart *100)+ 50, (j.xstart+j.length)-progress, (j.ystart *100)+ 50, paint);
 		}
 		
-		if(selIndex >= 0){
+		if(selIndex >= 0 && mD.size()>selIndex){
 		paint.setColor(Color.CYAN);
 		MixUIData j = mD.get(selIndex);
 		canvas.drawLine(j.xstart - progress, (j.ystart *100)+ 50, (j.xstart+j.length)-progress, (j.ystart *100)+ 50, paint);}
@@ -245,11 +245,25 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	
 	private boolean aliastest(Point p, int length) {
 		int temp = length;
+		
+		if(mD.get(selIndex).ystart == p.y){
+			for(MixUIData j: mD){
+				if(mD.get(selIndex).xstart != j.xstart){
+					if(j.ystart == p.y && 
+							p.x+progress + temp >= j.xstart &&
+							p.x+progress + temp < j.xstart +j.length){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 		for(MixUIData j: mD){
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
 					p.x+progress + temp < j.xstart +j.length){
 					//Log.v("selected", j.toString());
+				
 				return true;
 			}
 		}
