@@ -106,8 +106,9 @@ public class Mix {
 	}
 	
 	public void stop() {
-		for (int i = 0; i < lengthOf(); i++) {
-			usedClips.get(i).stop();
+		ArrayList<Clip> activeClips = findNowActiveClips();
+		for (int i = 0; i < activeClips.size(); i++) {
+			activeClips.get(i).stop();
 		}
 	}
 	
