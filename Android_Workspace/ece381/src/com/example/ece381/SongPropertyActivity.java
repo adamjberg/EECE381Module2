@@ -59,6 +59,9 @@ public class SongPropertyActivity extends Activity {
 	
 	public void onReloadSong(View view) {
 		Command.syncReloadSong(songId);
+		volumeBar.setProgress(100);
+		pitchBar.setProgress(50);
+		speedBar.setProgress(50);
 	}
 	
 	public void onPlayPressed(View view) {
