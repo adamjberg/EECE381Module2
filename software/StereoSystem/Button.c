@@ -18,7 +18,7 @@ struct Button* initButton(){
 
 struct Button* initMenuButton(int x, char* name, int type, struct Frame* menuFrame){
 	struct Button* b = initButton();
-	b->range = initRange(x, 1, 30, 10);
+	b->range = initRange(x, 1, 40, 10);
 	b->name = name;
 	b->x_pos = x;
 	b->y_pos = 1; // all menu buttons have to be drawn at y = 1
@@ -103,11 +103,21 @@ void drawActionButton(struct Button* this){
 void menuButtonCollide(struct Button* this){
 	// 0:ALLSONGS, 1:PLAYLISTS
 	draw_notransparent(241, 13, this->Panel->mainFrame->elements[2]->bg_image);
+	int i;
+	int y = 1;
 	switch(this->type){
 	case 0:
+		this->startAnimate = 1;
+		for (i = 0; i < 10; i++, y++){
+			drawHorizontalLine(10, y, 55, 0x353ace);
+		}
 		allSongsMenuButtonCollide(this);
 		break;
 	case 1:
+		this->startAnimate = 1;
+		for (i = 0; i < 10; i++, y++){
+			drawHorizontalLine(130, y, 55, 0x353ace);
+		}
 		playlistMenuButtonCollide(this);
 		break;
 	default:
@@ -188,18 +198,27 @@ void drawRange(struct Button* this){
 
 void playButtonCollide(struct Button* this){
 	if (mouse->frame->currentPanel == 0 || (mouse->frame->currentPanel == 2 && db.playlists[db.curr_playlist_id]->num_of_songs > 0)){
-		if (db.curr_song_id == 0 || db.songs[db.curr_song_id]->sound == NULL){
+	   if (mouse->frame->currentPanel == 2){
+		   if (db.curr_song_id == 0 || db.songs[db.curr_song_id]->sound == NULL){
+		   		syncPlay(db.index_list_order[db.curr_playlist_id][1], db.songs[db.index_list_order[db.curr_playlist_id][1]]->volume, 0);
+		   		highlightSongInList(db.curr_playlist_id, db.index_list_order[db.curr_playlist_id][1]);
+		   		updateVolumeValue(db.index_list_order[db.curr_playlist_id][1]);
+		   } else {
+			   syncPlay(db.curr_song_id, db.songs[db.curr_song_id]->volume, convertToMS(db.songs[db.curr_song_id]->sound->position));
+			   highlightSongInList(db.curr_playlist_id, db.curr_song_id);
+			   updateVolumeValue(db.curr_song_id);
+		   }
+		} else if (db.curr_song_id == 0 || db.songs[db.curr_song_id]->sound == NULL){
 			syncPlay(1, db.songs[1]->volume, 0);
 			highlightButton(this->Panel->mainFrame->elements[2]->buttons[1]);
-			printf("Play button is clicked\n");
 			updateVolumeValue(1);
 		} else {
 			syncPlay(db.curr_song_id, db.songs[db.curr_song_id]->volume, convertToMS(db.songs[db.curr_song_id]->sound->position));
 			highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id]);
-			printf("Play button is clicked\n");
 			updateVolumeValue(db.curr_song_id);
 		}
 	}
+	printf("Playlist button is clicked\n");
 }
 
 void pauseButtonCollide(struct Button* this){
@@ -378,7 +397,7 @@ struct Button* querySongButtonFromID(int song_id){
 	if (song_id > 14){
 		return NULL;
 	}
-	for (i = 1; i < mouse->frame->elements[2]->button_size; i++){
+	for (i = 1; i <= mouse->frame->elements[2]->button_size; i++){
 		if (mouse->frame->elements[2]->buttons[i]->id == song_id){
 			return mouse->frame->elements[2]->buttons[i];
 		}
