@@ -20,6 +20,7 @@ void checkButtonCollision(void*, void*);
 void checkTxtCollisionForMouse(void*, void*);
 void checkImgCollisionForMouse(void*, void*);
 void actionBtnAnimation(void*);
+void menuBtnAnimation();
 
 
 #endif /* RANGE_H_ */
