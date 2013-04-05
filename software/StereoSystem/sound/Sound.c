@@ -9,8 +9,8 @@
 
 #define MAX_PITCH 2.0
 #define MIN_PITCH 0.5
-#define MIN_SPEED 0.2
-#define MAX_SPEED 4
+#define MIN_SPEED 0.5
+#define MAX_SPEED 2.0
 #define DEFAULT_SAMPLE_RATE 32000
 #define DEFAULT_BITS_PER_SAMPLE 24
 #define MP3_DECODE_MULTIPLIER 2.7
@@ -64,14 +64,19 @@ int getMaxSoundValue(struct Sound* this) {
 	return maxVal;
 }
 
+bool isSoundValid(struct Sound* this) {
+	return isAudioFormatValid(this->audioFormat) && this->buffer != NULL && this->length > 0;
+}
+
 void setSoundPitch(struct Sound* this, float pitch, int quality) {
+	if(!isSoundValid(this)) {
+		return;
+	}
 	int i, origSampleRate, maxVal, fftFrameSize = 2048;
 	float *soundBuffer;
 	long oSamp, downSampleAmount;
 
 	printf("Changing sound pitch to: %f with quality: %d\n", pitch, quality);
-
-	pitch = pitch * (MAX_PITCH - MIN_PITCH) + MIN_PITCH;
 
 	switch (quality) {
 	case 0:
@@ -99,6 +104,12 @@ void setSoundPitch(struct Sound* this, float pitch, int quality) {
 		break;
 	}
 
+	if(pitch < 0.5) {
+		pitch = (pitch / 0.5) * (1 - MIN_PITCH) + MIN_PITCH;
+	} else {
+		pitch = ((pitch - 0.5)/ 0.5) * (MAX_PITCH - 1) + 1;
+	}
+
 	origSampleRate = getSampleRate(this->audioFormat);
 	resampleSound(this, origSampleRate / downSampleAmount, false, 0);
 	maxVal = getMaxSoundValue(this);
@@ -121,7 +132,15 @@ void setSoundPitch(struct Sound* this, float pitch, int quality) {
 }
 
 void setSoundPlaybackSpeed(struct Sound* this, float speed) {
-	speed = speed * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
+	if(!isSoundValid(this)) {
+		return;
+	}
+	if(speed < 0.5) {
+		speed = (speed / 0.5) * (1 - MIN_SPEED) + MIN_SPEED;
+	} else {
+		speed = ((speed - 0.5) / 0.5) * (MAX_SPEED - 1) + 1;
+	}
+	printf("changing speed to %f", speed);
 	resampleSound(this, (int)(getSampleRate(this->audioFormat) / speed), false, 0);
 }
 
