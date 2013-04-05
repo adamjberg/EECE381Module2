@@ -217,6 +217,8 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		if(tempindex !=-1){
 		MixerActivity.theMix.removeClipPlay(tempindex, mD.get(selIndex).xstart);
 		mD.remove(selIndex);}
+		
+		this.invalidate();
 	}
 
 
