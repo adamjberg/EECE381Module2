@@ -99,10 +99,10 @@ void syncPause(int id) {
 void pause(int id) {
 	disableAudioDeviceController();
 	pauseSong(db.songs[id]);
-	alt_up_char_buffer_string(char_buffer, "                          ", 3, 37);
-	alt_up_char_buffer_string(char_buffer, "                          ", 3, 38);
-	alt_up_char_buffer_string(char_buffer, "                          ", 3, 39);
-	alt_up_char_buffer_string(char_buffer, "                          ", 3, 40);
+	alt_up_char_buffer_string(char_buffer, "                               ", 3, 37);
+	alt_up_char_buffer_string(char_buffer, "                               ", 3, 38);
+	alt_up_char_buffer_string(char_buffer, "                               ", 3, 39);
+	alt_up_char_buffer_string(char_buffer, "                               ", 3, 40);
 }
 /*
  * Function to call when need to sync with Android

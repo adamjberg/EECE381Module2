@@ -2,24 +2,14 @@ package com.example.ece381;
 
 import java.util.ArrayList;
 
-import android.R.color;
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable.Callback;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -82,11 +72,13 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 			canvas.drawLine(j.xstart - progress, (j.ystart *100)+ 50, (j.xstart+j.length)-progress, (j.ystart *100)+ 50, paint);
 		}
 		
-		if(selIndex >= 0){
+		if(selIndex >= 0 && mD.size()>selIndex){
 		paint.setColor(Color.CYAN);
 		MixUIData j = mD.get(selIndex);
 		canvas.drawLine(j.xstart - progress, (j.ystart *100)+ 50, (j.xstart+j.length)-progress, (j.ystart *100)+ 50, paint);}
-	
+		if(selIndex >= mD.size()){
+			selIndex = -1;
+		}
 	
 		if(toPlay){
 			drawPlaybar(canvas);
@@ -216,7 +208,8 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		if(tempindex !=-1){
 		MixerActivity.theMix.removeClipPlay(tempindex, mD.get(selIndex).xstart);
-		mD.remove(selIndex);}
+		mD.remove(selIndex);
+		selIndex = -1;}
 		
 		this.invalidate();
 	}
@@ -245,11 +238,25 @@ public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 	
 	private boolean aliastest(Point p, int length) {
 		int temp = length;
+		
+		if(mD.get(selIndex).ystart == p.y){
+			for(MixUIData j: mD){
+				if(mD.get(selIndex).xstart != j.xstart){
+					if(j.ystart == p.y && 
+							p.x+progress + temp >= j.xstart &&
+							p.x+progress + temp < j.xstart +j.length){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 		for(MixUIData j: mD){
 			if( j.ystart == p.y && 
 					p.x+progress + temp >= j.xstart &&
 					p.x+progress + temp < j.xstart +j.length){
 					//Log.v("selected", j.toString());
+				
 				return true;
 			}
 		}

@@ -90,13 +90,6 @@
         android:id="@+id/volume"
         android:layout_width="120dip"
         android:layout_height="40dip" />
-
-    <ImageButton
-        android:id="@+id/save"
-        android:layout_width="40dip"
-        android:layout_height="40dip"
-        android:background="@drawable/ic_menu_save"
-        android:onClick="onSavePressed" />
         
 	</LinearLayout>
    

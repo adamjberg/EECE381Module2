@@ -13,7 +13,7 @@
 #define MAX_SPEED 2.0
 #define DEFAULT_SAMPLE_RATE 32000
 #define DEFAULT_BITS_PER_SAMPLE 24
-#define MP3_DECODE_MULTIPLIER 2.7
+#define MP3_DECODE_MULTIPLIER 3
 #define MAX_QUALITY 4
 
 struct buffer {
@@ -43,14 +43,14 @@ int convertToMS(int value) {
 /**
  * Returns the length of the sound in milliseconds
  */
-unsigned int getSoundPositionMS(struct Sound* this) {
+int getSoundPositionMS(struct Sound* this) {
 	return convertToMS(this->position);
 }
 
 /**
  * Returns the length of the sound in milliseconds
  */
-unsigned int getSoundLengthMS(struct Sound* this) {
+int getSoundLengthMS(struct Sound* this) {
 	return convertToMS(this->length);
 }
 
@@ -311,11 +311,11 @@ struct Sound* loadMP3Sound(char * file) {
 int resampleSound(struct Sound* this, int toSampleRate, bool fromFile, int filePointer) {
 	int fromSampleRate = getSampleRate(this->audioFormat);
 	int bytesPerSample = getSampleSizeInBytes(this->audioFormat);
-	int srcLength =  this->length;
+	int srcLength = this->length;
 	int destLength = ((float)srcLength * toSampleRate) / fromSampleRate;
 	float x0 = 0, x1 = 0, x = 0;
 	int y0 = 0, y1 = 0;
-	int i, j = 0, k;
+	int i, j = 0;
 	int* bufferToWriteTo;
 
 	if(fromSampleRate == toSampleRate) {
@@ -333,37 +333,35 @@ int resampleSound(struct Sound* this, int toSampleRate, bool fromFile, int fileP
 	for (i = 0; i < srcLength; i++) {
 		if (j >= this->length)
 			break;
-		x1 = i / (float) fromSampleRate;
-		if (fromFile) {
-			for (k = 0; k < getNumChannels(this->audioFormat); k++) {
+			x1 = i / (float) fromSampleRate;
+			if (fromFile) {
 				if ((y1 = readInt(filePointer, bytesPerSample, false)) < 0) {
-					free(this->audioFormat);
-					this->audioFormat = NULL;
-					free(this->buffer);
-					this->buffer = NULL;
-					free(this);
-					this = NULL;
-					return -1;
+				free(this->audioFormat);
+				this->audioFormat = NULL;
+				free(this->buffer);
+				this->buffer = NULL;
+				free(this);
+				this = NULL;
+				return -1;
 				}
+			} else {
+				y1 = this->buffer[i];
+				}
+			if (y1 > 0x07FFFFF) {
+				y1 = y1 | 0xFF000000;
 			}
-		} else {
-			y1 = this->buffer[i];
-		}
-		if (y1 > 0x07FFFFF) {
-			y1 = y1 | 0xFF000000;
-		}
-		while (x <= x1) {
-			if (x == x1) {
-				bufferToWriteTo[j++] = y1;
-			} else if (x < x1) {
-				bufferToWriteTo[j++] = (y1 - y0) * (x - x0) / (x1 - x0) + y0;
-				if (bufferToWriteTo[j - 1] > 0x07FFFFF)
-					bufferToWriteTo[j - 1] &= 0x00FFFFFF;
+			while (x <= x1) {
+				if (x == x1) {
+					bufferToWriteTo[j++] = y1;
+				} else if (x < x1) {
+					bufferToWriteTo[j++] = (y1 - y0) * (x - x0) / (x1 - x0) + y0;
+					if (bufferToWriteTo[j - 1] > 0x07FFFFF)
+						bufferToWriteTo[j - 1] &= 0x00FFFFFF;
+				}
+				x = j / (float) toSampleRate;
 			}
-			x = j / (float) toSampleRate;
-		}
-		x0 = x1;
-		y0 = y1;
+			x0 = x1;
+			y0 = y1;
 	}
 	if (!fromFile) {
 		free(this->buffer);
@@ -377,7 +375,7 @@ int resampleSound(struct Sound* this, int toSampleRate, bool fromFile, int fileP
  * Loads the sound using linear interpolation to convert to correct sample rate
  */
 int loadSoundBuffer(struct Sound* this, int filePointer) {
-	int i = 0, j, bytesPerSample;
+	int i = 0, bytesPerSample;
 
 	if(this->audioFormat->sampleRate != DEFAULT_SAMPLE_RATE)
 		return resampleSound(this, DEFAULT_SAMPLE_RATE, true, filePointer);
@@ -385,17 +383,15 @@ int loadSoundBuffer(struct Sound* this, int filePointer) {
 		bytesPerSample = getSampleSizeInBytes(this->audioFormat);
 		allocateSoundBuffer(this, this->length);
 		for (i = 0; i < this->length; i++) {
-			for (j = 0; j < getNumChannels(this->audioFormat); j++) {
-				if ((this->buffer[i] = readInt(filePointer, bytesPerSample,
+			if ((this->buffer[i] = readInt(filePointer, bytesPerSample,
 						false)) < 0) {
-					free(this->audioFormat);
-					this->audioFormat = NULL;
-					free(this->buffer);
-					this->buffer = NULL;
-					free(this);
-					this = NULL;
-					return -1;
-				}
+				free(this->audioFormat);
+				this->audioFormat = NULL;
+				free(this->buffer);
+				this->buffer = NULL;
+				free(this);
+				this = NULL;
+				return -1;
 			}
 		}
 	}
@@ -569,13 +565,8 @@ struct Sound* loadWavHeader(int filePointer) {
 	struct AudioFormat* audioFormat = initAudioFormat(sampleRate,
 			sampleSizeInBits, numChannels, byteRate);
 	int read = readInt(filePointer, 4, false);
-	int srcLength = (read / getSampleSizeInBytes(audioFormat)) / getNumChannels(audioFormat);
+	int srcLength = (read / getSampleSizeInBytes(audioFormat));
 	printf("length: %u\n", srcLength);
-
-	if(!isAudioFormatValid(audioFormat)) {
-		free(audioFormat);
-		return NULL;
-	}
 
 	struct Sound* this = initSound(srcLength);
 	this->audioFormat = audioFormat;
@@ -592,11 +583,11 @@ struct Sound* loadSound(struct Song* this) {
 	return NULL;
 }
 
-void setFadeInLength(struct Sound* this, unsigned int inFadeLength) {
+void setFadeInLength(struct Sound* this, int inFadeLength) {
 	this->inFadePosition = inFadeLength;
 }
 
-void setFadeOutLength(struct Sound* this, unsigned int len) {
+void setFadeOutLength(struct Sound* this, int len) {
 	this->outFadePosition = this->length - len;
 }
 

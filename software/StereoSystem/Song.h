@@ -30,7 +30,7 @@ void setSongPlaybackSpeed(struct Song*, int);
 void playSong(struct Song*, float, int, int);
 void stopSong(struct Song*);
 void pauseSong(struct Song*);
-void seekSong(struct Song*, unsigned int);
+void seekSong(struct Song*, int);
 void unloadSong(struct Song*);
 void loadSong(struct Song*);
 int getSongPosition(struct Song*);

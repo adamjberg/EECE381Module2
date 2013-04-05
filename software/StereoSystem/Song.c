@@ -122,7 +122,7 @@ void stopSong(struct Song* this) {
  * @param this - Song to seek
  * @param position - Position to seek to in MilliSeconds
  */
-void seekSong(struct Song* this, unsigned int position) {
+void seekSong(struct Song* this, int position) {
 	seekSound( this->sound, position );
 }
 

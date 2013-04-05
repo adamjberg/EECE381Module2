@@ -50,7 +50,7 @@ public class Clip {
 	public Clip(Song song) {
 		this.name = song.getSongName();
 		this.ID = song.getId();
-		this.length = song.getSize();
+		this.length = song.getSize() / 10;
 		this.volume = song.getVolume();
 		this.position = song.getPos();
 		this.pitch = 50;
@@ -119,16 +119,12 @@ public class Clip {
 		Command.syncReloadSong(ID);
 	}
 	
-	public void play() {
+	public void play(int globalVol) {
 		if(startTimes.size() > 0) {
-			Command.syncPlay(ID, volume, -startTimes.get(0) * 10);			
+			Command.syncPlay(ID, (int)(volume*(globalVol/100.0)), -startTimes.get(0) * 10);			
 		}
 	}
-
-	public void play(int startPos) {
-		Command.syncPlay(ID, volume, startPos);			
-	}
-	
+		
 	public void stop() {
 		Command.syncPause(ID);
 	}
