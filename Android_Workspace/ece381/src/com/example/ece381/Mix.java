@@ -81,7 +81,7 @@ public class Mix {
 	}
 	
 	public ArrayList<Clip> findNowActiveClips(){
-		ArrayList temp = new ArrayList();
+		ArrayList<Clip> temp = new ArrayList<Clip>();
 		for(Clip c: usedClips){
 			for(Integer t: c.timesUsed()){
 				if(t > timeLine && t < (timeLine+ //time segment 20 seconds
@@ -98,9 +98,10 @@ public class Mix {
 	}
 	
 	
-	public void play() {
-		for (int i = 0; i < usedClips.size(); i++) {
-			usedClips.get(i).play();
+	public void play(int volume) {
+		ArrayList<Clip> activeClips = findNowActiveClips();
+		for (int i = 0; i < activeClips.size(); i++) {
+			activeClips.get(i).play(volume);
 		}
 	}
 	

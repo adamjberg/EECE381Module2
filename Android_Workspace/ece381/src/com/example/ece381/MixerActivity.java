@@ -1,6 +1,7 @@
 package com.example.ece381;
 
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -135,7 +136,6 @@ public class MixerActivity extends Activity {
 	}
 	
 	public void onPlayPressed(View view) {
-		theMix.play();
 		mixerCanvas.toPlay = true;
 		play_timer.schedule(new TimerTask(){
 
@@ -147,6 +147,7 @@ public class MixerActivity extends Activity {
 				}
 			}
 		}, 1, 1);
+		theMix.play(globalVolumeBar.getProgress());
 	}
 
 	public void onStopPressed(View view) {
@@ -195,18 +196,22 @@ public class MixerActivity extends Activity {
 	
 	private class VolumeSeekChangeListener implements OnSeekBarChangeListener {
 		@Override
-		public void onProgressChanged(SeekBar Timeline, int progress,
+		public void onProgressChanged(SeekBar volumeBar, int progress,
 				boolean fromUser) {
-			if (fromUser) {
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar volumeBar) {
+		}
+
+		@Override
+		public void onStopTrackingTouch(SeekBar volumeBar) {
+			Clip clip;
+			ArrayList<Clip> activeClips = theMix.findNowActiveClips();
+			for(int i = 0; i < activeClips.size(); i++) {
+				clip = activeClips.get(i);
+				Command.syncSetVol(clip.getID(), (volumeBar.getProgress() + clip.getVolume()) / 2);
 			}
-		}
-
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-		}
-
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
 		}
 	}
 	
