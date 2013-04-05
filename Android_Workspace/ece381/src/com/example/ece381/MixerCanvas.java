@@ -2,24 +2,14 @@ package com.example.ece381;
 
 import java.util.ArrayList;
 
-import android.R.color;
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable.Callback;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 public class MixerCanvas extends SurfaceView implements SurfaceHolder.Callback{
 
