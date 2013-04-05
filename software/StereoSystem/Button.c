@@ -18,7 +18,7 @@ struct Button* initButton(){
 
 struct Button* initMenuButton(int x, char* name, int type, struct Frame* menuFrame){
 	struct Button* b = initButton();
-	b->range = initRange(x, 1, 30, 10);
+	b->range = initRange(x, 1, 40, 10);
 	b->name = name;
 	b->x_pos = x;
 	b->y_pos = 1; // all menu buttons have to be drawn at y = 1
@@ -103,11 +103,21 @@ void drawActionButton(struct Button* this){
 void menuButtonCollide(struct Button* this){
 	// 0:ALLSONGS, 1:PLAYLISTS
 	draw_notransparent(241, 13, this->Panel->mainFrame->elements[2]->bg_image);
+	int i;
+	int y = 1;
 	switch(this->type){
 	case 0:
+		this->startAnimate = 1;
+		for (i = 0; i < 10; i++, y++){
+			drawHorizontalLine(10, y, 55, 0x353ace);
+		}
 		allSongsMenuButtonCollide(this);
 		break;
 	case 1:
+		this->startAnimate = 1;
+		for (i = 0; i < 10; i++, y++){
+			drawHorizontalLine(130, y, 55, 0x353ace);
+		}
 		playlistMenuButtonCollide(this);
 		break;
 	default:
@@ -193,6 +203,12 @@ void playButtonCollide(struct Button* this){
 			highlightButton(this->Panel->mainFrame->elements[2]->buttons[1]);
 			printf("Play button is clicked\n");
 			updateVolumeValue(1);
+		} else if (mouse->frame->currentPanel == 2){
+			// we need this condition to make sure we highlight the right button on playlist
+			syncPlay(db.curr_song_id, db.songs[db.curr_song_id]->volume, convertToMS(db.songs[db.curr_song_id]->sound->position));
+			highlightSongInList(db.curr_playlist_id, db.curr_song_id);
+			printf("Play button is clicked, we are in list\n");
+			updateVolumeValue(db.curr_song_id);
 		} else {
 			syncPlay(db.curr_song_id, db.songs[db.curr_song_id]->volume, convertToMS(db.songs[db.curr_song_id]->sound->position));
 			highlightButton(this->Panel->mainFrame->elements[2]->buttons[db.curr_song_id]);

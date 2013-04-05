@@ -170,6 +170,7 @@ void checkButtonCollision(void* c, void* mf){
 	checkImgCollisionForMouse(cursor, mainFrame->elements[5]->buttons[1]);
 
 	actionBtnAnimation(mainFrame);
+	menuBtnAnimation();
 }
 
 void actionBtnAnimation(void* mf){
@@ -184,6 +185,20 @@ void actionBtnAnimation(void* mf){
 			mainFrame->elements[1]->buttons[i]->startAnimate = 0;
 			mainFrame->elements[1]->buttons[i]->frame = 0;
 			animateButton(mainFrame->elements[1]->buttons[i], 0);
+		}
+	}
+}
+
+void menuBtnAnimation(){
+	int i;
+	for (i = 0; i < 2; i++){
+		if (mouse->frame->elements[0]->buttons[i]->startAnimate == 1){
+			mouse->frame->elements[0]->buttons[i]->frame++;
+		}
+		if (mouse->frame->elements[0]->buttons[i]->frame == 2){
+			mouse->frame->elements[0]->buttons[i]->frame = 0;
+			mouse->frame->elements[0]->buttons[i]->startAnimate = 0;
+			drawMenuFrame(mouse->frame->elements[0]);
 		}
 	}
 }
