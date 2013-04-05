@@ -8,6 +8,7 @@
     <string name="connect">Connect</string>
     <string name="clear">Clear</string>
     <string name="sound_mixer">Sound Mixer</string>
+    <string name="menu_settings">Mixer</string>
     <string name="title_activity_main">Stereo System</string>
     <string name="label_myip">My IP:</string>
     <string name="play">Play</string>
