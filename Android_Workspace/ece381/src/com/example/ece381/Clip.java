@@ -114,12 +114,6 @@ public class Clip {
 		numberOfPlays = 0;
 		startTimes.clear();
 	}
-
-	public void updateSongInDatabase() {
-		Command.syncSetPitch(ID, pitch, 0);
-		Command.syncSetPlaybackSpeed(ID, playbackSpeed);
-		Command.syncSetVol(ID, volume);
-	}
 	
 	public void reload() {
 		Command.syncReloadSong(ID);
