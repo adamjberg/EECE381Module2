@@ -2,12 +2,12 @@ package com.example.ece381;
 
 
 import java.util.Timer;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -19,7 +19,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class MixerActivity extends Activity {
+public class MixerActivity extends Activity {	
 	public static Mix theMix;
 	private SeekBar Timeline;
 	private SeekBar globalVolumeBar;
@@ -143,6 +143,7 @@ public class MixerActivity extends Activity {
 
 	public void onPropertiesPressed(View view) {
 		Intent i = new Intent(this, SongPropertyActivity.class);
+		i.putExtra(SongPropertyActivity.ID_KEY, selectedClip.getID());
 		startActivity(i);
 	}
 	

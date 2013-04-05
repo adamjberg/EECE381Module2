@@ -3,117 +3,65 @@ package com.example.ece381;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class SongPropertyActivity extends Activity {
 
-	private Clip clip;
+	public static final String ID_KEY = "ID";
+	
+	private int songId;
 	private SeekBar volumeBar;
 	private SeekBar pitchBar;
 	private SeekBar speedBar;
+	private EditText pitchQuality;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.song_property);
-		clip = MixerActivity.selectedClip;
+		songId = this.getIntent().getIntExtra(ID_KEY, 0);
+		System.out.println("song id: " + songId);
 		initializeProgressBars();
 		setSongName();
+		pitchQuality = (EditText) findViewById(R.id.pitchQualityInput);
 	}
 	
 	private void initializeProgressBars() {
 		volumeBar = (SeekBar) findViewById(R.id.volumeBar);
 		pitchBar = (SeekBar) findViewById(R.id.pitchBar);
 		speedBar = (SeekBar) findViewById(R.id.speedBar);
-		
-		volumeBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				clip.setVolume(volumeBar.getProgress());
-			}
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				
-			}
-		});
-		
-		pitchBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				clip.setPitch(pitchBar.getProgress());
-			}
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				
-			}
-		});
-		
-		speedBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				clip.setPlaybackSpeed(speedBar.getProgress());
-			}
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				
-			}
-		});
-		
-		volumeBar.setProgress(clip.getVolume());
-		pitchBar.setProgress(clip.getPitch());
-		speedBar.setProgress(clip.getPlaybackSpeed());
 	}
 	
 	private void setSongName() {
 		TextView songName = (TextView) findViewById(R.id.songName);
-		songName.setText(clip.getName());
-	}
-	
-	public void onVolumeChanged(ProgressBar bar) {
-		clip.setVolume(bar.getProgress());
-	}
+		Song[] songs = Communication.getInstance().getDB().getSongs();
+		if (songs[songId] != null) {
+			songName.setText(songs[songId].getSongName());
+		} else {
+			songName.setText("Invalid song name");
+		}
 
-	public void onPitchChanged(ProgressBar bar) {
-		clip.setPitch(bar.getProgress());
-	}
-
-	public void onPlayBackSpeedChanged(ProgressBar bar) {
-		clip.setPlaybackSpeed(bar.getProgress());
 	}
 
 	public void onSyncPressed(View view) {
-		clip.updateSongInDatabase();
+		int pitchQual;
+		if(pitchQuality.getText().length() > 0) {
+			pitchQual = Integer.parseInt(pitchQuality.getText().toString());
+		} else {
+			pitchQual = 0;
+		}
+		Command.syncSetPitch(songId, pitchBar.getProgress(), pitchQual);
+		Command.syncSetPlaybackSpeed(songId, speedBar.getProgress());
+		Command.syncSetVol(songId, volumeBar.getProgress());
 	}
 	
 	public void onReloadSong(View view) {
-		clip.reload();
+		Command.syncReloadSong(songId);
 	}
 	
 	public void onPlayPressed(View view) {
-		clip.play(0);
+		Command.syncPlay(songId, volumeBar.getProgress(), 0);	
 	}
 }
